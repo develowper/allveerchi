@@ -14,6 +14,7 @@ use App\Models\Site;
 use App\Models\User;
 use DateTimeZone;
 use   Illuminate\Support\Facades\Http;
+use   Illuminate\Support\Facades\Log as Logger;
 use Morilog\Jalali\Jalalian;
 
 class Telegram
@@ -130,6 +131,8 @@ class Telegram
 
 
         $res = Http::asForm()->post($url, $datas);
+        Logger::debug($res);
+
         if ($res->status() != 200)
             self::sendMessage(self::LOGS[0], $res->body() . PHP_EOL . print_r($datas, true));
         return json_decode($res->body());
