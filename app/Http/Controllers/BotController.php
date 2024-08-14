@@ -134,7 +134,7 @@ class BotController extends Controller
 //        $CANCEL_REGISTER = "لغو ثبت نام";
 //            Telegram::sendMessage(Telegram::LOGS[0], print_r($update, true));
             if ($text == 'hi') {
-                Telegram::sendMessage($from_id, print_r($update, true));
+                Telegram::sendMessage($from_id, print_r($thread_id, true));
                 return;
             }
             if ($tc == 'private') {
