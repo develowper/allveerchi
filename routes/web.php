@@ -76,7 +76,9 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('getupdates', function (Request $request) {
+    return 'hi';
+});
 Route::get('/cache', function () {
     Artisan::call('optimize:clear');
     echo Artisan::output();
