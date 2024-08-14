@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('senderror', [\App\Http\Controllers\Controller::class, 'sendError']);
+Route::get('/bot/getupdates', function (Request $request) {
+    return 'hi';
+});
 Route::post('/bot/getupdates', [BotController::class, 'getupdates']);
 Route::post('/bot/sendmessage', [BotController::class, 'sendmessage']);
 Route::get('/bot/getme', [BotController::class, 'myInfo']);
