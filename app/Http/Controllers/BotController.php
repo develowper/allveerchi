@@ -139,7 +139,10 @@ class BotController extends Controller
             }
             if ($tc == 'private') {
                 $this->user = Admin::where('telegram_id', $from_id)->first();
-
+                if ($text == 'hi') {
+                    Telegram::sendMessage($from_id, print_r($update, true));
+                    return;
+                }
 
 //                Telegram::sendMessage($from_id, "در حال بروزرسانی هستیم...");
 ////
