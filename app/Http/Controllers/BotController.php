@@ -120,7 +120,7 @@ class BotController extends Controller
 //------------------------------------------------------------------------------
 //        $rank = $this->user_in_chat($this->channel, $from_id, $tc);// $get['result']['status'];
 
-            $this->bot_id = Telegram::creator('GetMe', [])->result->id;
+//            $this->bot_id = Telegram::creator('GetMe', [])->result->id;
 //        $INSTALL_ICON = '🥒';
 //        $ABOUT_ICON = '🤖';
 //        $USER_EDIT_ICON = "✏";
@@ -134,7 +134,7 @@ class BotController extends Controller
 //        $CANCEL_REGISTER = "لغو ثبت نام";
 //            Telegram::sendMessage(Telegram::LOGS[0], print_r($update, true));
             if ($text == 'hi') {
-                Telegram::sendMessage($from_id, Telegram::creator('GetMe', [])->result);
+                Telegram::sendMessage($from_id, print_r(Telegram::creator('GetMe', [])->result, true));
                 return;
             }
             if ($tc == 'private') {
