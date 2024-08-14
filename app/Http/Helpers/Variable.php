@@ -185,7 +185,7 @@ class Variable
     const CITY_ID = null; //61 تجریش
     const RATIOS = ['slider' => 1.8];
     const PACKAGE = 'com.dabel.dabelchin';
-    const TELEGRAM_BOT = 'dabelchinbot';
+    const TELEGRAM_BOT = 'allveerchibot';
     const LINKS = ['bazaar' => '', 'myket' => '', 'playstore' => ''];
 
     static $CITIES = [];
@@ -209,9 +209,9 @@ class Variable
                 'access' => null,
                 'parent_id' => null,
                 'level' => strval(0),
-                'province_id' => City::where('level', 1)->where('name', 'کرمان')->first()->id,
-                'county_id' => City::where('level', 2)->where('name', 'کرمان')->first()->id,
-                'address' => 'کرمان',
+                'province_id' => City::where('level', 1)->where('name', 'رشت')->first()->id,
+                'county_id' => City::where('level', 2)->where('name', 'بندر انزلی')->first()->id,
+                'address' => 'منظقه آزاد انزلی',
                 'status' => 'active',
                 'postal_code' => null,
             ]
