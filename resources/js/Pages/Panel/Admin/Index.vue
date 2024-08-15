@@ -86,7 +86,8 @@
             </div>
           </Link>
           <!-- messages card -->
-          <Link v-if="  hasAccess('view_message')" :class="cardShadow" :href="route('admin.panel.message.index')"
+          <Link v-if="false &&  hasAccess('view_message')" :class="cardShadow"
+                :href="route('admin.panel.message.index')"
                 class="flex hover:scale-[101%] transition duration-300 cursor-pointer   items-center justify-around   p-4 bg-white  rounded-lg">
             <div class="flex flex-col grow">
               <h6 class="text-xs font-bold   py-2 tracking-wider text-gray-500 uppercase">

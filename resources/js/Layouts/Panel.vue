@@ -268,24 +268,24 @@
                   <Bars2Icon class="w-5 h-5 mx-1"/>
                   {{ __('list') }}
                 </Link>
-                <Link :href="route('admin.panel.repository.transport.index')" role="menuitem"
-                      :class="subMenuIsActive ( 'admin.panel.repository.transport.index' )"
-                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
-                  <ArrowsRightLeftIcon class="w-5 h-5 mx-1"/>
-                  {{ __('send/receive_transport') }}
-                </Link>
-                <Link :href="route('admin.panel.repository.shop.index')" role="menuitem"
-                      :class="subMenuIsActive ( 'admin.panel.repository.shop.index' )"
-                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
-                  <ShoppingBagIcon class="w-5 h-5 mx-1"/>
-                  {{ __('shop') }}
-                </Link>
-                <Link :href="route('admin.panel.repository.order.index')" role="menuitem"
-                      :class="subMenuIsActive ( 'admin.panel.repository.order.index' )"
-                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
-                  <ShoppingCartIcon class="w-5 h-5 mx-1"/>
-                  {{ __('orders') }}
-                </Link>
+<!--                <Link :href="route('admin.panel.repository.transport.index')" role="menuitem"-->
+                <!--                      :class="subMenuIsActive ( 'admin.panel.repository.transport.index' )"-->
+                <!--                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">-->
+                <!--                  <ArrowsRightLeftIcon class="w-5 h-5 mx-1"/>-->
+                <!--                  {{ __('send/receive_transport') }}-->
+                <!--                </Link>-->
+                <!--                <Link :href="route('admin.panel.repository.shop.index')" role="menuitem"-->
+                <!--                      :class="subMenuIsActive ( 'admin.panel.repository.shop.index' )"-->
+                <!--                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">-->
+                <!--                  <ShoppingBagIcon class="w-5 h-5 mx-1"/>-->
+                <!--                  {{ __('shop') }}-->
+                <!--                </Link>-->
+                <!--                <Link :href="route('admin.panel.repository.order.index')" role="menuitem"-->
+                <!--                      :class="subMenuIsActive ( 'admin.panel.repository.order.index' )"-->
+                <!--                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">-->
+                <!--                  <ShoppingCartIcon class="w-5 h-5 mx-1"/>-->
+                <!--                  {{ __('orders') }}-->
+                <!--                </Link>-->
               </li>
 
             </ul>
