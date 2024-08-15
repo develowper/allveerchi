@@ -209,7 +209,7 @@ class Variable
                 'access' => null,
                 'parent_id' => null,
                 'level' => strval(0),
-                'province_id' => City::where('level', 1)->where('name', 'رشت')->first()->id,
+                'province_id' => City::where('level', 1)->where('name', 'گیلان')->first()->id,
                 'county_id' => City::where('level', 2)->where('name', 'بندر انزلی')->first()->id,
                 'address' => 'منظقه آزاد انزلی',
                 'status' => 'active',
