@@ -152,7 +152,7 @@ export default {
 
         name: null,
         uploading: false,
-        category_id: false,
+        category_id: null,
         tags: [],
 
       }),
