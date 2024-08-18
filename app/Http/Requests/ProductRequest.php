@@ -42,7 +42,7 @@ class ProductRequest extends FormRequest
             $tmp = array_merge($tmp, [
                 'name' => ['required', 'max:200', Rule::unique('products', 'name')->ignore($this->id)],
                 'tags' => ['nullable', 'string', 'max:1024'],
-                'category_id' => ['required', Rule::in(Category::pluck('id'))],
+                'category_id' => ['nullable', Rule::in(Category::pluck('id'))],
 
             ]);
         }
