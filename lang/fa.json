@@ -925,5 +925,11 @@
   "send_phone_request_for_start_chat": "جهت شروع مکالمه، شماره تماس و درخواست خود را ارسال نمایید",
   "central_profit": "سهم شرکت + مالیات",
   "local": "در محل",
+  "guarantee_months": "گارانتی (ماه)",
+  "produced_at": "تاریخ تولید",
+  "parent": "والد",
+  "guarantee": "گارانتی",
+  "barcode": "بارکد",
+  "export_excel": "خروجی اکسل",
   "": ""
 }

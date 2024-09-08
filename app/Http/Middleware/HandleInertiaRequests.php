@@ -91,7 +91,7 @@ class HandleInertiaRequests extends Middleware
             'units' => Variable::PRODUCT_UNITS,
             'packs' => Pack::get(),
             'grades' => Variable::GRADES,
-            'products' => Product::select('id', 'name')->whereStatus('active')->orderBy('order_count', 'DESC')->get(),
+            'products' => Product::select('id', 'name')->whereStatus('active')->orderBy('sell_count', 'DESC')->get(),
             'user_location' => User::getLocation(Variable::$CITIES),
             'socials' => [
                 'whatsapp' => "https://wa.me/" . optional($socials->where('key', 'social_whatsapp')->first())->value,

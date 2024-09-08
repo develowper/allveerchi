@@ -12,6 +12,8 @@ use App\Models\Product;
 use App\Models\Variation;
 use App\Models\Repository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -74,6 +76,11 @@ class ProductController extends Controller
         $data = Product::find($id);
 
         $this->authorize('edit', [Admin::class, $data]);
+        if ($data) {
+            $all = Product::getImages($data->id);
+            $data->images = collect($all)->filter(fn($e) => !str_contains($e, 'thumb'))->all();
+            $data->thumb_img = collect($all)->filter(fn($e) => str_contains($e, 'thumb'))->first();
+        }
         return Inertia::render('Panel/Admin/Product/Edit', [
             'statuses' => Variable::STATUSES,
             'data' => $data,
@@ -148,6 +155,39 @@ class ProductController extends Controller
                     $data->status = 'active';
                     $data->save();
                     return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
+
+                case 'delete-img'   :
+                    $type = Variable::IMAGE_FOLDERS[Product::class];
+                    $path = Storage::path("public/$type/$id/" . basename($request->path));
+//                    $allFiles = Storage::allFiles("public/$type/$id");
+//                    if (count($allFiles) == 1)
+//                        return response()->json(['errors' => [sprintf(__('validator.min_images'), 1)]], 422);
+                    if (!File::exists($path))
+                        return response()->json(['errors' => [__('file_not_exists')], 422]);
+                    File::delete($path);
+                    return response()->json(['message' => __('updated_successfully')], $successStatus);
+
+                case  'upload-img' :
+                    $limit = Variable::VARIATION_IMAGE_LIMIT;
+                    $type = Variable::IMAGE_FOLDERS[Product::class];
+                    $allFiles = Storage::allFiles("public/$type/$id");
+                    if (!$request->path && count($allFiles) >= $limit + 1) //  add extra image
+                        return response()->json(['errors' => [sprintf(__('validator.max_images'), $limit)], 422]);
+                    if (!$request->img) //  add extra image
+                        return response()->json(['errors' => [__('file_not_exists')], 422]);
+                    $name = str_contains($request->name, '-') ? explode('-', $request->name)[1] : $request->name;
+                    $path = Storage::path("public/$type/$id/$name.jpg");
+                    if (File::exists($path)) File::delete($path);
+                    Util::createImage($request->img, Variable::IMAGE_FOLDERS[Product::class], $name, $id, 500);
+//                    if ($data) {
+//                        $data->status = 'review';
+//                        $data->save();
+//                    }
+                    $data->img = url("storage/products/$id/$name.jpg");
+                    Telegram::log(null, 'image_updloaded', $data);
+                    return response()->json(['message' => __('updated_successfully')], $successStatus);
+
+
                 case  'upload-img' :
 
                     if (!$request->img) //  add extra image
@@ -164,7 +204,8 @@ class ProductController extends Controller
 
             $request->merge([
 //                'cities' => json_encode($request->cities ?? [])
-                'tags' => $request->tags
+                'tags' => $request->tags,
+
             ]);
 
 

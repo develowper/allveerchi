@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Http\Helpers\Variable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -13,8 +15,10 @@ class Product extends Model
         'name',
         'category_id',
         'tags',
-        'order_count',
+        'sell_count',
+        'in_repo',
         'in_shop',
+        'price',
         'charged_at',
         'rate',
         'status',
@@ -24,4 +28,16 @@ class Product extends Model
 
     ];
 
+    public static function getImages($id)
+    {
+
+        $images = array_fill(0, Variable::VARIATION_IMAGE_LIMIT, null);
+
+        if (!$id) return $images;
+        $allFiles = Storage::allFiles("public/" . Variable::IMAGE_FOLDERS[Product::class] . "/$id");
+        foreach ($allFiles as $idx => $path) {
+            $images[$idx] = route('storage.products') . "/$id/" . basename($path, ""); //suffix=format
+        }
+        return $images;
+    }
 }

@@ -26,14 +26,14 @@
           <div
               class="flex flex-col mx-2   col-span-2 w-full     px-2"
           >
-            <div class="flex-col   m-2 items-center rounded-lg max-w-xs  w-full mx-auto    ">
-              <div class="my-2">
-                <ImageUploader ref="imageCropper" :label="__('product_image_jpg')" id="img"
-                               height="10" class="grow " :crop-ratio="null"/>
-                <InputError class="mt-1 " :message="form.errors.img"/>
-              </div>
+            <!--            <div class="flex-col   m-2 items-center rounded-lg max-w-xs  w-full mx-auto    ">-->
+            <!--              <div class="my-2">-->
+            <!--                <ImageUploader ref="imageCropper" :label="__('product_image_jpg')" id="img"-->
+            <!--                               height="10" class="grow " :crop-ratio="null"/>-->
+            <!--                <InputError class="mt-1 " :message="form.errors.img"/>-->
+            <!--              </div>-->
 
-            </div>
+            <!--            </div>-->
             <form @submit.prevent="submit">
 
               <div class="my-2">
@@ -80,6 +80,18 @@
               </Selector>
               <div class="my-2">
                 <TextInput
+                    :id="`batch_count`"
+                    type="number"
+                    :placeholder="`${__('count')}`"
+                    classes=" p-2   min-w-[5rem]"
+                    v-model="form.batch_count"
+                    autocomplete="batch_count"
+                    :error="form.errors.batch_count">
+
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
                     :id="`name`"
                     type="name"
                     :placeholder="`${__('name')}`"
@@ -91,78 +103,127 @@
                 </TextInput>
               </div>
 
-              <div class="my-2">
-                <Selector ref="gradeSelector" v-model="form.grade"
-                          :data="$page.props.grades.map(e=>{return{id:e,name:e}})"
-                          :error="form.errors.grade"
-                          :label="__('grade')" classes=""
-                          :id="`grade`">
+              <!--              <div class="my-2">-->
+              <!--                <Selector ref="gradeSelector" v-model="form.grade"-->
+              <!--                          :data="$page.props.grades.map(e=>{return{id:e,name:e}})"-->
+              <!--                          :error="form.errors.grade"-->
+              <!--                          :label="__('grade')" classes=""-->
+              <!--                          :id="`grade`">-->
 
-                </Selector>
-              </div>
-              <div class="my-2">
-                <Selector ref="packSelector" v-model="form.pack_id"
-                          :data="$page.props.packs"
-                          @change="($e)=> {if(form.pack_id==null)form.weight=1}"
-                          :error="form.errors.pack_id"
-                          :label="__('pack')" classes=""
-                          :id="`pack`">
+              <!--                </Selector>-->
+              <!--              </div>-->
+              <!--              <div class="my-2">-->
+              <!--                <Selector ref="packSelector" v-model="form.pack_id"-->
+              <!--                          :data="$page.props.packs"-->
+              <!--                          @change="($e)=> {if(form.pack_id==null)form.weight=1}"-->
+              <!--                          :error="form.errors.pack_id"-->
+              <!--                          :label="__('pack')" classes=""-->
+              <!--                          :id="`pack`">-->
 
-                </Selector>
-              </div>
+              <!--                </Selector>-->
+              <!--              </div>-->
 
-              <div class="my-2">
+              <!--              <div class="my-2">-->
+              <!--                <TextInput-->
+              <!--                    :id="`weight`"-->
+              <!--                    type="number"-->
+              <!--                    :placeholder="`${__('pack_weight')} (${__('kg')})`"-->
+              <!--                    :disabled="form.pack_id==null? true:false"-->
+              <!--                    classes=" p-2   min-w-[5rem]"-->
+              <!--                    v-model="form.weight"-->
+              <!--                    autocomplete="weight"-->
+              <!--                    :error="form.errors.weight">-->
+
+              <!--                </TextInput>-->
+              <!--              </div>-->
+              <!--              <div class="my-2">-->
+              <!--                <TextInput-->
+              <!--                    :id="`in_repo`"-->
+              <!--                    type="number"-->
+              <!--                    :placeholder="`${__('repository_count')} `"-->
+              <!--                    classes="    "-->
+              <!--                    v-model="form.in_repo"-->
+              <!--                    autocomplete="in_repo"-->
+              <!--                    :error="form.errors.in_repo">-->
+
+              <!--                </TextInput>-->
+              <!--              </div>-->
+
+              <!--              <div class="my-2">-->
+              <!--                <TextInput-->
+              <!--                    :id="`in_shop`"-->
+              <!--                    type="number"-->
+              <!--                    :placeholder="`${__('shop_count')} `"-->
+              <!--                    classes=" "-->
+              <!--                    v-model="form.in_shop"-->
+              <!--                    autocomplete="in_shop"-->
+              <!--                    :error="form.errors.in_shop">-->
+
+              <!--                </TextInput>-->
+              <!--              </div>-->
+              <div class="my-2 flex flex-col space-y-1">
+
+                <date-picker :id="`produced_at`" class="rounded   fromdate  " inputClass=""
+                             :editable="true"
+                             inputFormat="YYYY/MM/DD" :placeholder="__('produced_at')" color="#00acc1"
+                             v-model="form.produced_at"></date-picker>
+                <InputError class="mt-1" :message="form.errors.produced_at"/>
                 <TextInput
-                    :id="`weight`"
-                    type="number"
-                    :placeholder="`${__('pack_weight')} (${__('kg')})`"
-                    :disabled="form.pack_id==null? true:false"
-                    classes=" p-2   min-w-[5rem]"
-                    v-model="form.weight"
-                    autocomplete="weight"
-                    :error="form.errors.weight">
+                    id="guarantee_months"
+                    type="text"
+                    :placeholder="null"
+                    classes="p-1  "
+                    v-model="form.guarantee_months"
+                    autocomplete="guarantee_months"
+                    :error=" form.errors.guarantee_months"
+                >
+                  <template v-slot:prepend>
+                    <div class="p-1 px-2">
+                      {{ __('guarantee_months') }}
+                    </div>
+                  </template>
 
                 </TextInput>
               </div>
 
-              <div class="my-2">
-                <TextInput
-                    :id="`price`"
-                    type="number"
-                    :placeholder="`${form.pack_id==null?__('kg_price'):__('pack_price')}  [ ${__('central_profit')}:${asPrice(Math.round($page.props.central_profit*form.price/100))} ] (${__('currency')})`"
-                    classes=" p-2   min-w-[5rem]"
-                    v-model="form.price"
-                    autocomplete="price"
-                    :error="form.errors.price">
+              <!--              <div class="my-2">-->
+              <!--                <TextInput-->
+              <!--                    :id="`price`"-->
+              <!--                    type="number"-->
+              <!--                    :placeholder="`${ __('unit_price') }  [ ${__('central_profit')}:${asPrice(Math.round($page.props.central_profit*form.price/100))} ] (${__('currency')})`"-->
+              <!--                    classes=" p-2   min-w-[5rem]"-->
+              <!--                    v-model="form.price"-->
+              <!--                    autocomplete="price"-->
+              <!--                    :error="form.errors.price">-->
 
-                </TextInput>
-              </div>
+              <!--                </TextInput>-->
+              <!--              </div>-->
 
-              <div class="my-2">
-                <TextInput
-                    :id="`in_repo`"
-                    type="number"
-                    :placeholder="`${__('repository_count')} (${form.pack_id==null?__('kg'):__('pack_count')})`"
-                    classes="    "
-                    v-model="form.in_repo"
-                    autocomplete="in_repo"
-                    :error="form.errors.in_repo">
+              <!--              <div class="my-2">-->
+              <!--                <TextInput-->
+              <!--                    :id="`in_repo`"-->
+              <!--                    type="number"-->
+              <!--                    :placeholder="`${__('repository_count')} `"-->
+              <!--                    classes="    "-->
+              <!--                    v-model="form.in_repo"-->
+              <!--                    autocomplete="in_repo"-->
+              <!--                    :error="form.errors.in_repo">-->
 
-                </TextInput>
-              </div>
+              <!--                </TextInput>-->
+              <!--              </div>-->
 
-              <div class="my-2">
-                <TextInput
-                    :id="`in_shop`"
-                    type="number"
-                    :placeholder="`${__('shop_count')} (${form.pack_id==null?__('kg'):__('pack_count')})`"
-                    classes=" "
-                    v-model="form.in_shop"
-                    autocomplete="in_shop"
-                    :error="form.errors.in_shop">
+              <!--              <div class="my-2">-->
+              <!--                <TextInput-->
+              <!--                    :id="`in_shop`"-->
+              <!--                    type="number"-->
+              <!--                    :placeholder="`${__('shop_count')} `"-->
+              <!--                    classes=" "-->
+              <!--                    v-model="form.in_shop"-->
+              <!--                    autocomplete="in_shop"-->
+              <!--                    :error="form.errors.in_shop">-->
 
-                </TextInput>
-              </div>
+              <!--                </TextInput>-->
+              <!--              </div>-->
 
 
               <div v-if="form.progress" class="shadow w-full bg-grey-light m-2   bg-gray-200 rounded-full">
@@ -236,7 +297,7 @@ import TextEditor from "@/Components/TextEditor.vue";
 import UserSelector from "@/Components/UserSelector.vue";
 import AddressSelector from "@/Components/AddressSelector.vue";
 import CitySelector from "@/Components/CitySelector.vue";
-
+import VuePersianDatetimePicker from 'vue3-persian-datetime-picker';
 
 export default {
 
@@ -244,6 +305,9 @@ export default {
     return {
       form: useForm({
 
+        produced_at: null,
+        guarantee_months: null,
+        batch_count: null,
         name: null,
         product_id: null,
         repo_ids: null,
@@ -295,9 +359,11 @@ export default {
     PencilIcon,
     XMarkIcon,
     CitySelector,
-
+    datePicker: VuePersianDatetimePicker,
   },
   mounted() {
+    this.initDatePicker();
+    this.form.produced_at = this.toShamsi(new Date())
     // this.log(this.$page.props)
 
   },
@@ -311,7 +377,7 @@ export default {
 
     submit() {
       // this.img = this.$refs.imageCropper.getCroppedData();
-      this.img = this.$refs.imageCropper.getCroppedData();
+      // this.img = this.$refs.imageCropper.getCroppedData();
       this.form.uploading = false;
       this.form.clearErrors();
       // this.isLoading(true, this.form.progress ? this.form.progress.percentage : null);
@@ -356,7 +422,23 @@ export default {
           // this.isLoading(false,);
         },
       });
-    }
+    },
+    initDatePicker() {
+      this.$nextTick(() => {
+        document.querySelectorAll('.vpd-input-group').forEach((el) => {
+          el.classList.add('flex');
+
+        });
+        document.querySelectorAll('.vpd-input-group input').forEach((el) => {
+          el.classList.add('rounded');
+        });
+        document.querySelectorAll('.vpd-input-group label').forEach((el) => {
+          el.append(` ${this.__('produced_at')} `)
+          // el.classList.add('w-full');
+          el.classList.add('rounded-s');
+        });
+      });
+    },
   },
 
 }

@@ -210,10 +210,10 @@
                                  :preload=" $page.props.data.products"
                                  :error="form.errors.products"/>
               </div>
-              <div class="my-2">
-                <Timestamp ref="timestampSelector" mode="edit" :label="__('delivery_hours')"
-                           :errors="form.errors || []" v-model="form.timestamps"/>
-              </div>
+<!--              <div class="my-2">-->
+              <!--                <Timestamp ref="timestampSelector" mode="edit" :label="__('delivery_hours')"-->
+              <!--                           :errors="form.errors || []" v-model="form.timestamps"/>-->
+              <!--              </div>-->
 
               <div v-if="form.progress" class="shadow w-full bg-grey-light m-2   bg-gray-200 rounded-full">
                 <div

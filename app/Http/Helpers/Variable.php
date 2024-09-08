@@ -105,12 +105,8 @@ class Variable
 
     ];
     const CATEGORIES = [
-        ['id' => 1, 'name' => 'آرایشی', 'parent_id' => null, 'children' => '[6]', 'level' => 1],
-        ['id' => 2, 'name' => 'اکسسوری', 'parent_id' => null, 'children' => "[]", 'level' => 1],
-        ['id' => 3, 'name' => 'دکوراتیو', 'parent_id' => null, 'children' => "[]", 'level' => 1],
-        ['id' => 4, 'name' => 'پوشاک', 'parent_id' => null, 'children' => "[]", 'level' => 1],
-        ['id' => 5, 'name' => 'خوراکی', 'parent_id' => null, 'children' => " []", 'level' => 1],
-        ['id' => 6, 'name' => 'کرم', 'parent_id' => 1, 'children' => "[]", 'level' => 2],
+        ['id' => 1, 'name' => 'لوازم خودرو', 'parent_id' => null, 'children' => '[]', 'level' => 1],
+        ['id' => 2, 'name' => 'روانکار', 'parent_id' => null, 'children' => "[]", 'level' => 1],
 
 
     ];
@@ -215,6 +211,26 @@ class Variable
                 'status' => 'active',
                 'postal_code' => null,
             ]
+
+        ];
+    }
+
+    static function getRepositories()
+    {
+        return [
+
+            [
+                'id' => 1,
+                'name' => 'انبار مرکزی',
+                'agency_id' => 1,
+                'is_shop' => true,
+                'province_id' => City::where('level', 1)->where('name', 'گیلان')->first()->id,
+                'county_id' => City::where('level', 2)->where('name', 'بندر انزلی')->first()->id,
+                'address' => 'گیلان، شهرستان بندر انزلی، شهرک صنعتی',
+                'location' => '37.469254,49.477436',
+                'status' => 'active',
+                'cities' => json_encode(array_merge(City::where('parent_id', City::where('level', 2)->where('name', 'تهران')->first()->id)->take(20)->inRandomOrder()->pluck('id')->toArray(), [])),
+            ],
 
         ];
     }

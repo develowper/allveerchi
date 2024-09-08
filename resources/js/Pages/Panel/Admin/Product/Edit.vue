@@ -26,15 +26,44 @@
           <div
               class="flex flex-col mx-2   col-span-2 w-full     px-2"
           >
-            <div class="flex-col   m-2 items-center rounded-lg max-w-xs  w-full mx-auto    ">
-              <div class="my-2">
-                <ImageUploader :replace="true"
-                               :preload="route('storage.products')+`/${$page.props.data.id}.jpg`"
-                               mode="edit" :for-id="$page.props.data.id"
+            <!--            <div class="flex-col   m-2 items-center rounded-lg max-w-xs  w-full mx-auto    ">-->
+            <!--              <div class="my-2">-->
+            <!--                <ImageUploader :replace="true"-->
+            <!--                               :preload="route('storage.products')+`/${$page.props.data.id}.jpg`"-->
+            <!--                               mode="edit" :for-id="$page.props.data.id"-->
+            <!--                               :link="route('admin.panel.product.update')"-->
+            <!--                               ref="imageCropper" :label="__('product_image_jpg')" :cropRatio="1" id="img"-->
+            <!--                               height="10" class="grow "/>-->
+            <!--                <InputError class="mt-1 " :message="form.errors.img"/>-->
+            <!--              </div>-->
+
+            <!--            </div>-->
+            <div class="flex-col   m-2  rounded-lg    w-full mx-auto    ">
+              <div class="font-semibold">{{ __('main_product_image') }}</div>
+              <div class="my-2 flex max-w-[150px]" v-if="$page.props.data">
+                <ImageUploader mode="edit"
                                :link="route('admin.panel.product.update')"
-                               ref="imageCropper" :label="__('product_image_jpg')" :cropRatio="1" id="img"
-                               height="10" class="grow "/>
-                <InputError class="mt-1 " :message="form.errors.img"/>
+                               :preload="$page.props.data.thumb_img" ref="imageCropperThumb"
+                               :label="__('product_image_jpg')" :for-id="$page.props.data.id"
+                               :cropRatio="null" :id="'img-'+'thumb'"
+                               class="   "/>
+                <InputError class="mt-1 text-xs" :message="form.errors.image_thumb ? form.errors.image_thumb :null "/>
+
+              </div>
+              <div>{{ __('gallery') }}</div>
+
+              <div class="my-2 flex flex-wrap items-stretch" v-if="$page.props.data">
+                <div v-for="(data,idx) in $page.props.data.images"
+                     class="m-1  max-w-[150px]   ">
+                  <ImageUploader mode="edit"
+                                 :link="route('admin.panel.product.update')"
+                                 :preload="$page.props.data.images[idx]" ref="imageCropper"
+                                 :label="__('product_image_jpg')" :for-id="$page.props.data.id"
+                                 :cropRatio="1" :id="'img-'+idx"
+                                 class="   "/>
+                  <InputError class="mt-1 text-xs" :message="form.errors.images ? form.errors.images.idx:null "/>
+                </div>
+
               </div>
 
             </div>
@@ -55,6 +84,43 @@
                       <Bars2Icon class="h-5 w-5"/>
                     </div>
                   </template>
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
+                    :id="`price`"
+                    type="number"
+                    :placeholder="`${ __('unit_price') } (${__('currency')})`"
+                    classes=" p-2   min-w-[5rem]"
+                    v-model="form.price"
+                    autocomplete="price"
+                    :error="form.errors.price">
+
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
+                    :id="`in_repo`"
+                    type="number"
+                    :placeholder="`${__('repository_count')} `"
+                    classes="    "
+                    v-model="form.in_repo"
+                    autocomplete="in_repo"
+                    :error="form.errors.in_repo">
+
+                </TextInput>
+              </div>
+
+              <div class="my-2">
+                <TextInput
+                    :id="`in_shop`"
+                    type="number"
+                    :placeholder="`${__('shop_count')} `"
+                    classes=" "
+                    v-model="form.in_shop"
+                    autocomplete="in_shop"
+                    :error="form.errors.in_shop">
+
                 </TextInput>
               </div>
               <div class="my-2">
@@ -159,6 +225,9 @@ export default {
 
         id: null,
         name: null,
+        price: null,
+        in_shop: null,
+        in_repo: null,
         uploading: false,
         category_id: false,
         tags: [],
@@ -215,6 +284,10 @@ export default {
 
 
     this.form.id = this.data.id;
+    this.form.name = this.data.name;
+    this.form.in_shop = parseFloat(this.data.in_shop);
+    this.form.in_repo = parseFloat(this.data.in_repo);
+    this.form.price = parseFloat(this.data.price);
     this.form.name = this.data.name;
     this.form.category_id = this.data.category_id;
     this.form.tags = this.data.tags;

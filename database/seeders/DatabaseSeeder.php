@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
 
     private function productionData()
     {
-        $this->createCities();
+//        $this->createCities();
 
         DB::table('users')->truncate();
         DB::table('users')->insert(Variable::getUsers());
@@ -73,152 +73,14 @@ class DatabaseSeeder extends Seeder
         DB::table('admins')->truncate();
         DB::table('admins')->insert(Variable::getAdmins());
 
+        DB::table('repositories')->truncate();
+        DB::table('repositories')->insert(Variable::getRepositories());
+
         $levels = array_column(Variable::AGENCY_TYPES, 'level');
         DB::table('agencies')->truncate();
-        DB::table('agencies')->insert([
-            [
-                'id' => 1,
-                'name' => 'دفتر مرکزی',
-                'access' => null,
-                'parent_id' => null,
-//                'has_shop' => true,
-                'level' => strval($levels[0]),
-//                'owner_id' => 2,
-                'province_id' => City::where('level', 1)->where('name', 'تهران')->first()->id,
-                'county_id' => City::where('level', 2)->where('name', 'تهران')->first()->id,
-                'address' => 'تهران',
-                'status' => 'active',
-                'postal_code' => null,
-            ], [
-                'id' => 2,
-                'name' => 'مرکز ایران (تهران)',
-                'parent_id' => 1,
-                'access' => json_encode(City::where('level', 1)->whereIn('name', ['تهران'])->pluck('id')),
-                'level' => strval($levels[1]),
-                'province_id' => City::where('level', 1)->where('name', 'تهران')->first()->id,
-                'county_id' => City::where('level', 2)->where('name', 'تهران')->first()->id,
-                'address' => 'تهران',
-                'postal_code' => null,
-                'status' => 'active',
-            ], [
-                'id' => 3,
-                'name' => 'مرکز ایران',
-                'parent_id' => 1,
-                'access' => json_encode(City::where('level', 1)->whereIn('name', ['اصفهان', 'فارس', 'یزد', 'چهارمحال و بختیاری', 'قم', 'مرکزی'])->pluck('id')),
-                'level' => strval($levels[1]),
-                'province_id' => City::where('level', 1)->where('name', 'تهران')->first()->id,
-                'county_id' => City::where('level', 2)->where('name', 'تهران')->first()->id,
-                'address' => 'تهران',
-                'postal_code' => null,
-                'status' => 'active',
-            ], [
-                'id' => 4,
-                'name' => 'شمال ایران',
-                'parent_id' => 1,
-                'access' => json_encode(City::where('level', 1)->whereIn('name', ['گلستان', 'مازندران', 'گیلان', 'قزوین', 'البرز'])->pluck('id')),
-                'level' => strval($levels[1]),
-                'province_id' => null,
-                'county_id' => null,
-                'address' => '-',
-                'postal_code' => null,
-                'status' => 'active',
-            ], [
-                'id' => 5,
-                'name' => 'جنوب/جنوب‌شرق ایران',
-                'parent_id' => 1,
-                'access' => json_encode(City::where('level', 1)->whereIn('name', ['هرمزگان', 'کرمان', 'سیستان و بلوچستان'])->pluck('id')),
-                'level' => strval($levels[1]),
-                'province_id' => null,
-                'county_id' => null,
-                'address' => '-',
-                'postal_code' => null,
-                'status' => 'active',
-            ], [
-                'id' => 6,
-                'name' => 'شمال‌شرق ایران',
-                'parent_id' => 1,
-                'access' => json_encode(City::where('level', 1)->whereIn('name', ['خراسان شمالی', 'خراسان رضوی', 'خراسان جنوبی', 'سمنان'])->pluck('id')),
-                'level' => strval($levels[1]),
-                'province_id' => null,
-                'county_id' => null,
-                'address' => '-',
-                'postal_code' => null,
-                'status' => 'active',
-            ], [
-                'id' => 7,
-                'name' => 'جنوب‌غرب ایران',
-                'parent_id' => 1,
-                'access' => json_encode(City::where('level', 1)->whereIn('name', ['خوزستان', 'بوشهر', 'کهگیلویه و بویراحمد', 'لرستان', 'ایلام'])->pluck('id')),
-                'level' => strval($levels[1]),
-                'province_id' => null,
-                'county_id' => null,
-                'address' => '-',
-                'postal_code' => null,
-                'status' => 'active',
-            ], [
-                'id' => 8,
-                'name' => 'غرب/شمال‌غرب ایران',
-                'parent_id' => 1,
-                'access' => json_encode(City::where('level', 1)->whereIn('name', ['اردبیل', 'آذربایجان شرقی', 'آذربایجان غربی', 'زنجان', 'کردستان', 'کرمانشاه', 'همدان'])->pluck('id')),
-                'level' => strval($levels[1]),
-                'province_id' => null,
-                'county_id' => null,
-                'address' => '-',
-                'postal_code' => null,
-                'status' => 'active',
-            ], [
-                'id' => 9,
-                'name' => 'انحصاری استان تهران',
-                'parent_id' => 2,
-                'access' => json_encode([10]),
-                'level' => strval($levels[2]),
-                'province_id' => json_encode(City::where('level', 1)->where('name', 'تهران')->first()->id ?? null),
-                'county_id' => json_encode(City::where('level', 2)->where('name', 'تهران')->first()->id ?? null),
-                'address' => 'تهران، منطقه 16، محله نازی آباد، میدان بهمن، خیابان دشت آزادگان، جنب شهرداری منطقه 16',
-                'postal_code' => '1811813453',
-                'status' => 'active',
-            ], [
-                'id' => 10,
-                'name' => 'شعبه لطفی شهر قدس تهران',
-                'parent_id' => 9,
-                'access' => json_encode([]),
-                'level' => strval($levels[3]),
-                'province_id' => json_encode(City::where('level', 1)->where('name', 'تهران')->first()->id ?? null),
-                'county_id' => json_encode(City::where('level', 2)->where('name', 'تهران')->first()->id ?? null),
-                'address' => 'شهر قدس- میدان مصلی',
-                'postal_code' => '3751847387',
-                'status' => 'active',
-            ],
-        ]);
-        DB::table('repositories')->truncate();
-        DB::table('repositories')->insert([
-            [
-                'id' => 1,
-                'name' => 'انبار انحصاری استان تهران',
-                'agency_id' => 9,
-                'is_shop' => false,
-                'province_id' => City::where('level', 1)->where('name', 'تهران')->first()->id,
-                'county_id' => City::where('level', 2)->where('name', 'تهران')->first()->id,
-                'address' => 'تهران، منطقه 16، محله نازی آباد، میدان بهمن، خیابان دشت آزادگان، جنب شهرداری منطقه 16',
-                'location' => '35.642897,51.3986079',
-                'postal_code' => '1811813453',
-                'status' => 'active',
-                'cities' => json_encode([]),
-            ], [
-                'id' => 2,
-                'name' => 'انبار شهر قدس لطفی',
-                'agency_id' => 10,
-                'is_shop' => true,
-                'province_id' => City::where('level', 1)->where('name', 'تهران')->first()->id,
-                'county_id' => City::where('level', 2)->where('name', 'تهران')->first()->id,
-                'address' => 'شهر قدس- میدان مصلی',
-                'location' => '35.642897,51.3986079',
-                'postal_code' => '3751847387',
-                'status' => 'active',
-                'cities' => json_encode([]),
-            ],
-        ]);
-        $this->createPacks();
+        DB::table('agencies')->insert(Variable::getAgencies());
+
+//        $this->createPacks();
         $this->createProducts();
 //        $this->createRepositories();
 //        $this->createVariations();
@@ -703,51 +565,7 @@ class DatabaseSeeder extends Seeder
 
         $prods = [
 
-            'سیب زمینی',
-            'پیاز',
-            'گوجه',
-            'خیار',
-            'پرتقال',
-            'سبزی',
-            'بادمجان',
-            'کدو',
-            'هویج',
-            'فلفل',
-            'فلفل دلمه',
-            'کاهو',
-            'لیمو ترش',
-            'لیمو شیرین',
-            'لوبیا سبز',
-            'موز',
-            'انار',
-            'انگور',
-            'نارنگی',
-            'نارنج',
-            'غوره',
-            'هلو',
-            'آلو',
-            'زرد آلو',
-            'آلبالو',
-            'گیلاس',
-            'به',
-            'انبه',
-            'گوجه سبز',
-            'چاقاله',
-            'نارگیل',
-            'آناناس',
-            'توت',
-            'شاه توت',
-            'توت فرنگی',
-            'انجیر',
-            'گلابی',
-            'ملون',
-            'خربزه',
-            'طالبی',
-            'هندوانه',
-            'کیوی',
-            'ازگیل',
-            'شلیل',
-            'کلم',
+            'گوی زانتیا',
 
 
         ];
@@ -756,6 +574,10 @@ class DatabaseSeeder extends Seeder
                 'name' => $prod,
                 'status' => 'active',
                 'category_id' => 1,
+                'categories' => '[1]',
+                'in_shop' => 0,
+                'in_repo' => 0,
+                'price' => 2200000,
             ]);
             $this->makeFile("products", $pp->id, '.jpg', false);
 

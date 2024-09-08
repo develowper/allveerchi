@@ -52,12 +52,15 @@ class VariationRequest extends FormRequest
                 'repo_ids' => ['required', 'array', 'min:1'],
                 'repo_ids.*' => [Rule::in($allowedRepositories)],
                 "product_id" => ['required', Rule::in($products->pluck('id'))],
-                "in_repo" => ['required', 'numeric', 'gte:0', 'lt:99999'],
-                "in_shop" => ['required', 'numeric', 'gte:0', 'lt:99999'],
-                "pack_id" => ['required', 'nullable', Rule::in($packs)],
-                "grade" => ['required', Rule::in($grades)],
-                "weight" => ['required', 'numeric', 'gte:0', 'lt:99999', $this->pack_id == null ? Rule::in(1) : 'numeric'],
-                "price" => ['required', 'numeric', 'gte:0'],
+//                "in_repo" => ['required', 'numeric', 'gte:0', 'lt:99999'],
+//                "in_shop" => ['required', 'numeric', 'gte:0', 'lt:99999'],
+//                "pack_id" => ['required', 'nullable', Rule::in($packs)],
+//                "grade" => ['required', Rule::in($grades)],
+//                "weight" => ['required', 'numeric', 'gte:0', 'lt:99999', $this->pack_id == null ? Rule::in(1) : 'numeric'],
+//                "price" => ['required', 'numeric', 'gte:0'],
+                "batch_count" => ['required', 'numeric', 'gte:0'],
+                "produced_at" => ['required', 'string', 'regex:/\d{4}\/\d{1,2}\/\d{1,2}/'],
+                "guarantee_months" => ['nullable', 'numeric', 'gte:0'],
 //                'tags' => ['nullable', 'max:1024'],
 //                'category_id' => ['required', Rule::in(Category::pluck('id'))],
 
@@ -83,6 +86,18 @@ class VariationRequest extends FormRequest
     {
 
         return [
+            'produced_at.required' => sprintf(__("validator.required"), __('produced_at')),
+            'produced_at.regex' => sprintf(__("validator.invalid"), __('produced_at')),
+
+            "guarantee_months.required" => sprintf(__("validator.required"), __('guarantee_months')),
+            "guarantee_months.numeric" => sprintf(__("validator.numeric"), __('guarantee_months')),
+            "guarantee_months.gte" => sprintf(__("validator.gt"), __('guarantee_months'), 0),
+
+            "batch_count.required" => sprintf(__("validator.required"), __('count')),
+            "batch_count.numeric" => sprintf(__("validator.numeric"), __('count')),
+            "batch_count.gte" => sprintf(__("validator.gt"), __('count'), 0),
+
+
             'name.required' => sprintf(__("validator.required"), __('name')),
             'name.unique' => sprintf(__("validator.unique"), __('name')),
             'name.max' => sprintf(__("validator.max_len"), __('name'), 200, mb_strlen($this->name)),

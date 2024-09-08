@@ -327,6 +327,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('variation/search', [VariationController::class, 'searchPanel'])->name('admin.panel.variation.search')->middleware("can:view,App\Models\Admin,App\Models\Variation,'1'");
         Route::patch('variation/update', [VariationController::class, 'update'])->name('admin.panel.variation.update');
         Route::post('variation/create', [VariationController::class, 'create'])->name('admin.panel.variation.create')->middleware("can:create,App\Models\Admin,App\Models\Variation,'1'");
+        Route::post('variation/export', [VariationController::class, 'export'])->name('admin.panel.variation.export');
         Route::get('variation/{Variation}', [VariationController::class, 'edit'])->name('admin.panel.variation.edit');
 
 

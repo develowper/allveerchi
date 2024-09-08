@@ -104,7 +104,13 @@ export default {
                     return this.__(el.name);
             return '';
         },
-        getPack(id) {
+        getProduct(id) {
+            if (id == null || usePage().props.products == null) return '';
+            for (const el of usePage().props.products)
+                if (el.id == id)
+                    return this.__(el.name);
+            return '';
+        }, getPack(id) {
             if (id == null || usePage().props.packs == null) return '';
             for (const el of usePage().props.packs)
                 if (el.id == id)

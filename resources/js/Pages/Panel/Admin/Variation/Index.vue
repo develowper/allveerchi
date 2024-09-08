@@ -52,7 +52,13 @@
                        tabindex="-1" role="menu" aria-orientation="vertical" aria-label="Actions menu"
 
                        aria-labelledby="dropdownActionsSetting">
-
+                    <div class="">
+                      <div @click=" exportTo('excel')" role="menuitem"
+                           class=" cursor-pointer  select-none block  p-2 px-6 text-sm   transition-colors hover:bg-gray-100">
+                        {{ __('export_excel') }}
+                      </div>
+                      <hr class="border-gray-200 ">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -118,7 +124,7 @@
                       class="   sticky top-0 shadow-md   text-xs text-gray-700   bg-gray-50 ">
                   <!--         table header-->
                   <tr class="text-sm text-center ">
-                    <th scope="col" class="p-4" @click="toggleAll">
+                    <th scope="col" class="p-4" @click="toggleAll($e)">
                       <div class="flex items-center">
                         <input id="checkbox-all-search" type="checkbox" v-model="toggleSelect"
                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
@@ -137,7 +143,7 @@
                         class="px-4 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
                         @click="params.order_by='name';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
                       <div class="flex items-center justify-center">
-                        <span class="px-2">  {{ __('product_title') }}</span>
+                        <span class="px-2">  {{ __('name') }}</span>
                         <ArrowsUpDownIcon class="w-4 h-4 "/>
                       </div>
                     </th>
@@ -153,73 +159,106 @@
 
                     <th scope="col"
                         class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
-                        @click="params.order_by='grade';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
+                        @click="params.order_by='product_id';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
                       <div class="flex items-center justify-center">
-                        <span class="px-2">    {{ __('grade') }} </span>
+                        <span class="px-2">    {{ __('parent') }} </span>
+                        <ArrowsUpDownIcon class="w-4 h-4 "/>
+                      </div>
+                    </th>
+                    <th scope="col"
+                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
+                        @click="params.order_by='produced_at';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
+                      <div class="flex items-center justify-center">
+                        <span class="px-2">    {{ __('produced_at') }} </span>
+                        <ArrowsUpDownIcon class="w-4 h-4 "/>
+                      </div>
+                    </th>
+                    <th scope="col"
+                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
+                        @click="params.order_by='guarantee_expires_at';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
+                      <div class="flex items-center justify-center">
+                        <span class="px-2">    {{ __('guarantee') }} </span>
+                        <ArrowsUpDownIcon class="w-4 h-4 "/>
+                      </div>
+                    </th>
+                    <th scope="col"
+                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
+                        @click="params.order_by='barcode';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
+                      <div class="flex items-center justify-center">
+                        <span class="px-2">    {{ __('barcode') }} </span>
                         <ArrowsUpDownIcon class="w-4 h-4 "/>
                       </div>
                     </th>
 
-                    <th scope="col"
-                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
-                        @click="params.order_by='pack_id';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
-                      <div class="flex items-center justify-center">
-                        <span class="px-2">    {{ __('pack') }} </span>
-                        <ArrowsUpDownIcon class="w-4 h-4 "/>
-                      </div>
-                    </th>
+                    <!--                    <th scope="col"-->
+                    <!--                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"-->
+                    <!--                        @click="params.order_by='grade';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">-->
+                    <!--                      <div class="flex items-center justify-center">-->
+                    <!--                        <span class="px-2">    {{ __('grade') }} </span>-->
+                    <!--                        <ArrowsUpDownIcon class="w-4 h-4 "/>-->
+                    <!--                      </div>-->
+                    <!--                    </th>-->
 
-                    <th scope="col"
-                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
-                        @click="params.order_by='weight';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
-                      <div class="flex items-center justify-center">
-                        <span class="px-2">    {{ __('weight') }} </span>
-                        <ArrowsUpDownIcon class="w-4 h-4 "/>
-                      </div>
-                    </th>
+                    <!--                    <th scope="col"-->
+                    <!--                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"-->
+                    <!--                        @click="params.order_by='pack_id';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">-->
+                    <!--                      <div class="flex items-center justify-center">-->
+                    <!--                        <span class="px-2">    {{ __('pack') }} </span>-->
+                    <!--                        <ArrowsUpDownIcon class="w-4 h-4 "/>-->
+                    <!--                      </div>-->
+                    <!--                    </th>-->
 
-                    <th scope="col"
-                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
-                        @click="params.order_by='price';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
-                      <div class="flex items-center justify-center">
-                        <span class="px-2">    {{ __('fee') }} </span>
-                        <ArrowsUpDownIcon class="w-4 h-4 "/>
-                      </div>
-                    </th>
-                    <th scope="col"
-                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
-                        @click="params.order_by='auction_price';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
-                      <div class="flex items-center justify-center">
-                        <span class="px-2">    {{ __('auction_fee') }} </span>
-                        <ArrowsUpDownIcon class="w-4 h-4 "/>
-                      </div>
-                    </th>
+                    <!--                    <th scope="col"-->
+                    <!--                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"-->
+                    <!--                        @click="params.order_by='weight';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">-->
+                    <!--                      <div class="flex items-center justify-center">-->
+                    <!--                        <span class="px-2">    {{ __('weight') }} </span>-->
+                    <!--                        <ArrowsUpDownIcon class="w-4 h-4 "/>-->
+                    <!--                      </div>-->
+                    <!--                    </th>-->
 
-                    <th scope="col"
-                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
-                        @click="params.order_by='in_shop';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
-                      <div class="flex items-center justify-center">
-                        <span class="px-2">    {{ __('shop_count') }} </span>
-                        <ArrowsUpDownIcon class="w-4 h-4 "/>
-                      </div>
-                    </th>
+                    <!--                    <th scope="col"-->
+                    <!--                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"-->
+                    <!--                        @click="params.order_by='price';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">-->
+                    <!--                      <div class="flex items-center justify-center">-->
+                    <!--                        <span class="px-2">    {{ __('fee') }} </span>-->
+                    <!--                        <ArrowsUpDownIcon class="w-4 h-4 "/>-->
+                    <!--                      </div>-->
+                    <!--                    </th>-->
+                    <!--                    <th scope="col"-->
+                    <!--                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"-->
+                    <!--                        @click="params.order_by='auction_price';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">-->
+                    <!--                      <div class="flex items-center justify-center">-->
+                    <!--                        <span class="px-2">    {{ __('auction_fee') }} </span>-->
+                    <!--                        <ArrowsUpDownIcon class="w-4 h-4 "/>-->
+                    <!--                      </div>-->
+                    <!--                    </th>-->
 
-                    <th scope="col"
-                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
-                        @click="params.order_by='in_repo';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
-                      <div class="flex items-center justify-center">
-                        <span class="px-2">    {{ __('repository_count') }} </span>
-                        <ArrowsUpDownIcon class="w-4 h-4 "/>
-                      </div>
-                    </th>
-                    <th v-if="false" scope="col"
-                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
-                        @click="params.order_by='is_private';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
-                      <div class="flex items-center justify-center">
-                        <span class="px-2">    {{ __('repository_special') }} </span>
-                        <ArrowsUpDownIcon class="w-4 h-4 "/>
-                      </div>
-                    </th>
+                    <!--                    <th scope="col"-->
+                    <!--                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"-->
+                    <!--                        @click="params.order_by='in_shop';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">-->
+                    <!--                      <div class="flex items-center justify-center">-->
+                    <!--                        <span class="px-2">    {{ __('shop_count') }} </span>-->
+                    <!--                        <ArrowsUpDownIcon class="w-4 h-4 "/>-->
+                    <!--                      </div>-->
+                    <!--                    </th>-->
+
+                    <!--                    <th scope="col"-->
+                    <!--                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"-->
+                    <!--                        @click="params.order_by='in_repo';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">-->
+                    <!--                      <div class="flex items-center justify-center">-->
+                    <!--                        <span class="px-2">    {{ __('repository_count') }} </span>-->
+                    <!--                        <ArrowsUpDownIcon class="w-4 h-4 "/>-->
+                    <!--                      </div>-->
+                    <!--                    </th>-->
+                    <!--                    <th v-if="false" scope="col"-->
+                    <!--                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"-->
+                    <!--                        @click="params.order_by='is_private';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">-->
+                    <!--                      <div class="flex items-center justify-center">-->
+                    <!--                        <span class="px-2">    {{ __('repository_special') }} </span>-->
+                    <!--                        <ArrowsUpDownIcon class="w-4 h-4 "/>-->
+                    <!--                      </div>-->
+                    <!--                    </th>-->
 
 
                     <th scope="col" class="px-2 py-3">
@@ -281,7 +320,7 @@
                   </tr>
                   <tr v-for="(d,idx) in data"
                       class="text-center border-b hover:bg-gray-50 " :class="idx%2==1?'bg-gray-50':'bg-white'">
-                    <td class="w-4 p-4" @click="d.selected=!d.selected">
+                    <td class="w-4 p-4" @click="toggleAll($e, idx)">
                       <div class="flex items-center">
                         <input id="checkbox-table-search-1" type="checkbox" v-model="d.selected"
                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
@@ -294,8 +333,8 @@
                     <td
                         class="flex  text-xs items-center px-1 py-4 text-gray-900  ">
                       <Image class="w-10 h-10 cursor-pointer rounded-full"
-                             :src="`${route('storage.variations')}/${d.id}/thumb.jpg`"
-                             :data-lity="`${route('storage.variations')}/${d.id}/thumb.jpg`"
+                             :src="`${route('storage.products')}/${d.product_id}/thumb.jpg`"
+                             :data-lity="`${route('storage.products')}/${d.product_id}/thumb.jpg`"
                              :alt="cropText(d.title,5)"/>
                       <Link class="px-1 whitespace-nowra hover:text-gray-500"
                             :href="route('admin.panel.variation.edit',d.id)">
@@ -304,18 +343,18 @@
                       </Link>
                     </td>
                     <td>
-
-                      <button
-                          @click="d.idx=idx;d.cmnd='change-repo';selected=d; "
-                          id="RepoId"
-                          aria-expanded="false"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
-                          :class="`bg-primary-50 border border-primary-300 hover:bg-primary-200 text-primary-500`"
-                      >
-                        {{ d.repo_id }}
-                      </button>
+                      {{ d.repo_id }}
+                      <!--                      <button-->
+                      <!--                          @click="d.idx=idx;d.cmnd='change-repo';selected=d; "-->
+                      <!--                          id="RepoId"-->
+                      <!--                          aria-expanded="false"-->
+                      <!--                          data-te-ripple-init-->
+                      <!--                          data-te-ripple-color="light"-->
+                      <!--                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "-->
+                      <!--                          :class="`bg-primary-50 border border-primary-300 hover:bg-primary-200 text-primary-500`"-->
+                      <!--                      >-->
+                      <!--                        {{ d.repo_id }}-->
+                      <!--                      </button>-->
 
                     </td>
                     <td v-if="false"
@@ -378,102 +417,112 @@
 
 
                     <td class="px-2 py-4    ">
-                      <button
-                          @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "
-                          id="GradeId"
-                          aria-expanded="false"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
-                          :class="`bg-blue-50 border border-blue-300 hover:bg-blue-200 text-primary-500`"
-                      >
-                        {{ d.grade }}
-                      </button>
+                      {{ getProduct(d.product_id) }}
+                      <!--                      <button-->
+                      <!--                          @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "-->
+                      <!--                          id="GradeId"-->
+                      <!--                          aria-expanded="false"-->
+                      <!--                          data-te-ripple-init-->
+                      <!--                          data-te-ripple-color="light"-->
+                      <!--                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "-->
+                      <!--                          :class="`bg-blue-50 border border-blue-300 hover:bg-blue-200 text-primary-500`"-->
+                      <!--                      >-->
+                      <!--                        {{ d.grade }}-->
+                      <!--                      </button>-->
                     </td>
 
                     <td class="px-2 py-4    ">
-                      <button
-                          @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "
-                          id="PackId"
-                          aria-expanded="false"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
-                          :class="`bg-blue-50 border border-blue-300 hover:bg-blue-200 text-primary-500`"
-                      >
-                        {{ getPack(d.pack_id) }}
-                      </button>
+                      {{ toShamsi(d.produced_at) }}
+                      <!--                      <button-->
+                      <!--                          @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "-->
+                      <!--                          id="PackId"-->
+                      <!--                          aria-expanded="false"-->
+                      <!--                          data-te-ripple-init-->
+                      <!--                          data-te-ripple-color="light"-->
+                      <!--                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "-->
+                      <!--                          :class="`bg-blue-50 border border-blue-300 hover:bg-blue-200 text-primary-500`"-->
+                      <!--                      >-->
+                      <!--                        {{ getPack(d.pack_id) }}-->
+                      <!--                      </button>-->
 
                     </td>
                     <td class="px-2 py-4    ">
-                      <button
-                          @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "
-                          id="WeightId"
-                          aria-expanded="false"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
-                          :class="`bg-blue-50 border border-blue-300 hover:bg-blue-200 text-primary-500`"
-                      >
-                        {{ parseFloat(d.weight) }}
-                      </button>
+                      {{ toShamsi(d.guarantee_expires_at) }}
 
                     </td>
-                    <td class="px-2 py-4    ">
-                      <button
-                          @click="d.idx=idx;d.cmnd='change-price';d.new_price=d.price;d.new_auction_price=d.auction_price; selected=d; "
-                          id="PriceId"
-                          aria-expanded="false"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
-                          :class="`bg-indigo-50 border border-indigo-300 hover:bg-indigo-200 text-indigo-500`"
-                      >
-                        {{ asPrice(d.price) }}
-                      </button>
+                    <td class="px-2 py-4  font-bold  " style="font-family: Serif !important">
+                      {{ f2e(d.barcode) }}
 
                     </td>
-                    <td class="px-2 py-4    ">
-                      <button
-                          @click="d.idx=idx;d.cmnd='change-price';d.new_price=d.price;d.new_auction_price=d.auction_price; selected=d; "
-                          id="PriceId"
-                          aria-expanded="false"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
-                          :class="`bg-indigo-50 border border-indigo-300 hover:bg-indigo-200 text-indigo-500`"
-                      >
-                        {{ asPrice(d.auction_price) }}
-                      </button>
+                    <!--                    <td class="px-2 py-4    ">-->
+                    <!--                      <button-->
+                    <!--                          @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "-->
+                    <!--                          id="WeightId"-->
+                    <!--                          aria-expanded="false"-->
+                    <!--                          data-te-ripple-init-->
+                    <!--                          data-te-ripple-color="light"-->
+                    <!--                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "-->
+                    <!--                          :class="`bg-blue-50 border border-blue-300 hover:bg-blue-200 text-primary-500`"-->
+                    <!--                      >-->
+                    <!--                        {{ parseFloat(d.weight) }}-->
+                    <!--                      </button>-->
 
-                    </td>
-                    <td class="px-2 py-4    ">
-                      <button
-                          @click="d.idx=idx;d.cmnd='change-qty';d.new_in_shop=parseFloat(d.in_shop);d.new_in_repo=parseFloat(d.in_repo); selected=d; "
-                          id="InShopId"
-                          aria-expanded="false"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
-                          :class="`bg-sky-50 border border-sky-300 hover:bg-sky-200 text-sky-500`"
-                      >
-                        {{ parseFloat(d.in_shop) }}
-                      </button>
+                    <!--                    </td>-->
+                    <!--                    <td class="px-2 py-4    ">-->
+                    <!--                      <button-->
+                    <!--                          @click="d.idx=idx;d.cmnd='change-price';d.new_price=d.price;d.new_auction_price=d.auction_price; selected=d; "-->
+                    <!--                          id="PriceId"-->
+                    <!--                          aria-expanded="false"-->
+                    <!--                          data-te-ripple-init-->
+                    <!--                          data-te-ripple-color="light"-->
+                    <!--                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "-->
+                    <!--                          :class="`bg-indigo-50 border border-indigo-300 hover:bg-indigo-200 text-indigo-500`"-->
+                    <!--                      >-->
+                    <!--                        {{ asPrice(d.price) }}-->
+                    <!--                      </button>-->
 
-                    </td>
-                    <td class="px-2 py-4    ">
-                      <button
-                          @click="d.idx=idx;d.cmnd='change-qty';d.new_in_shop=parseFloat(d.in_shop);d.new_in_repo=parseFloat(d.in_repo); selected=d; "
-                          id="InShopId"
-                          aria-expanded="false"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
-                          :class="`bg-sky-50 border border-sky-300 hover:bg-sky-200 text-sky-500`"
-                      >
-                        {{ parseFloat(d.in_repo) }}
-                      </button>
-                    </td>
+                    <!--                    </td>-->
+                    <!--                    <td class="px-2 py-4    ">-->
+                    <!--                      <button-->
+                    <!--                          @click="d.idx=idx;d.cmnd='change-price';d.new_price=d.price;d.new_auction_price=d.auction_price; selected=d; "-->
+                    <!--                          id="PriceId"-->
+                    <!--                          aria-expanded="false"-->
+                    <!--                          data-te-ripple-init-->
+                    <!--                          data-te-ripple-color="light"-->
+                    <!--                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "-->
+                    <!--                          :class="`bg-indigo-50 border border-indigo-300 hover:bg-indigo-200 text-indigo-500`"-->
+                    <!--                      >-->
+                    <!--                        {{ asPrice(d.auction_price) }}-->
+                    <!--                      </button>-->
+
+                    <!--                    </td>-->
+                    <!--                    <td class="px-2 py-4    ">-->
+                    <!--                      <button-->
+                    <!--                          @click="d.idx=idx;d.cmnd='change-qty';d.new_in_shop=parseFloat(d.in_shop);d.new_in_repo=parseFloat(d.in_repo); selected=d; "-->
+                    <!--                          id="InShopId"-->
+                    <!--                          aria-expanded="false"-->
+                    <!--                          data-te-ripple-init-->
+                    <!--                          data-te-ripple-color="light"-->
+                    <!--                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "-->
+                    <!--                          :class="`bg-sky-50 border border-sky-300 hover:bg-sky-200 text-sky-500`"-->
+                    <!--                      >-->
+                    <!--                        {{ parseFloat(d.in_shop) }}-->
+                    <!--                      </button>-->
+
+                    <!--                    </td>-->
+                    <!--                    <td class="px-2 py-4    ">-->
+                    <!--                      <button-->
+                    <!--                          @click="d.idx=idx;d.cmnd='change-qty';d.new_in_shop=parseFloat(d.in_shop);d.new_in_repo=parseFloat(d.in_repo); selected=d; "-->
+                    <!--                          id="InShopId"-->
+                    <!--                          aria-expanded="false"-->
+                    <!--                          data-te-ripple-init-->
+                    <!--                          data-te-ripple-color="light"-->
+                    <!--                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "-->
+                    <!--                          :class="`bg-sky-50 border border-sky-300 hover:bg-sky-200 text-sky-500`"-->
+                    <!--                      >-->
+                    <!--                        {{ parseFloat(d.in_repo) }}-->
+                    <!--                      </button>-->
+                    <!--                    </td>-->
                     <td v-if="false" class="px-2 py-4    ">
                       {{ d.is_private ? __('internal') : __('public') }}
                     </td>
@@ -672,7 +721,8 @@
                             <span class="text-xs py-2 text-danger-500">{{ __('help_price') }}</span>
                             <div class="text-xs py-2 text-danger-500">{{
                                 ` [${__('central_profit')}:${asPrice(Math.round($page.props.central_profit * selected.new_price / 100))} ]`
-                              }}</div>
+                              }}
+                            </div>
                             <div class="flex flex-col  space-y-2 text-start ">
 
                               <div class="flex flex-col  ">
@@ -835,6 +885,7 @@ export default {
       data: [],
       pagination: {},
       toggleSelect: false,
+      lastSelected: null,
       loading: false,
       error: null,
     }
@@ -951,13 +1002,79 @@ export default {
           });
     },
 
+    exportTo(type) {
 
-    toggleAll() {
-
-      this.toggleSelect = !this.toggleSelect;
+      this.isLoading(true);
+      this.errors = {};
+      let ids = [];
       this.data.forEach(e => {
-        e.selected = this.toggleSelect;
+        if (e.selected)
+          ids.push(e.id)
       });
+
+      window.axios.post(route('admin.panel.variation.export'), {'type': type, 'ids': ids},
+          {responseType: 'blob'})
+          .then((response) => {
+            var url = window.URL.createObjectURL(response.data);
+            var a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            a.href = url;
+            a.download = response.headers.filename;
+            a.click();
+            // window.location.assign(url);
+            // console.log(response);
+            if (response.data && response.data.message) {
+              this.showToast('success', response.data.message);
+
+            }
+
+            this.selected = null;
+
+          })
+          .catch((error) => {
+            this.error = this.getErrors(error);
+            // console.log(this.error);
+            if (error.response && error.response.data) {
+              this.errors = error.response.data.errors || {};
+
+
+            }
+            this.showToast('danger', this.error);
+          })
+          .finally(() => {
+            // always executed
+            this.isLoading(false);
+          });
+    },
+    toggleAll($e, idx = null) {
+
+      if (idx !== null) {
+        this.data[idx].selected = !this.data[idx].selected;
+        if (this.lastChecked !== null && event.shiftKey) {
+
+          let low = idx;
+          let high = this.lastSelected;
+
+          if (this.lastSelected < idx) {
+
+            low = this.lastSelected;
+            high = idx;
+          }
+          for (let i = low; i < high; i++) {
+            this.data[i].selected = true;
+          }
+        }
+
+        if (this.data[idx].selected) this.lastSelected = idx;
+
+      } else {
+
+        this.toggleSelect = !this.toggleSelect;
+        this.data.forEach(e => {
+          e.selected = this.toggleSelect;
+        });
+      }
     },
     edit(params) {
       this.isLoading(true);

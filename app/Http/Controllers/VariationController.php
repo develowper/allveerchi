@@ -19,6 +19,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Morilog\Jalali\Jalalian;
+use OpenSpout\Common\Entity\Row;
+use Spatie\SimpleExcel\SimpleExcelWriter;
+use OpenSpout\Common\Entity\Style\Color;
+use OpenSpout\Common\Entity\Style\CellAlignment;
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Common\Entity\Style\Border;
+use OpenSpout\Common\Entity\Style\BorderPart;
 
 class VariationController extends Controller
 {
@@ -31,6 +39,63 @@ class VariationController extends Controller
             'central_profit' => (\App\Models\Setting::getValue('tax_percent') ?? 0) + (\App\Models\Setting::getValue('order_percent_level_0') ?? 0),
         ]);
 
+    }
+
+    public
+    function export(Request $request)
+    {
+        $ids = $request->ids;
+        if (!$ids || (is_array($ids) && count($ids) == 0))
+            return response()->json(['message' => __('nothing_selected')], Variable::ERROR_STATUS);
+
+        $data = Variation::whereIn('id', $ids)->orderBy('id', 'DESC')->select('id', 'name', 'barcode', 'produced_at', 'guarantee_expires_at')->get();
+        $sortedIds = $data->pluck('id');
+        $title = $sortedIds[0] . '_' . $sortedIds[count($sortedIds) - 1];
+
+        $border = new Border(
+            new BorderPart(Border::BOTTOM, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::LEFT, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::RIGHT, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::TOP, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+        );
+        $style = (new Style())
+//            ->setFontBold()
+//            ->setFontSize(15)
+//            ->setFontColor(Color::BLUE)
+            ->setShouldWrapText()
+//            ->setBackgroundColor(Color::YELLOW)
+            ->setBorder($border);
+        $writer = SimpleExcelWriter::streamDownload("$title.xlsx", 'xlsx', function ($writerCallback, $downloadName) use ($style, $data) {
+
+            $writerCallback->openToBrowser($downloadName);
+
+
+            $writerCallback->addRow(Row::fromValues([
+                'id' => __('id'),
+                'name' => __('name'),
+                'barcode' => __('barcode'),
+                'produced_at' => __('produced_at'),
+                'guarantee_expires_at' => __('guarantee_expires_at'),
+
+            ]));
+            foreach ($data as $item) {
+
+                $writerCallback->addRow(Row::fromValues([
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'barcode' => $item->barcode,
+                    'produced_at' => $item->produced_at,
+                    'guarantee_expires_at' => $item->guarantee_expires_at,
+
+                ], $style));
+            }
+        });
+        header("fileName: $title");
+        $writer->close();
+        $writer->toBrowser();
+//        return response()->streamDownload(function () use ($writer) {
+//            $writer->close();
+//        }, "$title.xlsx");
     }
 
     public
@@ -137,11 +202,11 @@ class VariationController extends Controller
         $data = Variation::find($id);
 
         $this->authorize('edit', [Admin::class, $data]);
-        if ($data) {
-            $all = Variation::getImages($data->id);
-            $data->images = collect($all)->filter(fn($e) => !str_contains($e, 'thumb'))->all();
-            $data->thumb_img = collect($all)->filter(fn($e) => str_contains($e, 'thumb'))->first();
-        }
+//        if ($data) {
+//            $all = Product::getImages($data->product_id);
+//            $data->images = collect($all)->filter(fn($e) => !str_contains($e, 'thumb'))->all();
+//            $data->thumb_img = collect($all)->filter(fn($e) => str_contains($e, 'thumb'))->first();
+//        }
         return Inertia::render('Panel/Admin/Variation/Edit', [
             'statuses' => Variable::STATUSES,
             'data' => $data,
@@ -151,6 +216,8 @@ class VariationController extends Controller
 
     public function create(VariationRequest $request)
     {
+
+
         if (!$request->uploading) { //send again for uploading images
             return back()->with(['resume' => true]);
         }
@@ -158,72 +225,86 @@ class VariationController extends Controller
             'status' => 'active',
         ]);
         $logs = [];
-        foreach ($request->repo_ids as $repo_id) {
+        $admin = $request->user();
+        $product_timestamp = Jalalian::fromFormat('Y/m/d', $request->produced_at)->toCarbon();
+        $guarantee_timestamp = $request->guarantee_months ? (clone($product_timestamp))->addMonths($request->guarantee_months) : null;
 
 
-            $repo = Repository::find($repo_id);
-            $product = Product::find($request->product_id);
-            $agency = Agency::find($repo->agency_id);
+        for ($idx = 0; $idx < ($request->batch_count ?? 1); $idx++)
+            foreach ($request->repo_ids as $repo_id) {
 
-            $data = Variation::where([
-                'repo_id' => $repo_id,
-                'product_id' => $request->product_id,
-                'grade' => $request->grade,
-                'pack_id' => $request->pack_id,
-                'weight' => $request->weight,
-                'name' => $request->name,
 
-            ])->first();
-            if (!$data) {
+                $repo = Repository::find($repo_id);
+                $product = Product::find($request->product_id);
+                $agency = Agency::find($repo->agency_id);
+
+//            $data = Variation::where([
+//                'repo_id' => $repo_id,
+//                'product_id' => $request->product_id,
+//                'grade' => $request->grade,
+//                'pack_id' => $request->pack_id,
+//                'weight' => $request->weight,
+//                'name' => $request->name,
+//
+//            ])->first();
+//            if (!$data) {
                 $data = Variation::create([
                     'repo_id' => $repo_id,
-                    'in_repo' => $request->in_repo,
-                    'in_shop' => $request->in_shop,
+//                    'in_repo' => $request->in_repo,
+//                    'in_shop' => $request->in_shop,
                     'product_id' => $request->product_id,
                     'grade' => $request->grade,
                     'pack_id' => $request->pack_id,
                     'qty' => !$request->pack_id ? 'kg' : 'qty',
                     'agency_id' => $repo->agency_id,
-                    'weight' => $request->weight,
-                    'price' => $request->price,
+                    'weight' => $request->weight ?? 0,
+//                    'price' => $request->price,
                     'description' => null,
                     'name' => $request->name ?? $product->name,
                     'category_id' => $product->category_id,
                     'agency_level' => $agency->level,
                     'in_auction' => false,
+                    'admin_id' => $admin->id,
+                    'guarantee_expires_at' => $guarantee_timestamp,
+                    'produced_at' => $product_timestamp,
                 ]);
-            } else {
-                $data->in_shop += $request->in_shop;
-                $data->in_repo += $request->in_repo;
-                $data->save();
-            }
-            if ($data) {
-                if ($request->img) {
-                    Util::createImage($request->img, Variable::IMAGE_FOLDERS[Variation::class], 'thumb', $data->id, 500);
-                } else {
-                    $path = Storage::path("public/products/$data->product_id.jpg");
-
-                    if (!Storage::exists("public/variations")) {
-                        File::makeDirectory(Storage::path("public/variations"), $mode = 0755,);
+//            } else {
+//                $data->in_shop += $request->in_shop;
+//                $data->in_repo += $request->in_repo;
+//                $data->save();
+//            }
+                if ($data) {
+                    $data->barcode = Variation::makeBarcode($data->id, $request->produced_at, $request->guarantee_months);
+                    $data->save();
+//                    if ($request->img) {
+//                        Util::createImage($request->img, Variable::IMAGE_FOLDERS[Variation::class], 'thumb', $data->id, 500);
+//                    }
+//                    else {
+//                        $path = Storage::path("public/products/$data->product_id.jpg");
+//
+//                        if (!Storage::exists("public/variations")) {
+//                            File::makeDirectory(Storage::path("public/variations"), $mode = 0755,);
+//                        }
+//                        if (!Storage::exists("public/variations/$data->id")) {
+//                            File::makeDirectory(Storage::path("public/variations/$data->id"), $mode = 0755,);
+//                        }
+//                        File::copy($path, Storage::path("public/variations/$data->id/thumb.jpg"));
+//                    }
+                    if ($request->count == $idx + 1) {
+                        $data->repo = $repo;
+                        $data->agency = $agency;
+                        $data->count = $request->count;
+                        Telegram::log(null, 'variation_created', $data);
                     }
-                    if (!Storage::exists("public/variations/$data->id")) {
-                        File::makeDirectory(Storage::path("public/variations/$data->id"), $mode = 0755,);
-                    }
-                    File::copy($path, Storage::path("public/variations/$data->id/thumb.jpg"));
-                }
-                $data->repo = $repo;
-                $data->agency = $agency;
-                Telegram::log(null, 'variation_created', $data);
-
-                $res = ['flash_status' => 'success', 'flash_message' => __('created_successfully')];
+                    $res = ['flash_status' => 'success', 'flash_message' => __('created_successfully')];
 //                $logs[] = $data;
-            } else    $res = ['flash_status' => 'danger', 'flash_message' => __('response_error')];
+                } else    $res = ['flash_status' => 'danger', 'flash_message' => __('response_error')];
 
 //            foreach ($logs as $data) {
 //                usleep(500000);
 //            }
 
-        }
+            }
         return to_route('admin.panel.variation.index')->with($res);
 
     }

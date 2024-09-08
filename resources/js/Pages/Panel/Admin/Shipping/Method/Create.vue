@@ -207,10 +207,10 @@
                                  :error="form.errors.products"/>
               </div>
 
-              <div class="my-2">
-                <Timestamp mode="create" :label="__('delivery_hours')"
-                           :errors="form.errors || []" v-model="form.timestamps"/>
-              </div>
+<!--              <div class="my-2">-->
+              <!--                <Timestamp mode="create" :label="__('delivery_hours')"-->
+              <!--                           :errors="form.errors || []" v-model="form.timestamps"/>-->
+              <!--              </div>-->
               <div v-if="form.progress" class="shadow w-full bg-grey-light m-2   bg-gray-200 rounded-full">
                 <div
                     class=" bg-primary rounded  text-xs leading-none py-[.1rem] text-center text-white duration-300 "

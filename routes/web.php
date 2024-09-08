@@ -82,6 +82,8 @@ Route::get('/cache', function () {
     echo Artisan::output();
 });
 Route::get('test', function () {
+
+    return \App\Models\Variation::makeBarcode(1, "1402/1/01", 6);
     return;
     DB::statement('SET FOREIGN_KEY_CHECKS=0;');
     foreach (DB::table('pps')->get() as $idx => $item) {

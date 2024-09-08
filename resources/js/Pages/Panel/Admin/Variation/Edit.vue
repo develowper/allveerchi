@@ -26,35 +26,35 @@
           <div
               class="flex flex-col mx-2 text-gray-500   col-span-2 w-full     px-2"
           >
-            <div class="flex-col   m-2  rounded-lg    w-full mx-auto    ">
-              <div class="font-semibold">{{ __('main_product_image') }}</div>
-              <div class="my-2 flex max-w-[150px]" v-if="$page.props.data">
-                <ImageUploader mode="edit"
-                               :link="route('admin.panel.variation.update')"
-                               :preload="$page.props.data.thumb_img" ref="imageCropperThumb"
-                               :label="__('product_image_jpg')" :for-id="$page.props.data.id"
-                               :cropRatio="null" :id="'img-'+'thumb'"
-                               class="   "/>
-                <InputError class="mt-1 text-xs" :message="form.errors.image_thumb ? form.errors.image_thumb :null "/>
+<!--            <div class="flex-col   m-2  rounded-lg    w-full mx-auto    ">-->
+            <!--              <div class="font-semibold">{{ __('main_product_image') }}</div>-->
+            <!--              <div class="my-2 flex max-w-[150px]" v-if="$page.props.data">-->
+            <!--                <ImageUploader mode="edit"-->
+            <!--                               :link="route('admin.panel.variation.update')"-->
+            <!--                               :preload="$page.props.data.thumb_img" ref="imageCropperThumb"-->
+            <!--                               :label="__('product_image_jpg')" :for-id="$page.props.data.id"-->
+            <!--                               :cropRatio="null" :id="'img-'+'thumb'"-->
+            <!--                               class="   "/>-->
+            <!--                <InputError class="mt-1 text-xs" :message="form.errors.image_thumb ? form.errors.image_thumb :null "/>-->
 
-              </div>
-              <div>{{ __('gallery') }}</div>
+            <!--              </div>-->
+            <!--              <div>{{ __('gallery') }}</div>-->
 
-              <div class="my-2 flex flex-wrap items-stretch" v-if="$page.props.data">
-                <div v-for="(data,idx) in $page.props.data.images"
-                     class="m-1  max-w-[150px]   ">
-                  <ImageUploader mode="edit"
-                                 :link="route('admin.panel.variation.update')"
-                                 :preload="$page.props.data.images[idx]" ref="imageCropper"
-                                 :label="__('product_image_jpg')" :for-id="$page.props.data.id"
-                                 :cropRatio="1" :id="'img-'+idx"
-                                 class="   "/>
-                  <InputError class="mt-1 text-xs" :message="form.errors.images ? form.errors.images.idx:null "/>
-                </div>
+            <!--              <div class="my-2 flex flex-wrap items-stretch" v-if="$page.props.data">-->
+            <!--                <div v-for="(data,idx) in $page.props.data.images"-->
+            <!--                     class="m-1  max-w-[150px]   ">-->
+            <!--                  <ImageUploader mode="edit"-->
+            <!--                                 :link="route('admin.panel.variation.update')"-->
+            <!--                                 :preload="$page.props.data.images[idx]" ref="imageCropper"-->
+            <!--                                 :label="__('product_image_jpg')" :for-id="$page.props.data.id"-->
+            <!--                                 :cropRatio="1" :id="'img-'+idx"-->
+            <!--                                 class="   "/>-->
+            <!--                  <InputError class="mt-1 text-xs" :message="form.errors.images ? form.errors.images.idx:null "/>-->
+            <!--                </div>-->
 
-              </div>
+            <!--              </div>-->
 
-            </div>
+            <!--            </div>-->
             <form @submit.prevent="submit">
 
               <div class="my-2">

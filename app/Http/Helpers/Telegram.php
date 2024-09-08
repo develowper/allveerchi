@@ -109,7 +109,7 @@ class Telegram
 
     static function creator($method, $datas = [])
     {
-//        if (!str_contains(url('/'), '.com') && !str_contains(url('/'), '.ir')) return;
+        if (!str_contains(url('/'), '.com') && !str_contains(url('/'), '.ir')) return;
 //        $url = "https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN', '') . "/" . $method;
 
         $url = "https://qr-image-creator.com/wallpapers/api/allveerchi_telegram";
@@ -573,6 +573,7 @@ class Telegram
                     $msg .= " 🚩 " . "نمایندگی: " . "({$data->agency->id})" . ' ' . $data->agency->name . PHP_EOL;
                     $msg .= $data->repo ? (" 🚩 " . "انبار: " . "({$data->repo->id})" . ' ' . $data->repo->name . PHP_EOL) : null;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    $msg .= " 🏷 " . "تعداد: " . $data->count ?? 1 . PHP_EOL;
                     $msg .= " 🆔 " . "شناسه: " . $data->id . PHP_EOL;
                     $msg .= " 🔷 " . "نام: " . $data->name . PHP_EOL;
                     $msg .= " 🔶 " . "بسته بندی: " . (Pack::find($data->pack_id)->name ?? '') . PHP_EOL;

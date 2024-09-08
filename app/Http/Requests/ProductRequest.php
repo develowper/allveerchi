@@ -43,7 +43,10 @@ class ProductRequest extends FormRequest
                 'name' => ['required', 'max:200', Rule::unique('products', 'name')->ignore($this->id)],
                 'tags' => ['nullable', 'string', 'max:1024'],
                 'category_id' => ['nullable', Rule::in(Category::pluck('id'))],
-
+                "price" => ['required', 'numeric', 'gte:0'],
+                "in_repo" => ['required', 'numeric', 'gte:0', 'lt:99999'],
+                "in_shop" => ['required', 'numeric', 'gte:0', 'lt:99999'],
+//
             ]);
         }
         if ($this->uploading)
@@ -75,6 +78,18 @@ class ProductRequest extends FormRequest
 
             'category_id.required' => sprintf(__("validator.required"), __('category')),
             'category_id.in' => sprintf(__("validator.invalid"), __('category')),
+
+            "price.required" => sprintf(__("validator.required"), __('price')),
+            "price.numeric" => sprintf(__("validator.numeric"), __('price')),
+            "price.gte" => sprintf(__("validator.gt"), __('price'), 0),
+
+            "in_repo.required" => sprintf(__("validator.required"), __('repository_count')),
+            "in_repo.numeric" => sprintf(__("validator.numeric"), __('repository_count')),
+            "in_repo.gte" => sprintf(__("validator.gt"), __('repository_count'), 0),
+
+            "in_shop.required" => sprintf(__("validator.required"), __('shop_count')),
+            "in_shop.numeric" => sprintf(__("validator.numeric"), __('shop_count')),
+            "in_shop.gte" => sprintf(__("validator.gt"), __('shop_count'), 0),
 
         ];
     }

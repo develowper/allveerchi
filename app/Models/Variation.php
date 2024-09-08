@@ -30,6 +30,10 @@ class Variation extends Model
         'weight',
         'description',
         'min_allowed',
+        'barcode',
+        'admin_id',
+        'guarantee_expires_at',
+        'produced_at',
     ];
 
     public static function getImages($id)
@@ -43,6 +47,25 @@ class Variation extends Model
         }
 
         return $images;
+    }
+
+    public static function makeBarcode($id, mixed $produced_at, mixed $guarantee_months)
+    {
+        $seperated = explode('/', $produced_at);
+        foreach ($seperated as $idx => $item) {
+            $seperated[$idx] = str_pad($item, 2, "0", STR_PAD_LEFT);
+        }
+        $produced_at = join('', $seperated);
+        $guarantee_months = str_pad($guarantee_months, 2, "0", STR_PAD_LEFT);
+        $res = "$id$produced_at$guarantee_months";
+
+        $checksum = 0;
+        foreach (str_split($res) as $idx => $char) {
+            $checksum += ($char * ($idx + 1));
+        }
+        $checksum = str_pad($checksum, 2, "0", STR_PAD_LEFT);
+        $checksum = substr($checksum, -2);
+        return "$res$checksum";
     }
 
 
