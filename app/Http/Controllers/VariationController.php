@@ -75,7 +75,7 @@ class VariationController extends Controller
                 'name' => __('name'),
                 'barcode' => __('barcode'),
                 'produced_at' => __('produced_at'),
-                'guarantee_expires_at' => __('guarantee_expires_at'),
+                'guarantee_expires_at' => __('guarantee'),
 
             ]));
             foreach ($data as $item) {
