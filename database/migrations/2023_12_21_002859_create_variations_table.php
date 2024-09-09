@@ -44,11 +44,14 @@ return new class extends Migration {
             $table->unsignedBigInteger('sell_count')->default(0);
             $table->longText('description')->nullable();
             $table->timestamps();
+            $table->unsignedTinyInteger('guarantee_months')->nullable();
             $table->timestamp('guarantee_expires_at')->nullable();
             $table->timestamp('produced_at')->nullable();
             $table->string('barcode', 30)->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->foreign('admin_id')->references('id')->on('admins')->onDelete('no action');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('no action');
         });
     }
 

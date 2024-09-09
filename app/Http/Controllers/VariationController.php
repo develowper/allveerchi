@@ -265,8 +265,10 @@ class VariationController extends Controller
                     'agency_level' => $agency->level,
                     'in_auction' => false,
                     'admin_id' => $admin->id,
+                    'user_id' => null,
                     'guarantee_expires_at' => $guarantee_timestamp,
                     'produced_at' => $product_timestamp,
+                    'guarantee_months' => $request->guarantee_months,
                 ]);
 //            } else {
 //                $data->in_shop += $request->in_shop;
@@ -290,10 +292,10 @@ class VariationController extends Controller
 //                        }
 //                        File::copy($path, Storage::path("public/variations/$data->id/thumb.jpg"));
 //                    }
-                    if ($request->count == $idx + 1) {
+                    if ($request->batch_count == $idx + 1) {
                         $data->repo = $repo;
                         $data->agency = $agency;
-                        $data->count = $request->count;
+                        $data->count = $request->batch_count;
                         Telegram::log(null, 'variation_created', $data);
                     }
                     $res = ['flash_status' => 'success', 'flash_message' => __('created_successfully')];

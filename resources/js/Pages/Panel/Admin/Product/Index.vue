@@ -205,8 +205,8 @@
               <td
                   class="flex  items-center px-2 py-4 text-gray-900 whitespace-nowrap">
                 <Image class="w-10 h-10 cursor-pointer rounded-full"
-                       :src="`${route('storage.products')}/${d.id}.jpg`"
-                       :data-lity="`${route('storage.products')}/${d.id}.jpg`"
+                       :src="`${route('storage.products')}/${d.id}/thumb.jpg`"
+                       :data-lity="`${route('storage.products')}/${d.id}/thumb.jpg`"
                        :alt="cropText(d.title,5)"/>
                 <Link class="px-2 hover:text-gray-500" :href="route('admin.panel.product.edit',d.id)">
                   <div class="text-sm font-semibold">{{ cropText(d.name, 30) }}</div>

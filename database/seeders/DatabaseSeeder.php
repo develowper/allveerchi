@@ -579,7 +579,8 @@ class DatabaseSeeder extends Seeder
                 'in_repo' => 0,
                 'price' => 2200000,
             ]);
-            $this->makeFile("products", $pp->id, '.jpg', false);
+//            $this->makeFile("products", $pp->id, '.jpg', false);
+            $this->makeGallery("products", "products", $pp->id, 1);
 
         }
 

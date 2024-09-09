@@ -34,6 +34,8 @@ class Variation extends Model
         'admin_id',
         'guarantee_expires_at',
         'produced_at',
+        'guarantee_months',
+        'user_id',
     ];
 
     public static function getImages($id)

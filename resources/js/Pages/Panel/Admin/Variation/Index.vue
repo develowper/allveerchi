@@ -159,9 +159,17 @@
 
                     <th scope="col"
                         class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
-                        @click="params.order_by='product_id';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
+                        @click="params.order_by='admin_id';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
                       <div class="flex items-center justify-center">
-                        <span class="px-2">    {{ __('parent') }} </span>
+                        <span class="px-2">    {{ __('admin') }} </span>
+                        <ArrowsUpDownIcon class="w-4 h-4 "/>
+                      </div>
+                    </th>
+                    <th scope="col"
+                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
+                        @click="params.order_by='user_id';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
+                      <div class="flex items-center justify-center">
+                        <span class="px-2">    {{ __('user') }} </span>
                         <ArrowsUpDownIcon class="w-4 h-4 "/>
                       </div>
                     </th>
@@ -417,7 +425,7 @@
 
 
                     <td class="px-2 py-4    ">
-                      {{ getProduct(d.product_id) }}
+                      {{ d.admin_id }}
                       <!--                      <button-->
                       <!--                          @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "-->
                       <!--                          id="GradeId"-->
@@ -429,6 +437,9 @@
                       <!--                      >-->
                       <!--                        {{ d.grade }}-->
                       <!--                      </button>-->
+                    </td>
+                    <td class="px-2 py-4    ">
+                      {{ d.user_id }}
                     </td>
 
                     <td class="px-2 py-4    ">
@@ -447,7 +458,7 @@
 
                     </td>
                     <td class="px-2 py-4    ">
-                      {{ toShamsi(d.guarantee_expires_at) }}
+                      {{ d.guarantee_months }}
 
                     </td>
                     <td class="px-2 py-4  font-bold  " style="font-family: Serif !important">
