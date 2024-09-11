@@ -50,6 +50,8 @@ return new class extends Migration {
             $table->string('barcode', 30)->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->foreign('admin_id')->references('id')->on('admins')->onDelete('no action');
+            $table->unsignedBigInteger('operator_id')->nullable();
+            $table->foreign('operator_id')->references('id')->on('admins')->onDelete('no action');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('no action');
         });

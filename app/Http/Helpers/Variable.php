@@ -51,7 +51,8 @@ class Variable
         ['id' => 0, 'name' => 'central', 'level' => '0'],
 //        ['id' => 1, 'name' => 'zone_agency', 'level' => '1'],
 //        ['id' => 2, 'name' => 'province_agency', 'level' => '2'],
-        ['id' => 1, 'name' => 'branch_agency', 'level' => '1']
+        ['id' => 1, 'name' => 'branch_agency', 'level' => '1'],
+        ['id' => 2, 'name' => 'operator_agency', 'level' => '2'],
 //        ['name' => 'branch', 'code' => 4],
     ];
     const PRODUCT_UNITS = ['qty', 'kg'/*, 'gr'*/];
@@ -242,10 +243,10 @@ class Variable
             ['id' => 1, 'fullname' => 'مدیر مرکزی', 'phone' => '09122466401', 'status' => 'active', 'role' => 'owner', 'agency_id' => 1, 'agency_level' => '0',
                 'access' => json_encode(['all']), 'email' => 'eh.shakibi@gmail.com', 'password' => Hash::make(env('ADMIN_PASSWORD')), 'email_verified_at' => Carbon::now(), 'created_at' => Carbon::now(), 'phone_verified' => true,
             ],
-            ['id' => 2, 'fullname' => 'Tadavom (Ashori)', 'phone' => '1', 'status' => 'active', 'role' => 'admin', 'agency_id' => 1, 'agency_level' => '0',
-                'access' => json_encode(['all']), 'email' => 'Ashori@gmail.com', 'password' => Hash::make('Tkpc@123456'), 'email_verified_at' => Carbon::now(), 'created_at' => Carbon::now(), 'phone_verified' => true,
-            ], ['id' => 3, 'fullname' => 'Tadavom (Mahernia)', 'phone' => '2', 'status' => 'active', 'role' => 'admin', 'agency_id' => 1, 'agency_level' => '0',
-                'access' => json_encode(['all']), 'email' => 'Mahernia@gmail.com', 'password' => Hash::make('Tkpc@123456'), 'email_verified_at' => Carbon::now(), 'created_at' => Carbon::now(), 'phone_verified' => true,
+            ['id' => 2, 'fullname' => 'Tadavom (Ashori)', 'phone' => '09910397335', 'status' => 'active', 'role' => 'admin', 'agency_id' => 1, 'agency_level' => '0',
+                'access' => json_encode(['all']), 'email' => 'Mahdiehashouri77@yahoo.com', 'password' => Hash::make('Tkpc@123456'), 'email_verified_at' => Carbon::now(), 'created_at' => Carbon::now(), 'phone_verified' => true,
+            ], ['id' => 3, 'fullname' => 'Tadavom (Mahernia)', 'phone' => '09914546648', 'status' => 'active', 'role' => 'admin', 'agency_id' => 1, 'agency_level' => '0',
+                'access' => json_encode(['all']), 'email' => 'mobinasayad95@gmail.com', 'password' => Hash::make('Tkpc@123456'), 'email_verified_at' => Carbon::now(), 'created_at' => Carbon::now(), 'phone_verified' => true,
             ],
 
         ];
