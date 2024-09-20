@@ -83,7 +83,7 @@ Route::get('/cache', function () {
 });
 Route::get('test', function () {
 
-    return \App\Models\Variation::makeBarcode(1, "1402/1/01", 6);
+    return \App\Models\Variation::makeBarcode(1, "1403/06/30", 6);
     return;
     DB::statement('SET FOREIGN_KEY_CHECKS=0;');
     foreach (DB::table('pps')->get() as $idx => $item) {

@@ -56,8 +56,8 @@ class AdminRequest extends FormRequest
         $tmp = [];
         $allowedRoles = array_values(array_filter(Variable::ADMIN_ROLES, function ($e) use ($admin) {
             if (in_array($admin->role, ['god', 'owner']))
-                return in_array($e, ['owner', 'admin']);
-            return in_array($e, ['admin']);
+                return in_array($e, ['owner', 'admin', 'operator']);
+            return in_array($e, ['admin', 'operator']);
         }));
         $allowedStatuses = collect(Variable::USER_STATUSES)->pluck('name');
         $user = $this->user();

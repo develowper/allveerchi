@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class SMSHelper
 {
-    private $apiKey, $client, $server_number, $register_pattern, $forget_password_pattern;
+    private $senderType, $apiKey, $client, $server_number, $register_pattern, $forget_password_pattern;
 
     public function __construct()
     {
+        $this->senderType = Variable::SMS_SENDER;
 //        $this->register_pattern = 'i5gqousv1o5ndev'; //hamsignal
 //        $this->forget_password_pattern = '43z2ci5l612ro0x';
 //        $this->register_pattern = '50ybp75b5mlrjx8'; //vartashop
@@ -62,6 +63,11 @@ class SMSHelper
     public function send($to, $msg, $cmnd = 'register')
     {
 //        if ($to == "09018945844" || $to == "9018945844") return;
+
+        if ($this->senderType == 'sms.ir') {
+            return $this->smsIR($to, $msg, $cmnd);
+        }
+
         $name = "ورتا شاپ";
         $pattern = $this->register_pattern;
         $code = null;
@@ -115,9 +121,9 @@ class SMSHelper
     }
 
 
-    public function getCredit($type)
+    public function getCredit()
     {
-        if ($type == 'sms.ir')
+        if ($this->senderType == 'sms.ir')
             return (new SmsIR_UltraFastSend())->getCredit();
         return $this->client->getCredit();
     }
@@ -159,39 +165,49 @@ class SMSHelper
 
     }
 
-    public function smsIR($number, $code)
+    public function smsIR($number, $code, $type = 'register')
     {
+        switch ($type) {
+            case 'forget':
+            case 'register':
+                $templateId = '';
+                $params = [[
+                    "Parameter" => "VerificationCode",
+                    "ParameterValue" => $code
+                ]];
+                break;
+            case 'guarantee_started':
+                $templateId = '';
+                $code = explode('$', $code);
+                $params = [
+                    [
+                        "Parameter" => "Serial",
+                        "ParameterValue" => $code[0]
+                    ], [
+                        "Parameter" => "Expire",
+                        "ParameterValue" => $code[1]
+                    ],
+                ];
+                break;
+        }
+
         try {
             date_default_timezone_set("Asia/Tehran");
 
 
             // message data
             $data = array(
-                "ParameterArray" => array(
-                    array(
-                        "Parameter" => "VerificationCode",
-                        "ParameterValue" => $code
-                    )
-                ),
+                "ParameterArray" => $params,
                 "Mobile" => $number,
-                "TemplateId" => "56441"
-            );
-            $data2 = array(
-                "ParameterArray" => array(
-                    array(
-                        "Parameter" => "VerificationCode",
-                        "ParameterValue" => $code
-                    )
-                ),
-                "Mobile" => $number,
-                "TemplateId" => "79949"
+                "TemplateId" => $templateId
             );
 
             $SmsIR_UltraFastSend = new SmsIR_UltraFastSend();
-            $SmsIR_UltraFastSend->UltraFastSend($data2);
+            $SmsIR_UltraFastSend->UltraFastSend($data);
             return true;
         } catch (Exception $e) {
-            echo 'Error SendMessage : ' . $e->getMessage();
+//            echo 'Error SendMessage : ' . $e->getMessage();
+            Telegram::log(null, 'error', $e->getMessage());
             return false;
         }
     }

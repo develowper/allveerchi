@@ -19,6 +19,7 @@ class Product extends Model
         'in_repo',
         'in_shop',
         'price',
+        'auction_price',
         'charged_at',
         'rate',
         'status',

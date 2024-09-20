@@ -501,8 +501,27 @@ class Telegram
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     $msg .= "\xD8\x9C" . PHP_EOL . $time . PHP_EOL . " ";
                     break;
+                case 'guarantee_created':
+                case 'guarantee_edited':
+                    if ($isCreate)
+                        $msg .= " 🟢 " . "یک گارانتی ثبت شد" . PHP_EOL;
+                    if ($isEdit)
+                        $msg .= " 🟠 " . "یک گارانتی ویرایش شد" . PHP_EOL;
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    $msg .= " 👤 " . "کاربر: " . PHP_EOL;
+                    $msg .= "$us->fullname ( $us->phone )" . PHP_EOL;
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    $msg .= " 🔷 " . "نام کالا: " . $data->name . PHP_EOL;
+                    $msg .= " 🆔 " . "بارکد: " . $data->barcode . PHP_EOL;
+                    $msg .= " 🚩 " . "نمایندگی: " . "({$data->agency->id})" . ' ' . $data->agency->name . PHP_EOL;
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    if ($data->operator)
+                        $msg .= " 👤 " . "نصاب: " . "({$data->operator->id})" . ' ' . $data->operator->fullname . PHP_EOL;
+
+                    break;
                 case 'order_created':
                 case 'order_edited':
+
                     $cities = City::whereIn('id', [$data->province_id, $data->county_id, $data->district_id])->get();
                     $data->province = $cities->where('id', $data->province_id)->first()->name ?? '';
                     $data->county = $cities->where('id', $data->county_id)->first()->name ?? '';
@@ -1217,6 +1236,7 @@ class Telegram
 
                     break;
                 case 'error':
+                    $topic = self::TOPIC_BUGS;
                     $msg = ' 📛 ' . ' خطای سیستم ' . PHP_EOL . $data;
                     break;
                 default :

@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-1  text-start gap-2">
     <div>
-      <InputLabel class="mt-2" for="phone" :value="__('phone')"/>
+      <InputLabel class="mt-2" for="phone" :value="label || __('phone')"/>
       <div v-if="!disableEdit" class="flex items-center">
 
         <span v-if="verified==0" class="text-danger text-xs mx-1">({{ __('not_verified') }})</span>
@@ -83,7 +83,7 @@ import {
 } from "@heroicons/vue/24/outline";
 
 export default {
-  props: ['phone', 'for', 'verified', 'type', 'phoneVerify', 'phoneError', 'phoneVerifyError', 'disable', 'disableEdit', 'activeButtonText', 'admin'],
+  props: ['label', 'phone', 'for', 'verified', 'type', 'phoneVerify', 'phoneError', 'phoneVerifyError', 'disable', 'disableEdit', 'activeButtonText', 'admin'],
   emits: ['update:phone', 'update:phoneVerify', 'update:verified',],
   data() {
     return {

@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name', 200);
             $table->string('tags', 200)->nullable();
+            $table->enum('status', array_column(Variable::VARIATION_STATUSES, 'name'))->default(array_column(Variable::VARIATION_STATUSES, 'name')[0]);
             $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('no action');
             $table->enum('grade', \App\Http\Helpers\Variable::GRADES)->nullable();
@@ -52,8 +53,8 @@ return new class extends Migration {
             $table->foreign('admin_id')->references('id')->on('admins')->onDelete('no action');
             $table->unsignedBigInteger('operator_id')->nullable();
             $table->foreign('operator_id')->references('id')->on('admins')->onDelete('no action');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('no action');
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->foreign('customer_id')->references('id')->on('users')->onDelete('no action');
         });
     }
 

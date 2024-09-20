@@ -41,12 +41,13 @@ class Variable
 
 
     const LANGS = ['fa', 'en', 'ar'];
+    const SMS_SENDER = 'sms.ir';
 
     const MARKETS = ['bazaar', 'myket', 'playstore', 'site'];
     const GATEWAYS = ['bazaar', 'myket', 'nextpay'];
 
     const USER_ROLES = ['us'];
-    const ADMIN_ROLES = ['god', 'owner', 'admin'];
+    const ADMIN_ROLES = ['god', 'owner', 'admin', 'operator'];
     const AGENCY_TYPES = [
         ['id' => 0, 'name' => 'central', 'level' => '0'],
 //        ['id' => 1, 'name' => 'zone_agency', 'level' => '1'],
@@ -70,6 +71,11 @@ class Variable
         ["name" => 'inactive', "color" => 'gray'],
         ["name" => 'active', "color" => 'success'],
         ["name" => 'block', "color" => 'danger'],
+    ];
+    const  VARIATION_STATUSES = [
+        ["name" => 'available', "color" => 'success'],
+        ["name" => 'inactive', "color" => 'gray'],
+        ["name" => 'sold', "color" => 'danger'],
     ];
     const  USER_STATUSES = [
         ["name" => 'active', "color" => 'success'],
@@ -127,8 +133,8 @@ class Variable
 
     const  TRANSACTION_TYPES = ['pay', 'profit', 'settlement', 'charge', 'shipping'];
     const  FINANCIALS = ['admin' => AdminFinancial::class, 'user' => UserFinancial::class, 'agency' => AgencyFinancial::class];
-    const  TRANSACTION_MODELS = ['order' => Order::class, 'repo-order' => RepositoryOrder::class, 'admin' => Admin::class, 'user' => User::class, 'agency' => Agency::class];
-    const  PAYER_TYPES = ['admin' => Admin::class, 'user' => User::class, 'agency' => Agency::class];
+    const  TRANSACTION_MODELS = ['order' => Order::class, 'repo-order' => RepositoryOrder::class, 'admin' => Admin::class, 'user' => User::class, 'agency' => Agency::class, 'operator' => Admin::class];
+    const  PAYER_TYPES = ['admin' => Admin::class, 'operator' => Admin::class, 'user' => User::class, 'agency' => Agency::class];
     const REF_TYPES = ['register',];
     const BANK_GATEWAY = 'nextpay';
     const PAY_TIMEOUT = 1;
@@ -277,6 +283,7 @@ class Variable
             ['key' => 'order_percent_level_1', 'value' => 80, "created_at" => \Carbon\Carbon::now(),],
             ['key' => 'order_percent_level_2', 'value' => 0, "created_at" => \Carbon\Carbon::now(),],
             ['key' => 'order_percent_level_3', 'value' => 0, "created_at" => \Carbon\Carbon::now(),],
+            ['key' => 'operator_profit_percent', 'value' => 20, "created_at" => \Carbon\Carbon::now(),],
 
         ];
     }

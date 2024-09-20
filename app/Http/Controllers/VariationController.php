@@ -266,7 +266,7 @@ class VariationController extends Controller
                     'in_auction' => false,
                     'admin_id' => $admin->id,
                     'user_id' => null,
-                    'guarantee_expires_at' => $guarantee_timestamp,
+//                    'guarantee_expires_at' => $guarantee_timestamp,
                     'produced_at' => $product_timestamp,
                     'guarantee_months' => $request->guarantee_months,
                 ]);

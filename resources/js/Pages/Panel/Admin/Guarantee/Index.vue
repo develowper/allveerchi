@@ -13,13 +13,13 @@
             class="flex  items-center justify-between px-4 py-2 text-primary-500 border-b md:py-4">
           <div class="flex">
             <Bars2Icon class="h-7 w-7 mx-3"/>
-            <h5 class="  font-semibold">{{ __('variations_list') }}</h5>
+            <h5 class="  font-semibold">{{ __('guarantees_list') }}</h5>
           </div>
           <div>
-            <Link :href="route('admin.panel.variation.create')"
+            <Link :href="route('admin.panel.guarantee.create')"
                   class="inline-flex items-center  justify-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold  transition-all duration-500 text-white     hover:bg-green-600 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
             >
-              {{ __('new_product') }}
+              {{ __('new_guarantee') }}
             </Link>
           </div>
         </div>
@@ -455,6 +455,10 @@
                       <!--                      >-->
                       <!--                        {{ getPack(d.pack_id) }}-->
                       <!--                      </button>-->
+
+                    </td>
+                    <td class="px-2 py-4    ">
+                      {{ toShamsi(d.guarantee_expires_at) }}
 
                     </td>
                     <td class="px-2 py-4    ">
@@ -964,7 +968,7 @@ export default {
 
       this.loading = true;
       this.data = [];
-      window.axios.get(route('admin.panel.variation.search'), {
+      window.axios.get(route('admin.panel.guarantee.search'), {
         params: this.params
       }, {})
           .then((response) => {

@@ -141,6 +141,7 @@ class AdminPolicy
                 case    Category::class:
                     $res = $admin->hasAccess('create_category');
                     break;
+
             }
 
         if ($abort && empty($res))

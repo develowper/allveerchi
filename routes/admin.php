@@ -12,6 +12,8 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\FinancialController;
+use App\Http\Controllers\GuaranteeController;
+use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PackController;
 use App\Http\Controllers\PartnershipController;
@@ -138,6 +140,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::post('admin/create', [AdminController::class, 'create'])->name('admin.panel.admin.create')->middleware("can:create,App\Models\Admin,App\Models\Admin,'1'");
         Route::get('admin/{setting}', [AdminController::class, 'edit'])->name('admin.panel.admin.edit');
 
+        Route::get('operator/search', [OperatorController::class, 'searchPanel'])->name('admin.panel.operator.search');
 
         PanelController::makeInertiaRoute('get', 'message/index', 'admin.panel.message.index', 'Panel/Admin/Message/Index',
             [
@@ -184,6 +187,20 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::patch('agency/update', [AgencyController::class, 'update'])->name('admin.panel.agency.update');
         Route::post('agency/create', [AgencyController::class, 'create'])->name('admin.panel.agency.create')->middleware("can:create,App\Models\Admin,App\Models\Agency,'1'");
         Route::get('agency/{agency}', [AgencyController::class, 'edit'])->name('admin.panel.agency.edit');
+
+        PanelController::makeInertiaRoute('get', 'guarantee/index', 'admin.panel.guarantee.index', 'Panel/Admin/Guarantee/Index',
+            [
+            ]
+        );
+        PanelController::makeInertiaRoute('get', 'guarantee/create', 'admin.panel.guarantee.create', 'Panel/Admin/Guarantee/Create',
+            [
+            ]
+        );
+
+        Route::get('guarantee/search', [GuaranteeController::class, 'searchPanel'])->name('admin.panel.guarantee.search');
+        Route::patch('guarantee/update', [GuaranteeController::class, 'update'])->name('admin.panel.guarantee.update');
+        Route::post('guarantee/create', [GuaranteeController::class, 'create'])->name('admin.panel.guarantee.create');
+        Route::get('guarantee/{guarantee}', [GuaranteeController::class, 'edit'])->name('admin.panel.guarantee.edit');
 
 
         PanelController::makeInertiaRoute('get', 'repository/index', 'admin.panel.repository.index', 'Panel/Admin/Repository/Index',
