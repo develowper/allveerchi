@@ -89,7 +89,7 @@ class GuaranteeController extends Controller
                 Telegram::log(null, 'transaction_created', $t);
             }
         }
-        Telegram::log(null, 'guarantee_created', $variation);
+//        Telegram::log(null, 'guarantee_created', $variation);
         $res = ['flash_status' => 'success', 'flash_message' => __('done_successfully')];
         return to_route('admin.panel.guarantee.index')->with($res);
     }
