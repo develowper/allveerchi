@@ -82,9 +82,9 @@ Route::get('/cache', function () {
     echo Artisan::output();
 });
 Route::get('test', function () {
-    return;
-    return \App\Models\Variation::makeBarcode(1, "1403/07/01", 6);
-    return \App\Models\Variation::validateBarcode('11403070106154') ? 'true' : 'false';
+
+//    return \App\Models\Variation::makeBarcode(1, "1403/07/01", 6);
+//    return \App\Models\Variation::validateBarcode('10140307010676') ? 'true' : 'false';
     return;
     DB::statement('SET FOREIGN_KEY_CHECKS=0;');
     foreach (DB::table('pps')->get() as $idx => $item) {
