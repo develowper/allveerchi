@@ -512,7 +512,7 @@ class Telegram
                     $msg .= "$us->fullname ( $us->phone )" . PHP_EOL;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     $msg .= " 🔷 " . "نام کالا: " . $data->name . PHP_EOL;
-                    $msg .= " 🆔 " . "بارکد: " . $data->barcode . PHP_EOL;
+                    $msg .= "\xD8\x9C" . " 🆔 " . "بارکد: " . $data->barcode . PHP_EOL;
                     $msg .= " 🚩 " . "نمایندگی: " . "({$data->agency->id})" . ' ' . $data->agency->name . PHP_EOL;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     if ($data->operator)
