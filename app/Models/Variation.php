@@ -83,7 +83,7 @@ class Variation extends Model
         foreach (str_split($value) as $idx => $char) {
             $checksum += ($char * ($idx + 1));
         }
-        $res = round($checksum / $day);
+        $res = round(($checksum / $day) % 100);
         return str_pad($res, 2, "0", STR_PAD_LEFT);
     }
 
