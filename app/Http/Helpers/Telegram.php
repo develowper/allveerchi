@@ -621,7 +621,7 @@ class Telegram
                     $msg .= $data->repo ? (" 🚩 " . "انبار: " . "({$data->repo->id})" . ' ' . $data->repo->name . PHP_EOL) : null;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     $msg .= " 🏷 " . "تعداد: " . ($data->count ?? 1) . PHP_EOL;
-                    $msg .= " 🆔 " . "شناسه: " . $data->id . PHP_EOL;
+                    $msg .= " 🆔 " . "شناسه: " . ($data->batch_ids??$data->id) . PHP_EOL;
                     $msg .= " 🔷 " . "نام: " . $data->name . PHP_EOL;
                     $msg .= " 🔶 " . "بسته بندی: " . (Pack::find($data->pack_id)->name ?? '') . PHP_EOL;
                     $msg .= " 🔷 " . "درجه: " . $data->grade . PHP_EOL;

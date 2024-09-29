@@ -404,7 +404,7 @@ class SampleController extends Controller
                 $data->repo = $repo;
                 $data->agency = $agency;
                 $data->count = $request->batch_count;
-                $data->id = "$firstId-$lastId";
+                $data->batch_ids = "$firstId-$lastId";
                 Telegram::log(null, 'sample_created', $data);
                 $res = ['flash_status' => 'success', 'flash_message' => __('created_successfully')];
 //                $logs[] = $data;
