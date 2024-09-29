@@ -1056,6 +1056,7 @@ export default {
 
             this.selected = null;
 
+            
           })
           .catch((error) => {
             error.response.data.text().then(e =>
