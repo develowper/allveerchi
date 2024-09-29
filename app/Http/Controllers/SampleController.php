@@ -405,7 +405,7 @@ class SampleController extends Controller
                 $data->agency = $agency;
                 $data->count = $request->batch_count;
                 $data->id = "$firstId-$lastId";
-                Telegram::log(null, 'variation_created', $data);
+                Telegram::log(null, 'sample_created', $data);
                 $res = ['flash_status' => 'success', 'flash_message' => __('created_successfully')];
 //                $logs[] = $data;
             } else    $res = ['flash_status' => 'danger', 'flash_message' => __('response_error')];
