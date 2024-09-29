@@ -383,6 +383,9 @@ class SampleController extends Controller
                     ]);
                     $s->barcode = Sample::makeBarcode($s->id, $request->produced_at, $request->guarantee_months);
                     $s->save();
+                    if ($i == 0)
+                        $firstId = $s->id;
+                    $lastId = $s->id;
                 }
 //                    if ($request->img) {
 //                        Util::createImage($request->img, Variable::IMAGE_FOLDERS[Variation::class], 'thumb', $data->id, 500);
@@ -401,6 +404,7 @@ class SampleController extends Controller
                 $data->repo = $repo;
                 $data->agency = $agency;
                 $data->count = $request->batch_count;
+                $data->id = "$firstId-$lastId";
                 Telegram::log(null, 'variation_created', $data);
                 $res = ['flash_status' => 'success', 'flash_message' => __('created_successfully')];
 //                $logs[] = $data;

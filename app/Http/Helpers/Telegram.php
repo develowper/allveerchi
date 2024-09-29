@@ -604,6 +604,34 @@ class Telegram
                     $msg .= " 🖼 " . "تصویر:" . PHP_EOL . url("storage/variations/$data->id/thumb.jpg") . "?rev=" . random_int(100, 999) . PHP_EOL;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     break;
+                case 'sample_created':
+                case 'sample_edited':
+                    if ($isCreate)
+                        $msg .= " 🟩 " . "* نمونه ثبت شد" . PHP_EOL;
+                    if ($isEdit)
+                        $msg .= " 🟨 " . "* نمونه ویرایش شد" . PHP_EOL;
+
+                    $msg = str_replace('*', ($data->count ?? 'یک'), $msg);
+
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    $msg .= " 👤 " . "کاربر: " . PHP_EOL;
+                    $msg .= "$us->fullname ( $us->phone )" . PHP_EOL;
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    $msg .= " 🚩 " . "نمایندگی: " . "({$data->agency->id})" . ' ' . $data->agency->name . PHP_EOL;
+                    $msg .= $data->repo ? (" 🚩 " . "انبار: " . "({$data->repo->id})" . ' ' . $data->repo->name . PHP_EOL) : null;
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    $msg .= " 🏷 " . "تعداد: " . ($data->count ?? 1) . PHP_EOL;
+                    $msg .= " 🆔 " . "شناسه: " . $data->id . PHP_EOL;
+                    $msg .= " 🔷 " . "نام: " . $data->name . PHP_EOL;
+                    $msg .= " 🔶 " . "بسته بندی: " . (Pack::find($data->pack_id)->name ?? '') . PHP_EOL;
+                    $msg .= " 🔷 " . "درجه: " . $data->grade . PHP_EOL;
+                    $msg .= " 🔶 " . "وزن: " . floatval($data->weight) . PHP_EOL;
+                    $msg .= " 🔷 " . "در فروشگاه: " . floatval($data->in_shop) . PHP_EOL;
+                    $msg .= " 🔶 " . "در انبار: " . floatval($data->in_repo) . PHP_EOL;
+                    $msg .= " 🔷 " . "قیمت: " . number_format($data->price) . PHP_EOL;
+                    $msg .= " 🖼 " . "تصویر:" . PHP_EOL . url("storage/variations/$data->id/thumb.jpg") . "?rev=" . random_int(100, 999) . PHP_EOL;
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    break;
                 case 'product_created':
                     $msg .= " 🟩 " . "یک محصول والد ساخته شد" . PHP_EOL;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
