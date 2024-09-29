@@ -109,6 +109,7 @@ class SampleController extends Controller
 
             $writerCallback->addRow(Row::fromValues([
                 'id' => __('id'),
+                'repo_id' => __('repository'),
                 'name' => __('name'),
                 'barcode' => __('barcode'),
                 'produced_at' => __('produced_at'),
@@ -119,6 +120,7 @@ class SampleController extends Controller
 
                 $writerCallback->addRow(Row::fromValues([
                     'id' => $item->id,
+                    'repo_id' => $item->repo_id,
                     'name' => $item->name,
                     'barcode' => $item->barcode,
                     'produced_at' => $item->produced_at,
