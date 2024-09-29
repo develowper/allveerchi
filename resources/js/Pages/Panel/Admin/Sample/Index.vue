@@ -1036,7 +1036,7 @@ export default {
           ids.push(e.id)
       });
 
-      window.axios.post(route('admin.panel.variation.export'), {'type': type, 'ids': ids},
+      window.axios.post(route('admin.panel.sample.export'), {'type': type, 'ids': ids},
           {responseType: 'blob'})
           .then((response) => {
             var url = window.URL.createObjectURL(response.data);
