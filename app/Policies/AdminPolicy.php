@@ -15,6 +15,7 @@ use App\Models\Pack;
 use App\Models\Product;
 use App\Models\Repository;
 use App\Models\RepositoryOrder;
+use App\Models\Sample;
 use App\Models\Setting;
 use App\Models\Shipping;
 use App\Models\ShippingMethod;
@@ -78,6 +79,9 @@ class AdminPolicy
                 case    Variation::class:
                     $res = $admin->hasAccess('view_variation');
                     break;
+                case    Sample::class:
+                    $res = $admin->hasAccess('view_sample');
+                    break;
                 case    User::class:
                     $res = $admin->hasAccess('view_user');
                     break;
@@ -122,6 +126,9 @@ class AdminPolicy
                     break;
                 case    Variation::class:
                     $res = $admin->hasAccess('create_variation');
+                    break;
+                case    Sample::class:
+                    $res = $admin->hasAccess('create_sample');
                     break;
                 case    Driver::class:
                     $res = $admin->hasAccess('create_driver');
@@ -202,6 +209,9 @@ class AdminPolicy
                     break;
                 case   $item instanceof Variation :
                     $res = $admin->hasAccess('edit_variation');
+                    break;
+                case   $item instanceof Sample :
+                    $res = $admin->hasAccess('edit_sample');
                     break;
                 case   $item instanceof RepositoryOrder :
                     $res = $admin->hasAccess('edit_repository_order');

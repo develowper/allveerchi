@@ -16,14 +16,16 @@ class Product extends Model
         'category_id',
         'tags',
         'sell_count',
-        'in_repo',
-        'in_shop',
-        'price',
-        'auction_price',
+//        'in_repo',
+//        'in_shop',
+//        'price',
+//        'auction_price',
         'charged_at',
         'rate',
         'status',
         'description',
+//        'in_auction',
+//        'repo_id',
     ];
     protected $casts = [
 

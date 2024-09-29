@@ -220,4 +220,87 @@ class ProductController extends Controller
 
         return response()->json($response, $errorStatus);
     }
+
+    public
+    function search(Request $request)
+    {
+        //disable ONLY_FULL_GROUP_BY
+//        DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+//        $user = auth()->user();
+
+        $search = $request->search;
+        $inShop = $request->in_shop;
+        $parentIds = $request->parent_ids;
+        $districtId = $request->district_id;
+        $countyId = $request->county_id;
+        $provinceId = $request->province_id;
+        $page = $request->page ?: 1;
+        $orderBy = $request->order_by ?? 'updated_at';
+        $dir = $request->dir ?? 'DESC';
+        $paginate = $request->paginate ?: 24;
+        $grade = $request->grade;
+
+        $query = Product::join('repositories', function ($join) use ($inShop, $parentIds, $countyId, $districtId, $provinceId) {
+            $join->on('products.repo_id', '=', 'repositories.id')
+                ->where('repositories.status', 'active')
+                ->where('repositories.is_shop', true)
+//                ->where('variations.agency_level', '3')
+                ->where(function ($query) use ($inShop) {
+                    if ($inShop)
+                        $query->where('products.in_shop', '>', 0);
+                })->where(function ($query) use ($parentIds) {
+                    if ($parentIds && is_array($parentIds) && count($parentIds) > 0)
+                        $query->whereIntegerInRaw('products.product_id', $parentIds);
+                })
+//                ->where(function ($query) use ($provinceId) {
+//                    if ($provinceId === null)
+//                        $query->where('repositories.id', 0);
+//                    elseif ($provinceId)
+//                        $query->where('repositories.province_id', $provinceId);
+//                })->where(function ($query) use ($countyId, $districtId) {
+//
+//                    if ($countyId === null)
+//                        $query->where('repositories.id', 0);
+//                    elseif ($countyId && intval($districtId) === 0)
+//                        $query->whereJsonContains('repositories.cities', intval($countyId));
+//                })->where(function ($query) use ($districtId) {
+//                    if ($districtId === null)
+//                        $query->where('repositories.id', 0);
+//                    elseif ($districtId)
+//                        $query->whereJsonContains('repositories.cities', intval($districtId));
+//                })
+            ;
+
+        })->select('products.id',
+//            'products.product_id',
+            'repositories.id as repo_id',
+            'products.name as name',
+            'repositories.name as repo_name',
+//            'products.pack_id as pack_id',
+//            'products.grade as grade',
+            'products.price as price',
+            'products.auction_price as auction_price',
+            'products.auction_price as auction_price',
+//            'products.weight as weight',
+//            'products.unit as unit',
+            'products.in_auction as in_auction',
+            'products.in_shop as in_shop',
+//            'products.product_id as parent_id',
+            'products.updated_at as updated_at',
+            'repositories.province_id as province_id',
+
+        )
+            ->orderBy("products.$orderBy", $dir)//
+            //            ->orderByRaw("IF(articles.charge >= articles.view_fee, articles.view_fee, articles.id) DESC")
+        ;
+
+        if ($search)
+            $query->where('products.name', 'like', "%$search%");
+        if ($grade)
+            $query = $query->where('products.grade', $grade);
+        $res = $query->paginate($paginate, ['*'], 'page', $page)//            ->getCollection()->groupBy('parent_id')
+        ;
+        return $res;
+    }
+
 }

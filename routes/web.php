@@ -18,6 +18,7 @@ use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PartnershipController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PodcastController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VariationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -296,6 +297,10 @@ Route::get('article/{article}', [ArticleController::class, 'view'])->name('artic
 
 Route::get('/variation/search', [VariationController::class, 'search'])->name('variation.search');
 Route::get('/variation/{id}/{name}', [VariationController::class, 'view'])->name('variation.view');
+
+Route::get('/product/search', [ProductController::class, 'search'])->name('product.search');
+Route::get('/product/{id}/{name}', [ProductController::class, 'view'])->name('product.view');
+
 
 Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
 

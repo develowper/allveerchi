@@ -5,43 +5,108 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\Telegram;
 use App\Http\Helpers\Util;
 use App\Http\Helpers\Variable;
+use App\Http\Requests\SampleRequest;
 use App\Http\Requests\VariationRequest;
 use App\Models\Admin;
 use App\Models\Agency;
-use App\Models\Log;
 use App\Models\Pack;
 use App\Models\Product;
 use App\Models\Repository;
+use App\Models\Sample;
 use App\Models\Variation;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
-use Intervention\Image\Gd\Font;
-use Intervention\Image\ImageManagerStatic as Image;
+use Morilog\Jalali\Jalalian;
+use OpenSpout\Common\Entity\Row;
+use Spatie\SimpleExcel\SimpleExcelWriter;
+use OpenSpout\Common\Entity\Style\Color;
+use OpenSpout\Common\Entity\Style\CellAlignment;
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Common\Entity\Style\Border;
+use OpenSpout\Common\Entity\Style\BorderPart;
 
-class VariationController extends Controller
+class SampleController extends Controller
 {
     public
     function index(Request $request)
     {
         $admin = $request->user();
-        return Inertia::render('Panel/Admin/Variation/Index', [
+        return Inertia::render('Panel/Admin/Sample/Index', [
             'agencyRepositories' => $admin->allowedAgencies(Agency::find($admin->agency_id))->with('repositories:id,name,agency_id')->select('id', 'name')->get(),
-            'variation_statuses' => collect(Variable::SAMPLE_STATUSES)->map(function ($e) {
-                $e['message'] = sprintf(__('*_will_change_to_*'), __('status'), __($e['name']));
-                return $e;
-            }),
+            'central_profit' => (\App\Models\Setting::getValue('tax_percent') ?? 0) + (\App\Models\Setting::getValue('order_percent_level_0') ?? 0),
         ]);
 
     }
 
     public
-    function view(Request $request, $id)
+    function export(Request $request)
     {
+        $ids = $request->ids;
+        if (!$ids || (is_array($ids) && count($ids) == 0))
+            return response()->json(['message' => __('nothing_selected')], Variable::ERROR_STATUS);
+
+        $data = Variation::whereIn('id', $ids)->orderBy('id', 'DESC')->select('id', 'name', 'barcode', 'produced_at', 'guarantee_expires_at')->get();
+        $sortedIds = $data->pluck('id');
+        $title = $sortedIds[0] . '_' . $sortedIds[count($sortedIds) - 1];
+
+        $border = new Border(
+            new BorderPart(Border::BOTTOM, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::LEFT, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::RIGHT, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::TOP, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+        );
+        $style = (new Style())
+//            ->setFontBold()
+//            ->setFontSize(15)
+//            ->setFontColor(Color::BLUE)
+            ->setShouldWrapText()
+//            ->setBackgroundColor(Color::YELLOW)
+            ->setBorder($border);
+        $writer = SimpleExcelWriter::streamDownload("$title.xlsx", 'xlsx', function ($writerCallback, $downloadName) use ($style, $data) {
+
+            $writerCallback->openToBrowser($downloadName);
+
+
+            $writerCallback->addRow(Row::fromValues([
+                'id' => __('id'),
+                'name' => __('name'),
+                'barcode' => __('barcode'),
+                'produced_at' => __('produced_at'),
+                'guarantee_expires_at' => __('guarantee'),
+
+            ]));
+            foreach ($data as $item) {
+
+                $writerCallback->addRow(Row::fromValues([
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'barcode' => $item->barcode,
+                    'produced_at' => $item->produced_at,
+                    'guarantee_expires_at' => $item->guarantee_expires_at,
+
+                ], $style));
+            }
+        });
+        header("fileName: $title");
+        $writer->close();
+        $writer->toBrowser();
+//        return response()->streamDownload(function () use ($writer) {
+//            $writer->close();
+//        }, "$title.xlsx");
+    }
+
+    public
+    function view(Request $request, $id, $name)
+    {
+        if ($name && str_starts_with($name, "ref$")) {
+            $inviterId = explode("$", $name)[1];
+        }
         $data = Variation::where('id', $id)->with('repository')->firstOrNew();
         $product = Product::findOrNew($data->product_id);
         $data->description = $data->description ?? $product->description;
@@ -60,10 +125,9 @@ class VariationController extends Controller
 //        DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
 //        $user = auth()->user();
 
-        $id = $request->id;
         $search = $request->search;
         $inShop = $request->in_shop;
-        $parentIds = $request->parent_ids ? (is_array($request->parent_ids) ? $request->parent_ids : explode(',', $request->parent_ids)) : null;
+        $parentIds = $request->parent_ids;
         $districtId = $request->district_id;
         $countyId = $request->county_id;
         $provinceId = $request->province_id;
@@ -73,56 +137,126 @@ class VariationController extends Controller
         $paginate = $request->paginate ?: 24;
         $grade = $request->grade;
 
-        if ($id) {
-            $data = Variation::with('repository')->find($id);
-            $repository = $data->getRelation('repository') ?? new Repository;
-
-            if ($data) {
-                $data->gallery = Variation::getImages($data->id, false);
-                $product = Product::find($data->product_id) ?? new Product;
-                $data->description = $data->description ?? $product->description;
-                $data->order_count = $product->order_count ?? 0;
-                $data->rate = $product->rate ?? 0;
-                $data->repo_name = $repository->name;
-                $data->repo_phone = $repository->phone ?? Agency::first($repository->agency_id)->phone ?? null;
-                $data->repo_address = $repository->address;
-                $data->province_id = $repository->province_id;
-                $data->county_id = $repository->county_id;
-                $data->district_id = $repository->district_id;
-                $data->url = route('variation.view', ['id' => $data->id, 'name' => $data->name]);
-            }
-            return response()->json($data);
-        }
-
         $query = Variation::join('repositories', function ($join) use ($inShop, $parentIds, $countyId, $districtId, $provinceId) {
             $join->on('variations.repo_id', '=', 'repositories.id')
                 ->where('repositories.status', 'active')
                 ->where('repositories.is_shop', true)
-                ->where('variations.status', 'active')
-                ->where('variations.agency_level', '3')
+//                ->where('variations.agency_level', '3')
                 ->where(function ($query) use ($inShop) {
                     if ($inShop)
                         $query->where('variations.in_shop', '>', 0);
                 })->where(function ($query) use ($parentIds) {
                     if ($parentIds && is_array($parentIds) && count($parentIds) > 0)
                         $query->whereIntegerInRaw('variations.product_id', $parentIds);
-                })->where(function ($query) use ($provinceId) {
-                    if ($provinceId === null)
-                        $query->where('repositories.id', 0);
-                    elseif ($provinceId)
-                        $query->where('repositories.province_id', $provinceId);
-                })->where(function ($query) use ($countyId, $districtId) {
+                })
+//                ->where(function ($query) use ($provinceId) {
+//                    if ($provinceId === null)
+//                        $query->where('repositories.id', 0);
+//                    elseif ($provinceId)
+//                        $query->where('repositories.province_id', $provinceId);
+//                })->where(function ($query) use ($countyId, $districtId) {
+//
+//                    if ($countyId === null)
+//                        $query->where('repositories.id', 0);
+//                    elseif ($countyId && intval($districtId) === 0)
+//                        $query->whereJsonContains('repositories.cities', intval($countyId));
+//                })->where(function ($query) use ($districtId) {
+//                    if ($districtId === null)
+//                        $query->where('repositories.id', 0);
+//                    elseif ($districtId)
+//                        $query->whereJsonContains('repositories.cities', intval($districtId));
+//                })
+            ;
 
-                    if ($countyId === null)
-                        $query->where('repositories.id', 0);
-                    elseif ($countyId && intval($districtId) === 0)
-                        $query->whereJsonContains('repositories.cities', intval($countyId));
-                })->where(function ($query) use ($districtId) {
-                    if ($districtId === null)
-                        $query->where('repositories.id', 0);
-                    elseif ($districtId)
-                        $query->whereJsonContains('repositories.cities', intval($districtId));
-                });
+        })->join('products', function ($join) {
+            $join->on('variations.product_id', '=', 'products.id');
+        })
+            ->select(
+                'variations.id', 'variations.product_id',
+                'repositories.id as repo_id',
+                'products.name as name',
+                'repositories.name as repo_name',
+                'variations.pack_id as pack_id',
+                'variations.grade as grade',
+//            'variations.price as price',
+//            'variations.auction_price as auction_price',
+//            'variations.auction_price as auction_price',
+                'variations.weight as weight',
+                'variations.unit as unit',
+                'variations.in_auction as in_auction',
+//            'variations.in_shop as in_shop',
+                'variations.product_id as product_id',
+                'variations.updated_at as updated_at',
+                'repositories.province_id as province_id',
+
+            )
+
+//            ->select(
+//                'repositories.id as repo_id', DB::raw('count(*) as total'))
+            ->orderBy("variations.$orderBy", $dir)//
+            //            ->orderByRaw("IF(articles.charge >= articles.view_fee, articles.view_fee, articles.id) DESC")
+        ;
+
+        if ($search)
+            $query->where('variations.name', 'like', "%$search%");
+        if ($grade)
+            $query = $query->where('variations.grade', $grade);
+
+//        $query->groupBy('repositories.id');
+
+        $res = $query->paginate($paginate, ['*'], 'page', $page)//            ->getCollection()->groupBy('parent_id')
+        ;
+        return $res;
+    }
+
+    function search2(Request $request)
+    {
+        //disable ONLY_FULL_GROUP_BY
+//        DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+//        $user = auth()->user();
+
+        $search = $request->search;
+        $inShop = $request->in_shop;
+        $parentIds = $request->parent_ids;
+        $districtId = $request->district_id;
+        $countyId = $request->county_id;
+        $provinceId = $request->province_id;
+        $page = $request->page ?: 1;
+        $orderBy = $request->order_by ?? 'updated_at';
+        $dir = $request->dir ?? 'DESC';
+        $paginate = $request->paginate ?: 24;
+        $grade = $request->grade;
+
+        $query = Variation::join('repositories', function ($join) use ($inShop, $parentIds, $countyId, $districtId, $provinceId) {
+            $join->on('variations.repo_id', '=', 'repositories.id')
+                ->where('repositories.status', 'active')
+                ->where('repositories.is_shop', true)
+//                ->where('variations.agency_level', '3')
+                ->where(function ($query) use ($inShop) {
+                    if ($inShop)
+                        $query->where('variations.in_shop', '>', 0);
+                })->where(function ($query) use ($parentIds) {
+                    if ($parentIds && is_array($parentIds) && count($parentIds) > 0)
+                        $query->whereIntegerInRaw('variations.product_id', $parentIds);
+                })
+//                ->where(function ($query) use ($provinceId) {
+//                    if ($provinceId === null)
+//                        $query->where('repositories.id', 0);
+//                    elseif ($provinceId)
+//                        $query->where('repositories.province_id', $provinceId);
+//                })->where(function ($query) use ($countyId, $districtId) {
+//
+//                    if ($countyId === null)
+//                        $query->where('repositories.id', 0);
+//                    elseif ($countyId && intval($districtId) === 0)
+//                        $query->whereJsonContains('repositories.cities', intval($countyId));
+//                })->where(function ($query) use ($districtId) {
+//                    if ($districtId === null)
+//                        $query->where('repositories.id', 0);
+//                    elseif ($districtId)
+//                        $query->whereJsonContains('repositories.cities', intval($districtId));
+//                })
+            ;
 
         })->select('variations.id', 'variations.product_id',
             'repositories.id as repo_id',
@@ -134,6 +268,7 @@ class VariationController extends Controller
             'variations.auction_price as auction_price',
             'variations.auction_price as auction_price',
             'variations.weight as weight',
+            'variations.unit as unit',
             'variations.in_auction as in_auction',
             'variations.in_shop as in_shop',
             'variations.product_id as parent_id',
@@ -160,28 +295,33 @@ class VariationController extends Controller
         $data = Variation::find($id);
 
         $this->authorize('edit', [Admin::class, $data]);
-        if ($data) {
-            $all = Variation::getImages($data->id);
-            $data->images = collect($all)->filter(fn($e) => !str_contains($e, 'thumb'))->all();
-            $data->thumb_img = collect($all)->filter(fn($e) => str_contains($e, 'thumb'))->first();
-        }
-        return Inertia::render('Panel/Admin/Variation/Edit', [
+//        if ($data) {
+//            $all = Product::getImages($data->product_id);
+//            $data->images = collect($all)->filter(fn($e) => !str_contains($e, 'thumb'))->all();
+//            $data->thumb_img = collect($all)->filter(fn($e) => str_contains($e, 'thumb'))->first();
+//        }
+        return Inertia::render('Panel/Admin/Sample/Edit', [
             'statuses' => Variable::STATUSES,
             'data' => $data,
 
         ]);
     }
 
-    public function create(VariationRequest $request)
+    public function create(SampleRequest $request)
     {
-        if (!$request->uploading) { //send again for uploading images
-            return back()->with(['resume' => true]);
-        }
-        \Illuminate\Support\Facades\Log::alert('hi');
+
+
+//        if (!$request->uploading) { //send again for uploading images
+//            return back()->with(['resume' => true]);
+//        }
         $request->merge([
             'status' => 'active',
         ]);
         $logs = [];
+        $admin = $request->user();
+        $product_timestamp = Jalalian::fromFormat('Y/m/d', $request->produced_at)->toCarbon();
+        $guarantee_timestamp = $request->guarantee_months ? (clone($product_timestamp))->addMonths($request->guarantee_months) : null;
+
         foreach ($request->repo_ids as $repo_id) {
 
 
@@ -198,52 +338,70 @@ class VariationController extends Controller
                 'name' => $request->name,
 
             ])->first();
-            if ($data) {
-                return back()->withErrors(['errors' => [sprintf(__("validator.unique"), __('variation')),]]);
-                return response()->json(['errors' => [sprintf(__("validator.unique"), __('variation')),], Variable::ERROR_STATUS]);
-
-            }
             if (!$data) {
                 $data = Variation::create([
                     'repo_id' => $repo_id,
-                    'in_repo' => $request->in_repo,
-                    'in_shop' => $request->in_shop,
+                    'in_repo' => $request->batch_count,
+//                        'in_shop' => $request->in_shop,
                     'product_id' => $request->product_id,
                     'grade' => $request->grade,
                     'pack_id' => $request->pack_id,
+                    'qty' => !$request->pack_id ? 'kg' : 'qty',
                     'agency_id' => $repo->agency_id,
                     'weight' => $request->weight,
-                    'price' => $request->price,
+//                    'price' => $request->price,
                     'description' => null,
                     'name' => $request->name ?? $product->name,
                     'category_id' => $product->category_id,
                     'agency_level' => $agency->level,
                     'in_auction' => false,
+                    'admin_id' => $admin->id,
+                    'user_id' => null,
+//                    'guarantee_expires_at' => $guarantee_timestamp,
+//                        'produced_at' => $product_timestamp,
+//                        'guarantee_months' => $request->guarantee_months,
                 ]);
             } else {
-                $data->in_shop += $request->in_shop;
-                $data->in_repo += $request->in_repo;
+//                    $data->in_shop += $request->in_shop;
+                $data->in_repo += $request->batch_count;
                 $data->save();
             }
             if ($data) {
-                if ($request->img) {
-                    Util::createImage($request->img, Variable::IMAGE_FOLDERS[Variation::class], 'thumb', $data->id, 500);
+                for ($i = 0; $i < $request->batch_count; $i++) {
+                    $s = Sample::create([
+                        'produced_at' => $product_timestamp,
+                        'guarantee_months' => $request->guarantee_months,
+                        'status' => 'active',
+                        'variation_id' => $data->id,
+                        'product_id' => $data->product_id,
+                        'agency_id' => $repo->agency_id,
 
-                } else {
-                    $path = Storage::path("public/products/$data->product_id.jpg");
-
-                    if (!Storage::exists("public/variations")) {
-                        File::makeDirectory(Storage::path("public/variations"), $mode = 0755,);
-                    }
-                    if (!Storage::exists("public/variations/$data->id")) {
-                        File::makeDirectory(Storage::path("public/variations/$data->id"), $mode = 0755,);
-                    }
-                    File::copy($path, Storage::path("public/variations/$data->id/thumb.jpg"));
+                        'guarantee_expires_at',
+                        'admin_id' => $admin->id,
+                        'operator_id' => null,
+                        'customer_id' => null,
+                    ]);
+                    $s->barcode = Sample::makeBarcode($s->id, $request->produced_at, $request->guarantee_months);
+                    $s->save();
                 }
+//                    if ($request->img) {
+//                        Util::createImage($request->img, Variable::IMAGE_FOLDERS[Variation::class], 'thumb', $data->id, 500);
+//                    }
+//                    else {
+//                        $path = Storage::path("public/products/$data->product_id.jpg");
+//
+//                        if (!Storage::exists("public/variations")) {
+//                            File::makeDirectory(Storage::path("public/variations"), $mode = 0755,);
+//                        }
+//                        if (!Storage::exists("public/variations/$data->id")) {
+//                            File::makeDirectory(Storage::path("public/variations/$data->id"), $mode = 0755,);
+//                        }
+//                        File::copy($path, Storage::path("public/variations/$data->id/thumb.jpg"));
+//                    }
                 $data->repo = $repo;
                 $data->agency = $agency;
+                $data->count = $request->batch_count;
                 Telegram::log(null, 'variation_created', $data);
-
                 $res = ['flash_status' => 'success', 'flash_message' => __('created_successfully')];
 //                $logs[] = $data;
             } else    $res = ['flash_status' => 'danger', 'flash_message' => __('response_error')];
@@ -253,7 +411,7 @@ class VariationController extends Controller
 //            }
 
         }
-        return to_route('admin.panel.variation.index')->with($res);
+        return to_route('admin.panel.sample.index')->with($res);
 
     }
 
@@ -263,6 +421,7 @@ class VariationController extends Controller
         $admin = $request->user();
 
         $search = $request->search;
+        $repoId = $request->repo_id;
         $page = $request->page ?: 1;
         $orderBy = $request->order_by ?: 'id';
         $dir = $request->dir ?: 'DESC';
@@ -270,7 +429,47 @@ class VariationController extends Controller
         $status = $request->status;
         $grade = $request->grade;
 
-        $query = Variation::query()->select();
+
+        $query = Sample::join('variations', function ($join) use ($search, $repoId, $admin) {
+            $join->on('variations.id', '=', 'samples.variation_id')
+                ->whereIntegerInRaw('variations.agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))
+//                ->where('variations.status', 'active')
+//                ->where('variations.agency_level', '3')
+            ;
+
+        })->select('samples.id as id', 'variations.product_id',
+            'variations.repo_id as repo_id',
+            'variations.name as name',
+            'variations.pack_id as pack_id',
+            'variations.grade as grade',
+            'variations.price as price',
+            'variations.auction_price as auction_price',
+            'variations.auction_price as auction_price',
+            'variations.weight as weight',
+            'variations.in_auction as in_auction',
+            'variations.in_shop as in_shop',
+            'variations.product_id as parent_id',
+            'variations.updated_at as updated_at',
+            'samples.admin_id as admin_id',
+            'samples.customer_id as customer_id',
+            'samples.produced_at as produced_at',
+            'samples.guarantee_months as guarantee_months',
+            'samples.barcode as barcode',
+            'samples.guarantee_expires_at as guarantee_expires_at',
+
+        )
+            ->orderBy("$orderBy", $dir)//
+            //            ->orderByRaw("IF(articles.charge >= articles.view_fee, articles.view_fee, articles.id) DESC")
+        ;
+
+        if ($search)
+            $query->where('variations.name', 'like', "%$search%");
+        if ($grade)
+            $query = $query->where('variations.grade', $grade);//        $res = $query->paginate($paginate, ['*'], 'page', $page)//            ->getCollection()->groupBy('parent_id')
+
+        return $query->paginate($paginate, ['*'], 'page', $page);
+
+        $query = Sample::query()->select();
         $query->whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'));
         if ($search)
             $query = $query->where('name', 'like', "%$search%");
@@ -278,7 +477,6 @@ class VariationController extends Controller
             $query = $query->where('status', $status);
         if ($grade)
             $query = $query->where('grade', $grade);
-
 
         return $query->orderBy($orderBy, $dir)->paginate($paginate, ['*'], 'page', $page);
 
@@ -288,7 +486,6 @@ class VariationController extends Controller
     public
     function update(VariationRequest $request)
     {
-
         $response = ['message' => __('response_error')];
         $errorStatus = Variable::ERROR_STATUS;
         $successStatus = Variable::SUCCESS_STATUS;
@@ -400,7 +597,7 @@ class VariationController extends Controller
                     if (!$newVariation) {
                         $newVariation = Variation::create([
                             'repo_id' => $newRepo->id,
-                            'in_repo' => $request->new_in_repo ?: $data->in_repo,//copy
+                            'in_repo' => $request->new_in_repo ?: $data->in_repo,
                             'product_id' => $data->product_id,
                             'grade' => $data->grade,
                             'pack_id' => $data->pack_id,
@@ -621,21 +818,7 @@ class VariationController extends Controller
                     return response()->json(['message' => __('updated_successfully'),], $successStatus);
 
                     break;
-                case 'status':
-                    $request->validate(
-                        [
-                            'status' => ['required', Rule::in(array_column(Variable::VARIATION_STATUSES, 'name'))],
-                        ],
-                        [
-                            'status.required' => sprintf(__('validator.required'), __('status')),
-                            'status.in' => sprintf(__('validator.invalid'), __('status')),
-
-                        ],
-                    );
-                    $data->status = $request->status;
-                    $data->save();
-                    Telegram::log(null, 'variation_status_edited', (object)['id' => $data->id, 'name' => $data->name, 'status' => __($data->status)]);
-                    return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
+                case 'copy-variation':
 
                     break;
             }

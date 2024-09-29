@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use App\Models\Agency;
 use App\Models\City;
+use App\Models\Repository;
+use App\Models\Variation;
 use Illuminate\Validation\Rules\File;
 use App\Http\Helpers\Variable;
 use App\Models\Business;
@@ -15,7 +17,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use stdClass;
 
-class ProductRequest extends FormRequest
+class SampleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -35,18 +37,20 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         $editMode = (bool)$this->id;
-        $this->tags = is_array($this->tags) ? join(',', $this->tags) : $this->tags;
         $tmp = [];
+        $admin = $this->user();
+
         if (!$this->cmnd) {
+            $allowedRepositories = Repository::whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))->pluck('id');
 
             $tmp = array_merge($tmp, [
-                'name' => ['required', 'max:200', Rule::unique('products', 'name')->ignore($this->id)],
-                'tags' => ['nullable', 'string', 'max:1024'],
-                'category_id' => ['nullable', Rule::in(Category::pluck('id'))],
-//                "price" => ['required', 'numeric', 'gte:0'],
-//                "in_repo" => ['required', 'numeric', 'gte:0', 'lt:99999'],
-//                "in_shop" => ['required', 'numeric', 'gte:0', 'lt:99999'],
-//
+                'repo_ids' => ['required', 'array', 'min:1'],
+                'repo_ids.*' => [Rule::in($allowedRepositories)],
+                "product_id" => ['required', Rule::in(Variation::pluck('id'))],
+                "batch_count" => ['required', 'numeric', 'gte:0'],
+                "produced_at" => ['required', 'string', 'regex:/\d{4}\/\d{1,2}\/\d{1,2}/'],
+                "guarantee_months" => ['nullable', 'numeric', 'gte:0'],
+
             ]);
         }
         if ($this->uploading)
@@ -65,6 +69,22 @@ class ProductRequest extends FormRequest
 
         return [
 
+            'produced_at.required' => sprintf(__("validator.required"), __('produced_at')),
+            'produced_at.regex' => sprintf(__("validator.invalid"), __('produced_at')),
+
+            "guarantee_months.required" => sprintf(__("validator.required"), __('guarantee_months')),
+            "guarantee_months.numeric" => sprintf(__("validator.numeric"), __('guarantee_months')),
+            "guarantee_months.gte" => sprintf(__("validator.gt"), __('guarantee_months'), 0),
+
+            "batch_count.required" => sprintf(__("validator.required"), __('count')),
+            "batch_count.numeric" => sprintf(__("validator.numeric"), __('count')),
+            "batch_count.gte" => sprintf(__("validator.gt"), __('count'), 0),
+
+            'repo_ids.required' => sprintf(__("validator.required"), __('repository')),
+            'repo_ids.*.in' => sprintf(__("validator.invalid"), __('repository')),
+
+            "product_id.required" => sprintf(__("validator.required"), __('product')),
+            "product_id.in" => sprintf(__("validator.invalid"), __('product')),
 
             'name.required' => sprintf(__("validator.required"), __('name')),
             'name.unique' => sprintf(__("validator.unique"), __('name')),

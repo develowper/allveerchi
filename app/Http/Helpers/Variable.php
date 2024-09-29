@@ -73,9 +73,15 @@ class Variable
         ["name" => 'block', "color" => 'danger'],
     ];
     const  VARIATION_STATUSES = [
-        ["name" => 'available', "color" => 'success'],
+        ["name" => 'active', "color" => 'success'],
         ["name" => 'inactive', "color" => 'gray'],
-        ["name" => 'sold', "color" => 'danger'],
+    ];
+    const  SAMPLE_STATUSES = [
+//        ["name" => 'shop', "color" => 'success'],
+//        ["name" => 'repo', "color" => 'blue'],
+//        ["name" => 'sold', "color" => 'gray'],
+        ["name" => 'active', "color" => 'success'],
+        ["name" => 'inactive', "color" => 'danger'],
     ];
     const  USER_STATUSES = [
         ["name" => 'active', "color" => 'success'],

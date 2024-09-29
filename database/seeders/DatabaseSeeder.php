@@ -566,6 +566,7 @@ class DatabaseSeeder extends Seeder
         $prods = [
 
             'گوی زانتیا',
+            'گریس',
 
 
         ];
@@ -575,12 +576,12 @@ class DatabaseSeeder extends Seeder
                 'status' => 'active',
                 'category_id' => 1,
                 'categories' => '[1]',
-                'in_shop' => 0,
-                'in_repo' => 0,
-                'price' => 2200000,
+//                'in_shop' => 0,
+//                'in_repo' => 0,
+//                'price' => 2200000,
             ]);
-//            $this->makeFile("products", $pp->id, '.jpg', false);
-            $this->makeGallery("products", "products", $pp->id, 1);
+            $this->makeFile("products", $pp->id, '.jpg', false);
+//            $this->makeGallery("products", "products", $pp->id, 1);
 
         }
 

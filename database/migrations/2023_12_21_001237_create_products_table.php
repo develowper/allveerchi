@@ -28,9 +28,13 @@ return new class extends Migration {
             $table->unsignedInteger('rate')->nullable();
             $table->timestamps();
             $table->longText('description')->nullable();
-            $table->unsignedDecimal('in_repo', 8, 3)->default(0); //weight|count
-            $table->unsignedDecimal('in_shop', 8, 3)->default(0); //weight|count
-            $table->unsignedInteger('price')->default(0);
+//            $table->unsignedDecimal('in_repo', 8, 3)->default(0); //weight|count
+//            $table->unsignedDecimal('in_shop', 8, 3)->default(0); //weight|count
+//            $table->unsignedInteger('price')->default(0);
+//            $table->unsignedInteger('auction_price')->nullable();
+//            $table->unsignedBigInteger('repo_id')->nullable();
+//            $table->foreign('repo_id')->references('id')->on('repositories')->onDelete('no action');
+//            $table->boolean('in_auction')->default(false);
 
         });
     }

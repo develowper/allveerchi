@@ -2,7 +2,7 @@
 
   <img :src="url" :alt="alt" :class="classes+(loading?'   bg-gray-300 ':' ')"
        @loadstart="loading=true" @loadeddata="loading=false" @load="loading=false;"
-       @error="imageError  ">
+       @error="imageError  " :data-lity="`${url}`">
 </template>
 
 <script>
@@ -28,7 +28,7 @@ export default {
 
     }
   },
-  props: ['type', 'src', 'alt', 'classes','failUrl'],
+  props: ['type', 'src', 'alt', 'classes', 'failUrl'],
   methods: {
     imageError() {
       this.loading = false;

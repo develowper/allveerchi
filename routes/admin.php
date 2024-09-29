@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\SampleController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DriverController;
@@ -337,8 +338,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         );
 
 
-        PanelController::makeInertiaRoute('get', 'variation/create', 'admin.panel.variation.create', 'Panel/Admin/Variation/Create', [
-            'central_profit' => (\App\Models\Setting::getValue('tax_percent') ?? 0) + (\App\Models\Setting::getValue('order_percent_level_0') ?? 0)]);
+        PanelController::makeInertiaRoute('get', 'variation/create', 'admin.panel.variation.create', 'Panel/Admin/Variation/Create',
+            [
+                'central_profit' => (\App\Models\Setting::getValue('tax_percent') ?? 0) + (\App\Models\Setting::getValue('order_percent_level_0') ?? 0)]
+        );
 
         Route::get('variation/index', [VariationController::class, 'index'])->name('admin.panel.variation.index')->middleware("can:view,App\Models\Admin,App\Models\Variation,'1'");
         Route::get('variation/search', [VariationController::class, 'searchPanel'])->name('admin.panel.variation.search')->middleware("can:view,App\Models\Admin,App\Models\Variation,'1'");
@@ -346,6 +349,19 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::post('variation/create', [VariationController::class, 'create'])->name('admin.panel.variation.create')->middleware("can:create,App\Models\Admin,App\Models\Variation,'1'");
         Route::post('variation/export', [VariationController::class, 'export'])->name('admin.panel.variation.export');
         Route::get('variation/{Variation}', [VariationController::class, 'edit'])->name('admin.panel.variation.edit');
+
+
+        PanelController::makeInertiaRoute('get', 'sample/create', 'admin.panel.sample.create', 'Panel/Admin/Sample/Create',
+            [
+                'central_profit' => (\App\Models\Setting::getValue('tax_percent') ?? 0) + (\App\Models\Setting::getValue('order_percent_level_0') ?? 0)]
+        );
+
+        Route::get('sample/index', [SampleController::class, 'index'])->name('admin.panel.sample.index')->middleware("can:view,App\Models\Admin,App\Models\Sample,'1'");
+        Route::get('sample/search', [SampleController::class, 'searchPanel'])->name('admin.panel.sample.search')->middleware("can:view,App\Models\Admin,App\Models\Sample,'1'");
+        Route::patch('sample/update', [SampleController::class, 'update'])->name('admin.panel.sample.update');
+        Route::post('sample/create', [SampleController::class, 'create'])->name('admin.panel.sample.create')->middleware("can:create,App\Models\Admin,App\Models\Sample,'1'");
+        Route::post('sample/export', [SampleController::class, 'export'])->name('admin.panel.sample.export');
+        Route::get('sample/{sample}', [SampleController::class, 'edit'])->name('admin.panel.sample.edit');
 
 
         PanelController::makeInertiaRoute('get', 'shipping/driver/index', 'admin.panel.shipping.driver.index', 'Panel/Admin/Shipping/Driver/Index', []);

@@ -12,7 +12,7 @@
 
     <section
         class="flex   flex-wrap gap-2 w-full bg-gray-100 rounded-b-2xl shadow-md p-2  px-2 lg:px-4 items-center z-[-10]">
-<!--      <LocationSelector-->
+      <!--      <LocationSelector-->
       <!--          @change="  params.province_id=$event.province_id;params.county_id=$event.county_id;params.district_id=$event.district_id; getData(0);"/>-->
 
       <SearchInput class="shrink max-w-xs " v-model="params.search" @search="getData(0)"/>
@@ -40,7 +40,7 @@
                       v-for="p in $page.props.products">
           <div>
             <Image classes="rounded-full h-12 w-12 border-primary-500 border"
-                   :src="route('storage.products')+`/${p.id}.jpg`"></Image>
+                   :src="route('storage.products')+`/${p.id}/thumb.jpg`"></Image>
           </div>
           <div :class="{'text-white':params.parent_ids.filter((e)=>e==p.id).length>0}"
                class="text-xs text-center text-neutral-500">{{ replaceAll(p.name, ' ', "‌") }}
@@ -63,8 +63,8 @@
                 <!--                <Image :data-lity="route('storage.variations')+`/${p.id}/thumb.jpg`"-->
                 <!--                       classes="object-cover  h-full w-full  rounded-t-lg rounded-b   "-->
                 <!--                       :src="route('storage.variations')+`/${p.id}/thumb.jpg`"></Image> -->
-                <Image classes="object-cover  h-full w-full  rounded-t-lg rounded-b   "
-                       :src="route('storage.variations')+`/${p.id}/thumb.jpg`"></Image>
+                <Image classes="object-contain  h-full w-full  rounded-t-lg rounded-b  "
+                       :src="route('storage.products')+`/${p.product_id}/thumb.jpg`"></Image>
               </div>
               <div class="flex my-1 items-center justify-start text-xs text-gray-400">
                 <div class="  rounded p-1 px-2  "> {{ toRelativeTime(p.updated_at) }}</div>
@@ -79,7 +79,7 @@
 
               <div class="flex items-center justify-between">
                 <div class="text-primary-600 ms-1  ">{{ p.name }}</div>
-                <div class="text-sm text-neutral-500 mx-2 ">{{ __('grade') + ' ' + p.grade }}</div>
+                <!--                <div class="text-sm text-neutral-500 mx-2 ">{{ __('grade') + ' ' + p.grade }}</div>-->
 
               </div>
               <hr class="border-gray-200  m-2">
@@ -92,14 +92,14 @@
                 </div>
 
               </div>
-              <div v-if="p.unit != 'qty'" class="flex items-center text-sm">
-                <div>{{ (__('weight')) + ` : ${parseFloat(p.weight)}` }}</div>
-                <div class="text-sm text-neutral-500 mx-2">{{
-                    p.weight > 0 && p.weight < 1 ? __('gr') : __('kg')
-                  }}
-                </div>
+              <!--              <div v-if="p.unit != 'qty'" class="flex items-center text-sm">-->
+              <!--                <div>{{ (__('weight')) + ` : ${parseFloat(p.weight)}` }}</div>-->
+              <!--                <div class="text-sm text-neutral-500 mx-2">{{-->
+              <!--                    p.weight > 0 && p.weight < 1 ? __('gr') : __('kg')-->
+              <!--                  }}-->
+              <!--                </div>-->
 
-              </div>
+              <!--              </div>-->
               <div class="flex items-center justify-end">
                 <div class="flex items-center "
                      :class="{'line-through text-neutral-500':$page.props.is_auction && p.in_auction}">
@@ -220,7 +220,7 @@ export default {
 
   }, mounted() {
     this.setScroll(this.$refs.loader);
-    // this.getData();
+    this.getData();
   },
   methods: {
     getData(page) {

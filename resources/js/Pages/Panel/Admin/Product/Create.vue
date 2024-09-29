@@ -65,46 +65,6 @@
                   </template>
                 </Selector>
               </div>
-
-              <div class="my-2">
-                <TextInput
-                    :id="`price`"
-                    type="number"
-                    :placeholder="`${ __('unit_price') }  [ ${__('central_profit')}:${asPrice(Math.round($page.props.central_profit*form.price/100))} ] (${__('currency')})`"
-                    classes=" p-2   min-w-[5rem]"
-                    v-model="form.price"
-                    autocomplete="price"
-                    :error="form.errors.price">
-
-                </TextInput>
-              </div>
-
-              <div class="my-2">
-                <TextInput
-                    :id="`in_repo`"
-                    type="number"
-                    :placeholder="`${__('repository_count')} `"
-                    classes="    "
-                    v-model="form.in_repo"
-                    autocomplete="in_repo"
-                    :error="form.errors.in_repo">
-
-                </TextInput>
-              </div>
-
-              <div class="my-2">
-                <TextInput
-                    :id="`in_shop`"
-                    type="number"
-                    :placeholder="`${__('shop_count')} `"
-                    classes=" "
-                    v-model="form.in_shop"
-                    autocomplete="in_shop"
-                    :error="form.errors.in_shop">
-
-                </TextInput>
-              </div>
-
               <div class="my-4">
                 <TagInput :multi="true" :placeholder="__('tags')" v-model="form.tags"
                           :error="form.errors.tags"/>
@@ -190,13 +150,10 @@ export default {
     return {
       form: useForm({
 
-        price: null,
-        in_shop: null,
-        in_repo: null,
         name: null,
         uploading: false,
-        category_id: null,
-        tags: [],
+        category_id: false,
+        tags: null,
 
       }),
       img: null,
