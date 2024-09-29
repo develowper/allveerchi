@@ -113,6 +113,7 @@ class SampleController extends Controller
                 'name' => __('name'),
                 'barcode' => __('barcode'),
                 'produced_at' => __('produced_at'),
+                'guarantee_months' => __('guarantee_months'),
                 'guarantee_expires_at' => __('guarantee'),
 
             ]));
@@ -123,7 +124,8 @@ class SampleController extends Controller
                     'repo_id' => $item->repo_id,
                     'name' => $item->name,
                     'barcode' => $item->barcode,
-                    'produced_at' => $item->produced_at,
+                    'produced_at' => Jalalian::fromDateTime($item->produced_at)->format('Y/m/d'),
+                    'guarantee_months' => $item->guarantee_months,
                     'guarantee_expires_at' => $item->guarantee_expires_at,
 
                 ], $style));

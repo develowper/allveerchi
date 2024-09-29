@@ -889,6 +889,7 @@ import Selector from "@/Components/Selector.vue"
 import {Dropdown, Modal, initTE} from "tw-elements";
 import TextInput from "@/Components/TextInput.vue";
 import UserSelector from "@/Components/UserSelector.vue";
+import {J} from "../../../../../../public/build/assets/app-Cg8Dq89S.js";
 
 
 export default {
@@ -1047,7 +1048,7 @@ export default {
             a.download = response.headers.filename;
             a.click();
             // window.location.assign(url);
-            // console.log(response);
+            console.log(response);
             if (response.data && response.data.message) {
               this.showToast('success', response.data.message);
 
@@ -1057,11 +1058,14 @@ export default {
 
           })
           .catch((error) => {
+            error.response.data.text().then(e =>
+                this.showToast('danger', JSON.parse(e).message)
+            );
             this.error = this.getErrors(error);
+
             // console.log(this.error);
             if (error.response && error.response.data) {
               this.errors = error.response.data.errors || {};
-
 
             }
             this.showToast('danger', this.error);
