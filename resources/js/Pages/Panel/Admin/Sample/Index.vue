@@ -889,7 +889,6 @@ import Selector from "@/Components/Selector.vue"
 import {Dropdown, Modal, initTE} from "tw-elements";
 import TextInput from "@/Components/TextInput.vue";
 import UserSelector from "@/Components/UserSelector.vue";
-import {J} from "../../../../../../public/build/assets/app-Cg8Dq89S.js";
 
 
 export default {
