@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Helpers\Variable;
 use App\Models\Admin;
 use App\Models\Agency;
+use App\Models\Sample;
 use App\Models\User;
 use App\Models\Variation;
 use Illuminate\Foundation\Http\FormRequest;
@@ -56,7 +57,7 @@ class GuaranteeRequest extends FormRequest
 
 //                    dd(Variation::makeBarcode(1, '1403/06/2', 6));
 //                    1140306020678
-                    if (!Variation::validateBarcode($value))
+                    if (!Sample::validateBarcode($value))
                         return $fail(sprintf(__("validator.invalid"), __('guarantee_code')));
 
                 }]

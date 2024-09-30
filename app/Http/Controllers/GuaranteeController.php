@@ -36,9 +36,9 @@ class GuaranteeController extends Controller
         $id = substr($barcode, 0, strlen($barcode) - 12);
         $sample = Sample::find($id);
         if (!$sample || !$sample->guarantee_months)
-            return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('product'))]]);
+            return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('sample'))]]);
         $variation = Variation::find($sample->variation_id);
-        if (!$variation || !$variation->guarantee_months)
+        if (!$variation)
             return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('product'))]]);
         if ($sample->guarantee_expires_at)
             return back()->withErrors(['message' => [__('guarantee_registered_before')]]);

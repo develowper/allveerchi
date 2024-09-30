@@ -341,8 +341,8 @@
                     <td
                         class="flex  text-xs items-center px-1 py-4 text-gray-900  ">
                       <Image class="w-10 h-10 cursor-pointer rounded-full"
-                             :src="`${route('storage.products')}/${d.product_id}/thumb.jpg`"
-                             :data-lity="`${route('storage.products')}/${d.product_id}/thumb.jpg`"
+                             :src="`${route('storage.variations')}/${d.variation_id}/thumb.jpg`"
+                             :fail-url="`${route('storage.products')}/${d.product_id}.jpg`"
                              :alt="cropText(d.title,5)"/>
                       <Link class="px-1 whitespace-nowra hover:text-gray-500"
                             :href="route('admin.panel.variation.edit',d.id)">
