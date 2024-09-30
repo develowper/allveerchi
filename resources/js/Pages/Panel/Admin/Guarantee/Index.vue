@@ -550,7 +550,7 @@
                           role="group">
 
                         <Link
-                            type="button" :href="route('admin.panel.variation.edit',d.id)"
+                            type="button" :href="route('admin.panel.guarantee.edit',d.id)"
                             class="inline-block rounded  bg-orange-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-orange-400   focus:outline-none focus:ring-0  "
                             data-te-ripple-init
                             data-te-ripple-color="light">

@@ -853,7 +853,7 @@
   "local_payment": "پرداخت در محل",
   "shipping_order_agency_*_*": "کرایه بار سفارش %s به نمایندگی %s",
   "profit_order_agency_*_*_*": "سهم %s درصد سفارش %s به نمایندگی %s",
-  "profit_operator_agency_*_*_*": "سهم %s  درصد نصب محصول %s به نصاب %s",
+  "profit_operator_agency_*_*_*": "سهم %s  درصد نصب نمونه %s به نصاب %s",
   "seller": "فروشنده",
   "accept_for_enter_pay": "جهت پرداخت به درگاه بانکی هدایت خواهید شد",
   "orders_list": "لیست سفارشات",

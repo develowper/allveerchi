@@ -1056,7 +1056,7 @@ export default {
 
             this.selected = null;
 
-            
+
           })
           .catch((error) => {
             error.response.data.text().then(e =>
@@ -1108,7 +1108,7 @@ export default {
     edit(params) {
       this.isLoading(true);
       this.errors = {};
-      window.axios.patch(route('admin.panel.variation.update'), params,
+      window.axios.patch(route('admin.panel.sample.update'), params,
           {})
           .then((response) => {
             if (response.data && response.data.message) {
@@ -1161,7 +1161,7 @@ export default {
         }, [])
       };
 
-      window.axios.patch(route('admin.panel.variation.update'), params,
+      window.axios.patch(route('admin.panel.sample.update'), params,
           {})
           .then((response) => {
             if (response.data && response.data.message) {

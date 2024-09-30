@@ -12,6 +12,7 @@ use App\Models\Agency;
 use App\Models\AgencyFinancial;
 use App\Models\Car;
 use App\Models\Product;
+use App\Models\Sample;
 use App\Models\Setting;
 use App\Models\Transaction;
 use App\Models\User;
@@ -33,10 +34,13 @@ class GuaranteeController extends Controller
         $operatorId = $request->operator_id;
         $barcode = $request->guarantee_code;
         $id = substr($barcode, 0, strlen($barcode) - 12);
-        $variation = Variation::find($id);
+        $sample = Sample::find($id);
+        if (!$sample || !$sample->guarantee_months)
+            return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('product'))]]);
+        $variation = Variation::find($sample->variation_id);
         if (!$variation || !$variation->guarantee_months)
             return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('product'))]]);
-        if ($variation->guarantee_expires_at)
+        if ($sample->guarantee_expires_at)
             return back()->withErrors(['message' => [__('guarantee_registered_before')]]);
         $customer = User::where('phone', $phone)->first();
         if (!$customer) {
@@ -47,25 +51,25 @@ class GuaranteeController extends Controller
                 'ref_id' => User::makeRefCode($phone),
             ]);
         }
-        $guaranteeMonths = $variation->guarantee_months;
-        $variation->guarantee_expires_at = Carbon::now()->addMonths($guaranteeMonths);
-        $variation->operator_id = $operatorId;
-        $variation->customer_id = $customer->id;
-        $variation->save();
-        $variation->operator = $operator;
-        $variation->agency = $agency;
-        $variation->guarantee_expires_at_shamsi = Jalalian::fromCarbon($variation->guarantee_expires_at)->format('Y/m/d');
+        $guaranteeMonths = $sample->guarantee_months;
+        $sample->guarantee_expires_at = Carbon::now()->addMonths($guaranteeMonths);
+        $sample->operator_id = $operatorId;
+        $sample->customer_id = $customer->id;
+        $sample->save();
+        $sample->operator = $operator;
+        $sample->agency = $agency;
+        $sample->guarantee_expires_at_shamsi = Jalalian::fromCarbon($sample->guarantee_expires_at)->format('Y/m/d');
         Telegram::log(null, 'guarantee_created', $variation);
-        $product = Product::find($variation->product_id);
+//        $product = Product::find($variation->product_id);
         //add operator percent
-        if ($operator && $agency && $product) {
+        if ($operator && $agency && $variation) {
             $smsHelper = new SMSHelper();
 //            SMSHelper::deleteCode($phone);
 //            $smsHelper->send($phone, "$barcode\$$variation->guarantee_expires_at_shamsi", 'guarantee_started');
             $percent = Setting::getValue('operator_profit_percent') ?? 0;
             if ($percent > 0) {
                 $t = Transaction::create([
-                    'title' => sprintf(__('profit_operator_agency_*_*_*'), floor($percent), $variation->id, "$operator->fullname($operator->id)"),
+                    'title' => sprintf(__('profit_operator_agency_*_*_*'), floor($percent), "$sample->id($variation->name)", "$operator->fullname($operator->id)"),
                     'type' => "profit",
                     'for_type' => 'operator',
                     'for_id' => $operatorId,
@@ -77,7 +81,7 @@ class GuaranteeController extends Controller
                     'info' => null,
                     'coupon' => null,
                     'payed_at' => Carbon::now(),
-                    'amount' => floor($percent / 100 * (Setting::getValue('is_auction') && $product->auction_price !== null ? $product->auction_price : $product->price)),
+                    'amount' => floor($percent / 100 * (Setting::getValue('is_auction') && $variation->auction_price !== null ? $variation->auction_price : $variation->price)),
                     'pay_id' => null,
                 ]);
 
@@ -107,16 +111,42 @@ class GuaranteeController extends Controller
         $status = $request->status;
         $grade = $request->grade;
 
-        $query = Variation::query()->whereNotNull('guarantee_expires_at')->select();
-        $query->whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'));
-        if ($search)
-            $query = $query->where('name', 'like', "%$search%");
-        if ($status)
-            $query = $query->where('status', $status);
-        if ($grade)
-            $query = $query->where('grade', $grade);
+        $data = Sample::join('variations', function ($join) use ($admin, $search, $status) {
+            $join->on('variations.id', '=', 'samples.variation_id')
+                ->whereNotNull('samples.guarantee_expires_at')
+                ->whereIntegerInRaw('variations.agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'));
 
-        return $query->orderBy($orderBy, $dir)->paginate($paginate, ['*'], 'page', $page);
+            if ($search)
+                $join->where('name', 'like', "%$search%");
+            if ($status)
+                $join->where('status', $status);
+
+
+        })->select('samples.id as id',
+            'variations.product_id',
+            'variations.repo_id as repo_id',
+            'variations.name as name',
+            'variations.pack_id as pack_id',
+            'variations.grade as grade',
+            'variations.price as price',
+            'variations.auction_price as auction_price',
+            'variations.auction_price as auction_price',
+            'variations.weight as weight',
+            'variations.in_auction as in_auction',
+            'variations.in_shop as in_shop',
+            'variations.product_id as parent_id',
+            'variations.updated_at as updated_at',
+            'samples.admin_id as admin_id',
+            'samples.customer_id as customer_id',
+            'samples.produced_at as produced_at',
+            'samples.guarantee_months as guarantee_months',
+            'samples.barcode as barcode',
+            'samples.guarantee_expires_at as guarantee_expires_at',
+
+        );
+
+
+        return $data->orderBy($orderBy, $dir)->paginate($paginate, ['*'], 'page', $page);
 
 
     }
