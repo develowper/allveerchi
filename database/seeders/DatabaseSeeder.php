@@ -576,6 +576,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 'active',
                 'category_id' => 1,
                 'categories' => '[1]',
+                'weight' => 2.5,
 //                'in_shop' => 0,
 //                'in_repo' => 0,
 //                'price' => 2200000,

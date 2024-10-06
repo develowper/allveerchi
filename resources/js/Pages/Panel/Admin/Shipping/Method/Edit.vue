@@ -210,7 +210,7 @@
                                  :preload=" $page.props.data.products"
                                  :error="form.errors.products"/>
               </div>
-<!--              <div class="my-2">-->
+              <!--              <div class="my-2">-->
               <!--                <Timestamp ref="timestampSelector" mode="edit" :label="__('delivery_hours')"-->
               <!--                           :errors="form.errors || []" v-model="form.timestamps"/>-->
               <!--              </div>-->
@@ -384,7 +384,7 @@ export default {
     this.form.products = this.data.products;
     this.form.cities = this.data.cities;
     this.form.timestamps = this.data.timestamps || [];
-    this.$refs.timestampSelector.data = this.form.timestamps;
+    // this.$refs.timestampSelector.data = this.form.timestamps;
 
     this.$nextTick(() => {
 

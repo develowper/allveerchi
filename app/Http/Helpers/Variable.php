@@ -242,7 +242,8 @@ class Variable
                 'address' => 'گیلان، شهرستان بندر انزلی، شهرک صنعتی',
                 'location' => '37.469254,49.477436',
                 'status' => 'active',
-                'cities' => json_encode(array_merge(City::where('parent_id', City::where('level', 2)->where('name', 'تهران')->first()->id)->take(20)->inRandomOrder()->pluck('id')->toArray(), [])),
+                'cities' => json_encode([]),
+//                'cities' => json_encode(array_merge(City::where('parent_id', City::where('level', 2)->where('name', 'تهران')->first()->id)->take(20)->inRandomOrder()->pluck('id')->toArray(), [])),
             ],
 
         ];
@@ -268,8 +269,8 @@ class Variable
     {
         return [
 
-            ['id' => 1, 'fullname' => 'رجبی', 'phone' => '09018945844', 'status' => 'active', 'ref_id' => 'develowper',
-                'access' => json_encode(['all']), 'email' => 'moj2raj2@gmail.com', 'password' => Hash::make('o7615564351'), 'email_verified_at' => Carbon::now(), 'created_at' => Carbon::now(), 'phone_verified' => true,
+            ['id' => 1, 'fullname' => 'شکیبی', 'phone' => '09122466401', 'status' => 'active', 'ref_id' => 'shakibi',
+                'access' => json_encode(['all']), 'email' => 'moj2raj2@gmail.com', 'password' => Hash::make(env('ADMIN_PASSWORD')), 'email_verified_at' => Carbon::now(), 'created_at' => Carbon::now(), 'phone_verified' => true,
             ],
 
         ];

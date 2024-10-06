@@ -43,6 +43,8 @@ class ProductRequest extends FormRequest
                 'name' => ['required', 'max:200', Rule::unique('products', 'name')->ignore($this->id)],
                 'tags' => ['nullable', 'string', 'max:1024'],
                 'category_id' => ['nullable', Rule::in(Category::pluck('id'))],
+                "weight" => ['required', 'numeric', 'gte:0', 'lt:99999', /*$this->pack_id == null ? Rule::in(1) :*/ 'numeric'],
+
 //                "price" => ['required', 'numeric', 'gte:0'],
 //                "in_repo" => ['required', 'numeric', 'gte:0', 'lt:99999'],
 //                "in_shop" => ['required', 'numeric', 'gte:0', 'lt:99999'],
@@ -65,6 +67,9 @@ class ProductRequest extends FormRequest
 
         return [
 
+            "weight.required" => sprintf(__("validator.required"), __('weight')),
+            "weight.numeric" => sprintf(__("validator.numeric"), __('weight')),
+            "weight.gte" => sprintf(__("validator.gt"), __('weight'), 0),
 
             'name.required' => sprintf(__("validator.required"), __('name')),
             'name.unique' => sprintf(__("validator.unique"), __('name')),

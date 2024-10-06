@@ -23,9 +23,10 @@
           <div class="flex-col md:flex-row md:flex  ">
 
             <div class=" max-w-sm     mx-auto   ">
-              <Image :src="route('storage.variations')+`/${data.id}/thumb.jpg`"
-                     :data-lity="route('storage.variations')+`/${data.id}/1.jpg`"
-                     classes="object-contain rounded-lg cursor-pointer   "/>
+              <Image
+                  :src="route('storage.variations')+`/${data.id}/thumb.jpg`"
+                  :failUrl="route('storage.products')+`/${data.product_id}.jpg`"
+                  classes="object-contain rounded-lg cursor-pointer   "/>
 
             </div>
             <div class="grow max-w-sm mx-auto">
@@ -35,7 +36,7 @@
                 </div>
                 <div class="flex items-center justify-between">
                   <div class="text-primary-600 ms-1 font-bold ">{{ data.name }}</div>
-                  <div class="text-sm text-neutral-500 mx-2 ">{{ __('grade') + ' ' + data.grade }}</div>
+                  <div v-if="false" class="text-sm text-neutral-500 mx-2 ">{{ __('grade') + ' ' + data.grade }}</div>
 
                 </div>
                 <div v-if="data.repository" class="bg-neutral-100 flex justify-end items-center p-2 text-sm">

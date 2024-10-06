@@ -640,6 +640,7 @@ class Telegram
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     $msg .= " 🆔 " . "شناسه: " . $data->id . PHP_EOL;
                     $msg .= " 🔷 " . "نام: " . $data->name . PHP_EOL;
+                    $msg .= " 🔶 " . "وزن: " . floatval($data->weight) . PHP_EOL;
                     $msg .= " 🔖 " . "تگ ها: " . $data->tags . PHP_EOL;
                     $msg .= " 🖼 " . "تصویر:" . PHP_EOL . $data->img . PHP_EOL;
 

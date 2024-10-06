@@ -61,8 +61,9 @@
               >
                 <div>
                   <Image :src="route('storage.variations')+`/${item.cart_item.variation_id}/thumb.jpg`"
+                         :failUrl="route('storage.products')+`/${item.cart_item.product_id}.jpg`"
                          classes="w-32 h-32 object-contain rounded  mx-1 "
-                         :data-lity="route('storage.variations')+`/${item.cart_item.variation_id}/thumb.jpg`"/>
+                  />
                 </div>
                 <div v-if=" item.cart_item.product "
                      class="   w-full flex-col p-2 space-y-2 items-start">
@@ -101,7 +102,7 @@
                     <TomanIcon class="w-5 h-5 text-neutral-400"/>
 
                   </div>
-                  <div class="flex  items-center text-sm">
+                  <div v-if="false" class="flex  items-center text-sm">
                     <!--                    <div class="text-neutral-600 mx-1">{{ __('weight_unit') }}:</div>-->
                     <!--                    <div class="text-neutral-600 mx-1">{{ parseFloat(item.cart_item.product.weight) }}</div>-->
                     <!--                   -->
@@ -135,7 +136,7 @@
                 <div class="text-neutral-600 mx-1">{{ __('cart_total_qty') }}:</div>
                 <div class="text-neutral-800 mx-1">{{ shipment.total_items }}</div>
               </div>
-              <div class="flex  items-center text-sm  border-b p-2 py-2">
+              <div v-if="false" class="flex  items-center text-sm  border-b p-2 py-2">
                 <div class="text-neutral-600 mx-1">{{ __('total_weight') }}:</div>
                 <div class="text-neutral-800 mx-1">{{ shipment.total_weight }}</div>
                 <div class="text-neutral-500 mx-1">{{ __('kg') }}</div>
@@ -221,7 +222,7 @@
             <div class="text-neutral-600 mx-1">{{ __('cart_total_qty') }}:</div>
             <div class="text-neutral-800 mx-1">{{ cart.total_items }}</div>
           </div>
-          <div class="flex  items-center text-sm border-b  p-4 py-2">
+          <div v-if="false" class="flex  items-center text-sm border-b  p-4 py-2">
             <div class="text-neutral-600 mx-1">{{ __('total_weight') }}:</div>
             <div class="text-neutral-800 mx-1">{{ cart.total_weight }}</div>
             <div class="text-neutral-500 mx-1">{{ __('kg') }}</div>

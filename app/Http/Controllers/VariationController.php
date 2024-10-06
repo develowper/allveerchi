@@ -99,7 +99,7 @@ class VariationController extends Controller
                 ->where('repositories.status', 'active')
                 ->where('repositories.is_shop', true)
                 ->where('variations.status', 'active')
-                ->where('variations.agency_level', '3')
+//                ->where('variations.agency_level', '3')
                 ->where(function ($query) use ($inShop) {
                     if ($inShop)
                         $query->where('variations.in_shop', '>', 0);
@@ -107,20 +107,23 @@ class VariationController extends Controller
                     if ($parentIds && is_array($parentIds) && count($parentIds) > 0)
                         $query->whereIntegerInRaw('variations.product_id', $parentIds);
                 })->where(function ($query) use ($provinceId) {
-                    if ($provinceId === null)
-                        $query->where('repositories.id', 0);
-                    elseif ($provinceId)
+//                    if ($provinceId === null)
+//                        $query->where('repositories.id', 0);
+//                    else
+                    if ($provinceId)
                         $query->where('repositories.province_id', $provinceId);
                 })->where(function ($query) use ($countyId, $districtId) {
 
-                    if ($countyId === null)
-                        $query->where('repositories.id', 0);
-                    elseif ($countyId && intval($districtId) === 0)
+//                    if ($countyId === null)
+//                        $query->where('repositories.id', 0);
+//                    else
+                    if ($countyId && intval($districtId) === 0)
                         $query->whereJsonContains('repositories.cities', intval($countyId));
                 })->where(function ($query) use ($districtId) {
-                    if ($districtId === null)
-                        $query->where('repositories.id', 0);
-                    elseif ($districtId)
+//                    if ($districtId === null)
+//                        $query->where('repositories.id', 0);
+//                    else
+                    if ($districtId)
                         $query->whereJsonContains('repositories.cities', intval($districtId));
                 });
 
@@ -212,7 +215,7 @@ class VariationController extends Controller
                     'grade' => $request->grade,
                     'pack_id' => $request->pack_id,
                     'agency_id' => $repo->agency_id,
-                    'weight' => $request->weight,
+                    'weight' => $product->weight,
                     'price' => $request->price,
                     'description' => null,
                     'name' => $request->name ?? $product->name,
@@ -331,7 +334,10 @@ class VariationController extends Controller
 
                         ],
                     );
+                    $product = Product::find($data->product_id);
+
                     $data->name = $request->name;
+                    $data->weight = $product->weight;
                     $data->save();
                     if ($request->wantsJson())
                         return response()->json(['message' => __('updated_successfully')], $successStatus);
@@ -654,6 +660,7 @@ class VariationController extends Controller
 
                 ],
             );
+
 
             $request->merge([
 //                'cities' => json_encode($request->cities ?? [])

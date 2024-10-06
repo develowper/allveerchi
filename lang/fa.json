@@ -770,7 +770,7 @@
   "get_from_repo": "برداشت از انبار",
   "product_title": "نام محصول",
   "help_change_grade_pack": "تعداد مشخص شده به بسته بندی و درجه کیفی انتخابی تبدیل می شود",
-  "unit_weight": "وزن هر بسته",
+  "unit_weight": "وزن واحد",
   "new_unit_weight": "وزن هر بسته جدید",
   "not_any_change": "تغییری انجام نشده است",
   "fee": "قیمت واحد",

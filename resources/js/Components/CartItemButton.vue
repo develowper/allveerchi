@@ -2,7 +2,7 @@
 
   <div class="flex    flex-col ">
 
-    <div class="flex  ">
+    <div class="flex  hover:cursor-pointer">
       <div @click.prevent="!show? show=true:  !loading? edit({variation_id:productId,qty:inCart}):null "
            :class="  show ?'rounded-s-md':'rounded-md'"
            class="border grow   flex justify-center items-center   border-primary-500 text-primary-500 p-2  hover:bg-primary-400 hover:text-white">

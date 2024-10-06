@@ -115,7 +115,7 @@
                 <TextInput
                     :id="`weight`"
                     type="number"
-                    :placeholder="`${__('pack_weight')} (${__('kg')})`"
+                    :placeholder="`${__('unit_weight')} (${__('kg')})`"
                     :disabled="form.pack_id==1? true:false"
                     classes=" p-2   min-w-[5rem]"
                     v-model="form.weight"

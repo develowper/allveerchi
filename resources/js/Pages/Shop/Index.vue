@@ -40,7 +40,7 @@
                       v-for="p in $page.props.products">
           <div>
             <Image classes="rounded-full h-12 w-12 border-primary-500 border"
-                   :src="route('storage.products')+`/${p.id}/thumb.jpg`"></Image>
+                   :src="route('storage.products')+`/${p.id}.jpg`"></Image>
           </div>
           <div :class="{'text-white':params.parent_ids.filter((e)=>e==p.id).length>0}"
                class="text-xs text-center text-neutral-500">{{ replaceAll(p.name, ' ', "‌") }}
@@ -64,7 +64,9 @@
                 <!--                       classes="object-cover  h-full w-full  rounded-t-lg rounded-b   "-->
                 <!--                       :src="route('storage.variations')+`/${p.id}/thumb.jpg`"></Image> -->
                 <Image classes="object-contain  h-full w-full  rounded-t-lg rounded-b  "
-                       :src="route('storage.products')+`/${p.product_id}/thumb.jpg`"></Image>
+                       :src="route('storage.variations')+`/${p.id}/thumb.jpg`"
+                       :failUrl="route('storage.products')+`/${p.product_id}.jpg`"
+                ></Image>
               </div>
               <div class="flex my-1 items-center justify-start text-xs text-gray-400">
                 <div class="  rounded p-1 px-2  "> {{ toRelativeTime(p.updated_at) }}</div>

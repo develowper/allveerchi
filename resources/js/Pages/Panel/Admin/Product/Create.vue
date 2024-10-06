@@ -65,6 +65,23 @@
                   </template>
                 </Selector>
               </div>
+              <div class="my-2">
+                <TextInput
+                    :id="`weight`"
+                    type="number"
+                    :placeholder="`${__('weight')} (${__('kg')})`"
+                    :disabled="form.pack_id==1? true:false"
+                    classes=" "
+                    v-model="form.weight"
+                    autocomplete="weight"
+                    :error="form.errors.weight">
+                  <template v-slot:prepend>
+                    <div class="  p-3">
+                      <ScaleIcon class="h-5 w-5"/>
+                    </div>
+                  </template>
+                </TextInput>
+              </div>
               <div class="my-4">
                 <TagInput :multi="true" :placeholder="__('tags')" v-model="form.tags"
                           :error="form.errors.tags"/>
@@ -119,6 +136,7 @@ import {
   SignalIcon,
   PencilIcon,
   XMarkIcon,
+  ScaleIcon,
 
 } from "@heroicons/vue/24/outline";
 import {QuestionMarkCircleIcon,} from "@heroicons/vue/24/solid";
@@ -154,6 +172,7 @@ export default {
         uploading: false,
         category_id: false,
         tags: null,
+        weight: null,
 
       }),
       img: null,
@@ -195,6 +214,7 @@ export default {
     PencilIcon,
     XMarkIcon,
     CitySelector,
+    ScaleIcon,
 
   },
   mounted() {

@@ -26,6 +26,7 @@ class Product extends Model
         'description',
 //        'in_auction',
 //        'repo_id',
+        'weight',
     ];
     protected $casts = [
 

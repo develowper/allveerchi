@@ -35,6 +35,7 @@ return new class extends Migration {
 //            $table->unsignedBigInteger('repo_id')->nullable();
 //            $table->foreign('repo_id')->references('id')->on('repositories')->onDelete('no action');
 //            $table->boolean('in_auction')->default(false);
+            $table->unsignedDecimal('weight', 8, 3)->nullable(); //kg
 
         });
     }
