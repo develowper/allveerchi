@@ -6,6 +6,7 @@ namespace App\Http\Helpers;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 
 class SMSHelper
@@ -196,10 +197,17 @@ class SMSHelper
                 "Mobile" => $number,
                 "TemplateId" => $templateId
             );
-
-            $SmsIR_UltraFastSend = new SmsIR_UltraFastSend();
-            $SmsIR_UltraFastSend->UltraFastSend($data);
-            return true;
+            $res = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'text/plain',
+                'x-api-key' => env('SMS_API')])
+                ->post('https://api.sms.ir/v1/send/verify', $data);
+//            $SmsIR_UltraFastSend = new SmsIR_UltraFastSend(env('SMS_API'), $SecretKey);
+//            $SmsIR_UltraFastSend->UltraFastSend($data);
+            Telegram::sendMessage(Telegram::LOGS[0], $res->json()->status);
+            if ($res && $res->json()->status == 1)
+                return true;
+            return false;
         } catch (Exception $e) {
 //            echo 'Error SendMessage : ' . $e->getMessage();
             Telegram::log(null, 'error', $e->getMessage());
