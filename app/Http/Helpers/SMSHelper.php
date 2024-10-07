@@ -15,15 +15,9 @@ class SMSHelper
     public function __construct()
     {
         $this->senderType = Variable::SMS_SENDER;
-//        $this->register_pattern = 'i5gqousv1o5ndev'; //hamsignal
-//        $this->forget_password_pattern = '43z2ci5l612ro0x';
-//        $this->register_pattern = '50ybp75b5mlrjx8'; //vartashop
-        $this->register_pattern = 'bttts8dws9c6hqz'; //varta
-        $this->forget_password_pattern = '9s8sh1c0ukq2e3m';
-        $this->server_number = '+985000125475';
-//        $this->server_number = '+983000505';
-//        $this->server_number = '+9850004150400040';
-//        $this->server_number = '+9850004150001232';
+        $this->register_pattern = ''; //varta
+        $this->forget_password_pattern = '';
+        $this->server_number = '';
         $this->apiKey = env('SMS_API');
 
         $this->client = new \IPPanel\Client($this->apiKey);
@@ -170,14 +164,14 @@ class SMSHelper
         switch ($type) {
             case 'forget':
             case 'register':
-                $templateId = '';
+                $templateId = '209619';
                 $params = [[
                     "Parameter" => "VerificationCode",
                     "ParameterValue" => $code
                 ]];
                 break;
             case 'guarantee_started':
-                $templateId = '';
+                $templateId = '659877';
                 $code = explode('$', $code);
                 $params = [
                     [
