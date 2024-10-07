@@ -193,7 +193,7 @@ class SMSHelper
 
             // message data
             $data = array(
-                "ParameterArray" => $params,
+                "Parameters" => $params,
                 "Mobile" => $number,
                 "TemplateId" => $templateId
             );
