@@ -423,7 +423,7 @@ class OrderController extends Controller
                         if (str_starts_with($methodId, 'repo-')) //visit-repo [change id to 1]
                             $methodId = 1;
                         $items[] = [
-                            'title' => "$product->name ( " . floatval($cartItem->qty) . " " . optional(Pack::find($product->pack_id))->name . " " .($product->grade? (__('grade') . " $product->grade "):'') . floatval($product->weight) . " " . __('kg') . " )",
+                            'title' => "$product->name ( " . floatval($cartItem->qty) . " " . (Pack::find($product->pack_id)->name ?? __('piece')) . " " . ($product->grade ? (__('grade') . " $product->grade ") : '') . floatval($product->weight) . " " . __('kg') . " )",
                             'name' => $cartItem->name,
                             'order_id' => $order->id,
                             'variation_id' => $cartItem->variation_id,
