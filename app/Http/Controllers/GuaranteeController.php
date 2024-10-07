@@ -61,7 +61,9 @@ class GuaranteeController extends Controller
         $sample->guarantee_expires_at_shamsi = Jalalian::fromCarbon($sample->guarantee_expires_at)->format('Y/m/d');
         Telegram::log(null, 'guarantee_created', $variation);
 //        $product = Product::find($variation->product_id);
+
         //add operator percent
+
         if ($operator && $agency && $variation) {
             $smsHelper = new SMSHelper();
             $smsHelper->send($phone, "$barcode\$$sample->guarantee_expires_at_shamsi", 'guarantee_started');
