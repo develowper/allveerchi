@@ -168,8 +168,8 @@ class SMSHelper
             case 'verification':
                 $templateId = '209619';
                 $params = [[
-                    "Parameter" => "VerificationCode",
-                    "ParameterValue" => $code
+                    "Name" => "VerificationCode",
+                    "Value" => $code
                 ]];
                 break;
             case 'guarantee_started':
@@ -177,11 +177,11 @@ class SMSHelper
                 $code = explode('$', $code);
                 $params = [
                     [
-                        "Parameter" => "Serial",
-                        "ParameterValue" => $code[0]
+                        "Name" => "Serial",
+                        "Value" => $code[0]
                     ], [
-                        "Parameter" => "Expire",
-                        "ParameterValue" => $code[1]
+                        "Name" => "Expire",
+                        "Value" => $code[1]
                     ],
                 ];
                 break;
