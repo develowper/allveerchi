@@ -164,6 +164,7 @@ class SMSHelper
         switch ($type) {
             case 'forget':
             case 'register':
+            case 'verification':
                 $templateId = '209619';
                 $params = [[
                     "Parameter" => "VerificationCode",
