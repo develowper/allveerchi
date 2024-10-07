@@ -166,14 +166,14 @@ class SMSHelper
             case 'forget':
             case 'register':
             case 'verification':
-                $templateId =  209619 ;
+                $templateId = 209619;
                 $params = [[
                     "Name" => "VerificationCode",
                     "Value" => "$code"
                 ]];
                 break;
             case 'guarantee_started':
-                $templateId =  659877 ;
+                $templateId = 659877;
                 $code = explode('$', $code);
                 $params = [
                     [
@@ -200,7 +200,7 @@ class SMSHelper
             $res = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Accept' => 'text/plain',
-                'x-api-key' => env('SMS_API')])->asForm()
+                'x-api-key' => env('SMS_API')])
                 ->post('https://api.sms.ir/v1/send/verify', $data);
 //            $SmsIR_UltraFastSend = new SmsIR_UltraFastSend(env('SMS_API'), $SecretKey);
 //            $SmsIR_UltraFastSend->UltraFastSend($data);
