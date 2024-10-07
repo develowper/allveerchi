@@ -166,14 +166,14 @@ class SMSHelper
             case 'forget':
             case 'register':
             case 'verification':
-                $templateId = '209619';
+                $templateId =  209619 ;
                 $params = [[
                     "Name" => "VerificationCode",
-                    "Value" => $code
+                    "Value" => "$code"
                 ]];
                 break;
             case 'guarantee_started':
-                $templateId = '659877';
+                $templateId =  659877 ;
                 $code = explode('$', $code);
                 $params = [
                     [
@@ -194,7 +194,7 @@ class SMSHelper
             // message data
             $data = array(
                 "Parameters" => $params,
-                "Mobile" => $number,
+                "Mobile" => "$number",
                 "TemplateId" => $templateId
             );
             $res = Http::withHeaders([
