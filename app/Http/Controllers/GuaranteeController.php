@@ -64,7 +64,7 @@ class GuaranteeController extends Controller
         //add operator percent
         if ($operator && $agency && $variation) {
             $smsHelper = new SMSHelper();
-            $smsHelper->send($phone, "$barcode\$$variation->guarantee_expires_at_shamsi", 'guarantee_started');
+            $smsHelper->send($phone, "$barcode\$$sample->guarantee_expires_at_shamsi", 'guarantee_started');
             SMSHelper::deleteCode($phone);
             $percent = Setting::getValue('operator_profit_percent') ?? 0;
             if ($percent > 0) {
