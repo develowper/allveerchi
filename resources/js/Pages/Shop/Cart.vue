@@ -84,7 +84,7 @@
                     <!--                <ShoppingBagIcon class="w-5 h-5 text-neutral-500"/>-->
                     <div class="text-neutral-600 mx-1">{{ __('qty') }}:</div>
                     <div class="text-neutral-600 mx-1">{{
-                        item.cart_item.qty ? parseFloat(item.cart_item.qty) : 0
+                        item.cart_item.qty ? `${parseFloat(item.cart_item.qty)} ${__(item.cart_item.unit)}` : 0
                       }}
                     </div>
                     <div class="text-neutral-400"> {{ getPack(item.cart_item.product.pack_id) }}</div>

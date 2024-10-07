@@ -56,7 +56,7 @@ class Variable
         ['id' => 2, 'name' => 'operator_agency', 'level' => '2'],
 //        ['name' => 'branch', 'code' => 4],
     ];
-    const PRODUCT_UNITS = ['qty', 'kg'/*, 'gr'*/];
+    const PRODUCT_UNITS = ['piece', 'kg'/*, 'gr'*/];
 
     const ADMIN_ACCESS = ['all'];
     const GRADES = ['1', '2', '3'];

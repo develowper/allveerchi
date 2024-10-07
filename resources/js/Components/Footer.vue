@@ -132,12 +132,11 @@
           </p>
         </div>
         <div class="h-full ">
-          <a referrerpolicy='origin' target='_blank' class="block"
-             href='https://trustseal.enamad.ir/?id=476882&Code=nUwdZBbfdvIy7sEf5ss1RusrrQT32c8H'>
-            <img
-                referrerpolicy='origin'
-                src='https://trustseal.enamad.ir/logo.aspx?id=476882&Code=nUwdZBbfdvIy7sEf5ss1RusrrQT32c8H' alt=''
-                style='cursor:pointer' Code='nUwdZBbfdvIy7sEf5ss1RusrrQT32c8H'></a>
+          <a referrerpolicy='origin' target='_blank'
+             href='https://trustseal.enamad.ir/?id=416945&Code=9HX7V8iOeltU7Fwt8A9Qwi8OHyyvdcCL'><img
+              referrerpolicy='origin'
+              src='https://trustseal.enamad.ir/logo.aspx?id=416945&Code=9HX7V8iOeltU7Fwt8A9Qwi8OHyyvdcCL' alt=''
+              style='cursor:pointer' code='9HX7V8iOeltU7Fwt8A9Qwi8OHyyvdcCL'></a>
         </div>
 
       </div>

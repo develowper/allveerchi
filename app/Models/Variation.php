@@ -36,6 +36,7 @@ class Variation extends Model
         'produced_at',
         'guarantee_months',
         'customer_id',
+        'unit',
     ];
 
     public static function getImages($id)

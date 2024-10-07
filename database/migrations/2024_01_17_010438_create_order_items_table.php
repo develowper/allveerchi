@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Helpers\Variable;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -28,13 +29,14 @@ return new class extends Migration {
             $table->foreign('repo_id')->references('id')->on('repositories')->onDelete('no action');
 //            $table->unsignedInteger('qty')->nullable();
             $table->unsignedDecimal('qty', 8, 3)->default(0);//weight|count
+            $table->enum('unit', Variable::PRODUCT_UNITS)->nullable();
 
             $table->unsignedBigInteger('total_price');
             $table->unsignedBigInteger('discount_price');
             $table->unsignedInteger('pack_id')->nullable();
             $table->foreign('pack_id')->references('id')->on('packs')->onDelete('no action');
             $table->unsignedDecimal('total_weight', 8, 3)->default(0); //kg
-            $table->enum('grade', \App\Http\Helpers\Variable::GRADES)->nullable();
+            $table->enum('grade', Variable::GRADES)->nullable();
 
             $table->timestamps();
         });

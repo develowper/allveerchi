@@ -58,7 +58,7 @@ class CartController extends Controller
 //            if (!in_array($cityId, $repository->cities))
 //                return response()->json(['message' => __('repository_not_support_city')], Variable::ERROR_STATUS);
 //        }
-        $cols = 'items.product:id,name,repo_id,price,auction_price,in_shop,weight,pack_id,grade';
+        $cols = 'items.product:id,name,repo_id,price,auction_price,in_shop,weight,pack_id,grade,unit';
         $carts = Cart::where(function ($query) use ($ip) {
             $query->whereNotNull('ip')->where('ip', $ip);
         })->orWhere(function ($query) use ($user) {
@@ -192,10 +192,10 @@ class CartController extends Controller
             $cartItem->total_discount = $isAuctionItem ? ($cartItem->qty * ($product->price - $product->auction_price)) : 0;
             $cartItem->total_price = $itemTotalPrice;
             $cartItem->total_weight = $cartItem->qty * $product->weight;
+            $cartItem->unit = $product->unit;
             $cart->total_items_price += $itemTotalPrice;
             $cart->total_items_discount += $cartItem->total_discount;
             $cart->total_weight += $cartItem->total_weight;
-
         }
         $cart->setRelation('items', $cartItems);
 //        $cart->errors = $errors;
