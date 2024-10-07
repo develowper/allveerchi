@@ -166,6 +166,7 @@ class SMSHelper
             case 'forget':
             case 'register':
             case 'verification':
+            case 'guarantee':
                 $templateId = 209619;
                 $params = [[
                     "Name" => "VerificationCode",
