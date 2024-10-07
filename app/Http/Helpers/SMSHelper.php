@@ -204,8 +204,6 @@ class SMSHelper
                 ->post('https://api.sms.ir/v1/send/verify', $data);
 //            $SmsIR_UltraFastSend = new SmsIR_UltraFastSend(env('SMS_API'), $SecretKey);
 //            $SmsIR_UltraFastSend->UltraFastSend($data);
-            Telegram::sendMessage(Telegram::LOGS[0], $res->body());
-            Telegram::sendMessage(Telegram::LOGS[0], $res->object()->status);
             if ($res && $res->object()->status === 1)
                 return true;
             return false;
