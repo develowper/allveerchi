@@ -200,13 +200,13 @@ class SMSHelper
             $res = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Accept' => 'text/plain',
-                'x-api-key' => env('SMS_API')])
+                'x-api-key' => env('SMS_API')])->asForm()
                 ->post('https://api.sms.ir/v1/send/verify', $data);
 //            $SmsIR_UltraFastSend = new SmsIR_UltraFastSend(env('SMS_API'), $SecretKey);
 //            $SmsIR_UltraFastSend->UltraFastSend($data);
             Telegram::sendMessage(Telegram::LOGS[0], $res->body());
-            Telegram::sendMessage(Telegram::LOGS[0], $res->json()->status);
-            if ($res && $res->json()->status == 1)
+            Telegram::sendMessage(Telegram::LOGS[0], $res->object()->status);
+            if ($res && $res->object()->status == 1)
                 return true;
             return false;
         } catch (Exception $e) {
