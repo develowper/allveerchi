@@ -51,7 +51,7 @@ window.onload = (event) => {
         }
     } catch (_) {
     }
-    // initChat();
+    initChat();
 
 }
 
@@ -195,7 +195,7 @@ window.e2f = function (str) {
 };
 
 window.initChat = function () {
-    var i = "5EEMY6", a = window, d = document;
+    var i = "P3CkxG", a = window, d = document;
 
     function g() {
         var g = d.createElement("script"), s = "https://www.goftino.com/widget/" + i,
