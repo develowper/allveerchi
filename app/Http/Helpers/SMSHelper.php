@@ -206,7 +206,7 @@ class SMSHelper
 //            $SmsIR_UltraFastSend->UltraFastSend($data);
             Telegram::sendMessage(Telegram::LOGS[0], $res->body());
             Telegram::sendMessage(Telegram::LOGS[0], $res->object()->status);
-            if ($res && $res->object()->status == 1)
+            if ($res && $res->object()->status === 1)
                 return true;
             return false;
         } catch (Exception $e) {
