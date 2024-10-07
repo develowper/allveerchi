@@ -48,8 +48,10 @@
                 <h6 class="text-xs font-bold   py-2 tracking-wider text-gray-500 uppercase">
                   {{ __('wallet') }}
                 </h6>
-                <span class="text-xl font-semibold"> {{ asPrice(user.wallet) }} {{ __('currency') }}</span>
-
+                <span class="text-xl font-semibold" :class="{'text-red-500':user.financial.wallet<0}"> {{
+                    asPrice(user.financial.wallet)
+                  }} {{ __('currency') }}
+                </span>
               </div>
 
               <div>
@@ -86,7 +88,7 @@
 
           </Link>
           <!-- items card -->
-          <div :class="cardShadow"
+          <div v-if="false" :class="cardShadow"
                class="flex   cursor-pointer   items-center justify-around   bg-white  rounded-lg">
             <div class="flex flex-col grow">
               <h6 class="text-xs font-bold   p-4 tracking-wider text-gray-500 uppercase">

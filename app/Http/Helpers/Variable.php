@@ -203,8 +203,9 @@ class Variable
     static function getPaymentMethods()
     {
         return [
-            ['name' => __('online_payment'), 'key' => 'online', 'selected' => true, 'active' => true],
-            ['name' => __('local_payment'), 'key' => 'local', 'selected' => true, 'active' => false]
+            ['name' => __('online_payment'), 'description' => '', 'key' => 'online', 'selected' => true, 'active' => true],
+            ['name' => __('local_payment'), 'description' => '', 'key' => 'local', 'selected' => false, 'active' => true],
+            ['name' => __('wallet_payment'), 'description' => '', 'key' => 'wallet', 'selected' => false, 'active' => true]
         ];
     }
 

@@ -203,4 +203,26 @@ class User extends Authenticatable
             return substr($phone, -$length);
         return substr(str_shuffle($original), 0, $length);
     }
+
+    public function updateOrderNotifications($pendingOrders = null, $readyOrders = null)
+    {
+        $settings = $this->settings ?? [];
+        if (!$pendingOrders && !$readyOrders) {
+            $orders = Order::where('user_id', $this->id)->whereIn('status', ['pending', 'ready'])->select('id', 'status')->get();
+            $settings['pending_orders'] = $orders->where('status', 'pending')->count();
+            $settings['ready_orders'] = $orders->where('status', 'ready')->count();
+        } elseif ($pendingOrders) {
+            $settings['pending_orders'] = ($settings['pending_orders'] ?? 0) + $pendingOrders;
+            if ($settings['pending_orders'] < 0)
+                $settings['pending_orders'] = 0;
+        } elseif ($readyOrders) {
+            $settings['ready_orders'] = ($settings['ready_orders'] ?? 0) + $pendingOrders;
+            if ($settings['ready_orders'] < 0)
+                $settings['ready_orders'] = 0;
+        }
+        $this->settings = $settings;
+        $this->save();
+
+    }
+
 }

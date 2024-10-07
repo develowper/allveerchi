@@ -4,13 +4,16 @@ namespace App\Http\Middleware;
 
 use App\Http\Helpers\Variable;
 use App\Models\Admin;
+use App\Models\AdminFinancial;
 use App\Models\Agency;
+use App\Models\AgencyFinancial;
 use App\Models\Cart;
 use App\Models\City;
 use App\Models\Pack;
 use App\Models\Product;
 use App\Models\Setting;
 use App\Models\User;
+use App\Models\UserFinancial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -43,6 +46,14 @@ class HandleInertiaRequests extends Middleware
     {
         $socials = Setting::where('key', 'like', 'social_%')->get();
         $user = auth('sanctum')->user();
+        if ($user) {
+            $user->setRelation('financial', $user instanceof Admin ? AdminFinancial::whereAdminId($user->id)->firstOrNew() : UserFinancial::whereUserId($user->id)->firstOrNew());
+            if ($user instanceof Admin) {
+                $agency = Agency::with('financial')->findOrNew($user->agency_id);
+                if (!$agency->getRelation('financial'))
+                    $agency->setRelation('financial', new AgencyFinancial());
+            }
+        }
         Variable::$CITIES = City::orderby('name')->get();
         return array_merge(parent::share($request), [
             'auth' => [

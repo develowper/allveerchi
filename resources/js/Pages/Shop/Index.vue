@@ -190,8 +190,10 @@ export default {
         order_by: null,
         dir: null,
         parent_ids: [],
-        province_id: this.getUserProvinceId(),
-        city_id: this.getUserCityId(),
+        province_id: null,
+        city_id: null,
+        // province_id: this.getUserProvinceId(),
+        // city_id: this.getUserCityId(),
       },
       modules: [Navigation, Pagination, Scrollbar, A11y],
     }
