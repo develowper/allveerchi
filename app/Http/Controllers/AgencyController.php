@@ -9,6 +9,8 @@ use App\Models\Admin;
 use App\Models\Agency;
 use App\Models\AgencyFinancial;
 use App\Models\City;
+use App\Models\Product;
+use App\Models\Variation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -16,6 +18,19 @@ use Inertia\Inertia;
 
 class AgencyController extends Controller
 {
+
+    public
+    function view(Request $request, $id)
+    {
+        $data = Agency::where('id', $id)->first();
+        if (!$data)
+            return redirect('shop');
+        return Inertia::render('Agency/View', [
+            'back_link' => url()->previous(),
+            'agency' => $data,
+        ]);
+
+    }
 
     public function edit(Request $request, $id)
     {

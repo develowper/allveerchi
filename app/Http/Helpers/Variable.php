@@ -216,6 +216,7 @@ class Variable
             [
                 'id' => 1,
                 'name' => 'دفتر مرکزی',
+                'phone' => '09122466401',
                 'access' => null,
                 'parent_id' => null,
                 'level' => strval(0),

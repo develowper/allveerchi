@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdController;
+use App\Http\Controllers\AgencyController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BusinessController;
@@ -315,6 +316,9 @@ Route::get('language/{language}', function ($language) {
 })->name('language');
 
 Route::post('partnership/create', [PartnershipController::class, 'create'])->name('partnership.create');
+
+Route::get('/agency/{id}/{name}', [AgencyController::class, 'view'])->name('agency.view');
+
 
 //
 require __DIR__ . '/auth.php';

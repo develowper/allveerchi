@@ -72,6 +72,7 @@ class VariationController extends Controller
         $dir = $request->dir ?? 'DESC';
         $paginate = $request->paginate ?: 24;
         $grade = $request->grade;
+        $agencyId = $request->agency_id;
 
         if ($id) {
             $data = Variation::with('repository')->find($id);
@@ -94,13 +95,16 @@ class VariationController extends Controller
             return response()->json($data);
         }
 
-        $query = Variation::join('repositories', function ($join) use ($inShop, $parentIds, $countyId, $districtId, $provinceId) {
+        $query = Variation::join('repositories', function ($join) use ($inShop, $parentIds, $countyId, $districtId, $provinceId, $agencyId) {
             $join->on('variations.repo_id', '=', 'repositories.id')
                 ->where('repositories.status', 'active')
                 ->where('repositories.is_shop', true)
                 ->where('variations.status', 'active')
 //                ->where('variations.agency_level', '3')
-                ->where(function ($query) use ($inShop) {
+                ->where(function ($query) use ($agencyId) {
+                    if ($agencyId)
+                        $query->where('repositories.agency_id', $agencyId);
+                })->where(function ($query) use ($inShop) {
                     if ($inShop)
                         $query->where('variations.in_shop', '>', 0);
                 })->where(function ($query) use ($parentIds) {
