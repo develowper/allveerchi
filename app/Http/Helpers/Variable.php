@@ -225,6 +225,18 @@ class Variable
                 'address' => 'منظقه آزاد انزلی',
                 'status' => 'active',
                 'postal_code' => null,
+            ], [
+                'id' => 2,
+                'name' => 'Bigerz Co',
+                'phone' => '09122466401',
+                'access' => null,
+                'parent_id' => 1,
+                'level' => strval(1),
+                'province_id' => City::where('level', 1)->where('name', 'گیلان')->first()->id,
+                'county_id' => City::where('level', 2)->where('name', 'بندر انزلی')->first()->id,
+                'address' => 'Turkey',
+                'status' => 'active',
+                'postal_code' => null,
             ]
 
         ];
