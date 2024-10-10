@@ -581,7 +581,7 @@
             </ul>
           </li>
           <!-- Packs links -->
-          <li v-if="false &&  hasAccess('view_pack')" class="relative ">
+          <li v-if="   hasAccess('view_pack')" class="relative ">
             <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.pack.*' )}"
                class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                data-te-sidenav-link-ref>
