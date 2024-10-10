@@ -415,28 +415,30 @@
                     </td>
 
                     <td class="px-2 py-4    ">
-                      <button
-                          @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "
-                          id="PackId"
-                          aria-expanded="false"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
-                          :class="`bg-blue-50 border border-blue-300 hover:bg-blue-200 text-primary-500`"
+                      {{ getPack(d.pack_id) }}
+                      <button v-if="false"
+                              @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "
+                              id="PackId"
+                              aria-expanded="false"
+                              data-te-ripple-init
+                              data-te-ripple-color="light"
+                              class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
+                              :class="`bg-blue-50 border border-blue-300 hover:bg-blue-200 text-primary-500`"
                       >
                         {{ getPack(d.pack_id) }}
                       </button>
 
                     </td>
                     <td class="px-2 py-4    ">
-                      <button
-                          @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "
-                          id="WeightId"
-                          aria-expanded="false"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                          class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
-                          :class="`bg-blue-50 border border-blue-300 hover:bg-blue-200 text-primary-500`"
+                      {{ parseFloat(d.weight || 0) }}
+                      <button v-if="false"
+                              @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "
+                              id="WeightId"
+                              aria-expanded="false"
+                              data-te-ripple-init
+                              data-te-ripple-color="light"
+                              class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
+                              :class="`bg-blue-50 border border-blue-300 hover:bg-blue-200 text-primary-500`"
                       >
                         {{ parseFloat(d.weight || 0) }}
                       </button>
@@ -652,7 +654,7 @@
 
                               <div class="flex flex-col  ">
 
-                                <Selector ref="gradeSelector" v-model="selected.new_grade"
+                                <Selector v-if="false" ref="gradeSelector" v-model="selected.new_grade"
                                           @change="($e)=>{ selected.new_grade=$e.target.value;}"
                                           :data="$page.props.grades.map((e)=> {return {id:e,name:e}})"
                                           :error="errors.new_grade"
