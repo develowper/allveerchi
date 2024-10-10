@@ -623,13 +623,13 @@ class Telegram
                     $msg .= " 🏷 " . "تعداد: " . ($data->count ?? 1) . "\xD8\x9C";
                     $msg .= " 🆔 " . "شناسه: " . ($data->batch_ids ?? $data->id) . PHP_EOL;
                     $msg .= " 🔷 " . "نام: " . $data->name . PHP_EOL;
-                    $msg .= " 🔶 " . "بسته بندی: " . (Pack::find($data->pack_id)->name ?? '') . PHP_EOL;
-                    $msg .= " 🔷 " . "درجه: " . $data->grade . PHP_EOL;
-                    $msg .= " 🔶 " . "وزن: " . floatval($data->weight) . PHP_EOL;
-                    $msg .= " 🔷 " . "در فروشگاه: " . floatval($data->in_shop) . PHP_EOL;
-                    $msg .= " 🔶 " . "در انبار: " . floatval($data->in_repo) . PHP_EOL;
-                    $msg .= " 🔷 " . "قیمت: " . number_format($data->price) . PHP_EOL;
-                    $msg .= " 🖼 " . "تصویر:" . PHP_EOL . url("storage/variations/$data->id/thumb.jpg") . "?rev=" . random_int(100, 999) . PHP_EOL;
+//                    $msg .= " 🔶 " . "بسته بندی: " . (Pack::find($data->pack_id)->name ?? '') . PHP_EOL;
+//                    $msg .= " 🔷 " . "درجه: " . $data->grade . PHP_EOL;
+//                    $msg .= " 🔶 " . "وزن: " . floatval($data->weight) . PHP_EOL;
+//                    $msg .= " 🔷 " . "در فروشگاه: " . floatval($data->in_shop) . PHP_EOL;
+//                    $msg .= " 🔶 " . "در انبار: " . floatval($data->in_repo) . PHP_EOL;
+//                    $msg .= " 🔷 " . "قیمت: " . number_format($data->price) . PHP_EOL;
+                    $msg .= " 🖼 " . "تصویر:" . PHP_EOL . url("storage/products/$data->product_id.jpg") . "?rev=" . random_int(100, 999) . PHP_EOL;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     break;
                 case 'product_created':
