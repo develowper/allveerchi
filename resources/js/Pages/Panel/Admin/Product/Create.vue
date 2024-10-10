@@ -65,7 +65,7 @@
                   </template>
                 </Selector>
               </div>
-              <div class="my-2">
+              <div v-if="false" class="my-2">
                 <TextInput
                     :id="`weight`"
                     type="number"

@@ -175,7 +175,7 @@
                       </div>
                     </th>
 
-                    <th v-if="false" scope="col"
+                    <th scope="col"
                         class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
                         @click="params.order_by='pack_id';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
                       <div class="flex items-center justify-center">
@@ -184,7 +184,7 @@
                       </div>
                     </th>
 
-                    <th v-if="false" scope="col"
+                    <th scope="col"
                         class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
                         @click="params.order_by='weight';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
                       <div class="flex items-center justify-center">
@@ -414,7 +414,7 @@
                       </button>
                     </td>
 
-                    <td v-if="false" class="px-2 py-4    ">
+                    <td class="px-2 py-4    ">
                       <button
                           @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "
                           id="PackId"
@@ -428,7 +428,7 @@
                       </button>
 
                     </td>
-                    <td v-if="false" class="px-2 py-4    ">
+                    <td class="px-2 py-4    ">
                       <button
                           @click="d.idx=idx;d.cmnd='change-grade-pack-weight';d.new_grade=d.grade;d.new_pack_id=d.pack_id;d.new_in_repo=0;selected=d; "
                           id="WeightId"

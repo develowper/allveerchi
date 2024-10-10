@@ -219,7 +219,7 @@ class VariationController extends Controller
                     'grade' => $request->grade,
                     'pack_id' => $request->pack_id,
                     'agency_id' => $repo->agency_id,
-                    'weight' => $product->weight,
+                    'weight' => $request->weight,
                     'price' => $request->price,
                     'description' => null,
                     'name' => $request->name ?? $product->name,
@@ -341,7 +341,7 @@ class VariationController extends Controller
                     $product = Product::find($data->product_id);
 
                     $data->name = $request->name;
-                    $data->weight = $product->weight;
+//                    $data->weight = $product->weight;
                     $data->save();
                     if ($request->wantsJson())
                         return response()->json(['message' => __('updated_successfully')], $successStatus);

@@ -100,10 +100,10 @@
 
                 </Selector>
               </div>
-              <div v-if="false" class="my-2">
+              <div class="my-2">
                 <Selector ref="packSelector" v-model="form.pack_id"
                           :data="$page.props.packs"
-                          @change="($e)=> {if(form.pack_id==1)form.weight=1}"
+                          @change="($e)=> {if(form.pack_id==-1)form.weight=1}"
                           :error="form.errors.pack_id"
                           :label="__('pack')" classes=""
                           :id="`pack`">
@@ -111,12 +111,12 @@
                 </Selector>
               </div>
 
-              <div v-if="false" class="my-2">
+              <div class="my-2">
                 <TextInput
                     :id="`weight`"
                     type="number"
                     :placeholder="`${__('unit_weight')} (${__('kg')})`"
-                    :disabled="form.pack_id==1? true:false"
+                    :disabled="form.pack_id==-1? true:false"
                     classes=" p-2   min-w-[5rem]"
                     v-model="form.weight"
                     autocomplete="weight"
