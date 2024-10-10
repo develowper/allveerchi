@@ -197,7 +197,7 @@
                 data-te-collapse-item data-te-sidenav-collapse-ref>
               <li class="relative ps-7">
 
-                <Link v-if="false &&  hasAccess('view_user_order') " :href="route('admin.panel.order.user.index')"
+                <Link v-if="  hasAccess('view_user_order') " :href="route('admin.panel.order.user.index')"
                       role="menuitem"
                       :class="subMenuIsActive( 'admin.panel.order.user.index' )"
                       class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
@@ -217,7 +217,7 @@
                   </Link>
                 </template>
 
-                <Link v-if="false &&  hasAccess('view_agency_order') " :href="route('admin.panel.order.agency.index')"
+                <Link v-if="  hasAccess('view_agency_order') " :href="route('admin.panel.order.agency.index')"
                       role="menuitem"
                       :class="subMenuIsActive( 'admin.panel.order.agency.index' )"
                       class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">

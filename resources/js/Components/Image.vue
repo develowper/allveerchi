@@ -2,7 +2,7 @@
 
   <img :src="url" :alt="alt" :class="classes+(loading?'   bg-gray-300 ':' ')"
        @loadstart="loading=true" @loadeddata="loading=false" @load="loading=false;"
-       @error="imageError  " :data-lity="`${url}`">
+       @error="imageError  " v-bind:data-lity="disabled ? null : url">
 </template>
 
 <script>
@@ -28,7 +28,7 @@ export default {
 
     }
   },
-  props: ['type', 'src', 'alt', 'classes', 'failUrl'],
+  props: ['type', 'src', 'alt', 'classes', 'failUrl', 'disabled'],
   methods: {
     imageError() {
       this.loading = false;

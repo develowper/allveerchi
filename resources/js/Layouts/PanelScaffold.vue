@@ -136,6 +136,7 @@
                     <Image
                         classes="   hover:shadow-lg  object-cover   rounded-full w-12 h-12  "
                         :src="route(`storage.${isAdmin()?'admins':'users'}`)+`/${$page.props.auth.user.id}.jpg`"
+                        :disabled="true"
                         alt="jane avatar"
                         type="user"/>
                   </button>

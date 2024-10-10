@@ -330,7 +330,7 @@ class OrderController extends Controller
                 } else {
                     $dif = -$p['qty'];
                     DB::table('order_items')->insert([
-                        'title' => "$product->name ( " . floatval($p['qty']) . " " . optional(Pack::find($product->pack_id))->name . " " . ($product->grade?(__('grade') . " $product->grade "):'') . floatval($product->weight) . " " . __('kg') . " )",
+                        'title' => "$product->name ( " . floatval($p['qty']) . " " . optional(Pack::find($product->pack_id))->name . " " . ($product->grade ? (__('grade') . " $product->grade ") : '') . floatval($product->weight) . " " . __('kg') . " )",
                         'name' => $product->name,
                         'order_id' => $data->id,
                         'variation_id' => $product->id,
@@ -391,6 +391,7 @@ class OrderController extends Controller
 //        $cart = $cart ? $cart->getData() : null;
 //        $cart = optional($cart)->cart ?? null;
         $user = auth('sanctum')->user();
+
         $cart = $request->cart;
         $payMethod = $cart->payment_method;
         $pendingOrders = 0;
