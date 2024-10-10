@@ -584,7 +584,9 @@
                           </svg>
                         </div>
                         <h3 class="text-base     text-gray-900" id="modal-title">
-                          {{ `${selected.name} | ${getPack(selected.pack_id)} | ${__('grade')} ${selected.grade}` }}
+                          {{
+                            `${selected.name} | ${getPack(selected.pack_id)} ${selected.grade ? '|' : ''} ${selected.grade ? __('grade') : ''} ${selected.grade ? selected.grade : ''}`
+                          }}
                         </h3>
                       </div>
                       <div class="m-2  text-start">
