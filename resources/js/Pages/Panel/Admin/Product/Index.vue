@@ -127,7 +127,7 @@
               </th>
 
 
-              <th scope="col"
+              <th v-if="false" scope="col"
                   class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
                   @click="params.order_by='weight';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
                 <div class="flex items-center justify-center">
@@ -222,8 +222,8 @@
                 </Link>
               </td>
 
-              <td>
-                {{ parseFloat(d.weight)}}
+              <td v-if="false">
+                {{ parseFloat(d.weight) }}
               </td>
 
               <td class="px-2 py-4    " data-te-dropdown-ref>
