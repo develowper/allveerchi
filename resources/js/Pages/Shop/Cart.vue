@@ -66,7 +66,7 @@
               >
                 <div>
                   <Image :src="route('storage.variations')+`/${item.cart_item.variation_id}/thumb.jpg`"
-                         :failUrl="route('storage.products')+`/${item.cart_item.product_id}.jpg`"
+                         :failUrl="route('storage.products')+`/${item.cart_item.product.id}.jpg`"
                          classes="w-32 h-32 object-contain rounded  mx-1 "
                   />
                 </div>
