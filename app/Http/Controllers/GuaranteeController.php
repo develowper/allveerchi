@@ -56,6 +56,7 @@ class GuaranteeController extends Controller
         $sample->operator_id = $operatorId;
         $sample->customer_id = $customer->id;
         $sample->save();
+        $sample->name = $variation->name;
         $sample->operator = $operator;
         $sample->agency = $agency;
         $sample->guarantee_expires_at_shamsi = Jalalian::fromCarbon($sample->guarantee_expires_at)->format('Y/m/d');
