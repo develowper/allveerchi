@@ -59,7 +59,7 @@ class GuaranteeController extends Controller
         $sample->operator = $operator;
         $sample->agency = $agency;
         $sample->guarantee_expires_at_shamsi = Jalalian::fromCarbon($sample->guarantee_expires_at)->format('Y/m/d');
-        Telegram::log(null, 'guarantee_created', $variation);
+        Telegram::log(null, 'guarantee_created', $sample);
 //        $product = Product::find($variation->product_id);
 
         //add operator percent
