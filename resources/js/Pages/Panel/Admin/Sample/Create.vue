@@ -38,35 +38,24 @@
 
               <div class="my-2">
 
-                <UserSelector :multi="true" :colsData="['id','name','phone','agency_id']"
+                <UserSelector :colsData="['id','name','phone','agency_id']"
                               :labelsData="['id','name','phone','agency_id']"
                               :callback="{'level':getAgency}" :error="form.errors.repo_ids"
                               :link="route('admin.panel.repository.search')+(`?status=active` )"
                               :label="__('repositories')"
                               :id="'repository'" v-model:selected="form.repo_ids" :preload="null">
                   <template v-slot:selector="props">
-                    <div v-if="(props.selectedText || []).length==0" :class=" 'py-2'"
+                    <div :class="props.selectedText?'py-2':'py-2'"
                          class=" px-4 border border-gray-300 rounded hover:bg-gray-100 cursor-pointer flex items-center ">
                       <div class="grow">
-                        {{ __('select') }}
+                        {{ props.selectedText ?? __('select_owner') }}
+                      </div>
+                      <div v-if="props.selectedText"
+                           class="bg-danger rounded p-2   cursor-pointer text-white hover:bg-danger-400"
+                           @click.stop="props.clear()">
+                        <XMarkIcon class="w-5 h-5"/>
                       </div>
                     </div>
-                    <template v-for="(text,idx) in props.selectedText">
-                      <div :class=" 'py-2 my-1'"
-                           class=" px-4 border border-gray-300 rounded hover:bg-gray-100 cursor-pointer flex items-center ">
-                        <div class="grow">
-                          {{ text }}
-                        </div>
-                        <div
-                            class="bg-danger rounded p-2   cursor-pointer text-white hover:bg-danger-400"
-                            @click.stop="props.clear(props.selectedItem[idx]  )">
-                          <XMarkIcon class="w-5 h-5"/>
-
-                        </div>
-                      </div>
-                      <InputError
-                          :message="form.errors && form.errors[`repo_ids.${idx}`]?form.errors[`repo_ids.${idx}`]:null"/>
-                    </template>
                   </template>
                 </UserSelector>
               </div>

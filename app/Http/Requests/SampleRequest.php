@@ -44,8 +44,8 @@ class SampleRequest extends FormRequest
             $allowedRepositories = Repository::whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))->pluck('id');
 
             $tmp = array_merge($tmp, [
-                'repo_ids' => ['required', 'array', 'min:1'],
-                'repo_ids.*' => [Rule::in($allowedRepositories)],
+                'repo_ids' => ['required', 'integer', 'min:1', Rule::in($allowedRepositories)],
+//                'repo_ids.*' => [Rule::in($allowedRepositories)],
                 "product_id" => ['required', Rule::in(Variation::pluck('id'))],
                 "batch_count" => ['required', 'numeric', 'gte:0'],
                 "produced_at" => ['required', 'string', 'regex:/\d{4}\/\d{1,2}\/\d{1,2}/'],

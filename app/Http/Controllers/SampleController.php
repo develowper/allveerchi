@@ -360,7 +360,7 @@ class SampleController extends Controller
         $product_timestamp = Jalalian::fromFormat('Y/m/d', $request->produced_at)->toCarbon();
         $guarantee_timestamp = $request->guarantee_months ? (clone($product_timestamp))->addMonths($request->guarantee_months) : null;
 
-        foreach ($request->repo_ids as $repo_id) {
+        foreach ([$request->repo_ids] as $repo_id) {
 
 
             $repo = Repository::find($repo_id);
@@ -370,10 +370,10 @@ class SampleController extends Controller
             $data = Variation::where([
                 'repo_id' => $repo_id,
                 'product_id' => $request->product_id,
-                'grade' => $request->grade,
-                'pack_id' => $request->pack_id,
-                'weight' => $request->weight,
-                'name' => $request->name,
+//                'grade' => $request->grade,
+//                'pack_id' => $request->pack_id,
+//                'weight' => $request->weight,
+//                'name' => $request->name,
 
             ])->first();
             if (!$data) {
@@ -403,8 +403,8 @@ class SampleController extends Controller
                 ]);
             } else {
 //                    $data->in_shop += $request->in_shop;
-                $data->in_repo += $request->batch_count;
-                $data->save();
+//                $data->in_repo += $request->batch_count;
+//                $data->save();
             }
             if ($data) {
                 for ($i = 0; $i < $request->batch_count; $i++) {
@@ -412,7 +412,7 @@ class SampleController extends Controller
                         'produced_at' => $product_timestamp,
                         'guarantee_months' => $request->guarantee_months,
                         'status' => 'active',
-                        'variation_id' => $data->id,
+//                        'variation_id' => $data->id,
                         'product_id' => $data->product_id,
                         'agency_id' => $repo->agency_id,
 
