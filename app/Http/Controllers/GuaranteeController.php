@@ -42,7 +42,6 @@ class GuaranteeController extends Controller
             return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('product'))]]);
         if ($sample->guarantee_expires_at)
             return back()->withErrors(['message' => [__('guarantee_registered_before')]]);
-        dd($request->all());
         $customer = User::where('phone', $phone)->first();
         if (!$customer) {
             $customer = User::create([
