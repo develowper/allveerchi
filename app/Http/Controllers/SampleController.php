@@ -377,6 +377,8 @@ class SampleController extends Controller
 
             ])->first();
             if (!$data) {
+                return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('variation'))]]);
+
                 $data = Variation::create([
                     'repo_id' => $repo_id,
                     'in_repo' => $request->batch_count,
