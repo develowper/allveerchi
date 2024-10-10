@@ -373,7 +373,7 @@ class SampleController extends Controller
 //                'grade' => $request->grade,
 //                'pack_id' => $request->pack_id,
 //                'weight' => $request->weight,
-//                'name' => $request->name,
+                'name' => $request->name,
 
             ])->first();
             if (!$data) {
@@ -409,6 +409,7 @@ class SampleController extends Controller
             if ($data) {
                 for ($i = 0; $i < $request->batch_count; $i++) {
                     $s = Sample::create([
+                        'name' => $request->name,
                         'produced_at' => $product_timestamp,
                         'guarantee_months' => $request->guarantee_months,
                         'status' => 'active',

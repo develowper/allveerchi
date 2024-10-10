@@ -10,6 +10,7 @@ class Sample extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
         'status',
         'agency_id',
         'product_id',

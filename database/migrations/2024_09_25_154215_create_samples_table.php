@@ -15,6 +15,7 @@ return new class extends Migration {
     {
         Schema::create('samples', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 200);
             $table->enum('status', array_column(Variable::SAMPLE_STATUSES, 'name'))->default(array_column(Variable::SAMPLE_STATUSES, 'name')[0]);
             $table->unsignedBigInteger('agency_id')->nullable();
             $table->foreign('agency_id')->references('id')->on('agencies')->onDelete('no action');

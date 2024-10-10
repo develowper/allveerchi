@@ -69,6 +69,18 @@
               </Selector>
               <div class="my-2">
                 <TextInput
+                    :id="`name`"
+                    type="name"
+                    :placeholder="`${__('name')}`"
+                    classes=" p-2   min-w-[5rem]"
+                    v-model="form.name"
+                    autocomplete="name"
+                    :error="form.errors.name">
+
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
                     :id="`batch_count`"
                     type="number"
                     :placeholder="`${__('count')}`"
