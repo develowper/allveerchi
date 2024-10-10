@@ -10,6 +10,7 @@ use App\Models\City;
 use App\Models\Pack;
 use App\Models\Product;
 use App\Models\Repository;
+use App\Models\ShippingMethod;
 use App\Models\Site;
 use App\Models\User;
 use DateTimeZone;
@@ -552,7 +553,7 @@ class Telegram
                     $msg .= " کد پستی: " . ($data->postal_code ?? '_') . PHP_EOL;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     $msg .= " 👤 " . "دریافت کننده: " . "$data->receiver_fullname ( $data->receiver_phone )" . PHP_EOL;
-                    $msg .= " 📅 " . "تحویل: " . ($data->delivery_date ? Jalalian::forge($data->delivery_date)->format('Y/m/d') . " ($data->delivery_timestamp) " : ' در محل ') . PHP_EOL;
+                    $msg .= " 📅 " . "تحویل: " . (ShippingMethod::find($data->shipping_method_id)->name ?? '') . ($data->delivery_date ? Jalalian::forge($data->delivery_date)->format('Y/m/d') . " ($data->delivery_timestamp) " : '  ') . PHP_EOL;
                     $msg .= " ➡️ " . "مسافت: " . $data->distance . ' km' . PHP_EOL;
                     $msg .= " ⚓️ " . "وزن: " . floatval($data->total_weight) . ' kg' . PHP_EOL;
                     $msg .= " 🚛 " . "کرایه: " . number_format($data->total_shipping_price) . PHP_EOL;
