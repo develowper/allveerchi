@@ -381,12 +381,18 @@ export default {
     document.ondragstart = function () {
       return !1
     };
+    document.ontouchstart = function () {
+      return !1
+    };
     window.addEventListener("load", this.ass);
     scene.addEventListener("mousedown", this.md);
     scene.addEventListener("touchstart", this.md, {passive: true});
     this.$forceUpdate();
-    this.$nextTick(() => {
-    });
+    // this.$nextTick(() => {
+    // });
+  },
+
+  updated() {
   },
   methods: {
 
@@ -466,43 +472,41 @@ export default {
     }
     ,
     md(e) {
-      this.$nextTick(() => {
+      var t = pivot.style.transform.match(/-?\d+\.?\d*/g).map(Number), n = e.target.closest(".element"),
+          o = [].indexOf.call((n || cube).parentNode.children, n);
 
-        var t = pivot.style.transform.match(/-?\d+\.?\d*/g).map(Number), n = e.target.closest(".element"),
-            o = [].indexOf.call((n || cube).parentNode.children, n);
-
-        function r(r) {
-          if (r.touches && r.touches[0].pageY) {
-            r.pageY = r.touches[0].pageY;
-            r.pageX = r.touches[0].pageX;
-          }
-          if (e.touches && e.touches[0].pageY) {
-            e.pageY = e.touches[0].pageY;
-            e.pageX = e.touches[0].pageX;
-          }
-          // if (n) {
-          //   var i = /\d/.exec(document.elementFromPoint(r.pageX, r.pageY).id);
-          //   if (i && i.input.includes("anchor")) {
-          //     a();
-          //     var s = n.parentNode.children[self.mx(o, Number(i) + 3)].hasChildNodes();
-          //     self.ani(self.mx(o, Number(i) + 1 + 2 * s), s)
-          //   }
-          // } else
-          pivot.style.transform = "rotateX(" + (t[0] - (r.pageY - e.pageY) / 2) + "deg)rotateY(" + (t[1] + (r.pageX - e.pageX) / 2) + "deg)"
+      function r(r) {
+        if (r.touches && r.touches[0].pageY) {
+          r.pageY = r.touches[0].pageY;
+          r.pageX = r.touches[0].pageX;
         }
-
-        function a() {
-          document.body.appendChild(guide), scene.removeEventListener("mousemove", r), document.removeEventListener("mouseup", a), scene.addEventListener("mousedown", self.md);
+        if (e.touches && e.touches[0].pageY) {
+          e.pageY = e.touches[0].pageY;
+          e.pageX = e.touches[0].pageX;
         }
+        // if (n) {
+        //   var i = /\d/.exec(document.elementFromPoint(r.pageX, r.pageY).id);
+        //   if (i && i.input.includes("anchor")) {
+        //     a();
+        //     var s = n.parentNode.children[self.mx(o, Number(i) + 3)].hasChildNodes();
+        //     self.ani(self.mx(o, Number(i) + 1 + 2 * s), s)
+        //   }
+        // } else
+        pivot.style.transform = "rotateX(" + (t[0] - (r.pageY - e.pageY) / 2) + "deg)rotateY(" + (t[1] + (r.pageX - e.pageX) / 2) + "deg)"
+      }
 
-        function b() {
-          scene.removeEventListener("touchmove", r), document.removeEventListener("touchend", a), scene.addEventListener("touchstart", self.md, {passive: true});
-        }
+      function a() {
+        document.body.appendChild(guide), scene.removeEventListener("mousemove", r), document.removeEventListener("mouseup", a), scene.addEventListener("mousedown", self.md);
+      }
 
-        (n || document.body).appendChild(guide), scene.addEventListener("mousemove", r), document.addEventListener("mouseup", a), scene.removeEventListener("mousedown", self.md);
-        scene.addEventListener("touchmove", r, {passive: true}), document.addEventListener("touchend", b, {passive: true}), scene.removeEventListener("touchstart", self.md);
-      });
+      function b() {
+        scene.removeEventListener("touchmove", r), document.removeEventListener("touchend", a), scene.addEventListener("touchstart", self.md, {passive: true});
+      }
+
+      (n || document.body).appendChild(guide), scene.addEventListener("mousemove", r), document.addEventListener("mouseup", a), scene.removeEventListener("mousedown", self.md);
+      scene.addEventListener("touchmove", r, {passive: true}), document.addEventListener("touchend", b, {passive: true}), scene.removeEventListener("touchstart", self.md);
     }
+
   },
 }
 
