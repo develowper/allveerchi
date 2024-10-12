@@ -3,7 +3,7 @@
 
     <div class="scene  " id="scene">
       <div class="pivot centered" id="pivot" style="transform: rotateX(-20deg) rotateY(225deg)">
-        <div v-if="true" class="cube " id="cube">
+        <div v-if="false" class="cube " id="cube">
           <div v-for="(piece,idx) in pieces" class="piece " :id="`${piece}${idx+1}`"
                style="transform: rotateX(0deg) translateX(-2em);">
             <div v-for="face in faces" :class="`element ${face}`">
@@ -12,10 +12,13 @@
 
           </div>
         </div>
-        <div v-if="false" class="cube" id="cube">
-          <div class="piece   " id="piece1" style="transform: rotateX(0deg) translateX(-2em);">
-            <div class="element left ">
-              <div class="sticker blue"></div>
+        <div v-if="true" class="cube" id="cube">
+          <div class="piece" id="piece1" style="transform: rotateX(0deg) translateX(-2em);">
+            <div class="element left">
+              <div class="text-gray-900 flex items-center justify-center sticker blue">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه0
+                </div>
+              </div>
             </div>
             <div class="element right"></div>
             <div class="element top"></div>
@@ -26,61 +29,79 @@
           <div class="piece" id="piece2" style="transform: rotateX(0deg) translateX(2em);">
             <div class="element left"></div>
             <div class="element right">
-              <div class="sticker green"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker green">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(-90deg);">فروشگاه1
+                </div>
+              </div>
             </div>
             <div class="element top"></div>
             <div class="element bottom"></div>
             <div class="element back"></div>
             <div class="element front"></div>
           </div>
-          <div class="piece" id="piece4" style="transform: rotateY(0deg) translateY(-2em);">
+          <div class="piece" id="piece4" style="transform: rotateX(0deg) translateY(-2em);">
             <div class="element left"></div>
             <div class="element right"></div>
             <div class="element top">
-              <div class="sticker white"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker white">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه2</div>
+              </div>
             </div>
             <div class="element bottom"></div>
             <div class="element back"></div>
             <div class="element front"></div>
           </div>
-          <div class="piece" id="piece8" style="transform: rotateY(0deg) translateY(2em);">
+          <div class="piece" id="piece8" style="transform: rotateX(0deg) translateY(2em);">
             <div class="element left"></div>
             <div class="element right"></div>
             <div class="element top"></div>
             <div class="element bottom">
-              <div class="sticker yellow"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker yellow">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه3
+                </div>
+              </div>
             </div>
             <div class="element back"></div>
             <div class="element front"></div>
           </div>
-          <div class="piece" id="piece16" style="transform: rotateZ(0deg) translateZ(-2em);">
+          <div class="piece" id="piece16" style="transform: rotateX(0deg) translateZ(-2em);">
             <div class="element left"></div>
             <div class="element right"></div>
             <div class="element top"></div>
             <div class="element bottom"></div>
             <div class="element back">
-              <div class="sticker orange"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker orange">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(90deg);">فروشگاه4</div>
+              </div>
             </div>
             <div class="element front"></div>
           </div>
-          <div class="piece" id="piece32" style="transform: rotateZ(0deg) translateZ(2em);">
+          <div class="piece" id="piece32" style="transform: rotateX(0deg) translateZ(2em);">
             <div class="element left"></div>
             <div class="element right"></div>
             <div class="element top"></div>
             <div class="element bottom"></div>
             <div class="element back"></div>
             <div class="element front">
-              <div class="sticker red"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker red">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه5</div>
+              </div>
             </div>
           </div>
-          <div class="piece" id="piece9" style="transform: rotateY(0deg) translateX(-2em) translateY(2em);">
+          <div class="piece" id="piece9" style="transform: rotateX(0deg) translateX(-2em) translateY(2em);">
             <div class="element left">
-              <div class="sticker yellow"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker blue">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه0
+                </div>
+              </div>
             </div>
             <div class="element right"></div>
             <div class="element top"></div>
             <div class="element bottom">
-              <div class="sticker green"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker yellow">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه3
+                </div>
+              </div>
             </div>
             <div class="element back"></div>
             <div class="element front"></div>
@@ -88,70 +109,99 @@
           <div class="piece" id="piece6" style="transform: rotateX(0deg) translateX(2em) translateY(-2em);">
             <div class="element left"></div>
             <div class="element right">
-              <div class="sticker white"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker green">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(-90deg);">فروشگاه1
+                </div>
+              </div>
             </div>
             <div class="element top">
-              <div class="sticker blue"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker white">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه2</div>
+              </div>
             </div>
             <div class="element bottom"></div>
             <div class="element back"></div>
             <div class="element front"></div>
           </div>
-          <div class="piece" id="piece20" style="transform: rotateZ(0deg) translateY(-2em) translateZ(-2em);">
+          <div class="piece" id="piece20" style="transform: rotateX(0deg) translateY(-2em) translateZ(-2em);">
             <div class="element left"></div>
             <div class="element right"></div>
             <div class="element top">
-              <div class="sticker blue"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker white">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه2</div>
+              </div>
             </div>
             <div class="element bottom"></div>
             <div class="element back">
-              <div class="sticker orange"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker orange">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(90deg);">فروشگاه4</div>
+              </div>
             </div>
             <div class="element front"></div>
           </div>
-          <div class="piece" id="piece40" style="transform: rotateY(0deg) translateY(2em) translateZ(2em);">
+          <div class="piece" id="piece40" style="transform: rotateX(0deg) translateY(2em) translateZ(2em);">
             <div class="element left"></div>
             <div class="element right"></div>
             <div class="element top"></div>
             <div class="element bottom">
-              <div class="sticker orange"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker yellow">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه3
+                </div>
+              </div>
             </div>
             <div class="element back"></div>
             <div class="element front">
-              <div class="sticker green"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker red">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه5</div>
+              </div>
             </div>
           </div>
           <div class="piece" id="piece18" style="transform: rotateX(0deg) translateZ(-2em) translateX(2em);">
             <div class="element left"></div>
             <div class="element right">
-              <div class="sticker white"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker green">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(-90deg);">فروشگاه1
+                </div>
+              </div>
             </div>
             <div class="element top"></div>
             <div class="element bottom"></div>
             <div class="element back">
-              <div class="sticker red"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker orange">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(90deg);">فروشگاه4</div>
+              </div>
             </div>
             <div class="element front"></div>
           </div>
-          <div class="piece" id="piece33" style="transform: rotateZ(0deg) translateZ(2em) translateX(-2em);">
+          <div class="piece" id="piece33" style="transform: rotateX(0deg) translateZ(2em) translateX(-2em);">
             <div class="element left">
-              <div class="sticker green"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker blue">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه0
+                </div>
+              </div>
             </div>
             <div class="element right"></div>
             <div class="element top"></div>
             <div class="element bottom"></div>
             <div class="element back"></div>
             <div class="element front">
-              <div class="sticker red"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker red">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه5</div>
+              </div>
             </div>
           </div>
-          <div class="piece" id="piece5" style="transform: rotateY(0deg) translateX(-2em) translateY(-2em);">
+          <div class="piece" id="piece5" style="transform: rotateX(0deg) translateX(-2em) translateY(-2em);">
             <div class="element left">
-              <div class="sticker orange"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker blue">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه0
+                </div>
+              </div>
             </div>
             <div class="element right"></div>
             <div class="element top">
-              <div class="sticker white"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker white">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه2</div>
+              </div>
             </div>
             <div class="element bottom"></div>
             <div class="element back"></div>
@@ -160,75 +210,107 @@
           <div class="piece" id="piece10" style="transform: rotateX(0deg) translateX(2em) translateY(2em);">
             <div class="element left"></div>
             <div class="element right">
-              <div class="sticker white"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker green">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(-90deg);">فروشگاه1
+                </div>
+              </div>
             </div>
             <div class="element top"></div>
             <div class="element bottom">
-              <div class="sticker green"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker yellow">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه3
+                </div>
+              </div>
             </div>
             <div class="element back"></div>
             <div class="element front"></div>
           </div>
-          <div class="piece" id="piece36" style="transform: rotateZ(0deg) translateY(-2em) translateZ(2em);">
+          <div class="piece" id="piece36" style="transform: rotateX(0deg) translateY(-2em) translateZ(2em);">
             <div class="element left"></div>
             <div class="element right"></div>
             <div class="element top">
-              <div class="sticker yellow"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker white">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه2</div>
+              </div>
             </div>
             <div class="element bottom"></div>
             <div class="element back"></div>
             <div class="element front">
-              <div class="sticker red"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker red">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه5</div>
+              </div>
             </div>
           </div>
-          <div class="piece" id="piece24" style="transform: rotateY(0deg) translateY(2em) translateZ(-2em);">
+          <div class="piece" id="piece24" style="transform: rotateX(0deg) translateY(2em) translateZ(-2em);">
             <div class="element left"></div>
             <div class="element right"></div>
             <div class="element top"></div>
             <div class="element bottom">
-              <div class="sticker yellow"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker yellow">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه3
+                </div>
+              </div>
             </div>
             <div class="element back">
-              <div class="sticker blue"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker orange">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(90deg);">فروشگاه4</div>
+              </div>
             </div>
             <div class="element front"></div>
           </div>
-          <div class="piece" id="piece17" style="transform: rotateZ(0deg) translateZ(-2em) translateX(-2em);">
+          <div class="piece" id="piece17" style="transform: rotateX(0deg) translateZ(-2em) translateX(-2em);">
             <div class="element left">
-              <div class="sticker yellow"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker blue">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه0
+                </div>
+              </div>
             </div>
             <div class="element right"></div>
             <div class="element top"></div>
             <div class="element bottom"></div>
             <div class="element back">
-              <div class="sticker orange"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker orange">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(90deg);">فروشگاه4</div>
+              </div>
             </div>
             <div class="element front"></div>
           </div>
           <div class="piece" id="piece34" style="transform: rotateX(0deg) translateZ(2em) translateX(2em);">
             <div class="element left"></div>
             <div class="element right">
-              <div class="sticker blue"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker green">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(-90deg);">فروشگاه1
+                </div>
+              </div>
             </div>
             <div class="element top"></div>
             <div class="element bottom"></div>
             <div class="element back"></div>
             <div class="element front">
-              <div class="sticker red"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker red">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه5</div>
+              </div>
             </div>
           </div>
           <div class="piece" id="piece21"
-               style="transform: rotateZ(0deg) translateX(-2em) translateY(-2em) translateZ(-2em);">
+               style="transform: rotateX(0deg) translateX(-2em) translateY(-2em) translateZ(-2em);">
             <div class="element left">
-              <div class="sticker yellow"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker blue">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه0
+                </div>
+              </div>
             </div>
             <div class="element right"></div>
             <div class="element top">
-              <div class="sticker blue"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker white">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه2</div>
+              </div>
             </div>
             <div class="element bottom"></div>
             <div class="element back">
-              <div class="sticker orange"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker orange">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(90deg);">فروشگاه4</div>
+              </div>
             </div>
             <div class="element front"></div>
           </div>
@@ -236,59 +318,90 @@
                style="transform: rotateX(0deg) translateX(2em) translateY(2em) translateZ(2em);">
             <div class="element left"></div>
             <div class="element right">
-              <div class="sticker blue"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker green">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(-90deg);">فروشگاه1
+                </div>
+              </div>
             </div>
             <div class="element top"></div>
             <div class="element bottom">
-              <div class="sticker white"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker yellow">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه3
+                </div>
+              </div>
             </div>
             <div class="element back"></div>
             <div class="element front">
-              <div class="sticker red"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker red">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه5</div>
+              </div>
             </div>
           </div>
           <div class="piece" id="piece37"
-               style="transform: rotateZ(0deg) translateY(-2em) translateZ(2em) translateX(-2em);">
+               style="transform: rotateX(0deg) translateY(-2em) translateZ(2em) translateX(-2em);">
             <div class="element left">
-              <div class="sticker green"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker blue">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه0
+                </div>
+              </div>
             </div>
             <div class="element right"></div>
             <div class="element top">
-              <div class="sticker yellow"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker white">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه2</div>
+              </div>
             </div>
             <div class="element bottom"></div>
             <div class="element back"></div>
             <div class="element front">
-              <div class="sticker red"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker red">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه5</div>
+              </div>
             </div>
           </div>
           <div class="piece" id="piece26"
                style="transform: rotateX(0deg) translateY(2em) translateZ(-2em) translateX(2em);">
             <div class="element left"></div>
             <div class="element right">
-              <div class="sticker white"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker green">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(-90deg);">فروشگاه1
+                </div>
+              </div>
             </div>
             <div class="element top"></div>
             <div class="element bottom">
-              <div class="sticker green"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker yellow">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه3
+                </div>
+              </div>
             </div>
             <div class="element back">
-              <div class="sticker orange"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker orange">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(90deg);">فروشگاه4</div>
+              </div>
             </div>
             <div class="element front"></div>
           </div>
           <div class="piece" id="piece25"
-               style="transform: rotateY(0deg) translateZ(-2em) translateX(-2em) translateY(2em);">
+               style="transform: rotateX(0deg) translateZ(-2em) translateX(-2em) translateY(2em);">
             <div class="element left">
-              <div class="sticker yellow"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker blue">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه0
+                </div>
+              </div>
             </div>
             <div class="element right"></div>
             <div class="element top"></div>
             <div class="element bottom">
-              <div class="sticker green"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker yellow">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه3
+                </div>
+              </div>
             </div>
             <div class="element back">
-              <div class="sticker orange"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker orange">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(90deg);">فروشگاه4</div>
+              </div>
             </div>
             <div class="element front"></div>
           </div>
@@ -296,44 +409,66 @@
                style="transform: rotateX(0deg) translateZ(2em) translateX(2em) translateY(-2em);">
             <div class="element left"></div>
             <div class="element right">
-              <div class="sticker blue"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker green">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(-90deg);">فروشگاه1
+                </div>
+              </div>
             </div>
             <div class="element top">
-              <div class="sticker yellow"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker white">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه2</div>
+              </div>
             </div>
             <div class="element bottom"></div>
             <div class="element back"></div>
             <div class="element front">
-              <div class="sticker red"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker red">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه5</div>
+              </div>
             </div>
           </div>
           <div class="piece" id="piece41"
-               style="transform: rotateY(0deg) translateX(-2em) translateY(2em) translateZ(2em);">
+               style="transform: rotateX(0deg) translateX(-2em) translateY(2em) translateZ(2em);">
             <div class="element left">
-              <div class="sticker green"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker blue">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه0
+                </div>
+              </div>
             </div>
             <div class="element right"></div>
             <div class="element top"></div>
             <div class="element bottom">
-              <div class="sticker white"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker yellow">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(180deg);">فروشگاه3
+                </div>
+              </div>
             </div>
             <div class="element back"></div>
             <div class="element front">
-              <div class="sticker red"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker red">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه5</div>
+              </div>
             </div>
           </div>
           <div class="piece" id="piece22"
                style="transform: rotateX(0deg) translateX(2em) translateY(-2em) translateZ(-2em);">
             <div class="element left"></div>
             <div class="element right">
-              <div class="sticker white"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker green">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(-90deg);">فروشگاه1
+                </div>
+              </div>
             </div>
             <div class="element top">
-              <div class="sticker blue"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker white">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(0deg);">فروشگاه2</div>
+              </div>
             </div>
             <div class="element bottom"></div>
             <div class="element back">
-              <div class="sticker orange"></div>
+              <div class="text-gray-900 flex items-center justify-center sticker orange">
+                <div class="select-none text-center " style="font-size: 12px; transform: rotateZ(90deg);">فروشگاه4</div>
+              </div>
             </div>
             <div class="element front"></div>
           </div>
@@ -388,8 +523,8 @@ export default {
     scene.addEventListener("mousedown", this.md);
     scene.addEventListener("touchstart", this.md, {passive: true});
     this.$forceUpdate();
-    // this.$nextTick(() => {
-    // });
+    this.$nextTick(() => {
+    });
   },
 
   updated() {
