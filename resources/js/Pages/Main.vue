@@ -5,190 +5,201 @@
 
     </template>
 
-    <div
-        class="relative    bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-rose-300 to-rose-700">
-      <!--Hero-->
-      <div
-          class="opacity-60   bg-no-repeat  bg-cover  blur-sm   z-0 absolute  bottom-2     w-full   h-full      "
-          :style="`background-image: url(${heroImage})`"></div>
-
-
-      <div class="py-24 md:py-32 xl:py-32   z-10 z-[1044]   mx-auto    ">
-        <div class="justify-center  px-3  sm:px-1  flex   flex-col md:flex-row items-center">
-          <!--                    Right Col-->
-          <div v-if="false" class=" z-10 md:w-2/5 py-6 text-center">
-
-            <!--            <h1 class="my-4 text-white text-5xl font-bold    ">-->
-            <!--              {{ __('app_name') }}-->
-            <!--            </h1>-->
-          </div>
-          <!--Left Col-->
-          <div
-              class="flex flex-col max-w-lg text-white w-full    justify-center   text-center  ">
-
-            <p class="   font-bold  text-xl py-4 shadow-[rgba(0,0,15,0.1)_0px_5px_20px_0px] shadow-primary-400 lg:text-2xl  mb-8 z-10   delay-300">
-              {{ heroText }}
-            </p>
-            <!--                        search-->
-            <div v-if="false" class="w-full mx-auto mt-2  ">
-              <div class="relative  px-6 mx-auto  ">
-                <div
-                    class="absolute top-0 bottom-0 start-0 flex items-center opacity-60  ps-10  ">
-                  <svg
-                      class="w-4 h-4 text-gray-600 fill-current   "
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20">
-                    <path
-                        d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
-                  </svg>
-                  <span class="absolute border-gray-300  border-s top-0 bottom-0 my-2 ms-6"></span>
-                </div>
-                <input id="search-toggle" type="search" v-model=" search"
-                       :placeholder="__('hero_search_placeholder')"
-                       class="placeholder-gray-400 border-transparent block w-full py-3 ps-12 pe-4 font-bold text-gray-700 bg-gray-100 rounded-lg shadow-lg focus:outline-none focus:bg-white"
-                       onkeyup="updateSearchResults(  );">
-
-              </div>
-
-
-            </div>
-            <div class=" p-3    gap-2 grid  grid-cols-1 sm:grid-cols-2 items-center">
-
-              <SecondaryButton @click="$inertia.visit(route('shop.index'))"
-                               class="   grow    "
-                               classes="     py-4  ">
-                {{ __('shop') }}
-
-
-              </SecondaryButton>
-              <PartnershipForm :type="'agency'">
-                <template v-slot:partnershipForm="props">
-                  <SecondaryButton
-                      classes="  py-4  "
-                      data-te-ripple-init class="      grow    ">{{
-                      __('agency')
-                    }}
-                  </SecondaryButton>
-                </template>
-              </PartnershipForm>
-
-
-              <PartnershipForm v-if="false" :type="'gardener'">
-                <template v-slot:partnershipForm="props">
-                  <SecondaryButton classes="  py-8  "
-                                   data-te-ripple-init class="  grow    ">{{
-                      __('gardeners')
-                    }}
-                  </SecondaryButton>
-                </template>
-              </PartnershipForm>
-              <PartnershipForm v-if="false" :type="'farmer'">
-                <template v-slot:partnershipForm="props">
-                  <SecondaryButton
-                      classes=" py-8 "
-                      data-te-ripple-init class=" grow ">{{
-                      __('farmers')
-                    }}
-                  </SecondaryButton>
-                </template>
-              </PartnershipForm>
-            </div>
-          </div>
-
-
-        </div>
-      </div>
-
-      <!--wave-->
-      <div class="absolute  bottom-0 start-0 end-0">
-        <svg viewBox="0 0 1400 174" version="1.1" xmlns="http://www.w3.org/2000/svg"
-             xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <g transform="translate(-4.000000, 76.000000)" fill="#FFFFFF" fill-rule="nonzero">
-              <path
-                  d="m 2 7 C 121 -73 570 -118 718 -73 Q 974 34 1233 -47 C 1282 -81 1330 -90 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
-                  opacity="0.100000001"></path>
-              <path
-                  d="m 2 7 C 240 6 654 -116 772 -55 Q 925 -3 1096 12 C 1249 23 1330 -90 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
-                  opacity="0.100000001"
-              ></path>
-              <path
-                  d="m 2 7 C 99 -11 212 -74 425 -23 Q 1142 84 1082 -55 C 1248 -38 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
-                  id="Path-4" opacity="0.200000003"></path>
-            </g>
-            <g transform="translate(-4.000000, 76.000000)" fill="#FFFFFF" fill-rule="nonzero">
-              <path
-                  d="m 2 7 C 99 -11 212 -74 425 -23 Q 1142 84 1082 -55 C 1248 -38 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
-              ></path>
-            </g>
-          </g>
-        </svg>
-      </div>
-
-
+    <div class="    ">
+      <Cube class="">
+      </Cube>
     </div>
-    <div class="container  mx-auto space-y-4 relative">
-      <div v-if="$page.props.slides.length>0"
-           class="   shadow-md bg-white rounded-lg  overflow-hidden h-72 lg:h-72 xl:h-[24rem] w-full md:w-[90%] lg:w-[80%] md:mx-auto  start-0 end-0 md:-mt-32 -mt-16 ">
-        <Slider :items="$page.props.slides" :delay="8000"></Slider>
-      </div>
 
-      <Transition name="fade" mode="out-in">
-        <section class="flex flex-col   justify-center   text-center ">
-          <h1 class="slide-in-bottom-h1 my-4 text-primary-500 mx-auto w-fit text-3xl font-bold border-primary       ">
-            {{ $page.props.section1Header }}
+    <div v-if="false">
+      <div
+          class="relative    bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-rose-300 to-rose-700">
+        <!--Hero-->
+        <div
+            class="opacity-60   bg-no-repeat  bg-cover  blur-sm   z-0 absolute  bottom-2     w-full   h-full      "
+            :style="`background-image: url(${heroImage})`"></div>
+
+
+        <div class="py-24 md:py-32 xl:py-32   z-10 z-[1044]   mx-auto    ">
+          <div class="justify-center  px-3  sm:px-1  flex   flex-col md:flex-row items-center">
+            <!--                    Right Col-->
+            <div v-if="false" class=" z-10 md:w-2/5 py-6 text-center">
+
+              <!--            <h1 class="my-4 text-white text-5xl font-bold    ">-->
+              <!--              {{ __('app_name') }}-->
+              <!--            </h1>-->
+            </div>
+            <!--Left Col-->
             <div
-                class="h-1 mx-auto bg-gradient-to-l from-primary-100 via-primary-500 to-primary-600 w-64 opacity-25 my-0 py-0 rounded-t"></div>
+                class="flex flex-col max-w-lg text-white w-full    justify-center   text-center  ">
 
-          </h1>
-          <div v-if="false" class="  text-primary-500  slide-in-bottom-subtitle ">{{ __('how_help_you_revenue') }}</div>
+              <p class="   font-bold  text-xl py-4 shadow-[rgba(0,0,15,0.1)_0px_5px_20px_0px] shadow-primary-400 lg:text-2xl  mb-8 z-10   delay-300">
+                {{ heroText }}
+              </p>
+              <!--                        search-->
+              <div v-if="false" class="w-full mx-auto mt-2  ">
+                <div class="relative  px-6 mx-auto  ">
+                  <div
+                      class="absolute top-0 bottom-0 start-0 flex items-center opacity-60  ps-10  ">
+                    <svg
+                        class="w-4 h-4 text-gray-600 fill-current   "
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20">
+                      <path
+                          d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
+                    </svg>
+                    <span class="absolute border-gray-300  border-s top-0 bottom-0 my-2 ms-6"></span>
+                  </div>
+                  <input id="search-toggle" type="search" v-model=" search"
+                         :placeholder="__('hero_search_placeholder')"
+                         class="placeholder-gray-400 border-transparent block w-full py-3 ps-12 pe-4 font-bold text-gray-700 bg-gray-100 rounded-lg shadow-lg focus:outline-none focus:bg-white"
+                         onkeyup="updateSearchResults(  );">
 
-          <div class="m-4 mt-8 gap-4 grid md:grid-cols-2 lg:grid-cols-4 bounce-top-icons">
+                </div>
 
-            <div v-for="(item,idx) in section1"
-                 class="relative flex gap-4 bg-gradient-to-l   shadow-md rounded-lg p-4 py-8 items-stretch">
-              <component v-bind:is="item.icon" class="w-12 h-12 lg:w-24 lg:h-24 text-primary-500"></component>
-              <div class="flex flex-col justify-start py-4 space-y-2 items-start  ">
-                <div class="text-sm  text-primary-900 font-bold">{{ __(item.header) }}</div>
-                <p class="text-sm text-start text-primary-900">{{ __(item.sub) }}</p>
+
               </div>
-              <!--wave-->
-              <svg class="absolute z-[-1] opacity-70 bottom-0 w-full start-0 wave-top" viewBox="0 0 1439 147"
-                   version="1.1" xmlns="http://www.w3.org/2000/svg"
-                   xmlns:xlink="http://www.w3.org/1999/xlink">
-                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                  <g transform="translate(-1.000000, -14.000000)" fill-rule="nonzero">
-                    <g class="wave " fill="#fff">
-                      <path
-                          d="M 106 -20 C 393 16 493 33 584 39 C 1306 33 1402 29 1444 34 L 1441.191 104.352 L 1.121 104.031 Z"></path>
-                    </g>
-                    <g transform="translate(0.000000, 50.000000)" class="fill-primary-500" fill="" fill-rule="nonzero">
-                      <path
-                          d="M 0.457 34.035 C 72 39 99 36 217 45 C 342 31 681 36 1216 12 C 1291 20 1402 29 1444 34 L 1441.191 104.352 L 1.121 104.031 L 0.457 34.035 Z"></path>
-                    </g>
-                  </g>
-                  <g transform="translate(0.000000, 50.000000)" class="fill-primary-200" fill="" fill-rule="nonzero">
-                    <path
-                        d="M 0.457 34.035 C 71 22 156 3 208 -2 C 248 5 1039 48 1124 55 C 1237 46 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0.457 34.035 Z"></path>
-                  </g>
-                </g>
-              </svg>
+              <div class=" p-3    gap-2 grid  grid-cols-1 sm:grid-cols-2 items-center">
+
+                <SecondaryButton @click="$inertia.visit(route('shop.index'))"
+                                 class="   grow    "
+                                 classes="     py-4  ">
+                  {{ __('shop') }}
 
 
+                </SecondaryButton>
+                <PartnershipForm :type="'agency'">
+                  <template v-slot:partnershipForm="props">
+                    <SecondaryButton
+                        classes="  py-4  "
+                        data-te-ripple-init class="      grow    ">{{
+                        __('agency')
+                      }}
+                    </SecondaryButton>
+                  </template>
+                </PartnershipForm>
+
+
+                <PartnershipForm v-if="false" :type="'gardener'">
+                  <template v-slot:partnershipForm="props">
+                    <SecondaryButton classes="  py-8  "
+                                     data-te-ripple-init class="  grow    ">{{
+                        __('gardeners')
+                      }}
+                    </SecondaryButton>
+                  </template>
+                </PartnershipForm>
+                <PartnershipForm v-if="false" :type="'farmer'">
+                  <template v-slot:partnershipForm="props">
+                    <SecondaryButton
+                        classes=" py-8 "
+                        data-te-ripple-init class=" grow ">{{
+                        __('farmers')
+                      }}
+                    </SecondaryButton>
+                  </template>
+                </PartnershipForm>
+              </div>
             </div>
 
 
           </div>
-        </section>
-      </Transition>
+        </div>
+
+        <!--wave-->
+        <div class="absolute  bottom-0 start-0 end-0">
+          <svg viewBox="0 0 1400 174" version="1.1" xmlns="http://www.w3.org/2000/svg"
+               xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g transform="translate(-4.000000, 76.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <path
+                    d="m 2 7 C 121 -73 570 -118 718 -73 Q 974 34 1233 -47 C 1282 -81 1330 -90 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
+                    opacity="0.100000001"></path>
+                <path
+                    d="m 2 7 C 240 6 654 -116 772 -55 Q 925 -3 1096 12 C 1249 23 1330 -90 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
+                    opacity="0.100000001"
+                ></path>
+                <path
+                    d="m 2 7 C 99 -11 212 -74 425 -23 Q 1142 84 1082 -55 C 1248 -38 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
+                    id="Path-4" opacity="0.200000003"></path>
+              </g>
+              <g transform="translate(-4.000000, 76.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <path
+                    d="m 2 7 C 99 -11 212 -74 425 -23 Q 1142 84 1082 -55 C 1248 -38 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
+                ></path>
+              </g>
+            </g>
+          </svg>
+        </div>
 
 
-      <div v-if="$page.props.articles.length>0"
-           class=" flex flex-col justify-center   rounded-lg  overflow-hidden h-72 lg:h-72    w-fit mx-auto     ">
-        <Link :href="route('article.index')" class="text-lg text-primary-500 font-bold p-2 hover:text-primary-400">
-          {{ __('articles') }}
-        </Link>
-        <ArticleSlider :items="$page.props.articles" :delay="8000"></ArticleSlider>
+      </div>
+      <div class="container  mx-auto space-y-4 relative">
+        <div v-if="$page.props.slides.length>0"
+             class="   shadow-md bg-white rounded-lg  overflow-hidden h-72 lg:h-72 xl:h-[24rem] w-full md:w-[90%] lg:w-[80%] md:mx-auto  start-0 end-0 md:-mt-32 -mt-16 ">
+          <Slider :items="$page.props.slides" :delay="8000"></Slider>
+        </div>
+
+        <Transition name="fade" mode="out-in">
+          <section class="flex flex-col   justify-center   text-center ">
+            <h1 class="slide-in-bottom-h1 my-4 text-primary-500 mx-auto w-fit text-3xl font-bold border-primary       ">
+              {{ $page.props.section1Header }}
+              <div
+                  class="h-1 mx-auto bg-gradient-to-l from-primary-100 via-primary-500 to-primary-600 w-64 opacity-25 my-0 py-0 rounded-t"></div>
+
+            </h1>
+            <div v-if="false" class="  text-primary-500  slide-in-bottom-subtitle ">{{
+                __('how_help_you_revenue')
+              }}
+            </div>
+
+            <div class="m-4 mt-8 gap-4 grid md:grid-cols-2 lg:grid-cols-4 bounce-top-icons">
+
+              <div v-for="(item,idx) in section1"
+                   class="relative flex gap-4 bg-gradient-to-l   shadow-md rounded-lg p-4 py-8 items-stretch">
+                <component v-bind:is="item.icon" class="w-12 h-12 lg:w-24 lg:h-24 text-primary-500"></component>
+                <div class="flex flex-col justify-start py-4 space-y-2 items-start  ">
+                  <div class="text-sm  text-primary-900 font-bold">{{ __(item.header) }}</div>
+                  <p class="text-sm text-start text-primary-900">{{ __(item.sub) }}</p>
+                </div>
+                <!--wave-->
+                <svg class="absolute z-[-1] opacity-70 bottom-0 w-full start-0 wave-top" viewBox="0 0 1439 147"
+                     version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g transform="translate(-1.000000, -14.000000)" fill-rule="nonzero">
+                      <g class="wave " fill="#fff">
+                        <path
+                            d="M 106 -20 C 393 16 493 33 584 39 C 1306 33 1402 29 1444 34 L 1441.191 104.352 L 1.121 104.031 Z"></path>
+                      </g>
+                      <g transform="translate(0.000000, 50.000000)" class="fill-primary-500" fill=""
+                         fill-rule="nonzero">
+                        <path
+                            d="M 0.457 34.035 C 72 39 99 36 217 45 C 342 31 681 36 1216 12 C 1291 20 1402 29 1444 34 L 1441.191 104.352 L 1.121 104.031 L 0.457 34.035 Z"></path>
+                      </g>
+                    </g>
+                    <g transform="translate(0.000000, 50.000000)" class="fill-primary-200" fill="" fill-rule="nonzero">
+                      <path
+                          d="M 0.457 34.035 C 71 22 156 3 208 -2 C 248 5 1039 48 1124 55 C 1237 46 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0.457 34.035 Z"></path>
+                    </g>
+                  </g>
+                </svg>
+
+
+              </div>
+
+
+            </div>
+          </section>
+        </Transition>
+
+
+        <div v-if="$page.props.articles.length>0"
+             class=" flex flex-col justify-center   rounded-lg  overflow-hidden h-72 lg:h-72    w-fit mx-auto     ">
+          <Link :href="route('article.index')" class="text-lg text-primary-500 font-bold p-2 hover:text-primary-400">
+            {{ __('articles') }}
+          </Link>
+          <ArticleSlider :items="$page.props.articles" :delay="8000"></ArticleSlider>
+        </div>
       </div>
     </div>
     <!--    <SupportChat id="support-chat" :ip="$page.props.ip" :broadcast-link="route('chat.broadcast')"-->
@@ -212,6 +223,7 @@ import Slider from "@/Components/Slider.vue";
 import ArticleSlider from "@/Components/ArticleSlider.vue";
 import PartnershipForm from "@/Components/PartnershipForm.vue";
 import SupportChat from "@/Components/SupportChat.vue";
+import Cube from "@/Components/Cube.vue";
 import vueRecaptcha from 'vue3-recaptcha2';
 import {
   HomeModernIcon,
@@ -281,6 +293,7 @@ export default {
     ButtonSkew,
     PartnershipForm,
     SupportChat,
+    Cube,
   },
   // mixins: [Mixin],
   setup(props) {
@@ -304,7 +317,7 @@ export default {
   methods: {
 
     updateSearchResults() {
-      this.log('search')
+      // this.log('search')
       if (!this.search) return;
       this.loading = true;
       this.params.phone = f2e(this.params.phone);
