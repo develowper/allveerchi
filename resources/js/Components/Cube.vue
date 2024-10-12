@@ -570,8 +570,9 @@ export default {
         }
         text.style.transform = `rotateZ(${rotate}deg)`;
         face.appendChild(text);
-        face.addEventListener('click', function (e) {
+        face.addEventListener('click', function (ev) {
               // e.preventDefault();
+              self.log(e);
               window.location = 'https://ailverchi.ir/shop';
             }, {passive: false}
         )
