@@ -466,41 +466,43 @@ export default {
     }
     ,
     md(e) {
-      var t = pivot.style.transform.match(/-?\d+\.?\d*/g).map(Number), n = e.target.closest(".element"),
-          o = [].indexOf.call((n || cube).parentNode.children, n);
+      this.$nextTick(() => {
 
-      function r(r) {
-        if (r.touches && r.touches[0].pageY) {
-          r.pageY = r.touches[0].pageY;
-          r.pageX = r.touches[0].pageX;
+        var t = pivot.style.transform.match(/-?\d+\.?\d*/g).map(Number), n = e.target.closest(".element"),
+            o = [].indexOf.call((n || cube).parentNode.children, n);
+
+        function r(r) {
+          if (r.touches && r.touches[0].pageY) {
+            r.pageY = r.touches[0].pageY;
+            r.pageX = r.touches[0].pageX;
+          }
+          if (e.touches && e.touches[0].pageY) {
+            e.pageY = e.touches[0].pageY;
+            e.pageX = e.touches[0].pageX;
+          }
+          // if (n) {
+          //   var i = /\d/.exec(document.elementFromPoint(r.pageX, r.pageY).id);
+          //   if (i && i.input.includes("anchor")) {
+          //     a();
+          //     var s = n.parentNode.children[self.mx(o, Number(i) + 3)].hasChildNodes();
+          //     self.ani(self.mx(o, Number(i) + 1 + 2 * s), s)
+          //   }
+          // } else
+          pivot.style.transform = "rotateX(" + (t[0] - (r.pageY - e.pageY) / 2) + "deg)rotateY(" + (t[1] + (r.pageX - e.pageX) / 2) + "deg)"
         }
-        if (e.touches && e.touches[0].pageY) {
-          e.pageY = e.touches[0].pageY;
-          e.pageX = e.touches[0].pageX;
+
+        function a() {
+          document.body.appendChild(guide), scene.removeEventListener("mousemove", r), document.removeEventListener("mouseup", a), scene.addEventListener("mousedown", self.md);
         }
-        // if (n) {
-        //   var i = /\d/.exec(document.elementFromPoint(r.pageX, r.pageY).id);
-        //   if (i && i.input.includes("anchor")) {
-        //     a();
-        //     var s = n.parentNode.children[self.mx(o, Number(i) + 3)].hasChildNodes();
-        //     self.ani(self.mx(o, Number(i) + 1 + 2 * s), s)
-        //   }
-        // } else
-        pivot.style.transform = "rotateX(" + (t[0] - (r.pageY - e.pageY) / 2) + "deg)rotateY(" + (t[1] + (r.pageX - e.pageX) / 2) + "deg)"
-      }
 
-      function a() {
-        document.body.appendChild(guide), scene.removeEventListener("mousemove", r), document.removeEventListener("mouseup", a), scene.addEventListener("mousedown", self.md);
-      }
+        function b() {
+          scene.removeEventListener("touchmove", r), document.removeEventListener("touchend", a), scene.addEventListener("touchstart", self.md, {passive: true});
+        }
 
-      function b() {
-        scene.removeEventListener("touchmove", r), document.removeEventListener("touchend", a), scene.addEventListener("touchstart", self.md, {passive: true});
-      }
-
-      (n || document.body).appendChild(guide), scene.addEventListener("mousemove", r), document.addEventListener("mouseup", a), scene.removeEventListener("mousedown", self.md);
-      scene.addEventListener("touchmove", r, {passive: true}), document.addEventListener("touchend", b, {passive: true}), scene.removeEventListener("touchstart", self.md);
+        (n || document.body).appendChild(guide), scene.addEventListener("mousemove", r), document.addEventListener("mouseup", a), scene.removeEventListener("mousedown", self.md);
+        scene.addEventListener("touchmove", r, {passive: true}), document.addEventListener("touchend", b, {passive: true}), scene.removeEventListener("touchstart", self.md);
+      });
     }
-
   },
 }
 
