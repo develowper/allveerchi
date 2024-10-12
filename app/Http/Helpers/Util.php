@@ -120,7 +120,7 @@ class Util
                     $font->align('left');
                     $font->valign('bottom');
                 };
-                $image->text("allveerchi.ir", 20, $size, $font);
+                $image->text("ailverchi.ir", 20, $size, $font);
                 $image->save(Storage::path($p));
             }
         }
