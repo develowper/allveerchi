@@ -38,9 +38,9 @@ export default defineConfig({
         ckeditor5({theme: require.resolve('@ckeditor/ckeditor5-theme-lark')})
 
 
-        // legacy({
-        //     targets: ['since 2011',/*'defaults', 'not IE 11'*/],
-        // }),
+        , legacy({
+            targets: ['since 2011',/*'defaults', 'not IE 11'*/],
+        }),
     ],
     server: {
         host: "localhost",
