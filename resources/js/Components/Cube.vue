@@ -542,8 +542,9 @@ export default {
     ass() {
 
       function e(e) {
-        let face = document.createElement("div");
+        let face = document.createElement("a");
         face.classList += 'text-gray-900 flex items-center justify-center' + " sticker " + colors[e];
+        face.setAttribute('href', 'https://ailverchi.ir/shop');
         var text = document.createElement("div");
         text.classList = "select-none text-center ";
         text.style.fontSize = "12px";
@@ -569,7 +570,7 @@ export default {
         }
         text.style.transform = `rotateZ(${rotate}deg)`;
         face.appendChild(text);
-        face.addEventListener('click', () => window.location = 'https://ailverchi.ir/shop')
+        // face.addEventListener('click', () => window.location = 'https://ailverchi.ir/shop')
 
         return t += 1 << e, pieces[o].children[e].appendChild(face), "translate" + self.ga(e) + "(" + (e % 2 * 4 - 2) + "em)"
       }
