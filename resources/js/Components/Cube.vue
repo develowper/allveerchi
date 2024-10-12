@@ -569,8 +569,8 @@ export default {
         }
         text.style.transform = `rotateZ(${rotate}deg)`;
         face.appendChild(text);
+        face.addEventListener('click', () => window.location = 'https://ailverchi.ir/shop')
 
-        face.onclick = () => window.location = 'https://ailverchi.ir/shop';
         return t += 1 << e, pieces[o].children[e].appendChild(face), "translate" + self.ga(e) + "(" + (e % 2 * 4 - 2) + "em)"
       }
 
