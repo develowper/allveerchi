@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-screen">
+  <div class="relative h-screen overflow-hidden">
 
     <div class="scene  " id="scene">
       <div class="pivot centered" id="pivot" style="transform: rotateX(-20deg) rotateY(225deg)">
@@ -516,15 +516,18 @@ export default {
     document.ondragstart = function () {
       return !1
     };
-    document.ontouchstart = function () {
+    // document.ontouchstart = function () {
+    //   return !1
+    // };
+    scene.addEventListener("touchstart", function () {
       return !1
-    };
+    }, {passive: false});
     window.addEventListener("load", this.ass);
     scene.addEventListener("mousedown", this.md);
-    scene.addEventListener("touchstart", this.md, {passive: true});
-    this.$forceUpdate();
-    this.$nextTick(() => {
-    });
+    scene.addEventListener("touchstart", this.md, {passive: false});
+    // this.$forceUpdate();
+    // this.$nextTick(() => {
+    // });
   },
 
   updated() {
@@ -542,9 +545,9 @@ export default {
     ass() {
 
       function e(e) {
-        let face = document.createElement("div");
+        let face = document.createElement("a");
         face.classList += 'text-gray-900 flex items-center justify-center' + " sticker " + colors[e];
-        // face.setAttribute('href', 'https://ailverchi.ir/shop');
+        face.setAttribute('href', 'https://ailverchi.ir/shop');
         var text = document.createElement("div");
         text.classList = "select-none text-center ";
         text.style.fontSize = "12px";
@@ -570,12 +573,11 @@ export default {
         }
         text.style.transform = `rotateZ(${rotate}deg)`;
         face.appendChild(text);
-        face.addEventListener('click', function (ev) {
-              // e.preventDefault();
-              self.log(e);
-              window.location = 'https://ailverchi.ir/shop';
-            }, {passive: false}
-        )
+        // face.addEventListener('click', function (e) {
+        //       e.preventDefault();
+        //       window.location = 'https://ailverchi.ir/shop';
+        //     }, {passive: false}
+        // )
 
         return t += 1 << e, pieces[o].children[e].appendChild(face), "translate" + self.ga(e) + "(" + (e % 2 * 4 - 2) + "em)"
       }
@@ -613,6 +615,7 @@ export default {
     }
     ,
     md(e) {
+
       var t = pivot.style.transform.match(/-?\d+\.?\d*/g).map(Number), n = e.target.closest(".element"),
           o = [].indexOf.call((n || cube).parentNode.children, n);
 
@@ -665,10 +668,11 @@ $faces: (left: (0, -90, 180), right: (0, 90, 90), back: (0, 180, -90), front: (0
 $colors: (blue: #006FB2, green: #1AC54C, white: #F9F7EC, yellow: #FFCF36, orange: #FF5721, red: #FF0030);
 
 html, body {
-  height: 100%;
+  //height: 100%;
   //overflow: hidden;
   //background: $ground-color;
 }
+
 
 .centered {
   position: absolute;
