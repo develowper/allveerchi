@@ -3,7 +3,7 @@
 
     <div class="scene  " id="scene">
       <div class="pivot centered" id="pivot" style="transform: rotateX(-20deg) rotateY(225deg)">
-        <div v-if="true" class="cube " id="cube">
+        <div v-if="false" class="cube " id="cube">
           <div v-for="(piece,idx) in pieces" class="piece " :id="`${piece}${idx+1}`"
                style="transform: rotateX(0deg) translateX(-2em);">
             <div v-for="face in faces" :class="`element ${face}`">
@@ -12,7 +12,7 @@
 
           </div>
         </div>
-        <div v-if="false" class="cube" id="cube">
+        <div v-if="true" class="cube" id="cube">
           <div class="piece   " id="piece1" style="transform: rotateX(0deg) translateX(-2em);">
             <div class="element left ">
               <div class="sticker blue"></div>
