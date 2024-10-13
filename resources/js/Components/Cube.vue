@@ -519,7 +519,8 @@ export default {
     scene.addEventListener("touchstart", function () {
       return !1
     }, {passive: false});
-    window.addEventListener("load", this.ass);
+    this.ass();
+    // window.addEventListener("load", this.ass);
     scene.addEventListener("mousedown", this.md);
     scene.addEventListener("touchstart", this.md, {passive: false});
     // this.$forceUpdate();
