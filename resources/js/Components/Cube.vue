@@ -516,9 +516,6 @@ export default {
     document.ondragstart = function () {
       return !1
     };
-    // document.ontouchstart = function () {
-    //   return !1
-    // };
     scene.addEventListener("touchstart", function () {
       return !1
     }, {passive: false});
@@ -545,9 +542,9 @@ export default {
     ass() {
 
       function e(e) {
-        let face = document.createElement("div");
+        let face = document.createElement("Link");
         face.classList += 'text-gray-900 flex items-center justify-center' + " sticker " + colors[e];
-        // face.setAttribute('onclick', 'window.location="https://ailverchi.ir/shop"');
+        face.setAttribute('href', 'https://ailverchi.ir/shop');
         var text = document.createElement("div");
         text.classList = "select-none text-center ";
         text.style.fontSize = "12px";
