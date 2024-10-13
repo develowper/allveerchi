@@ -43,8 +43,8 @@ export default defineConfig({
         //  }),
     ],
     server: {
-        host: "localhost",
-        // host: "192.168.105.234",
+        // host: "localhost",
+        host: "192.168.105.234",
         port: 3000,
         // cors: false,
         // proxy: {
