@@ -673,7 +673,8 @@ $faces: (left: (0, -90, 180), right: (0, 90, 90), back: (0, 180, -90), front: (0
 $colors: (blue: #006FB2, green: #1AC54C, white: #F9F7EC, yellow: #FFCF36, orange: #FF5721, red: #FF0030);
 
 html, body {
-  //height: 100%;
+  height: 100%;
+  min-height: -webkit-fill-available;
   //overflow: hidden;
   //background: $ground-color;
 }
