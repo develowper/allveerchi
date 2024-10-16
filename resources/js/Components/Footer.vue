@@ -133,6 +133,13 @@
         </div>
         <div class="h-full ">
           <a referrerpolicy='origin' target='_blank'
+             href='https://trustseal.enamad.ir/?id=537013&Code=OJeOoy3263AWFiCRERbpFgIA9cIaYpa5'><img
+              referrerpolicy='origin'
+              src='https://trustseal.enamad.ir/logo.aspx?id=537013&Code=OJeOoy3263AWFiCRERbpFgIA9cIaYpa5' alt=''
+              style='cursor:pointer' code='OJeOoy3263AWFiCRERbpFgIA9cIaYpa5'></a>
+        </div>
+        <div class="h-full ">
+          <a referrerpolicy='origin' target='_blank'
              href='https://trustseal.enamad.ir/?id=416945&Code=9HX7V8iOeltU7Fwt8A9Qwi8OHyyvdcCL'><img
               referrerpolicy='origin'
               src='https://trustseal.enamad.ir/logo.aspx?id=416945&Code=9HX7V8iOeltU7Fwt8A9Qwi8OHyyvdcCL' alt=''
