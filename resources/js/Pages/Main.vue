@@ -10,7 +10,7 @@
     </Cube>
   </div>
 
-  <div v-if="false">
+  <div v-if="true">
     <div
         class="relative    bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-rose-300 to-rose-700">
       <!--Hero-->
