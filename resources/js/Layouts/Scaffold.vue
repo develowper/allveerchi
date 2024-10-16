@@ -6,19 +6,6 @@
     <main :dir="dir()" class="min-h-screen ">
       <Head>
 
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-7YJZL3GXR9"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-
-          function gtag() {
-            dataLayer.push(arguments);
-          }
-
-          gtag('js', new Date());
-
-          gtag('config', 'G-7YJZL3GXR9');
-        </script>
 
         <meta name="author" :content="__('app_name')">
         <link rel="shortcut icon" type="image/x-icon" :href="favicon"/>

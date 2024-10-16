@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-screen overflow-hidden">
+  <div class=" h-72    overflow-hidden">
 
     <div class="scene  " id="scene">
       <div class="pivot centered" id="pivot" style="transform: rotateX(-20deg) rotateY(225deg)">
