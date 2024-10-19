@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Agency;
 use App\Models\City;
+use App\Models\Product;
 use App\Models\Repository;
 use App\Models\Variation;
 use Illuminate\Validation\Rules\File;
@@ -46,7 +47,7 @@ class SampleRequest extends FormRequest
             $tmp = array_merge($tmp, [
                 'repo_ids' => ['required', 'integer', 'min:1', Rule::in($allowedRepositories)],
 //                'repo_ids.*' => [Rule::in($allowedRepositories)],
-                "product_id" => ['required', Rule::in(Variation::pluck('id'))],
+                "product_id" => ['required', Rule::in(Product::pluck('id'))],
                 "batch_count" => ['required', 'numeric', 'gte:0'],
                 "produced_at" => ['required', 'string', 'regex:/\d{4}\/\d{1,2}\/\d{1,2}/'],
                 "guarantee_months" => ['nullable', 'numeric', 'gte:0'],
