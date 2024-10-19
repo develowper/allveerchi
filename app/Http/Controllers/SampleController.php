@@ -474,46 +474,46 @@ class SampleController extends Controller
         $status = $request->status;
         $grade = $request->grade;
 
+        /*
+                $query = Sample::join('variations', function ($join) use ($search, $repoId, $admin) {
+                    $join->on('variations.id', '=', 'samples.variation_id')
+                        ->whereIntegerInRaw('variations.agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))
+        //                ->where('variations.status', 'active')
+        //                ->where('variations.agency_level', '3')
+                    ;
 
-        $query = Sample::join('variations', function ($join) use ($search, $repoId, $admin) {
-            $join->on('variations.id', '=', 'samples.variation_id')
-                ->whereIntegerInRaw('variations.agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))
-//                ->where('variations.status', 'active')
-//                ->where('variations.agency_level', '3')
-            ;
+                })->select('samples.id as id', 'variations.product_id',
+                    'variations.repo_id as repo_id',
+                    'variations.name as name',
+                    'variations.pack_id as pack_id',
+                    'variations.grade as grade',
+                    'variations.price as price',
+                    'variations.auction_price as auction_price',
+                    'variations.auction_price as auction_price',
+                    'variations.weight as weight',
+                    'variations.in_auction as in_auction',
+                    'variations.in_shop as in_shop',
+                    'variations.product_id as parent_id',
+                    'variations.updated_at as updated_at',
+                    'samples.admin_id as admin_id',
+                    'samples.customer_id as customer_id',
+                    'samples.produced_at as produced_at',
+                    'samples.guarantee_months as guarantee_months',
+                    'samples.barcode as barcode',
+                    'samples.guarantee_expires_at as guarantee_expires_at',
 
-        })->select('samples.id as id', 'variations.product_id',
-            'variations.repo_id as repo_id',
-            'variations.name as name',
-            'variations.pack_id as pack_id',
-            'variations.grade as grade',
-            'variations.price as price',
-            'variations.auction_price as auction_price',
-            'variations.auction_price as auction_price',
-            'variations.weight as weight',
-            'variations.in_auction as in_auction',
-            'variations.in_shop as in_shop',
-            'variations.product_id as parent_id',
-            'variations.updated_at as updated_at',
-            'samples.admin_id as admin_id',
-            'samples.customer_id as customer_id',
-            'samples.produced_at as produced_at',
-            'samples.guarantee_months as guarantee_months',
-            'samples.barcode as barcode',
-            'samples.guarantee_expires_at as guarantee_expires_at',
+                )
+                    ->orderBy("$orderBy", $dir)//
+                    //            ->orderByRaw("IF(articles.charge >= articles.view_fee, articles.view_fee, articles.id) DESC")
+                ;
 
-        )
-            ->orderBy("$orderBy", $dir)//
-            //            ->orderByRaw("IF(articles.charge >= articles.view_fee, articles.view_fee, articles.id) DESC")
-        ;
+                if ($search)
+                    $query->where('variations.name', 'like', "%$search%");
+                if ($grade)
+                    $query = $query->where('variations.grade', $grade);//        $res = $query->paginate($paginate, ['*'], 'page', $page)//            ->getCollection()->groupBy('parent_id')
 
-        if ($search)
-            $query->where('variations.name', 'like', "%$search%");
-        if ($grade)
-            $query = $query->where('variations.grade', $grade);//        $res = $query->paginate($paginate, ['*'], 'page', $page)//            ->getCollection()->groupBy('parent_id')
-
-        return $query->paginate($paginate, ['*'], 'page', $page);
-
+                return $query->paginate($paginate, ['*'], 'page', $page);
+        */
         $query = Sample::query()->select();
         $query->whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'));
         if ($search)
