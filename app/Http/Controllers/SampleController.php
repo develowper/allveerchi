@@ -51,7 +51,7 @@ class SampleController extends Controller
         $ids = $request->ids;
         if (!$ids || (is_array($ids) && count($ids) == 0))
             return response()->json(['message' => __('nothing_selected')], Variable::ERROR_STATUS);
-
+/*
         $data = Sample::join('variations', function ($join) use ($ids, $admin) {
             $join->on('variations.id', '=', 'samples.variation_id')
                 ->whereIn('samples.id', $ids)
@@ -84,8 +84,9 @@ class SampleController extends Controller
         )
             ->orderBy("samples.id", 'DESC')
             ->get();
-
-
+*/
+        $query = Sample::query()->select();
+        $data=  $query->whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))->get();
         $sortedIds = $data->pluck('id');
         $title = $sortedIds[0] . '_' . $sortedIds[count($sortedIds) - 1];
 
