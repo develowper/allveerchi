@@ -51,42 +51,42 @@ class SampleController extends Controller
         $ids = $request->ids;
         if (!$ids || (is_array($ids) && count($ids) == 0))
             return response()->json(['message' => __('nothing_selected')], Variable::ERROR_STATUS);
-/*
-        $data = Sample::join('variations', function ($join) use ($ids, $admin) {
-            $join->on('variations.id', '=', 'samples.variation_id')
-                ->whereIn('samples.id', $ids)
-                ->whereIntegerInRaw('variations.agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))
-//                ->where('variations.status', 'active')
-//                ->where('variations.agency_level', '3')
-            ;
+        /*
+                $data = Sample::join('variations', function ($join) use ($ids, $admin) {
+                    $join->on('variations.id', '=', 'samples.variation_id')
+                        ->whereIn('samples.id', $ids)
+                        ->whereIntegerInRaw('variations.agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))
+        //                ->where('variations.status', 'active')
+        //                ->where('variations.agency_level', '3')
+                    ;
 
-        })->select('samples.id as id',
-            'variations.product_id',
-            'variations.repo_id as repo_id',
-            'variations.name as name',
-            'variations.pack_id as pack_id',
-            'variations.grade as grade',
-            'variations.price as price',
-            'variations.auction_price as auction_price',
-            'variations.auction_price as auction_price',
-            'variations.weight as weight',
-            'variations.in_auction as in_auction',
-            'variations.in_shop as in_shop',
-            'variations.product_id as parent_id',
-            'variations.updated_at as updated_at',
-            'samples.admin_id as admin_id',
-            'samples.customer_id as customer_id',
-            'samples.produced_at as produced_at',
-            'samples.guarantee_months as guarantee_months',
-            'samples.barcode as barcode',
-            'samples.guarantee_expires_at as guarantee_expires_at',
+                })->select('samples.id as id',
+                    'variations.product_id',
+                    'variations.repo_id as repo_id',
+                    'variations.name as name',
+                    'variations.pack_id as pack_id',
+                    'variations.grade as grade',
+                    'variations.price as price',
+                    'variations.auction_price as auction_price',
+                    'variations.auction_price as auction_price',
+                    'variations.weight as weight',
+                    'variations.in_auction as in_auction',
+                    'variations.in_shop as in_shop',
+                    'variations.product_id as parent_id',
+                    'variations.updated_at as updated_at',
+                    'samples.admin_id as admin_id',
+                    'samples.customer_id as customer_id',
+                    'samples.produced_at as produced_at',
+                    'samples.guarantee_months as guarantee_months',
+                    'samples.barcode as barcode',
+                    'samples.guarantee_expires_at as guarantee_expires_at',
 
-        )
-            ->orderBy("samples.id", 'DESC')
-            ->get();
-*/
+                )
+                    ->orderBy("samples.id", 'DESC')
+                    ->get();
+        */
         $query = Sample::query()->select();
-        $data=  $query->whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))->get();
+        $data = $query->whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))->get();
         $sortedIds = $data->pluck('id');
         $title = $sortedIds[0] . '_' . $sortedIds[count($sortedIds) - 1];
 
@@ -417,6 +417,7 @@ class SampleController extends Controller
 //                        'variation_id' => $data->id,
                         'product_id' => $data->product_id,
                         'agency_id' => $repo->agency_id,
+                        'repo_id' => $repo->repo_id,
 
                         'guarantee_expires_at',
                         'admin_id' => $admin->id,
