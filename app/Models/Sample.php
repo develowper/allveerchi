@@ -22,6 +22,7 @@ class Sample extends Model
         'admin_id',
         'operator_id',
         'customer_id',
+        'repo_id'
     ];
 
     public static function makeBarcode($id, mixed $produced_at, mixed $guarantee_months)

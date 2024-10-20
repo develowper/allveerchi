@@ -419,7 +419,7 @@ class SampleController extends Controller
                         'agency_id' => $repo->agency_id,
                         'repo_id' => $repo->repo_id,
 
-                        'guarantee_expires_at',
+                        'guarantee_expires_at' => null,
                         'admin_id' => $admin->id,
                         'operator_id' => null,
                         'customer_id' => null,
