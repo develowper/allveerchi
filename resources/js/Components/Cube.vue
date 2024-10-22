@@ -498,20 +498,33 @@
 
 var colors = ["blue", "green", "white", "yellow", "orange", "red"],
     pieces = document.getElementsByClassName("piece"),
-    scene = document.getElementById("scene");
+    scene = document.getElementById("scene"),
+    index = 1,
+    faceCode = {8: 0, 1: 1, 7: 2, 2: 3, 0: 4, 4: 5, 6: 6, 3: 7, 5: 8},
+    map = {
+      47: 0, 9: 1, 52: 2, 30: 3, 2: 4, 16: 5, 34: 6, 21: 7, 42: 8,
+      54: 9, 12: 10, 33: 11, 15: 12, 5: 13, 27: 14, 41: 15, 26: 16, 43: 17,
+      48: 18, 23: 19, 37: 20, 10: 21, 3: 22, 20: 23, 53: 24, 11: 25, 32: 26,
+      31: 27, 19: 28, 39: 29, 28: 30, 1: 31, 18: 32, 44: 33, 7: 34, 49: 35,
+      38: 36, 24: 37, 46: 38, 17: 39, 6: 40, 29: 41, 51: 42, 14: 43, 36: 44,
+      35: 45, 22: 46, 40: 47, 13: 48, 4: 49, 25: 50, 50: 51, 8: 52, 45: 53,
+    };
 let self;
 export default {
   name: "Cube",
+  props: ['data'],
   data() {
     return {
       pieces: 26,
       faces: ['left', 'right', 'top', 'bottom', 'back', 'front'],
+      // colors: ["blue", "green", "white", "yellow", "orange", "red"],
       colors: ["blue", "green", "white", "yellow", "orange", "red"],
     }
   },
   mounted() {
     pieces = document.getElementsByClassName("piece");
     scene = document.getElementById("scene");
+
     self = this;
     document.ondragstart = function () {
       return !1
@@ -543,14 +556,24 @@ export default {
     ass() {
 
       function e(e) {
+        let idx = index++;
+        let item = self.data[map[idx]];
         let face = document.createElement("a");
-        face.classList += 'text-gray-900 flex items-center justify-center' + " sticker " + colors[e];
-        face.setAttribute('href', 'https://ailverchi.ir/shop');
+        face.classList += 'text-gray-900 p-1 flex items-center justify-center' + " sticker " + colors[e];
+        face.setAttribute('href', item.link);
+        face.setAttribute('target', 'new');
         var text = document.createElement("div");
+        if (item.icon) {
+          text = document.createElement("img");
+          text.style.backgroundImage = item.icon;
+          text.setAttribute('src', item.icon);
+        } else {
+          text.classList = "select-none text-center ";
+          text.style.fontSize = "12px";
+          text.innerHTML = (item.title);
+        }
         // text.setAttribute('href', 'https://ailverchi.ir/shop');
-        text.classList = "select-none text-center ";
-        text.style.fontSize = "12px";
-        text.innerHTML = "فروشگاه" + e;
+
         let rotate = 0;
         switch (e) {
           case 0: //blue
@@ -590,8 +613,12 @@ export default {
         return t += 1 << e, pieces[o].children[e].appendChild(face), "translate" + self.ga(e) + "(" + (e % 2 * 4 - 2) + "em)"
       }
 
-      for (var t, n, o = 0; t = 0, o < 26; o++) n = this.mx(o, o % 18), pieces[o].style.transform = "rotateX(0deg)" + e(o % 6) + (o > 5 ? e(n) + (o > 17 ? e(this.mx(n, n + 2)) : "") : ""), pieces[o].setAttribute("id", "piece" + t);
-      // for (let i = 0; i++ < 9;) setTimeout(this.ani, 999 * i, Math.random() * 10 % 6 | 0, i % 2)
+
+      for (var t, n, o = 0; t = 0, o < 26; o++) {
+
+        n = this.mx(o, o % 18), pieces[o].style.transform = "rotateX(0deg)" + e(o % 6) + (o > 5 ? e(n) + (o > 17 ? e(this.mx(n, n + 2)) : "") : ""), pieces[o].setAttribute("id", "piece" + t);
+        // for (let i = 0; i++ < 9;) setTimeout(this.ani, 999 * i, Math.random() * 10 % 6 | 0, i % 2)
+      }
     }
 
     ,
@@ -673,7 +700,8 @@ $sticker-size: 93%;
 $rounded: 10%;
 $cube-scale: 2;
 $faces: (left: (0, -90, 180), right: (0, 90, 90), back: (0, 180, -90), front: (0, 0, 0), bottom: (-90, 0, -90), top: (90, 0, 180));
-$colors: (blue: #006FB2, green: #1AC54C, white: #F9F7EC, yellow: #FFCF36, orange: #FF5721, red: #FF0030);
+//$colors: (blue: #006FB2, green: #1AC54C, white: #F9F7EC, yellow: #FFCF36, orange: #FF5721, red: #FF0030);
+$colors: (blue: #e7ded5, green: #e7ded5, white: #e7ded5, yellow: #e7ded5, orange: #e7ded5, red: #e7ded5);
 
 html, body {
   height: 100vh;

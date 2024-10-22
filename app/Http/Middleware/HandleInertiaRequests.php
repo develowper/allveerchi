@@ -125,6 +125,7 @@ class HandleInertiaRequests extends Middleware
         for ($i = 1; $i <= 54; $i++) {
             $item = $faces->where('face_id', $i)->where('lang', $domainCountry)->first() ?? $faces->where('face_id', $i)->first();
             $arr[] = [
+                'face_id' => $item->face_id,
                 'title' => $item->title,
                 'icon' => $item->icon,
                 'link' => $item->link

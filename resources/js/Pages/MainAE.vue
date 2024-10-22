@@ -144,7 +144,7 @@
 
 
         <div class="    ">
-          <Cube class="" :faces="$page.props.rubikFaces">
+          <Cube class="" :data="$page.props.rubikFaces">
           </Cube>
         </div>
 
@@ -194,14 +194,14 @@
           </h1>
           <div class="grid grid-cols-1  md:grid-cols-2 gap-1">
             <div v-for="item in $page.props.sections[2].items"
-                 class="relative  flex flex-col  items-end gap-4 bg-gradient-to-b from-primary-100 to-primary-50 z-0 shadow-md rounded-lg my-4   items-stretch">
-              <div class="text-primary-600 ">{{ item.header }}</div>
+                 class="relative  flex flex-col  justify-between gap-4 bg-gradient-to-b from-primary-100 to-primary-50 z-0 shadow-md rounded-lg my-4   items-stretch">
+              <div class="text-primary-600 pt-2">{{ item.header }}</div>
               <div v-for="subitem in item.items "
                    class="px-4">
                 <div class="">
                   <!--                <component v-bind:is="item.icon" class="w-12 h-12 lg:w-24 lg:h-24 text-primary-500"></component>-->
                   <div class="flex flex-col justify-start   space-y-2 items-start  ">
-                    <h3>{{ subitem.header }}</h3>
+                    <h3 class="pb-2">{{ subitem.header }}</h3>
                     <p class="text-md text-start text-primary-900  ">{{ subitem.desc }}</p>
                   </div>
                 </div>

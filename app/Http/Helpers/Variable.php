@@ -335,11 +335,10 @@ class Variable
     public static function getRubikFaces(): array
     {
         for ($i = 1; $i <= 54; $i++) {
-
             $arr[] = [
                 'face_id' => $i,
                 'title' => __('shop'),
-                'icon' => null,
+                'icon' => url('assets/images/logo.png'),
                 'link' => url('shop')
             ];
         }

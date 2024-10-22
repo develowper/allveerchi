@@ -128,7 +128,7 @@
         </div>
 
         <div class="    ">
-          <Cube class="" :faces="$page.props.rubikFaces">
+          <Cube class="" :data="$page.props.rubikFaces">
           </Cube>
         </div>
 
