@@ -162,10 +162,10 @@
                 class="h-1 mx-auto bg-gradient-to-l from-primary-100 via-primary-500 to-primary-600 w-64 opacity-25 my-0 py-0 rounded-t"></div>
           </h1>
           <div
-              class="relative flex gap-4 bg-gradient-to-l   shadow-md rounded-lg px-4 pb-8 items-stretch">
+              class="relative flex flex-col   bg-gradient-to-l   shadow-md rounded-lg    items-stretch">
             <!--                <component v-bind:is="item.icon" class="w-12 h-12 lg:w-24 lg:h-24 text-primary-500"></component>-->
-            <div class="flex flex-col justify-start pb-4 space-y-2 items-start  ">
-              <p class="text-md text-start text-primary-900 pb-4">{{ $page.props.sections[0].desc }}</p>
+            <div class="flex flex-col justify-start    space-y-2 items-start px-4 ">
+              <p class="text-md text-start text-primary-900   ">{{ $page.props.sections[0].desc }}</p>
             </div>
             <Wave></Wave>
           </div>
@@ -178,10 +178,10 @@
                 class="h-1 mx-auto bg-gradient-to-l from-primary-100 via-primary-500 to-primary-600 w-64 opacity-25 my-0 py-0 rounded-t"></div>
           </h1>
           <div
-              class="relative flex gap-4 bg-gradient-to-l   shadow-md rounded-lg px-4 pb-8 items-stretch">
+              class="relative flex flex-col gap-4 bg-gradient-to-l   shadow-md rounded-lg   items-stretch">
             <!--                <component v-bind:is="item.icon" class="w-12 h-12 lg:w-24 lg:h-24 text-primary-500"></component>-->
-            <div class="flex flex-col justify-start pb-4 space-y-2 items-start  ">
-              <p class="text-md text-start text-primary-900 pb-4">{{ $page.props.sections[1].desc }}</p>
+            <div class="flex flex-col justify-start   space-y-2 items-start px-4  ">
+              <p class="text-md text-start text-primary-900  ">{{ $page.props.sections[1].desc }}</p>
             </div>
             <Wave></Wave>
           </div>
@@ -194,10 +194,10 @@
           </h1>
           <div class="grid grid-cols-1  md:grid-cols-2 gap-1">
             <div v-for="item in $page.props.sections[2].items"
-                 class="relative  flex flex-col gap-4 bg-gradient-to-b from-primary-100 to-primary-50 z-0 shadow-md rounded-lg my-4 px-4 pt-8 pb-16 items-stretch">
+                 class="relative  flex flex-col  items-end gap-4 bg-gradient-to-b from-primary-100 to-primary-50 z-0 shadow-md rounded-lg my-4   items-stretch">
               <div class="text-primary-600 ">{{ item.header }}</div>
               <div v-for="subitem in item.items "
-                   class="">
+                   class="px-4">
                 <div class="">
                   <!--                <component v-bind:is="item.icon" class="w-12 h-12 lg:w-24 lg:h-24 text-primary-500"></component>-->
                   <div class="flex flex-col justify-start   space-y-2 items-start  ">

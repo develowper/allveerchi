@@ -1,5 +1,5 @@
 <template>
-  <svg v-if="!side || side=='bottom'" class="absolute z-[-1] opacity-70 bottom-0 w-full start-0 wave-top"
+  <svg v-if="!side || side=='bottom'" class="absolut z-[-1] opacity-70 bottom-0 w-full start-0 wave-top"
        viewBox="0 0 1439 147"
        version="1.1" xmlns="http://www.w3.org/2000/svg"
        xmlns:xlink="http://www.w3.org/1999/xlink">
