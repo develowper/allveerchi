@@ -6,7 +6,9 @@ use App\Http\Helpers\SMSHelper;
 use App\Http\Helpers\Util;
 use App\Models\Article;
 use App\Models\User;
+use Faker\Core\File;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rule;
@@ -17,9 +19,9 @@ class MainController extends Controller
 {
     public function viewFile(Request $request)
     {
-
-
-        return response()->file(HTTP::get($request->file)->body());
+        $f = HTTP::get($request->file)->body();
+        dd($f->path());
+        return response()->file();
         return response()->make(file_get_contents($request->file), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline',
