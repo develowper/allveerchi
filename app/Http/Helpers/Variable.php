@@ -332,11 +332,12 @@ class Variable
         ];
     }
 
-   public static function getRubikFaces(): array
-   {
+    public static function getRubikFaces(): array
+    {
         for ($i = 1; $i <= 54; $i++) {
 
             $arr[] = [
+                'face_id' => $i,
                 'title' => __('shop'),
                 'icon' => null,
                 'link' => url('shop')

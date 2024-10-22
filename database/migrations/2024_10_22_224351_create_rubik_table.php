@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        \App\Http\Helpers\Variable::getRubikFaces();
+        \Illuminate\Support\Facades\DB::table('rubik')->insert(\App\Http\Helpers\Variable::getRubikFaces());
     }
 
     /**
