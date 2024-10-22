@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -16,7 +17,10 @@ class MainController extends Controller
 {
     public function viewFile(Request $request)
     {
-
+        return response()->streamDownload(function () use ($request) {
+            echo file_get_contents($request->file);
+        }, 'nice-name.jpg');
+        return response()->file(HTTP::get($request->file));
         return response()->make(file_get_contents($request->file), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline',
