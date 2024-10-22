@@ -19,9 +19,9 @@ class MainController extends Controller
 {
     public function viewFile(Request $request)
     {
-        $f = HTTP::get($request->file)->body();
+        $f = file_get_contents($request->file);
         dd($f->path());
-        return response()->file();
+        return response()->file($f);
         return response()->make(file_get_contents($request->file), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline',
