@@ -19,7 +19,7 @@ class MainController extends Controller
     {
 
 
-        return response()->file(HTTP::get($request->file));
+        return response()->file(HTTP::get($request->file)->body());
         return response()->make(file_get_contents($request->file), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline',
