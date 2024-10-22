@@ -23,7 +23,7 @@ class MainController extends Controller
 //        $f = file_get_contents($request->file);
 //
 //        if (str_ends_with($request->file, '.pdf'))
-        header("Content-Type: application/pdf");
+//        header("Content-Type: application/pdf");
 //        echo $f;
 //        readfile("../unreachable_file_outside_webserver.pdf");
 
