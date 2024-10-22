@@ -44,6 +44,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $domainCountry = explode('.', url()->current())[count(explode('.', url()->current())) - 1];
         $socials = Setting::where('key', 'like', 'social_%')->get();
         $user = auth('sanctum')->user();
         if ($user) {
@@ -105,9 +106,9 @@ class HandleInertiaRequests extends Middleware
             'products' => Product::select('id', 'name')->whereStatus('active')->orderBy('sell_count', 'DESC')->get(),
             'user_location' => User::getLocation(Variable::$CITIES),
             'socials' => [
-                'whatsapp' => "https://wa.me/" . optional($socials->where('key', 'social_whatsapp')->first())->value,
+                'whatsapp' => optional($socials->where('key', "social_whatsapp_$domainCountry")->first() ?? $socials->where('key', 'social_whatsapp')->first())->value,
                 'telegram' => "https://t.me/" . optional($socials->where('key', 'social_telegram')->first())->value,
-                'phone' => optional($socials->where('key', 'social_phone')->first())->value,
+                'phone' => optional($socials->where('key', "social_phone_$domainCountry")->first() ?? $socials->where('key', 'social_phone')->first())->value,
                 'email' => optional($socials->where('key', 'social_email')->first())->value,
                 'address' => optional($socials->where('key', 'social_address')->first())->value,
             ],
