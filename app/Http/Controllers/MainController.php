@@ -17,7 +17,7 @@ class MainController extends Controller
     public function viewFile(Request $request)
     {
 
-        return Response::make(file_get_contents($request->file), 200, [
+        return response()->make(file_get_contents($request->file), 200, [
             'Content-Type' => 'application/pdf',
         ]);
     }
