@@ -14,6 +14,14 @@ use Inertia\Response;
 
 class MainController extends Controller
 {
+    public function viewFile(Request $request)
+    {
+
+        return Response::make(file_get_contents($request->file), 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
     public function main(Request $request)
     {
         if ($r = $request->ref) {

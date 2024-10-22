@@ -151,6 +151,7 @@ Route::get('storage/drivers')->name('storage.drivers');
 Route::get('storage/cars')->name('storage.cars');
 
 Route::get('/', [MainController::class, 'main'])->name('/');
+Route::get('view', [MainController::class, 'viewFile'])->name('view.file');
 
 Route::group(['prefix' => '', 'namespace' => 'User'], function () {
     Route::middleware(['auth:sanctum',
