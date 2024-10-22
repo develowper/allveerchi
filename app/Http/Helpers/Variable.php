@@ -35,6 +35,7 @@ use App\Models\VideoTransaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class Variable
 {
@@ -329,6 +330,19 @@ class Variable
             ],
 
         ];
+    }
+
+   public static function getRubikFaces(): array
+   {
+        for ($i = 1; $i <= 54; $i++) {
+
+            $arr[] = [
+                'title' => __('shop'),
+                'icon' => null,
+                'link' => url('shop')
+            ];
+        }
+        return $arr;
     }
 
 }

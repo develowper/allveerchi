@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\UserFinancial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -104,6 +105,7 @@ class HandleInertiaRequests extends Middleware
             'packs' => Pack::get(),
             'grades' => Variable::GRADES,
             'products' => Product::select('id', 'name')->whereStatus('active')->orderBy('sell_count', 'DESC')->get(),
+            'rubikFaces' => $this->getRubicFaces($domainCountry),
             'user_location' => User::getLocation(Variable::$CITIES),
             'socials' => [
                 'whatsapp' => optional($socials->where('key', "social_whatsapp_$domainCountry")->first() ?? $socials->where('key', 'social_whatsapp')->first())->value,
@@ -114,4 +116,22 @@ class HandleInertiaRequests extends Middleware
             ],
         ]);
     }
+
+    private function getRubicFaces(string $domainCountry)
+    {
+        $arr = [];
+//        Storage::path("public/$type/$id/" . basename($request->path));
+        $faces = DB::table('rubik')->get();
+        for ($i = 1; $i <= 54; $i++) {
+            $item = $faces->where('face_id')->where('lang', $domainCountry)->first() ?? $faces->where('face_id')->first();
+            $arr[] = [
+                'title' => $item->title,
+                'icon' => $item->icon,
+                'link' => $item->link
+            ];
+
+        }
+        return $arr;
+    }
+
 }

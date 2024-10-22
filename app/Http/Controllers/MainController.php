@@ -20,6 +20,7 @@ class MainController extends Controller
             session(['ref' => $r]);
         }
 //    Telegram::log(null, 'order_created', \App\Models\Order::with('items')->with('agency')->orderBy('id', 'DESC')->first());
+        $domainCountry = explode('.', url()->current())[count(explode('.', url()->current())) - 1];
 
         if (str_contains(url()->current(), '.ae') || str_contains(url()->current(), 'localhost'))
 
@@ -103,4 +104,5 @@ class MainController extends Controller
         ]);
 
     }
+
 }
