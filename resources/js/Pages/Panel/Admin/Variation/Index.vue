@@ -237,6 +237,14 @@
                     </th>
                     <th scope="col"
                         class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
+                        @click="params.order_by='in_auction';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
+                      <div class="flex items-center justify-center">
+                        <span class="px-2">    {{ __('auction') }} </span>
+                        <ArrowsUpDownIcon class="w-4 h-4 "/>
+                      </div>
+                    </th>
+                    <th scope="col"
+                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
                         @click="params.order_by='status';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
                       <div class="flex items-center justify-center">
                         <span class="px-2">    {{ __('status') }} </span>
@@ -501,6 +509,34 @@
                     </td>
                     <td v-if="false" class="px-2 py-4    ">
                       {{ d.is_private ? __('internal') : __('public') }}
+                    </td>
+                    <td class="px-2 py-4    " data-te-dropdown-ref>
+                      <button
+                          :id="`dropdownAuctionSetting${d.id}`"
+                          data-te-dropdown-toggle-ref
+                          aria-expanded="false"
+                          data-te-ripple-init
+                          data-te-ripple-color="light"
+                          class="  min-w-[5rem]  py-2  cursor-pointer items-center text-center rounded-md  "
+                          :class="`bg-${getStatus('variation_statuses', d.status).color}-100 hover:bg-${getStatus('variation_statuses', d.status).color}-200 text-${getStatus('variation_statuses', d.status).color}-500`">
+                        {{ getStatus('variation_statuses', d.status).name }}
+                      </button>
+                      <ul :ref="`variationMenu${d.id}`" data-te-dropdown-menu-ref
+                          class="  absolute z-[1000]  m-0 hidden   list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-center text-base shadow-lg [&[data-te-dropdown-show]]:block"
+                          tabindex="-1" role="menu" aria-orientation="vertical" aria-label="User menu"
+                          :aria-labelledby="`dropdownVariationSetting${d.id}`">
+
+                        <li v-for="(s,ix) in $page.props.variation_statuses" role="menuitem"
+                            @click="showDialog('danger',s.message,__('accept'),edit,{'idx':idx,'id':d.id,'cmnd':'auction','status':s.name}) "
+                            class="   cursor-pointer   text-sm   transition-colors hover:bg-gray-100">
+                          <div class="flex items-center justify-center    px-6 py-2   "
+                               :class="` hover:bg-gray-200 text-${s.color}-500`">
+                            {{ __(s.name) }}
+                          </div>
+                          <hr class="border-gray-200 ">
+                        </li>
+
+                      </ul>
                     </td>
                     <td class="px-2 py-4    " data-te-dropdown-ref>
                       <button

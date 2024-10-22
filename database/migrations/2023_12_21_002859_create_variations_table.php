@@ -38,7 +38,7 @@ return new class extends Migration {
             $table->unsignedDecimal('weight', 8, 3)->nullable(); //kg
             $table->unsignedInteger('price')->default(0);
             $table->unsignedInteger('auction_price')->default(0);
-            $table->boolean('in_auction')->default(false);
+            $table->boolean('in_auction')->default(true);
 //            $table->boolean('is_private')->default(false); //just sell to agencies
             $table->enum('agency_level', array_column(Variable::AGENCY_TYPES, 'level'))->nullable();
             $table->enum('unit', Variable::PRODUCT_UNITS)->default(Variable::PRODUCT_UNITS[0]);

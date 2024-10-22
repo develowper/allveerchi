@@ -299,6 +299,7 @@ class Variable
             ['key' => 'social_email', 'value' => 'eh.shakibi@gmail.com', "created_at" => \Carbon\Carbon::now(),],
             ['key' => 'social_phone', 'value' => '09122466401', "created_at" => \Carbon\Carbon::now(),],
             ['key' => 'social_address', 'value' => __('social_address'), "created_at" => \Carbon\Carbon::now(),],
+            ['key' => 'is_auction', 'value' => 0, "created_at" => \Carbon\Carbon::now(),],
             ['key' => 'order_reserve_minutes', 'value' => 30, "created_at" => \Carbon\Carbon::now(),],
             ['key' => 'order_percent_level_0', 'value' => 20, "created_at" => \Carbon\Carbon::now(),],
             ['key' => 'order_percent_level_1', 'value' => 80, "created_at" => \Carbon\Carbon::now(),],

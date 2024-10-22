@@ -646,6 +646,21 @@ class VariationController extends Controller
                     $data->save();
                     Telegram::log(null, 'variation_status_edited', (object)['id' => $data->id, 'name' => $data->name, 'status' => __($data->status)]);
                     return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
+                case 'in_auction':
+                    $request->validate(
+                        [
+                            'in_auction' => ['required', Rule::in(array_column(Variable::VARIATION_STATUSES, 'name'))],
+                        ],
+                        [
+                            'status.required' => sprintf(__('validator.required'), __('status')),
+                            'status.in' => sprintf(__('validator.invalid'), __('status')),
+
+                        ],
+                    );
+                    $data->in_auction = $request->inauction == 'active';
+                    $data->save();
+                    Telegram::log(null, 'variation_status_edited', (object)['id' => $data->id, 'name' => $data->name, 'status' => __($data->status)]);
+                    return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
 
                     break;
             }
