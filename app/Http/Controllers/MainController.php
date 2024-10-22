@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,13 +20,18 @@ class MainController extends Controller
 {
     public function viewFile(Request $request)
     {
-        $f = file_get_contents($request->file);
-        dd($f->path());
-        return response()->file($f);
-        return response()->make(file_get_contents($request->file), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline',
-        ]);
+//        $f = file_get_contents($request->file);
+//
+//        if (str_ends_with($request->file, '.pdf'))
+        header("Content-Type: application/pdf");
+//        echo $f;
+//        readfile("../unreachable_file_outside_webserver.pdf");
+
+        return response()->file(Storage::path("public/$request->file"));
+//        return response()->make(file_get_contents($request->file), 200, [
+//            'Content-Type' => 'application/pdf',
+//            'Content-Disposition' => 'inline',
+//        ]);
     }
 
     public function main(Request $request)
