@@ -150,34 +150,7 @@ Route::get('storage/admins')->name('storage.admins');
 Route::get('storage/drivers')->name('storage.drivers');
 Route::get('storage/cars')->name('storage.cars');
 
-Route::get('/', function (Request $request) {
-    if ($r = $request->ref) {
-        session(['ref' => $r]);
-    }
-//    Telegram::log(null, 'order_created', \App\Models\Order::with('items')->with('agency')->orderBy('id', 'DESC')->first());
-
-
-    return Inertia::render('Main', [
-        'heroText' => \App\Models\Setting::getValue('hero_main_page'),
-        'slides' => \App\Models\Slider::where('is_active', true)->get(),
-        'articles' => \App\Models\Article::where('status', 'active')->orderBy('id', 'desc')->take(12)->get(),
-        'section1Header' => __('our_services'),
-        'section1' => [
-            ['header' => 'تحویل در محل', 'sub' => 'سفارش خود را در سریعترین زمان در محل تحویل بگیرید', 'icon' => 'TruckIcon'],
-            ['header' => 'قیمت به صرفه', 'sub' => 'با حذف واسطه ها، حمل و نقل هوشمند و انبارهای اختصاصی، قیمت تمام شده کالا را به حداقل می رسانیم', 'icon' => 'RocketLaunchIcon'],
-            ['header' => 'پاسخگویی شبانه روزی', 'sub' => 'در هر زمان از شبانه روز پاسخگوی شما خوهیم بود', 'icon' => 'UsersIcon'],
-            ['header' => 'همکاری در فروش', 'sub' => 'با ثبت محصولات شما در فروشگاه و مشاوره تخصصی، به افزایش درامد شما کمک می کنیم', 'icon' => 'MapPinIcon'],
-        ],
-        'section2Header' => __('our_benefits'),
-        'section2' => [
-        ],
-        'carouselImages' => [],
-        'counts' => [
-            'users' => ['icon' => 'UsersIcon', 'count' => User::count()],
-            'articles' => ['icon' => 'PencilIcon', 'count' => Article::count()],
-        ]
-    ]);
-})->name('/');
+Route::get('/', [MainController::class, 'main'])->name('/');
 
 Route::group(['prefix' => '', 'namespace' => 'User'], function () {
     Route::middleware(['auth:sanctum',
