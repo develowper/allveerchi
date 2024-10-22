@@ -123,7 +123,7 @@ class HandleInertiaRequests extends Middleware
 //        Storage::path("public/$type/$id/" . basename($request->path));
         $faces = DB::table('rubik')->get();
         for ($i = 1; $i <= 54; $i++) {
-            $item = $faces->where('face_id')->where('lang', $domainCountry)->first() ?? $faces->where('face_id')->first();
+            $item = $faces->where('face_id', $i)->where('lang', $domainCountry)->first() ?? $faces->where('face_id', $i)->first();
             $arr[] = [
                 'title' => $item->title,
                 'icon' => $item->icon,
