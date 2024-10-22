@@ -19,6 +19,7 @@ class MainController extends Controller
 
         return response()->make(file_get_contents($request->file), 200, [
             'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline',
         ]);
     }
 
