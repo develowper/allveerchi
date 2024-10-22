@@ -923,6 +923,7 @@
   "shipping_owner": "مالک حمل و نقل",
   "copy": "کپی",
   "settlement": "تسویه",
+  "*_will_change_to_*": " %s به %s تغییر خواهد یافت",
   "settlement_*_*_*": "تسویه %s با %s %s",
   "charge_*_*_*": "افزایش اعتبار %s %s %s",
   "edit_order": "ویرایش سفارش",

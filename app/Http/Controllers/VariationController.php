@@ -646,10 +646,10 @@ class VariationController extends Controller
                     $data->save();
                     Telegram::log(null, 'variation_status_edited', (object)['id' => $data->id, 'name' => $data->name, 'status' => __($data->status)]);
                     return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
-                case 'in_auction':
+                case 'auction':
                     $request->validate(
                         [
-                            'in_auction' => ['required', Rule::in(array_column(Variable::VARIATION_STATUSES, 'name'))],
+                            'status' => ['required', Rule::in(array_column(Variable::VARIATION_STATUSES, 'name'))],
                         ],
                         [
                             'status.required' => sprintf(__('validator.required'), __('status')),
@@ -657,10 +657,10 @@ class VariationController extends Controller
 
                         ],
                     );
-                    $data->in_auction = $request->inauction == 'active';
+                    $data->in_auction = $request->status == 'active';
                     $data->save();
-                    Telegram::log(null, 'variation_status_edited', (object)['id' => $data->id, 'name' => $data->name, 'status' => __($data->status)]);
-                    return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
+                    Telegram::log(null, 'variation_status_edited', (object)['id' => $data->id, 'name' => $data->name, 'in_auction' => __($data->in_auction)]);
+                    return response()->json(['message' => __('updated_successfully'), 'in_auction' => $data->in_auction,], $successStatus);
 
                     break;
             }
