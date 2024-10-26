@@ -194,7 +194,7 @@
                              v-model="shipment.method.timestamps"/>
                 </div>
               </div>
-              <div v-if=" shipment.has_available_shipping " class="my-4 ">
+              <div v-if=" shipment.has_available_shipping && shipment.allow_visit " class="my-4 ">
                 <TextInput
                     @change=" ($e)=>{let params={};params[`visit_repo_${shipment.repo_id}`]= shipment.visit_checked  ; update( params)}"
                     :id="`visit_repo_${shipment.repo_id}`"
