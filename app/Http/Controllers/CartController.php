@@ -533,7 +533,8 @@ class CartController extends Controller
         $cart->shipments = $shipments;
         $cart->tax_price = round($cart->total_items_price * $taxPercent / 100);
         $cart->total_discount = $cart->total_items_discount;
-        $cart->total_price = $cart->total_items_price + $cart->total_shipping_price + $cart->tax_price - $cart->total_discount;
+        $cart->total_price = $cart->total_items_price + $cart->total_shipping_price + $cart->tax_price /*- $cart->total_discount*/
+        ;
         $cart->need_address = $needAddress;
         $cart->need_self_receive = $needSelfReceive;
         if ($request->payment_method) {
