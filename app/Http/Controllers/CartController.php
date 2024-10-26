@@ -591,7 +591,7 @@ class CartController extends Controller
                 $tmpCart->total_weight += $shipment['total_weight'];
 
                 $tmpCart->total_items += $shipment['total_items'];
-                $tmpCart->total_price += ($shipment['total_items_price'] + $shipment['total_shipping_price'] + $shipment['tax_price'] - $shipment['total_items_discount']);
+                $tmpCart->total_price += ($shipment['total_items_price'] + $shipment['total_shipping_price'] + $shipment['tax_price'] /*- $shipment['total_items_discount']*/);
             }
             $tmpCart->shipments = $tmpShipments;
             $orders->add(clone $tmpCart);
