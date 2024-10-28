@@ -168,6 +168,16 @@ class ProductController extends Controller
                     return response()->json(['message' => __('updated_successfully')], $successStatus);
 
                 case  'upload-img' :
+
+                    if (!$request->img) //  add extra image
+                        return response()->json(['errors' => [__('file_not_exists')], 422]);
+
+                    Util::createImage($request->img, Variable::IMAGE_FOLDERS[Product::class], $id);
+
+                    return response()->json(['message' => __('updated_successfully')], $successStatus);
+
+
+                case  'upload-img' :
                     $limit = Variable::VARIATION_IMAGE_LIMIT;
                     $type = Variable::IMAGE_FOLDERS[Product::class];
                     $allFiles = Storage::allFiles("public/$type/$id");
@@ -185,16 +195,6 @@ class ProductController extends Controller
 //                    }
                     $data->img = url("storage/products/$id/$name.jpg");
                     Telegram::log(null, 'image_updloaded', $data);
-                    return response()->json(['message' => __('updated_successfully')], $successStatus);
-
-
-                case  'upload-img' :
-
-                    if (!$request->img) //  add extra image
-                        return response()->json(['errors' => [__('file_not_exists')], 422]);
-
-                    Util::createImage($request->img, Variable::IMAGE_FOLDERS[Product::class], $id);
-
                     return response()->json(['message' => __('updated_successfully')], $successStatus);
 
 
