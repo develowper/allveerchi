@@ -174,6 +174,13 @@ class ProductController extends Controller
 
                     Util::createImage($request->img, Variable::IMAGE_FOLDERS[Product::class], $id);
 
+                    $data = new stdClass;
+
+                    $data->id = $request->id;
+                    $data->name = $request->name;
+                    $data->img = url("storage/products/$id.jpg");
+                    Telegram::log(null, 'image_updloaded', $data);
+
                     return response()->json(['message' => __('updated_successfully')], $successStatus);
 
 
