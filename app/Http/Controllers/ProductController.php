@@ -179,7 +179,7 @@ class ProductController extends Controller
 
                     $data->id = $request->id;
                     $data->name = $request->name;
-                    $data->img = url("storage/products/$id.jpg");
+                    $data->img = url("storage/products/$id.jpg") . "?rev=" . random_int(100, 999);
                     Telegram::log(null, 'image_updloaded', $data);
 
                     return response()->json(['message' => __('updated_successfully')], $successStatus);
