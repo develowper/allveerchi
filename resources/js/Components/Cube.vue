@@ -522,6 +522,7 @@ export default {
     }
   },
   mounted() {
+    index = 1;
     pieces = document.getElementsByClassName("piece");
     scene = document.getElementById("scene");
 
