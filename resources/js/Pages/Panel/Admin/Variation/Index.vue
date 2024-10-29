@@ -518,8 +518,8 @@
                           data-te-ripple-init
                           data-te-ripple-color="light"
                           class="  min-w-[5rem]  py-2  cursor-pointer items-center text-center rounded-md  "
-                          :class="`bg-${ d.in_auction ? 'success' : 'danger' }-100 hover:bg-${d.in_auction ? 'success' : 'red'}-200 text-${d.in_auction ? 'success' : 'red'}-500`">
-                        {{ getStatus('variation_statuses', d.in_auction ? 'active' : 'inactive').name }}
+                          :class="`bg-${ d.in_auction ? 'success' : 'danger' }-100 hover:bg-${d.in_auction==1 ? 'success' : 'red'}-200 text-${d.in_auction==1 ? 'success' : 'red'}-500`">
+                        {{ getStatus('variation_statuses', d.in_auction == 1 ? 'active' : 'inactive').name }}
                       </button>
                       <ul :ref="`variationMenu${d.id}`" data-te-dropdown-menu-ref
                           class="  absolute z-[1000]  m-0 hidden   list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-center text-base shadow-lg [&[data-te-dropdown-show]]:block"
