@@ -46,8 +46,9 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
 
-//            if (str_contains(url('/'), '.com') || str_contains(url('/'), '.ir'))
-//                Telegram::logAdmins(print_r([$e->getMessage(), $e->getLine(), $e->getFile()], true), null, Telegram::TOPIC_BUGS);
+            if (str_contains(url('/'), '.com') || str_contains(url('/'), '.ir'))
+                Telegram::log(null, 'error', $e->getMessage());
+//            Telegram::logAdmins(print_r([$e->getMessage(), $e->getLine(), $e->getFile()], true), null, Telegram::TOPIC_BUGS);
 
         });
     }

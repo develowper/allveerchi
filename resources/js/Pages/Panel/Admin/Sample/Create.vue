@@ -81,6 +81,18 @@
               </div>
               <div class="my-2">
                 <TextInput
+                    :id="`price`"
+                    type="number"
+                    :placeholder="`${__('price')} (${__('currency')})`"
+                    classes=" p-2   min-w-[5rem]"
+                    v-model="form.price"
+                    autocomplete="price"
+                    :error="form.errors.price">
+
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
                     :id="`batch_count`"
                     type="number"
                     :placeholder="`${__('count')}`"

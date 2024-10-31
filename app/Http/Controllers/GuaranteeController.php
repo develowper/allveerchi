@@ -55,6 +55,7 @@ class GuaranteeController extends Controller
                 'phone_verified' => true,
                 'ref_id' => User::makeRefCode($phone),
             ]);
+            
         }
         $guaranteeMonths = $sample->guarantee_months;
         $sample->guarantee_expires_at = Carbon::now()->addMonths($guaranteeMonths);

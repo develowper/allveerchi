@@ -36,6 +36,7 @@ return new class extends Migration {
             $table->timestamps();
             $table->unsignedBigInteger('repo_id')->nullable();
             $table->foreign('repo_id')->references('id')->on('repositories')->onDelete('no action');
+            $table->unsignedInteger('price')->default(0);
 
         });
     }
