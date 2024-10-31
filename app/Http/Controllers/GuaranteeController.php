@@ -34,13 +34,17 @@ class GuaranteeController extends Controller
         $operatorId = $request->operator_id;
         $barcode = $request->guarantee_code;
         $id = substr($barcode, 0, strlen($barcode) - 12);
-        dd($id);
         $sample = Sample::find($id);
-        if (!$sample || !$sample->guarantee_months)
+
+        if (!$sample)
             return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('sample'))]]);
-        $variation = Variation::find($sample->variation_id);
-        if (!$variation)
-            return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('product'))]]);
+        if (!$sample->guarantee_months)
+            return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('guarantee_months'))]]);
+        if (!$sample->price)
+            return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('price'))]]);
+//        $variation = Variation::find($sample->variation_id);
+//        if (!$variation)
+//            return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('product'))]]);
         if ($sample->guarantee_expires_at)
             return back()->withErrors(['message' => [__('guarantee_registered_before')]]);
         $customer = User::where('phone', $phone)->first();
@@ -57,7 +61,7 @@ class GuaranteeController extends Controller
         $sample->operator_id = $operatorId;
         $sample->customer_id = $customer->id;
         $sample->save();
-        $sample->name = $variation->name;
+//        $sample->name = $variation->name;
         $sample->operator = $operator;
         $sample->agency = $agency;
         $sample->guarantee_expires_at_shamsi = Jalalian::fromCarbon($sample->guarantee_expires_at)->format('Y/m/d');
@@ -66,14 +70,14 @@ class GuaranteeController extends Controller
 
         //add operator percent
 
-        if ($operator && $agency && $variation) {
+        if ($operator && $agency /*&& $variation*/) {
             $smsHelper = new SMSHelper();
             $smsHelper->send($phone, "$barcode\$$sample->guarantee_expires_at_shamsi", 'guarantee_started');
             SMSHelper::deleteCode($phone);
             $percent = Setting::getValue('operator_profit_percent') ?? 0;
             if ($percent > 0) {
                 $t = Transaction::create([
-                    'title' => sprintf(__('profit_operator_agency_*_*_*'), floor($percent), "$sample->id($variation->name)", "$operator->fullname($operator->id)"),
+                    'title' => sprintf(__('profit_operator_agency_*_*_*'), floor($percent), "$sample->id($sample->name)", "$operator->fullname($operator->id)"),
                     'type' => "profit",
                     'for_type' => 'operator',
                     'for_id' => $operatorId,
@@ -85,7 +89,7 @@ class GuaranteeController extends Controller
                     'info' => null,
                     'coupon' => null,
                     'payed_at' => Carbon::now(),
-                    'amount' => floor($percent / 100 * (Setting::getValue('is_auction') && $variation->auction_price !== null ? $variation->auction_price : $variation->price)),
+                    'amount' => floor($percent / 100 * $sample->price),
                     'pay_id' => null,
                 ]);
 
