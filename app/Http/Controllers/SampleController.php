@@ -411,6 +411,7 @@ class SampleController extends Controller
                 for ($i = 0; $i < $request->batch_count; $i++) {
                     $s = Sample::create([
                         'name' => $request->name,
+                        'price' => $request->price,
                         'produced_at' => $product_timestamp,
                         'guarantee_months' => $request->guarantee_months,
                         'status' => 'active',
