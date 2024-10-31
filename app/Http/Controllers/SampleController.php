@@ -381,7 +381,7 @@ class SampleController extends Controller
                 return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('variation'))]]);
 
                 $data = Variation::create([
-                    'repo_id' => $repo_id,
+                    'repo_id' => $repo->id,
                     'in_repo' => $request->batch_count,
 //                        'in_shop' => $request->in_shop,
                     'product_id' => $request->product_id,
@@ -418,7 +418,7 @@ class SampleController extends Controller
 //                        'variation_id' => $data->id,
                         'product_id' => $data->product_id,
                         'agency_id' => $repo->agency_id,
-                        'repo_id' => $repo->repo_id,
+                        'repo_id' => $repo->id,
 
                         'guarantee_expires_at' => null,
                         'admin_id' => $admin->id,
