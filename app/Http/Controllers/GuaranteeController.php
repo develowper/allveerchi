@@ -34,6 +34,7 @@ class GuaranteeController extends Controller
         $operatorId = $request->operator_id;
         $barcode = $request->guarantee_code;
         $id = substr($barcode, 0, strlen($barcode) - 12);
+        dd($id);
         $sample = Sample::find($id);
         if (!$sample || !$sample->guarantee_months)
             return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('sample'))]]);
