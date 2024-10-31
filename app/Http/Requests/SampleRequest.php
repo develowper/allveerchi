@@ -51,6 +51,7 @@ class SampleRequest extends FormRequest
                 "batch_count" => ['required', 'numeric', 'gte:0'],
                 "produced_at" => ['required', 'string', 'regex:/\d{4}\/\d{1,2}\/\d{1,2}/'],
                 "guarantee_months" => ['nullable', 'numeric', 'gte:0'],
+                "price" => ['required', 'numeric', 'gte:0'],
 
             ]);
         }
