@@ -120,6 +120,18 @@ class GuaranteeController extends Controller
         $status = $request->status;
         $grade = $request->grade;
 
+        $query = Sample::query()->select();
+        $query->whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'));
+        if ($search)
+            $query = $query->where('name', 'like', "%$search%");
+        if ($status)
+            $query = $query->where('status', $status);
+        if ($grade)
+            $query = $query->where('grade', $grade);
+
+        return $query->orderBy($orderBy, $dir)->paginate($paginate, ['*'], 'page', $page);
+
+
         $data = Sample::join('variations', function ($join) use ($admin, $search, $status) {
             $join->on('variations.id', '=', 'samples.variation_id')
                 ->whereNotNull('samples.guarantee_expires_at')
