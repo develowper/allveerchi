@@ -167,7 +167,6 @@ class SMSHelper
             case 'register':
             case 'verification':
             case 'guarantee':
-            case  'item_status':
                 $templateId = 209619;
                 $params = [[
                     "Name" => "VerificationCode",
@@ -192,10 +191,10 @@ class SMSHelper
                 $code = explode('$', $code);
                 $params = [
                     [
-                        "Name" => "Item",
+                        "Name" => "item",
                         "Value" => $code[0]
                     ], [
-                        "Name" => "Status",
+                        "Name" => "status",
                         "Value" => $code[1]
                     ],
                 ];
