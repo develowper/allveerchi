@@ -54,11 +54,11 @@ class GuaranteeController extends Controller
             return;
         }
         if (!$phone || strlen($phone) != 11 || !is_numeric($phone)) {
-            $smsHelper->send($from, '' . '$' . sprintf(__('validator.invalid'), __('customer_phone')), 'item_status');
+            $smsHelper->send($from, __('customer_phone') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
             return;
         }
         if ($sample->guarantee_expires_at) {
-            $smsHelper->send("09018945844", '' . '$' . __('guarantee_registered_before'), 'item_status');
+            $smsHelper->send("09018945844", __('guarantee') . '$' . __('*_registered_before'), 'item_status');
             return;
         }
 
