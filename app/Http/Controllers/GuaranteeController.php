@@ -26,15 +26,26 @@ use Morilog\Jalali\Jalalian;
 
 class GuaranteeController extends Controller
 {
+    public static function makePhone($phone)
+    {
+        $phone = $phone ?? "";
+        if (strlen($phone) == 10 && str_starts_with($phone, '9'))
+            return "0$phone";
+        if (strlen($phone) == 12 && str_starts_with($phone, '98'))
+            return preg_replace("/98/", "0", $phone, 1);
+        return $phone;
+    }
+
     //
     public function smsVerify(Request $request)
     {
 
 
         Telegram::log(null, 'sms_received', print_r($request->all(), true));
-        $from = $request->from;
+        $from = Util::makePhone($request->from);
         $text = $request->text ?? "";
         $text = explode(' ', $text);
+        $date = Carbon::createFromTimestamp($request->date);
         if (count($text) != 2) return;
         $operator = Admin::where('phone', $from)->first();
         if (!$operator) return;
@@ -42,6 +53,7 @@ class GuaranteeController extends Controller
 
         $barcode = Util::f2e(trim($text[0] ?? ""));
         $phone = Util::f2e(trim($text[1] ?? ""));
+
         $id = substr($barcode, 0, strlen($barcode) - 12);
         $sample = Sample::find($id);
         if (!$sample || !$sample->guarantee_months) {
