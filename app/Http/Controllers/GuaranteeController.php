@@ -50,15 +50,15 @@ class GuaranteeController extends Controller
         $id = substr($barcode, 0, strlen($barcode) - 12);
         $sample = Sample::find($id);
         if (!$sample || !$sample->guarantee_months) {
-            $smsHelper->send($from, __('guarantee') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
+            $smsHelper->send('09018945844', __('guarantee') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
             return;
         }
         if (!$phone || strlen($phone) != 11 || !is_numeric($phone)) {
-            $smsHelper->send($from, __('customer_phone') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
+            $smsHelper->send('09018945844', __('customer_phone') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
             return;
         }
         if ($sample->guarantee_expires_at) {
-            $smsHelper->send("09018945844", __('guarantee') . '$' . __('validator.unique'), 'item_status');
+            $smsHelper->send("09018945844", __('guarantee') . '$' . sprintf(__('validator.unique'), ''), 'item_status');
             return;
         }
 
