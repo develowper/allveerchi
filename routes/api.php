@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BotController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\GuaranteeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,7 @@ Route::post('/chat/chatsupporthistory', [App\Http\Controllers\PushController::cl
 
 
 Route::any('payment/done', [TransactionController    ::class, 'payDone'])->name('eblagh.payment.done');
+Route::get('guarantee/sms-verify', [GuaranteeController::class, 'smsVerify'])->name('guarantee.sms');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

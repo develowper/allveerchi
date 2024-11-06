@@ -25,6 +25,27 @@ use Morilog\Jalali\Jalalian;
 class GuaranteeController extends Controller
 {
     //
+    public function smsVerify(Request $request)
+    {
+        Telegram::log(null, 'sms_received', $request);
+        $from = $request->from;
+        $text = $request->text ?? "";
+        $text = explode(' ', $text);
+        if (count($text) != 2) return;
+        $operator = Admin::where('phone', $from)->first();
+        if (!$operator) return;
+        $smsHelper = new SMSHelper();
+
+        $barcode = Util::f2e(trim($text[0] ?? ""));
+        $phone = Util::f2e(trim($text[1] ?? ""));
+        $id = substr($barcode, 0, strlen($barcode) - 12);
+        $sample = Sample::find($id);
+        if (!$sample || !$sample->guarantee_months)
+            $smsHelper->send($phone, __('guarantee') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
+        if (!$sample)
+            $smsHelper->send($phone, __('guarantee') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
+
+    }
     public function create(GuaranteeRequest $request)
     {
 

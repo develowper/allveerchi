@@ -186,6 +186,19 @@ class SMSHelper
                     ],
                 ];
                 break;
+            case 'item_status':
+                $templateId = 606885;
+                $code = explode('$', $code);
+                $params = [
+                    [
+                        "Name" => "Item",
+                        "Value" => $code[0]
+                    ], [
+                        "Name" => "Status",
+                        "Value" => $code[1]
+                    ],
+                ];
+                break;
         }
 
         try {

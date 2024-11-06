@@ -502,6 +502,12 @@ class Telegram
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     $msg .= "\xD8\x9C" . PHP_EOL . $time . PHP_EOL . " ";
                     break;
+                case 'sms_received':
+                    $msg .= " ☑️ " . "یک پیامک دریافت شد" . PHP_EOL;
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    $msg .= print_r($data, true) . PHP_EOL;
+
+                    break;
                 case 'guarantee_created':
                 case 'guarantee_edited':
                     if ($isCreate)
