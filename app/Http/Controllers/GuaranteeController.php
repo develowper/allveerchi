@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\SMSHelper;
 use App\Http\Helpers\Telegram;
+use App\Http\Helpers\Util;
 use App\Http\Helpers\Variable;
 use App\Http\Requests\GuaranteeRequest;
 use App\Models\Admin;
@@ -27,7 +28,7 @@ class GuaranteeController extends Controller
     //
     public function smsVerify(Request $request)
     {
-        Telegram::log(null, 'sms_received', $request);
+        Telegram::log(null, 'sms_received', print_r($request->all(), true));
         $from = $request->from;
         $text = $request->text ?? "";
         $text = explode(' ', $text);
@@ -46,6 +47,7 @@ class GuaranteeController extends Controller
             $smsHelper->send($phone, __('guarantee') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
 
     }
+
     public function create(GuaranteeRequest $request)
     {
 
@@ -76,7 +78,7 @@ class GuaranteeController extends Controller
                 'phone_verified' => true,
                 'ref_id' => User::makeRefCode($phone),
             ]);
-            
+
         }
         $guaranteeMonths = $sample->guarantee_months;
         $sample->guarantee_expires_at = Carbon::now()->addMonths($guaranteeMonths);
