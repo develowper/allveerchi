@@ -29,7 +29,7 @@ class GuaranteeController extends Controller
     public function smsVerify(Request $request)
     {
         Telegram::log(null, 'sms_received', $request->url());
-        Telegram::sendMessage(Telegram::LOGS[0], $request->json());
+        Telegram::sendMessage(Telegram::LOGS[0], print_r($request->json(), true));
         $from = $request->from;
         $text = $request->text ?? "";
         $text = explode(' ', $text);
