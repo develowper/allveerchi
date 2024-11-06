@@ -26,15 +26,7 @@ use Morilog\Jalali\Jalalian;
 
 class GuaranteeController extends Controller
 {
-    public static function makePhone($phone)
-    {
-        $phone = $phone ?? "";
-        if (strlen($phone) == 10 && str_starts_with($phone, '9'))
-            return "0$phone";
-        if (strlen($phone) == 12 && str_starts_with($phone, '98'))
-            return preg_replace("/98/", "0", $phone, 1);
-        return $phone;
-    }
+
 
     //
     public function smsVerify(Request $request)
@@ -47,7 +39,7 @@ class GuaranteeController extends Controller
         $text = explode(' ', $text);
         $date = Carbon::createFromTimestamp($request->date);
         if (count($text) != 2) return;
-        $operator = Admin::where('phone', $from)->first();
+        $operator = Admin::where('phone', $from)->where('role', 'operator')->first();
         if (!$operator) return;
         $smsHelper = new SMSHelper();
 
