@@ -1893,6 +1893,14 @@ INSERT INTO `cities` (`id`, `parent_id`, `name`, `latitude`, `longitude`, `slug`
     }
 
 
-
+    public static function makePhone($phone)
+    {
+        $phone = $phone ?? "";
+        if (strlen($phone) == 10 && str_starts_with($phone, '9'))
+            return "0$phone";
+        if (strlen($phone) == 12 && str_starts_with($phone, '98'))
+            return preg_replace("/98/", "0", $phone, 1);
+        return $phone;
+    }
 
 }
