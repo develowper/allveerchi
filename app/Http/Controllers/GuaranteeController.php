@@ -31,6 +31,7 @@ class GuaranteeController extends Controller
 
 //        Telegram::log(null, 'sms_received', $request->url());
         Telegram::sendMessage(Telegram::LOGS[0], $request->from);
+        return
         $from = $request->from;
         $text = $request->text ?? "";
         $text = explode(' ', $text);
