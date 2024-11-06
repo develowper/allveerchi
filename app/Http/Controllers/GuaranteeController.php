@@ -41,15 +41,80 @@ class GuaranteeController extends Controller
         $phone = Util::f2e(trim($text[1] ?? ""));
         $id = substr($barcode, 0, strlen($barcode) - 12);
         $sample = Sample::find($id);
-        if (!$sample || !$sample->guarantee_months)
+        if (!$sample || !$sample->guarantee_months) {
             $smsHelper->send($phone, __('guarantee') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
-        if (!$sample)
-            $smsHelper->send($phone, __('guarantee') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
+            return;
+        }
+        if (!$phone || strlen($phone) != 11 || is_numeric($phone)) {
+            $smsHelper->send($phone, '' . '$' . sprintf(__('validator.invalid'), __('customer_phone')), 'item_status');
+            return;
+        }
+        if ($sample->guarantee_expires_at) {
+            $smsHelper->send($phone, '' . '$' . __('guarantee_registered_before'), 'item_status');
+            return;
+        }
 
+        $customer = User::where('phone', $phone)->first();
+        if (!$customer) {
+            $customer = User::create([
+                'phone' => $phone,
+                'fullname' => "U$phone",
+                'phone_verified' => true,
+                'ref_id' => User::makeRefCode($phone),
+            ]);
+
+        }
+        $agency = Agency::find($operator->agency_id);
+        $guaranteeMonths = $sample->guarantee_months;
+        $sample->guarantee_expires_at = Carbon::now()->addMonths($guaranteeMonths);
+        $sample->operator_id = $operator->id;
+        $sample->customer_id = $customer->id;
+        $sample->save();
+//        $sample->name = $variation->name;
+        $sample->operator = $operator;
+        $sample->agency = $agency;
+        $sample->guarantee_expires_at_shamsi = Jalalian::fromCarbon($sample->guarantee_expires_at)->format('Y/m/d');
+        Telegram::log(null, 'guarantee_created', $sample);
+//        $product = Product::find($variation->product_id);
+
+        //add operator percent
+
+        if ($operator && $agency /*&& $variation*/) {
+            $smsHelper = new SMSHelper();
+            $smsHelper->send($phone, "$barcode\$$sample->guarantee_expires_at_shamsi", 'guarantee_started');
+            SMSHelper::deleteCode($phone);
+            $percent = Setting::getValue('operator_profit_percent') ?? 0;
+            if ($percent > 0) {
+                $t = Transaction::create([
+                    'title' => sprintf(__('profit_operator_agency_*_*_*'), floor($percent), "$sample->id($sample->name)", "$operator->fullname($operator->id)"),
+                    'type' => "profit",
+                    'for_type' => 'operator',
+                    'for_id' => $operator->id,
+                    'from_type' => 'agency',
+                    'from_id' => 1,
+                    'to_type' => 'operator',
+                    'to_id' => $operator->id,
+                    'is_success' => true,
+                    'info' => null,
+                    'coupon' => null,
+                    'payed_at' => Carbon::now(),
+                    'amount' => floor($percent / 100 * $sample->price),
+                    'pay_id' => null,
+                ]);
+
+                $agencyF = AdminFinancial::firstOrNew(['admin_id' => $operator->id]);
+                $agencyF->wallet += $t->amount;
+                $agencyF->save();
+
+                $t->user = $operator;
+                Telegram::log(null, 'transaction_created', $t);
+            }
+        }
     }
 
     public function create(GuaranteeRequest $request)
     {
+
 
         $agency = $request->agency;
         $phone = $request->phone;
@@ -70,6 +135,8 @@ class GuaranteeController extends Controller
 //            return back()->withErrors(['message' => [sprintf(__('*_not_found'), __('product'))]]);
         if ($sample->guarantee_expires_at)
             return back()->withErrors(['message' => [__('guarantee_registered_before')]]);
+
+
         $customer = User::where('phone', $phone)->first();
         if (!$customer) {
             $customer = User::create([
