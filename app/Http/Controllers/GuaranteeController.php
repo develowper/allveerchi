@@ -38,6 +38,7 @@ class GuaranteeController extends Controller
         $text = $request->text ?? "";
         $text = explode(' ', $text);
         $date = Carbon::createFromTimestamp($request->date);
+
         if (count($text) != 2) return;
         $operator = Admin::where('phone', $from)->where('role', 'operator')->first();
         if (!$operator) return;
@@ -49,15 +50,15 @@ class GuaranteeController extends Controller
         $id = substr($barcode, 0, strlen($barcode) - 12);
         $sample = Sample::find($id);
         if (!$sample || !$sample->guarantee_months) {
-            $smsHelper->send($phone, __('guarantee') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
+            $smsHelper->send($from, __('guarantee') . '$' . sprintf(__('validator.invalid'), ''), 'item_status');
             return;
         }
-        if (!$phone || strlen($phone) != 11 || is_numeric($phone)) {
-            $smsHelper->send($phone, '' . '$' . sprintf(__('validator.invalid'), __('customer_phone')), 'item_status');
+        if (!$phone || strlen($phone) != 11 || !is_numeric($phone)) {
+            $smsHelper->send($from, '' . '$' . sprintf(__('validator.invalid'), __('customer_phone')), 'item_status');
             return;
         }
         if ($sample->guarantee_expires_at) {
-            $smsHelper->send($phone, '' . '$' . __('guarantee_registered_before'), 'item_status');
+            $smsHelper->send("09018945844", '' . '$' . __('guarantee_registered_before'), 'item_status');
             return;
         }
 
