@@ -12,6 +12,7 @@ use App\Models\AdminFinancial;
 use App\Models\Agency;
 use App\Models\AgencyFinancial;
 use App\Models\Car;
+use App\Models\Log;
 use App\Models\Product;
 use App\Models\Sample;
 use App\Models\Setting;
@@ -30,9 +31,10 @@ class GuaranteeController extends Controller
     {
 
 //        Telegram::log(null, 'sms_received', $request->url());
-        Telegram::sendMessage(Telegram::LOGS[0], $request->from);
+        Log::debug($request);
+//        Telegram::sendMessage(Telegram::LOGS[0], $request);
         return
-        $from = $request->from;
+            $from = $request->from;
         $text = $request->text ?? "";
         $text = explode(' ', $text);
         if (count($text) != 2) return;
