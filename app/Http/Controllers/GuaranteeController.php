@@ -58,7 +58,7 @@ class GuaranteeController extends Controller
             return;
         }
         if ($sample->guarantee_expires_at) {
-            $smsHelper->send("09018945844", __('guarantee') . '$' . __('*_registered_before'), 'item_status');
+            $smsHelper->send("09018945844", __('guarantee') . '$' . __('validator.unique'), 'item_status');
             return;
         }
 
