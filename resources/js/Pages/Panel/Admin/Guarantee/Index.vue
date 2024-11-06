@@ -461,10 +461,10 @@
                       {{ toShamsi(d.guarantee_expires_at) }}
 
                     </td>
-                    <td class="px-2 py-4    ">
-                      {{ d.guarantee_months }}
+<!--                    <td class="px-2 py-4    ">-->
+                    <!--                      {{ d.guarantee_months }}-->
 
-                    </td>
+                    <!--                    </td>-->
                     <td class="px-2 py-4  font-bold  " style="font-family: Serif !important">
                       {{ f2e(d.barcode) }}
 
@@ -545,9 +545,9 @@
 
                     <td class="px-2 py-4">
                       <!-- Actions Group -->
-                      <div
-                          class=" inline-flex rounded-md shadow-sm transition duration-150 ease-in-out    focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-                          role="group">
+                      <div v-if="false"
+                           class=" inline-flex rounded-md shadow-sm transition duration-150 ease-in-out    focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+                           role="group">
 
                         <Link
                             type="button" :href="route('admin.panel.guarantee.edit',d.id)"
