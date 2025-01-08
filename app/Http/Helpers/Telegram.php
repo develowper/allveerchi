@@ -733,7 +733,10 @@ class Telegram
                     $msg .= " 💎 " . "نقش: " . __($data->role) . PHP_EOL;
                     $msg .= " 💵 " . "کیف پول: " . $data->wallet . PHP_EOL;
                     $msg .= " 🔑 " . "دسترسی: " . join(', ', $data->access ?? []) . PHP_EOL;
-
+                    $msg .= " 🚩 " . "استان: " . City::firstOrNew(['id' => $data->province_id])->name . PHP_EOL;
+                    $msg .= " 🚩 " . "شهر: " . City::firstOrNew(['id' => $data->county_id])->name . PHP_EOL;
+                    $msg .= " 🚩 " . " کد پستی: " . ($data->postal_code ?? '_') . PHP_EOL;
+                    $msg .= " 🚩 " . " آدرس: " . ($data->address ?? '_') . PHP_EOL;
                     break;
                 case 'partnership_created':
                     $cities = City::whereIn('id', [$data->province_id, $data->county_id])->select('id', 'name')->get();
