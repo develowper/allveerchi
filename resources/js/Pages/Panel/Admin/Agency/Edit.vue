@@ -70,7 +70,7 @@
 
             </div>
             <form @submit.prevent="submit">
-              <div class="my-2">
+              <div class="my-2" v-show=" form.type_id >0 ">
 
                 <Selector
                     v-show="$page.props.agency_types.filter((e)=>$page.props.agency && e.level>$page.props.agency.level).length>0"
@@ -234,7 +234,7 @@
                 <AddressSelector ref="addressSelector" :editable="true" :clearable="true" class=" " type=""
                                  :label="__('address')"
                                  @change="updateAddress($event) "
-                                 :error="form.errors.address ||form.errors.postal_code || form.errors.province_id || form.errors.county_id "/>
+                                 :error="form.errors.address ||form.errors.postal_code || form.errors.province_id || form.errors.county_id|| form.errors.district_id "/>
 
 
               </div>
@@ -272,7 +272,6 @@
 </template>
 
 <script>
-import Scaffold from "@/Layouts/Scaffold.vue";
 import Panel from "@/Layouts/Panel.vue";
 import {Head, Link, useForm} from "@inertiajs/vue3";
 import {
@@ -294,7 +293,6 @@ import {
 } from "@heroicons/vue/24/outline";
 import {QuestionMarkCircleIcon,} from "@heroicons/vue/24/solid";
 import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -416,8 +414,8 @@ export default {
       province_id: this.data.province_id,
       county_id: this.data.county_id,
       district_id: this.data.district_id,
-      lat: this.data.location && this.data.location.indexOf(',') > -1 ? this.data.location.split(',')[1] : null,
-      lon: this.data.location && this.data.location.indexOf(',') > -1 ? this.data.location.split(',')[0] : null,
+      lat: this.data.location && this.data.location.indexOf(',') > -1 ? this.data.location.split(',')[0] : null,
+      lon: this.data.location && this.data.location.indexOf(',') > -1 ? this.data.location.split(',')[1] : null,
 
     };
 
@@ -461,7 +459,7 @@ export default {
       this.form.district_id = address.district_id;
       this.form.lat = address.lat;
       this.form.lon = address.lon;
-      this.form.location = `${address.lat},${address.lon}`;
+      this.form.location = address.lat && address.lon ? `${address.lat},${address.lon}` : null;
       this.form.postal_code = this.f2e(address.postal_code);
       this.updateFilteredAgencies();
     },

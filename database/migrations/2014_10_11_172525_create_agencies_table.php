@@ -18,13 +18,13 @@ return new class extends Migration {
             $table->id();
             $table->string('name', 200);
             $table->string('phone', 20)->nullable();
-            $table->string('postal_code', 20)->nullable();
             $table->json('access')->nullable();
             $table->enum('level', array_column(Variable::AGENCY_TYPES, 'level'))->default(array_column(Variable::AGENCY_TYPES, 'level')[count(Variable::AGENCY_TYPES) - 1]);
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreign('parent_id')->references('id')->on('agencies')->onDelete('no action');
             //            $table->unsignedBigInteger('owner_id')->nullable();
 //            $table->foreign('owner_id')->references('id')->on('admins')->onDelete('no action');
+            $table->string('postal_code', 20)->nullable();
             $table->unsignedSmallInteger('province_id')->nullable()->index();
             $table->foreign('province_id')->references('id')->on('cities')->onDelete('no action');
             $table->unsignedSmallInteger('county_id')->nullable();

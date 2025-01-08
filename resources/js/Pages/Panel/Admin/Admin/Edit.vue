@@ -33,7 +33,7 @@
                                :preload="route('storage.admins')+`/${$page.props.data.id}.jpg`"
                                mode="edit" :for-id="$page.props.data.id"
                                :link="route('admin.panel.admin.update')"
-                               ref="imageCropper" :label="__('driver_image_jpg')" :cropRatio="3/4" id="img"
+                               ref="imageCropper" :label="__('image_jpg')" :cropRatio="3/4" id="img"
                                height="10" class="grow "/>
                 <InputError class="mt-1 " :message="form.errors.img"/>
               </div>
@@ -181,6 +181,14 @@
 
                 </TextInput>
               </div>
+              <div class="my-2">
+                <AddressSelector ref="addressSelector" :editable="true" :clearable="true" class=" " type=""
+                                 :label="__('address')"
+                                 @change="updateAddress($event) "
+                                 :error="form.errors.address ||form.errors.postal_code || form.errors.province_id || form.errors.county_id || form.errors.district_id "/>
+
+
+              </div>
               <div class="my-4">
                 <TextInput
                     id="password"
@@ -296,6 +304,7 @@ import PhoneFields from "@/Components/PhoneFields.vue";
 import SocialFields from "@/Components/SocialFields.vue";
 import EmailFields from "@/Components/EmailFields.vue";
 import UserSelector from "@/Components/UserSelector.vue";
+import AddressSelector from "@/Components/AddressSelector.vue";
 
 export default {
 
@@ -317,7 +326,15 @@ export default {
         status: null,
         role: null,
         img: null,
-
+        address: null,
+        lat: null,
+        lon: null,
+        location: null,
+        province_id: null,
+        county_id: null,
+        district_id: null,
+        postal_code: null,
+        preloadAddress: null,
       }),
       profile: null,
     }
@@ -361,6 +378,7 @@ export default {
     XMarkIcon,
     UserSelector,
     BanknotesIcon,
+    AddressSelector,
 
   },
   created() {
@@ -384,6 +402,23 @@ export default {
       this.form.wallet = this.data.financial.wallet;
     }
 
+    this.preloadAddress = {
+      address: this.data.address,
+      postal_code: this.data.postal_code,
+      province_id: this.data.province_id,
+      county_id: this.data.county_id,
+      district_id: this.data.district_id,
+      lat: this.data.location && this.data.location.indexOf(',') > -1 ? this.data.location.split(',')[0] : null,
+      lon: this.data.location && this.data.location.indexOf(',') > -1 ? this.data.location.split(',')[1] : null,
+
+    };
+
+    this.$nextTick(() => {
+      this.$refs.addressSelector.preload(this.preloadAddress);
+      this.updateAddress(this.preloadAddress);
+
+
+    });
   },
   methods: {
     submit() {
@@ -418,7 +453,18 @@ export default {
             this.showAlert(this.$page.props.flash.status, this.$page.props.flash.message);
         },
       });
-    }
+    },
+    updateAddress(address) {
+      address = address || {};
+      this.form.address = address.address;
+      this.form.province_id = address.province_id;
+      this.form.county_id = address.county_id;
+      this.form.district_id = address.district_id;
+      this.form.lat = address.lat;
+      this.form.lon = address.lon;
+      this.form.location = address.lat && address.lon ? `${address.lat},${address.lon}` : null;
+      this.form.postal_code = this.f2e(address.postal_code);
+    },
   },
 
 }

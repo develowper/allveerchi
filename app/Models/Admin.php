@@ -54,6 +54,12 @@ class Admin extends Authenticatable
         'expires_at',
         'created_at',
         'updated_at',
+        'postal_code',
+        'province_id',
+        'county_id',
+        'district_id',
+        'address',
+        'location',
     ];
 
     /**

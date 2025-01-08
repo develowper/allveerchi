@@ -26,7 +26,7 @@
       <div class="px-2 flex flex-col   md:px-4">
 
         <div class="flex-col   bg-white  overflow-x-auto shadow-lg  rounded-lg">
-          <div class="flex   items-center justify-between py-4 p-4">
+          <div class="flex   items-center justify-start py-4 p-4">
             <!--              Dropdown Actions-->
             <div>
               <div class="relative mx-1  " data-te-dropdown-ref>
@@ -89,7 +89,7 @@
               <Pagination @paginationChanged="paginationChanged" :pagination="pagination"/>
             </div>
 
-            <div class="relative ">
+            <div class="relative mx-1">
               <label for="table-search" class="sr-only">Search</label>
               <div
                   class="absolute inset-y-0 cursor-pointer text-gray-500 hover:text-gray-700  start-0 flex items-center px-3  ">
@@ -101,9 +101,25 @@
                 <XMarkIcon class="w-4 h-4 "/>
               </div>
               <input type="text" id="table-search-admins" v-model="params.search" @keydown.enter="getData()"
-                     class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                     class="block p-1 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                      :placeholder="__('search')">
             </div>
+
+            <!--            roles selector-->
+            <div class="inline-flex" role="group">
+
+              <div v-for="(s,idx) in $page.props.admin_roles"
+                   type="button" @click="(params.role==s?params.role=null: params.role=s);params.page=1;getData()"
+                   class="inline-block border    border-1 w-16 p-2  text-center text-xs font-medium uppercase leading-normal  transition duration-150 ease-in-out hover:border-primary-accent-200   focus:border-primary-accent-200 focus:bg-secondary-50/50 focus:outline-none focus:ring-0 active:border-primary-accent-200 motion-reduce:transition-none dark:border-primary-400 dark:text-primary-300 dark:hover:bg-blue-950 dark:focus:bg-blue-950"
+                   :class="`bg-gray-200 cursor-pointer ${idx==0?'rounded-s-lg':idx==$page.props.admin_roles.length-1 ?'rounded-e-lg':''} border-dark-500 ${s==params.role?  `text-white bg-green-500` :`text-gray-400 bg-white`}`"
+                   data-twe-ripple-init
+                   data-twe-ripple-color="light">
+                {{ __(s) }}
+              </div>
+
+
+            </div>
+
           </div>
           <!--           table-->
           <table class="w-full text-sm text-left text-gray-500">
@@ -408,6 +424,7 @@ export default {
         paginate: this.$page.props.pageItems[0],
         order_by: null,
         dir: 'DESC',
+        role: null,
       },
       data: [],
       pagination: {},

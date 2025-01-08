@@ -103,29 +103,30 @@
 
         <!--wave-->
         <div class="absolute  bottom-0 start-0 end-0">
-          <svg viewBox="0 0 1400 174" version="1.1" xmlns="http://www.w3.org/2000/svg"
+          <svg viewBox="0 0 1428 174" version="1.1" xmlns="http://www.w3.org/2000/svg"
                xmlns:xlink="http://www.w3.org/1999/xlink">
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g transform="translate(-4.000000, 76.000000)" fill="#FFFFFF" fill-rule="nonzero">
+              <g transform="translate(-2.000000, 44.000000)" fill="#FFFFFF" fill-rule="nonzero">
                 <path
-                    d="m 2 7 C 121 -73 570 -118 718 -73 Q 974 34 1233 -47 C 1282 -81 1330 -90 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
+                    d="M 5 -51 C 118 -34 116 -30 424 13 C 643 10 681 36 1263 -11 C 1300 5 1402 29 1444 34 L 1441.191 104.352 L 1.121 104.031 L 1 -54 Z"
                     opacity="0.100000001"></path>
                 <path
-                    d="m 2 7 C 240 6 654 -116 772 -55 Q 925 -3 1096 12 C 1249 23 1330 -90 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
+                    d="M 106 -20 C 393 16 493 33 584 39 C 1306 33 1402 29 1444 34 L 1441.191 104.352 L 1.121 104.031 Z"
                     opacity="0.100000001"
                 ></path>
                 <path
-                    d="m 2 7 C 99 -11 212 -74 425 -23 Q 1142 84 1082 -55 C 1248 -38 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
+                    d="M 0.457 34.035 C 72 39 99 36 217 45 C 342 31 681 36 1216 12 C 1291 20 1402 29 1444 34 L 1441.191 104.352 L 1.121 104.031 L 0.457 34.035 Z"
                     id="Path-4" opacity="0.200000003"></path>
               </g>
               <g transform="translate(-4.000000, 76.000000)" fill="#FFFFFF" fill-rule="nonzero">
                 <path
-                    d="m 2 7 C 99 -11 212 -74 425 -23 Q 1142 84 1082 -55 C 1248 -38 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0 7 Z"
+                    d="M 0.457 34.035 C 71 22 156 3 208 -2 C 248 5 1039 48 1124 55 C 1237 46 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0.457 34.035 Z"
                 ></path>
               </g>
             </g>
           </svg>
         </div>
+
 
         <div class="    ">
           <Cube class="" :data="$page.props.rubikFaces">

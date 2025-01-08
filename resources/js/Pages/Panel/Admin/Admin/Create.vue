@@ -161,6 +161,14 @@
                   </template>
                 </TextInput>
               </div>
+              <div class="my-2">
+                <AddressSelector ref="addressSelector" :editable="true" :clearable="true" class=" " type=""
+                                 :label="__('address')"
+                                 @change="updateAddress($event) "
+                                 :error="form.errors.address ||form.errors.postal_code || form.errors.province_id || form.errors.county_id || form.errors.district_id "/>
+
+
+              </div>
               <div class="my-4">
                 <TextInput
                     id="password"
@@ -275,6 +283,7 @@ import PhoneFields from "@/Components/PhoneFields.vue";
 import SocialFields from "@/Components/SocialFields.vue";
 import EmailFields from "@/Components/EmailFields.vue";
 import UserSelector from "@/Components/UserSelector.vue";
+import AddressSelector from "@/Components/AddressSelector.vue";
 
 export default {
 
@@ -296,7 +305,14 @@ export default {
         status: null,
         role: null,
         img: null,
-
+        address: null,
+        lat: null,
+        lon: null,
+        location: null,
+        province_id: null,
+        county_id: null,
+        district_id: null,
+        postal_code: null,
       }),
       profile: null,
     }
@@ -339,6 +355,7 @@ export default {
     KeyIcon,
     XMarkIcon,
     IdentificationIcon,
+    AddressSelector,
 
   },
   created() {
@@ -386,7 +403,18 @@ export default {
             this.showAlert(this.$page.props.flash.status, this.$page.props.flash.message);
         },
       });
-    }
+    },
+    updateAddress(address) {
+      address = address || {};
+      this.form.address = address.address;
+      this.form.province_id = address.province_id;
+      this.form.county_id = address.county_id;
+      this.form.district_id = address.district_id;
+      this.form.lat = address.lat;
+      this.form.lon = address.lon;
+      this.form.location = address.lat && address.lon ? `${address.lat},${address.lon}` : null;
+      this.form.postal_code = this.f2e(address.postal_code);
+    },
   },
 
 }

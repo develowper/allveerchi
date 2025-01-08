@@ -64,6 +64,7 @@ class AdminRequest extends FormRequest
         $availableAgencies = $user->allowedAgencies($this->myAgency)->get('id', 'name', 'level');
         $selectedAgency = $availableAgencies->where('id', $this->myAgency->level == '3' ? $user->agency_id : $this->agency_id)->first();
         $allowedAgencies = $availableAgencies->pluck('id');
+        $regexLocation = "/^[-+]?[0-9]{1,7}(\\.[0-9]+)?,[-+]?[0-9]{1,7}(\\.[0-9]+)?$/";
 
         if (!$this->cmnd) {
             $this->merge([
@@ -82,7 +83,12 @@ class AdminRequest extends FormRequest
                 'phone_verify' => [Rule::requiredIf($phoneChanged), $phoneChanged ? Rule::exists('sms_verify', 'code')->where('phone', $this->phone) : '',],
                 'card' => ['nullable', 'numeric', 'digits:16'],
                 'sheba' => ['nullable', 'numeric', 'digits:24'],
-
+                'address' => ['nullable', 'max:2048'],
+                'province_id' => ['nullable', Rule::in(City::where('level', 1)->pluck('id'))],
+                'county_id' => ['nullable', Rule::in(City::where('level', 2)->pluck('id'))],
+                'district_id' => ['sometimes', 'nullable', Rule::in(City::where('level', 3)->pluck('id'))],
+                'postal_code' => ['nullable', 'max:20'],
+                'location' => ['nullable', "regex:$regexLocation",],
 
             ]);
             if (!$editMode || $this->password)

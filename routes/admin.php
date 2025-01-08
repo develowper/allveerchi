@@ -128,7 +128,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         PanelController::makeInertiaRoute('get', 'admin/index', 'admin.panel.admin.index', 'Panel/Admin/Admin/Index',
             [
                 'user_statuses' => collect(Variable::USER_STATUSES)->filter(fn($e) => $e['name'] != 'block'),
-                'admin_roles' => array_filter(Variable::ADMIN_ROLES, fn($e) => $e != 'god')
+                'admin_roles' => array_values(array_filter(Variable::ADMIN_ROLES, fn($e) => $e != 'god'))
             ]);
         PanelController::makeInertiaRoute('get', 'admin/create', 'admin.panel.admin.create', 'Panel/Admin/Admin/Create',
             [

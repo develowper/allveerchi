@@ -42,7 +42,7 @@ class MainController extends Controller
 //    Telegram::log(null, 'order_created', \App\Models\Order::with('items')->with('agency')->orderBy('id', 'DESC')->first());
         $domainCountry = explode('.', url()->current())[count(explode('.', url()->current())) - 1];
 
-        if (str_contains(url()->current(), '.ae') || str_contains(url()->current(), 'localhost'))
+        if (str_contains(url()->current(), '.ae') /*|| str_contains(url()->current(), 'localhost')*/)
 
             return Inertia::render('MainAE', [
                 'heroText' => \App\Models\Setting::getValue('hero_main_page'),

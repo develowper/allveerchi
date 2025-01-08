@@ -148,7 +148,7 @@ class AdminController extends Controller
         $paginate = $request->paginate ?: 24;
         $status = $request->status;
         $query = Admin::query()->select('*');
-
+        $role = $request->role;
         $myAgency = Agency::find($admin->agency_id);
 
         $agencies = $admin->allowedAgencies($myAgency)->get();
@@ -161,6 +161,8 @@ class AdminController extends Controller
             });
         if ($status)
             $query = $query->where('status', $status);
+        if ($role)
+            $query = $query->where('role', $role);
 
         $query->whereIntegerInRaw('agency_id', $agencyIds);
 

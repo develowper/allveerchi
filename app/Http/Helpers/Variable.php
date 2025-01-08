@@ -54,7 +54,7 @@ class Variable
 //        ['id' => 1, 'name' => 'zone_agency', 'level' => '1'],
 //        ['id' => 2, 'name' => 'province_agency', 'level' => '2'],
         ['id' => 1, 'name' => 'branch_agency', 'level' => '1'],
-        ['id' => 2, 'name' => 'operator_agency', 'level' => '2'],
+//        ['id' => 2, 'name' => 'operator_agency', 'level' => '2'],
 //        ['name' => 'branch', 'code' => 4],
     ];
     const PRODUCT_UNITS = ['piece', 'kg'/*, 'gr'*/];
