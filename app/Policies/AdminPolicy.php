@@ -7,6 +7,7 @@ use App\Models\AdminFinancial;
 use App\Models\Agency;
 use App\Models\AgencyFinancial;
 use App\Models\Car;
+use App\Models\Catalog;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Driver;
@@ -85,6 +86,9 @@ class AdminPolicy
                 case    User::class:
                     $res = $admin->hasAccess('view_user');
                     break;
+                case    Catalog::class:
+                    $res = $admin->hasAccess('view_catalog');
+                    break;
             }
 
         if ($abort && empty($res))
@@ -147,6 +151,9 @@ class AdminPolicy
                     break;
                 case    Category::class:
                     $res = $admin->hasAccess('create_category');
+                    break;
+                case    Catalog::class:
+                    $res = $admin->hasAccess('create_catalog');
                     break;
 
             }
@@ -248,6 +255,9 @@ class AdminPolicy
                 case   $item instanceof AdminFinancial :
                 case   $item instanceof AgencyFinancial :
                     $res = $admin->hasAccess('edit_financial');
+                    break;
+                case   $item instanceof Catalog :
+                    $res = $admin->hasAccess('edit_catalog');
                     break;
             }
 

@@ -44,6 +44,7 @@ use App\Models\Agency;
 use App\Models\Article;
 use App\Models\Banner;
 use App\Models\Business;
+use App\Models\Catalog;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\County;
@@ -84,6 +85,10 @@ Route::get('/cache', function () {
     echo Artisan::output();
 });
 Route::get('test', function () {
+    return;
+
+//    DB::table('catalogs')->insert($res);
+    return;
 //    return url('') . "/api/payment/done";
 //    return \App\Models\Variation::makeBarcode(1, "1403/07/01", 6);
 //    return \App\Models\Variation::validateBarcode('10140307010676') ? 'true' : 'false';

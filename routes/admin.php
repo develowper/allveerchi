@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\SampleController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CategoryController;
@@ -392,6 +393,18 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::patch('/profile', [ProfileController::class, 'update'])->name('admin.panel.profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('admin.panel.profile.destroy');
         Route::patch('/profile/reset-password', [ProfileController::class, 'resetPassword'])->name('admin.panel.profile.password.reset');
+
+
+        PanelController::makeInertiaRoute('get', 'catalog/index', 'admin.panel.catalog.index', 'Panel/Admin/Catalog/Index',
+            []
+        );
+        PanelController::makeInertiaRoute('get', 'catalog/create', 'admin.panel.catalog.create', 'Panel/Admin/Catalog/Create',
+            [], "can:create,App\Models\Admin,App\Models\Catalog,'1'"
+        );
+        Route::get('catalog/search', [CatalogController::class, 'searchPanel'])->name('admin.panel.catalog.search');
+        Route::patch('catalog/update', [CatalogController::class, 'update'])->name('admin.panel.catalog.update');
+        Route::post('catalog/create', [CatalogController::class, 'create'])->name('admin.panel.catalog.create')->middleware("can:create,App\Models\Admin,App\Models\Catalog,'1'");
+        Route::get('catalog/{catalog}', [CatalogController::class, 'edit'])->name('admin.panel.catalog.edit');
 
 
     });

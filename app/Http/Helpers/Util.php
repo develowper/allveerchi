@@ -368,6 +368,7 @@ class Util
         return 'done';
 
     }
+
     public static function makePhone($phone)
     {
         $phone = $phone ?? "";
@@ -376,6 +377,23 @@ class Util
         if (strlen($phone) == 12 && str_starts_with($phone, '98'))
             return preg_replace("/98/", "0", $phone, 1);
         return $phone;
+    }
+
+    static function fromCSV($path)
+    {
+        $idx = 0;
+
+        $data = [];
+        $file_handle = fopen($path, 'r');
+        $header = fgetcsv($file_handle, null, ',');
+        while ($csvRow = fgetcsv($file_handle, null, ',')) {
+            $tmp = [];
+            for ($i = 0; $i < count($header); $i++)
+                $tmp[$header[$i]] = $csvRow[$i];
+            $data[] = $tmp;
+        }
+        fclose($file_handle);
+        return $data;
     }
 
     private
@@ -1900,8 +1918,6 @@ INSERT INTO `cities` (`id`, `parent_id`, `name`, `latitude`, `longitude`, `slug`
 (1936, 12, 'پورسینا', '37.269924', '49.591053', 'rasht-poursina', '3', '[]', '[49.588257,37.26769,49.59385,37.27216]', 248);
 ");
     }
-
-
 
 
 }

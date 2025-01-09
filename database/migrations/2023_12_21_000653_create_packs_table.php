@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->unsignedInteger('width')->default(0); //cm
             $table->unsignedInteger('length')->default(0); //cm
             $table->unsignedInteger('price')->default(0);
-            $table->enum('status', array_column(Variable::STATUSES, 'name'))->default('inactive');
+            $table->enum('status', array_column(Variable::STATUSES, 'name'))->default('active');
             $table->timestamps();
         });
     }
