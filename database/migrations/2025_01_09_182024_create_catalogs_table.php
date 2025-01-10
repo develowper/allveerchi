@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('pn', 30)->nullable()->index();
             $table->unsignedInteger('price')->nullable()->default(null);
             $table->string('image_url', 250)->nullable();
-            $table->unsignedInteger('image_indicator')->nullable();
+            $table->string('image_indicator', 3)->nullable();
             $table->unsignedInteger('in_shop')->default(0);
             $table->unsignedInteger('in_repo')->default(0);
             $table->enum('status', array_column(Variable::STATUSES, 'name'))->default('active');
