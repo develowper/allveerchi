@@ -19,19 +19,5 @@ class Log extends Model
         'to',
     ];
 
-    static function seed()
-    {
-        set_time_limit(0);
-        $i = 0;
-        Catalog::truncate();
-        $res = Util::fromCSV(Storage::path('catalog.csv'));
-        foreach ($res as $row) {
-            $row['price'] = intVal($row['price'] ?? 0);
-            $row['in_shop'] = intVal($row['in_shop'] ?? 0);
-            $row['in_repo'] = intVal($row['in_repo'] ?? 0);
-            Catalog::create($row);
-            echo "$i created " . PHP_EOL;
-            $i++;
-        }
-    }
+
 }

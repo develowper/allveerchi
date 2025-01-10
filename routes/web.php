@@ -85,7 +85,10 @@ Route::get('/cache', function () {
     echo Artisan::output();
 });
 Route::get('test', function () {
+
+    Catalog::seed();
     return;
+
 
 //    DB::table('catalogs')->insert($res);
     return;
