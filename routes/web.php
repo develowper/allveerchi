@@ -86,8 +86,8 @@ Route::get('/cache', function () {
 });
 Route::get('test', function () {
 
-    Catalog::seed();
     return;
+    Catalog::seed();
 
 
 //    DB::table('catalogs')->insert($res);
