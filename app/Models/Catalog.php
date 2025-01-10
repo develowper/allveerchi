@@ -32,6 +32,7 @@ class Catalog extends Model
             $row['price'] = intVal($row['price'] ?? 0);
             $row['in_shop'] = intVal($row['in_shop'] ?? 0);
             $row['in_repo'] = intVal($row['in_repo'] ?? 0);
+            $row['image_indicator'] = intVal($row['image_indicator'] ?? 0) ?? null;
             Catalog::create($row);
             echo "$i created " . PHP_EOL;
             $i++;
