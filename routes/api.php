@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BotController;
+use App\Http\Controllers\BotDrZantiaController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\GuaranteeController;
 use Illuminate\Http\Request;
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::post('/bot/drzantia/getupdates', [BotDrZantiaController::class, 'getupdates']);
+Route::post('/bot/drzantia/sendmessage', [BotDrZantiaController::class, 'sendmessage']);
 
 Route::post('senderror', [\App\Http\Controllers\Controller::class, 'sendError']);
 Route::post('/bot/getupdates', [BotController::class, 'getupdates']);

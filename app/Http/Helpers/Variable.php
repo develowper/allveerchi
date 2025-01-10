@@ -13,6 +13,7 @@ use App\Models\BannerTransaction;
 use App\Models\Business;
 use App\Models\BusinessTransaction;
 use App\Models\Car;
+use App\Models\Catalog;
 use App\Models\City;
 use App\Models\Driver;
 use App\Models\Message;
@@ -175,6 +176,7 @@ class Variable
         Variation::class => 'variations',
         Driver::class => 'drivers',
         Car::class => 'cars',
+        Catalog::class => 'catalogs',
     ];
     const NOTIFICATION_TYPES = [
         "pay",

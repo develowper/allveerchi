@@ -27,8 +27,11 @@
               class="flex flex-col mx-2   col-span-2 w-full     px-2"
           >
             <div class="flex-col   m-2 items-center rounded-lg max-w-xs  w-full mx-auto    ">
-              <div v-if="false" class="my-2">
-                <ImageUploader ref="imageCropper" :label="__('image_cover_jpg')" cropRatio="1.25" id="img"
+              <div class="my-2">
+                <ImageUploader :replace="true"
+
+                               mode="create"
+                               ref="imageCropper" :label="__('image_jpg')" :cropRatio="0" id="img"
                                height="10" class="grow "/>
                 <InputError class="mt-1 " :message="form.errors.img"/>
               </div>
@@ -38,13 +41,64 @@
 
               <div class="my-2">
                 <TextInput
-                    id="name"
+                    id="image_url"
                     type="text"
-                    :placeholder="__('catalog_name')"
+                    :placeholder="__('image_url')"
                     classes="  "
-                    v-model="form.name"
-                    autocomplete="name"
-                    :error="form.errors.name"
+                    v-model="form.image_url"
+                    autocomplete="image_url"
+                    :error="form.errors.image_url"
+                >
+                  <template v-slot:prepend>
+                    <div class="p-3">
+                      <Bars2Icon class="h-5 w-5"/>
+                    </div>
+                  </template>
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
+                    id="name_fa"
+                    type="text"
+                    :placeholder="__('name_fa')"
+                    classes="  "
+                    v-model="form.name_fa"
+                    autocomplete="name_fa"
+                    :error="form.errors.name_fa"
+                >
+                  <template v-slot:prepend>
+                    <div class="p-3">
+                      <Bars2Icon class="h-5 w-5"/>
+                    </div>
+                  </template>
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
+                    id="name_en"
+                    type="text"
+                    :placeholder="__('name_en')"
+                    classes="  "
+                    v-model="form.name_en"
+                    autocomplete="name_en"
+                    :error="form.errors.name_en"
+                >
+                  <template v-slot:prepend>
+                    <div class="p-3">
+                      <Bars2Icon class="h-5 w-5"/>
+                    </div>
+                  </template>
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
+                    id="pn"
+                    type="text"
+                    :placeholder="__('pn')"
+                    classes="  "
+                    v-model="form.pn"
+                    autocomplete="pn"
+                    :error="form.errors.pn"
                 >
                   <template v-slot:prepend>
                     <div class="p-3">
@@ -72,13 +126,13 @@
               </div>
               <div class="my-2">
                 <TextInput
-                    id="weight"
-                    type="numeric"
-                    :placeholder="`${__('weight')} (${__('gr')})`"
+                    id="image_indicator"
+                    type="text"
+                    :placeholder="__('image_indicator')"
                     classes="  "
-                    v-model="form.weight"
-                    autocomplete="weight"
-                    :error="form.errors.weight"
+                    v-model="form.image_indicator"
+                    autocomplete="image_indicator"
+                    :error="form.errors.image_indicator"
                 >
                   <template v-slot:prepend>
                     <div class="p-3">
@@ -87,15 +141,17 @@
                   </template>
                 </TextInput>
               </div>
+
+
               <div class="my-2">
                 <TextInput
-                    id="length"
+                    id="in_repo"
                     type="numeric"
-                    :placeholder="`${__('length')} (${__('cm')})`"
+                    :placeholder="__('repository_count')"
                     classes="  "
-                    v-model="form.length"
-                    autocomplete="length"
-                    :error="form.errors.length"
+                    v-model="form.in_repo"
+                    autocomplete="in_repo"
+                    :error="form.errors.in_repo"
                 >
                   <template v-slot:prepend>
                     <div class="p-3">
@@ -104,32 +160,16 @@
                   </template>
                 </TextInput>
               </div>
+
               <div class="my-2">
                 <TextInput
-                    id="width"
+                    id="in_shop"
                     type="numeric"
-                    :placeholder="`${__('width')} (${__('cm')})`"
+                    :placeholder="__('shop_count')"
                     classes="  "
-                    v-model="form.width"
-                    autocomplete="width"
-                    :error="form.errors.width"
-                >
-                  <template v-slot:prepend>
-                    <div class="p-3">
-                      <Bars2Icon class="h-5 w-5"/>
-                    </div>
-                  </template>
-                </TextInput>
-              </div>
-              <div class="my-2">
-                <TextInput
-                    id="height"
-                    type="numeric"
-                    :placeholder="`${__('height')} (${__('cm')})`"
-                    classes="  "
-                    v-model="form.height"
-                    autocomplete="height"
-                    :error="form.errors.height"
+                    v-model="form.in_shop"
+                    autocomplete="in_shop"
+                    :error="form.errors.in_shop"
                 >
                   <template v-slot:prepend>
                     <div class="p-3">
@@ -219,16 +259,19 @@ export default {
     return {
       filteredAgencies: this.$page.props.agencies,
       form: useForm({
-        name: null,
-        price: 0,
-        weight: 0,
-        length: 0,
-        height: 0,
-        width: 0,
+        uploading: null,
+        name_fa: null,
+        name_en: null,
+        pn: null,
+        price: null,
+        image_indicator: null,
+        image_url: null,
+        in_shop: null,
+        in_repo: null,
+
 
       }),
       img: null,
-
     }
   },
   components: {
@@ -279,22 +322,12 @@ export default {
     }
   },
   methods: {
-    updateAddress(address) {
-      address = address || {};
-      this.form.address = address.address;
-      this.form.province_id = address.province_id;
-      this.form.county_id = address.county_id;
-      this.form.district_id = address.district_id;
-      this.form.lat = address.lat;
-      this.form.lon = address.lon;
-      this.form.location = `${address.lat},${address.lon}`;
-      this.form.postal_code = this.f2e(address.postal_code);
-    },
-    submit() {
-      // this.img = this.$refs.imageCropper.getCroppedData();
 
+    submit() {
+      this.img = this.$refs.imageCropper.getCroppedData();
+
+      this.form.uploading = false
       this.form.clearErrors();
-      this.form.phone = this.f2e(this.form.phone);
       // this.isLoading(true, this.form.progress ? this.form.progress.percentage : null);
 
       this.form.post(route('admin.panel.catalog.create'), {
@@ -302,13 +335,33 @@ export default {
 
         onSuccess: (data) => {
 
-          if (this.$page.props.flash.status)
-            this.showAlert(this.$page.props.flash.status, this.$page.props.flash.message);
+          if (!this.form.uploading) {
+            this.form.uploading = true;
 
-          // else {
-          //   this.showAlert(this.$page.props.flash.status, this.$page.props.flash.message);
-          //   this.form.reset();
-          // }
+            this.form.transform((data) => ({
+              ...data,
+              uploading: true,
+              img: this.img,
+
+            }))
+                .post(route('admin.panel.catalog.create'), {
+                  preserveScroll: false,
+                  onSuccess: (data) => {
+                    // else {
+                    if (this.$page.props.flash.status)
+                      this.showAlert(this.$page.props.flash.status, this.$page.props.flash.message);
+                    //   this.form.reset();
+                    // }
+                  },
+                  onError: () => {
+
+                    this.showToast('danger', Object.values(this.form.errors).join("<br/>"));
+                  },
+                  onFinish: (data) => {
+                    // this.isLoading(false,);
+                  },
+                });
+          }
         },
         onError: () => {
           this.showToast('danger', Object.values(this.form.errors).join("<br/>"));
@@ -317,6 +370,7 @@ export default {
           // this.isLoading(false,);
         },
       });
+
     }
   },
 

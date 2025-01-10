@@ -154,6 +154,7 @@ Route::get('storage/products')->name('storage.products');
 Route::get('storage/admins')->name('storage.admins');
 Route::get('storage/drivers')->name('storage.drivers');
 Route::get('storage/cars')->name('storage.cars');
+Route::get('storage/catalogs')->name('storage.catalogs');
 
 Route::get('/', [MainController::class, 'main'])->name('/');
 Route::get('view', [MainController::class, 'viewFile'])->name('view.file');

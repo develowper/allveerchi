@@ -295,8 +295,8 @@ export default {
 
     errorImage() {
 
-      this.doc = null;
-      this.uploadContainer.classList.remove('d-none');
+      this.clearImage()
+
 
     },
     getCroppedData() { //input id=img value=cropped data

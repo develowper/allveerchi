@@ -2,7 +2,7 @@
 
   <Panel>
     <template v-slot:header>
-      <title>{{__('new_catalog')}}</title>
+      <title>{{__('edit_catalog')}}</title>
     </template>
 
 
@@ -12,7 +12,7 @@
           class="flex items-center justify-start px-4 py-2 text-primary-500 border-b md:py-4">
         <FolderPlusIcon class="h-7 w-7 mx-3"/>
 
-        <h1 class="text-2xl font-semibold">{{ __('new_catalog') }}</h1>
+        <h1 class="text-2xl font-semibold">{{ __('edit_catalog') }}</h1>
 
       </div>
 
@@ -27,8 +27,12 @@
               class="flex flex-col mx-2   col-span-2 w-full     px-2"
           >
             <div class="flex-col   m-2 items-center rounded-lg max-w-xs  w-full mx-auto    ">
-              <div v-if="false" class="my-2">
-                <ImageUploader ref="imageCropper" :label="__('image_cover_jpg')" cropRatio="1.25" id="img"
+              <div class="my-2">
+                <ImageUploader :replace="true"
+                               :preload="$page.props.data.image_url"
+                               mode="edit" :for-id="$page.props.data.id"
+                               :link="route('admin.panel.catalog.update')"
+                               ref="imageCropper" :label="__('image_jpg')" :cropRatio="0" id="img"
                                height="10" class="grow "/>
                 <InputError class="mt-1 " :message="form.errors.img"/>
               </div>
@@ -38,13 +42,64 @@
 
               <div class="my-2">
                 <TextInput
-                    id="name"
+                    id="image_url"
                     type="text"
-                    :placeholder="__('catalog_name')"
+                    :placeholder="__('image_url')"
                     classes="  "
-                    v-model="form.name"
-                    autocomplete="name"
-                    :error="form.errors.name"
+                    v-model="form.image_url"
+                    autocomplete="image_url"
+                    :error="form.errors.image_url"
+                >
+                  <template v-slot:prepend>
+                    <div class="p-3">
+                      <Bars2Icon class="h-5 w-5"/>
+                    </div>
+                  </template>
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
+                    id="name_fa"
+                    type="text"
+                    :placeholder="__('name_fa')"
+                    classes="  "
+                    v-model="form.name_fa"
+                    autocomplete="name_fa"
+                    :error="form.errors.name_fa"
+                >
+                  <template v-slot:prepend>
+                    <div class="p-3">
+                      <Bars2Icon class="h-5 w-5"/>
+                    </div>
+                  </template>
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
+                    id="name_en"
+                    type="text"
+                    :placeholder="__('name_en')"
+                    classes="  "
+                    v-model="form.name_en"
+                    autocomplete="name_en"
+                    :error="form.errors.name_en"
+                >
+                  <template v-slot:prepend>
+                    <div class="p-3">
+                      <Bars2Icon class="h-5 w-5"/>
+                    </div>
+                  </template>
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
+                    id="pn"
+                    type="text"
+                    :placeholder="__('pn')"
+                    classes="  "
+                    v-model="form.pn"
+                    autocomplete="pn"
+                    :error="form.errors.pn"
                 >
                   <template v-slot:prepend>
                     <div class="p-3">
@@ -72,13 +127,13 @@
               </div>
               <div class="my-2">
                 <TextInput
-                    id="weight"
-                    type="numeric"
-                    :placeholder="`${__('weight')} (${__('gr')})`"
+                    id="image_indicator"
+                    type="text"
+                    :placeholder="__('image_indicator')"
                     classes="  "
-                    v-model="form.weight"
-                    autocomplete="weight"
-                    :error="form.errors.weight"
+                    v-model="form.image_indicator"
+                    autocomplete="image_indicator"
+                    :error="form.errors.image_indicator"
                 >
                   <template v-slot:prepend>
                     <div class="p-3">
@@ -87,15 +142,17 @@
                   </template>
                 </TextInput>
               </div>
+
+
               <div class="my-2">
                 <TextInput
-                    id="length"
+                    id="in_repo"
                     type="numeric"
-                    :placeholder="`${__('length')} (${__('cm')})`"
+                    :placeholder="__('repository_count')"
                     classes="  "
-                    v-model="form.length"
-                    autocomplete="length"
-                    :error="form.errors.length"
+                    v-model="form.in_repo"
+                    autocomplete="in_repo"
+                    :error="form.errors.in_repo"
                 >
                   <template v-slot:prepend>
                     <div class="p-3">
@@ -104,32 +161,16 @@
                   </template>
                 </TextInput>
               </div>
+
               <div class="my-2">
                 <TextInput
-                    id="width"
+                    id="in_shop"
                     type="numeric"
-                    :placeholder="`${__('width')} (${__('cm')})`"
+                    :placeholder="__('shop_count')"
                     classes="  "
-                    v-model="form.width"
-                    autocomplete="width"
-                    :error="form.errors.width"
-                >
-                  <template v-slot:prepend>
-                    <div class="p-3">
-                      <Bars2Icon class="h-5 w-5"/>
-                    </div>
-                  </template>
-                </TextInput>
-              </div>
-              <div class="my-2">
-                <TextInput
-                    id="height"
-                    type="numeric"
-                    :placeholder="`${__('height')} (${__('cm')})`"
-                    classes="  "
-                    v-model="form.height"
-                    autocomplete="height"
-                    :error="form.errors.height"
+                    v-model="form.in_shop"
+                    autocomplete="in_shop"
+                    :error="form.errors.in_shop"
                 >
                   <template v-slot:prepend>
                     <div class="p-3">
@@ -223,12 +264,15 @@ export default {
 
       form: useForm({
         id: null,
-        name: null,
-        price: 0,
-        weight: 0,
-        length: 0,
-        height: 0,
-        width: 0,
+        name_fa: null,
+        name_en: null,
+        pn: null,
+        price: null,
+        image_indicator: null,
+        image_url: null,
+        in_shop: null,
+        in_repo: null,
+
 
       }),
     }
@@ -281,12 +325,14 @@ export default {
 
 
     this.form.id = this.data.id;
-    this.form.name = this.data.name;
+    this.form.name_fa = this.data.name_fa;
+    this.form.name_en = this.data.name_en;
+    this.form.pn = this.data.pn;
     this.form.price = this.data.price;
-    this.form.height = this.data.height;
-    this.form.weight = this.data.weight;
-    this.form.length = this.data.length;
-    this.form.width = this.data.width;
+    this.form.image_indicator = this.data.image_indicator;
+    this.form.image_url = this.data.image_url;
+    this.form.in_repo = this.data.in_repo;
+    this.form.in_shop = this.data.in_shop;
 
 
   },
