@@ -47,8 +47,8 @@ class CatalogRequest extends FormRequest
 
             $tmp = array_merge($tmp, [
 
-                'name_fa' => ['required', 'string', 'max:100'],
-                'name_en' => ['required', 'string', 'max:100'],
+                'name_fa' => ['required', 'string', 'max:200'],
+                'name_en' => ['required', 'string', 'max:200'],
                 'pn' => ['required', 'string', 'max:30'],
                 'price' => ['required', 'numeric'   /*, Rule::unique('drivers', 'national_code')->ignore($this->id)*/],
                 'image_url' => ['nullable', 'string', 'max:250'],
@@ -79,12 +79,12 @@ class CatalogRequest extends FormRequest
 
             'name_fa.required' => sprintf(__("validator.required"), __('name_fa')),
             'name_fa.unique' => sprintf(__("validator.unique"), __('name_fa')),
-            'name_fa.max' => sprintf(__("validator.max_len"), __('name_fa'), 100, mb_strlen($this->name_fa)),
+            'name_fa.max' => sprintf(__("validator.max_len"), __('name_fa'), 200, mb_strlen($this->name_fa)),
             'name_fa.string' => sprintf(__("validator.string"), __('name_fa')),
 
             'name_en.required' => sprintf(__("validator.required"), __('name_en')),
             'name_en.unique' => sprintf(__("validator.unique"), __('name_en')),
-            'name_en.max' => sprintf(__("validator.max_len"), __('name_en'), 100, mb_strlen($this->name_en)),
+            'name_en.max' => sprintf(__("validator.max_len"), __('name_en'), 200, mb_strlen($this->name_en)),
             'name_en.string' => sprintf(__("validator.string"), __('name_en')),
 
             'pn.required' => sprintf(__("validator.required"), __('pn')),

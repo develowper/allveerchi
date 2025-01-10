@@ -15,8 +15,8 @@ return new class extends Migration {
     {
         Schema::create('catalogs', function (Blueprint $table) {
             $table->id();
-            $table->string('name_fa', 100)->nullable()->index();
-            $table->string('name_en', 100)->nullable()->index();
+            $table->string('name_fa', 200)->nullable()->index();
+            $table->string('name_en', 200)->nullable()->index();
             $table->string('pn', 30)->nullable()->index();
             $table->unsignedInteger('price')->nullable()->default(null);
             $table->string('image_url', 250)->nullable();
