@@ -20,6 +20,7 @@ use App\Http\Controllers\PartnershipController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TMAController;
 use App\Http\Controllers\VariationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -158,6 +159,24 @@ Route::get('storage/admins')->name('storage.admins');
 Route::get('storage/drivers')->name('storage.drivers');
 Route::get('storage/cars')->name('storage.cars');
 Route::get('storage/catalogs')->name('storage.catalogs');
+
+Route::prefix('tma')->group(function ($route) {
+    Route::get('', [TMAController::class, 'index'])->name('tma.index');
+    Route::post('validation', [TMAController::class, 'validation'])->name('tma.validation');
+    Route::get('login-form', [TMAController::class, 'loginForm'])->name('tma.login-form');
+    Route::post('login', [TMAController::class, 'login'])->name('tma.login');
+    Route::get('register-form', [TMAController::class, 'registerForm'])->name('tma.register-form');
+    Route::post('register', [TMAController::class, 'register'])->name('tma.register');
+    Route::post('logout', [TMAController::class, 'logout'])->name('tma.logout');
+    Route::post('sms', [TMAController::class, 'sendSMS'])->name('tma.sms');
+
+    Route::middleware(['auth'])->group(function ($route) {
+        Route::get('shop', [TMAController::class, 'shop'])->name('tma.shop');
+        Route::get('manage/{cmnd}', [TMAController::class, 'manage'])->name('tma.manage');
+
+    });
+});
+
 
 Route::get('/', [MainController::class, 'main'])->name('/');
 Route::get('view', [MainController::class, 'viewFile'])->name('view.file');

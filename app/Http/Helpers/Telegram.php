@@ -110,10 +110,10 @@ class Telegram
 
     static function creator($method, $datas = [])
     {
-        if (!str_contains(url('/'), '.com') && !str_contains(url('/'), '.ir')) return;
+//        if (!str_contains(url('/'), '.com') && !str_contains(url('/'), '.ir')) return;
 //        $url = "https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN', '') . "/" . $method;
 
-        $url = "https://qr-image-creator.com/wallpapers/api/allveerchi_telegram";
+        $url = "https://bot.drzantia.ir/api/bot/telegram/ailverchi";
         $datas['cmnd'] = $method;
 
 

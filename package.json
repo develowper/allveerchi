@@ -54,6 +54,7 @@
     "@he-tree/vue": "^2.8.2",
     "@heroicons/vue": "^2.0.18",
     "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
+    "@twa-dev/sdk": "^8.0.1",
     "@vitejs/plugin-legacy": "^5.3.2",
     "amplitudejs": "^5.3.2",
     "chart.js": "^4.3.0",
