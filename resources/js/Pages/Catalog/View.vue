@@ -1,5 +1,5 @@
 <template>
-  <Scaffold navbar-theme="dark">
+  <DZScaffold navbar-theme="dark">
     <template v-slot:header>
       <title v-if="data">{{ data.title }}</title>
       <meta v-if="data" name="description" :content=" data.seo ">
@@ -98,12 +98,12 @@
     </section>
 
 
-  </Scaffold>
+  </DZScaffold>
 </template>
 
 <script>
 
-import Scaffold from "@/Layouts/Scaffold.vue";
+import DZScaffold from "@/Layouts/DZScaffold.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import {Head, Link} from "@inertiajs/vue3";

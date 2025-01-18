@@ -65,11 +65,9 @@ Route::get('/cache', function () {
     echo Artisan::output();
 });
 Route::get('test', function () {
-
+    return;
     foreach (Catalog::get() as $catalog) {
 
-        $catalog->image_url = str_replace('.jpg.jpg', '.jpg', $catalog->image_url);
-        $catalog->save();
 
 //        $ex = explode('/', $catalog->image_url ?? '');
 //        $number = $ex[count($ex) - 1];
