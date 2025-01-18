@@ -262,6 +262,7 @@ export default {
                     callback('success', response.data);
                 })
                 .catch(function (error) {
+                    return;
                     if (error.response) {
                         // The request was made and the server responded with a status code
                         // that falls out of the range of 2xx
