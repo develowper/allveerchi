@@ -1,13 +1,12 @@
 <?php
 
-use App\Http\Controllers\AdController;
 use App\Http\Controllers\AgencyController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BusinessController;
-
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\DrZantia\TMAController;
 use App\Http\Controllers\ExchangeController;
 use App\Http\Controllers\HireController;
 use App\Http\Controllers\ItemController;
@@ -19,56 +18,36 @@ use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PartnershipController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PodcastController;
+use App\Http\Controllers\PreOrderController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\TMAController;
-use App\Http\Controllers\VariationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectItemController;
-use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SiteController;
-use App\Http\Controllers\SliderController;
 use App\Http\Controllers\TextController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VariationController;
 use App\Http\Controllers\VideoController;
-use App\Http\Helpers\Pay;
-use App\Http\Helpers\SMSHelper;
-use App\Http\Helpers\Telegram;
-use App\Http\Helpers\Util;
 use App\Http\Helpers\Variable;
-use App\Models\Admin;
-use App\Models\Agency;
-use App\Models\Article;
 use App\Models\Banner;
 use App\Models\Business;
 use App\Models\Catalog;
-use App\Models\Category;
-use App\Models\City;
 use App\Models\County;
-use App\Models\Notification;
 use App\Models\Podcast;
 use App\Models\Province;
-use App\Models\Repository;
-use App\Models\Setting;
 use App\Models\Site;
 use App\Models\Text;
-use App\Models\User;
 use App\Models\Video;
-use Carbon\Carbon;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +65,16 @@ Route::get('/cache', function () {
     echo Artisan::output();
 });
 Route::get('test', function () {
+
+    foreach (Catalog::get() as $catalog) {
+        $ex = explode('/', $catalog->image_url ?? '');
+        $number = $ex[count($ex) - 1];
+        if ($number) {
+            $catalog->image_url = route('storage.catalogs') . "/$number.jpg";
+            $catalog->save();
+        }
+
+    }
 
     return;
     Catalog::seed();
@@ -160,22 +149,33 @@ Route::get('storage/drivers')->name('storage.drivers');
 Route::get('storage/cars')->name('storage.cars');
 Route::get('storage/catalogs')->name('storage.catalogs');
 
-Route::prefix('tma')->group(function ($route) {
-    Route::get('', [TMAController::class, 'index'])->name('tma.index');
-    Route::post('validation', [TMAController::class, 'validation'])->name('tma.validation');
-    Route::get('login-form', [TMAController::class, 'loginForm'])->name('tma.login-form');
-    Route::post('login', [TMAController::class, 'login'])->name('tma.login');
-    Route::get('register-form', [TMAController::class, 'registerForm'])->name('tma.register-form');
-    Route::post('register', [TMAController::class, 'register'])->name('tma.register');
-    Route::post('logout', [TMAController::class, 'logout'])->name('tma.logout');
-    Route::post('sms', [TMAController::class, 'sendSMS'])->name('tma.sms');
+Route::post('validation', [TMAController::class, 'validation'])->name('tma.validation');
+Route::prefix('drzantia/tma')->group(function ($route) {
+    Route::get('', [TMAController::class, 'index'])->name('dz.index');
+    Route::get('login-form', [TMAController::class, 'loginForm'])->name('dz.tma.login-form');
+    Route::post('login', [TMAController::class, 'login'])->name('dz.tma.login');
+    Route::get('register-form', [TMAController::class, 'registerForm'])->name('dz.tma.register-form');
+    Route::post('register', [TMAController::class, 'register'])->name('dz.tma.register');
+    Route::post('logout', [TMAController::class, 'logout'])->name('dz.tma.logout');
+    Route::post('sms', [TMAController::class, 'sendSMS'])->name('dz.tma.sms');
 
     Route::middleware(['auth'])->group(function ($route) {
-        Route::get('shop', [TMAController::class, 'shop'])->name('tma.shop');
-        Route::get('manage/{cmnd}', [TMAController::class, 'manage'])->name('tma.manage');
+        Route::get('shop', [TMAController::class, 'shop'])->name('dz.tma.shop');
+        Route::get('manage/{cmnd}', [TMAController::class, 'manage'])->name('dz.tma.manage');
 
     });
+
+
 });
+Route::patch('drzantia/cart/update', [\App\Http\Controllers\DrZantia\CartController::class, 'update'])->name('dz.cart.update');
+Route::get('catalog/search', [CatalogController::class, 'search'])->name('catalog.search');
+Route::get('drzantia/catalog/{id}/{name}', [CatalogController::class, 'view'])->name('dz.catalog.view');
+PanelController::makeInertiaRoute('get', 'drzantia/checkout/cart', 'dz.checkout.cart', 'DZ/Cart',);
+PanelController::makeInertiaRoute('get', 'drzantia/contact-us', 'dz.page.contact-us', 'DZ/ContactUs',);
+Route::middleware(['auth'])->group(function ($route) {
+    PanelController::makeInertiaRoute('get', 'drzantia/checkout/shipping', 'dz.checkout.shipping', 'DZ/Cart',);
+});
+Route::post('drzantia/preorder/create', [PreOrderController::class, 'create'])->name('dz.preorder.create');
 
 
 Route::get('/', [MainController::class, 'main'])->name('/');
@@ -223,6 +223,11 @@ Route::group(['prefix' => '', 'namespace' => 'User'], function () {
         Route::get('order/search', [OrderController::class, 'searchPanel'])->name('user.panel.order.search');
         Route::patch('order/update', [OrderController::class, 'userUpdate'])->name('user.panel.order.update');
         Route::get('order/{order}', [OrderController::class, 'edit'])->name('user.panel.order.edit');
+
+        PanelController::makeInertiaRoute('get', 'preorder/index', 'user.panel.preorder.index', 'Panel/User/PreOrder/Index', ['order_statuses' => Variable::ORDER_STATUSES]);
+        Route::get('preorder/search', [PreOrderController::class, 'searchPanel'])->name('user.panel.preorder.search');
+        Route::patch('preorder/update', [PreOrderController::class, 'userUpdate'])->name('user.panel.preorder.update');
+        Route::get('preorder/{preorder}', [PreOrderController::class, 'edit'])->name('user.panel.preorder.edit');
 
         PanelController::makeInertiaRoute('get', 'transaction/index', 'user.panel.financial.transaction.index', 'Panel/Financial/Transaction/Index',
             []
@@ -281,6 +286,7 @@ Route::middleware(['auth:sanctum',
     Route::get('order/{order}', [OrderController::class, 'edit'])->name('order.edit');
 
     Route::get('order/factor/{order}', [OrderController::class, 'factor'])->name('user.panel.order.factor');
+    Route::get('preorder/factor/{preorder}', [PreOrderController::class, 'factor'])->name('user.panel.preorder.factor');
 
 
 });

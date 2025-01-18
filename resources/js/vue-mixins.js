@@ -62,7 +62,7 @@ export default {
                 : key
 
             Object.keys(replace).forEach(function (key) {
-                translation = translation.replace(':' + key, replace[key])
+                translation = translation.replace(`{${key}}`, replace[key])
             });
 
             return translation

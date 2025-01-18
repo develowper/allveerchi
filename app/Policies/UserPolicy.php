@@ -6,6 +6,7 @@ use App\Http\Helpers\Variable;
 use App\Models\Article;
 use App\Models\Banner;
 use App\Models\Business;
+use App\Models\DrZantia\PreOrder;
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Podcast;
@@ -151,6 +152,8 @@ class UserPolicy
 
                 break;
             case $item instanceof Order  :
+            case $item instanceof PreOrder  :
+
                 $res = $item->user_id == $user->id;
 
                 break;

@@ -11,6 +11,7 @@ import {createInertiaApp} from '@inertiajs/vue3';
 import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
 import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m';
 import Mixins from "@/vue-mixins";
+import TgMixins from "@/telegram-mixins";
 import LoadScript from 'vue-plugin-load-script';
 import VueDragscroll from "vue-dragscroll";
 
@@ -31,7 +32,8 @@ createInertiaApp({
             .use(ZiggyVue, Ziggy)
             .use(LoadScript)
             .use(VueDragscroll)
-            .mixin(Mixins);
+            .mixin(Mixins)
+            .mixin(TgMixins);
         window.Vue.config.globalProperties.emitter = emitter;
         window.Vue.mount(el);
         return window.Vue;

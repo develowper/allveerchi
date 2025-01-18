@@ -1,68 +1,44 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\DrZantia;
 
 use App\Http\Helpers\Variable;
-use App\Http\Requests\OrderRequest;
+use App\Models\Agency;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class PreOrder extends Model
 {
     use HasFactory;
 
+    protected $table = 'pre_orders';
+
     protected $fillable = [
-        'user_id',
-        'repo_id',
+        'items',
         'agency_id',
+        'transaction_id',
+        'user_id',
+        'status',
         'province_id',
         'county_id',
         'district_id',
         'receiver_fullname',
         'receiver_phone',
-        'location',
         'postal_code',
         'address',
-        'status',
-        'total_shipping_price',
-        'total_items_price',
+        'location',
         'total_items',
-        'total_price',
-        'total_discount',
-        'shipping_method_id',
-        'shipping_id',
-        'delivery_date',
-        'delivery_timestamp',
-        'shipping_id',
-        'shipping_method_id',
-        'done_at',
-        'distance',
-        'coupon',
+        'total_items_price',
+        'total_shipping_price',
         'change_price',
-        'tax_price',
-        'total_weight',
-        'payment_method',
+        'total_price',
+        'pay_type',
 
-    ];
-
-    public function store(OrderRequest $request)
-    {
-
-    }
-
-    public function items()
-    {
-        return $this->hasMany(OrderItem::class, 'order_id');
-    }
+        'payed_at',];
 
     public function agency()
     {
         return $this->belongsTo(Agency::class, 'agency_id');
-    }
-
-    public function repository()
-    {
-        return $this->belongsTo(Repository::class, 'repo_id');
     }
 
     public function getAvailableStatuses()

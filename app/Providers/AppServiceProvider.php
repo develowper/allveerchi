@@ -7,6 +7,7 @@ use App\Models\Business;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        URL::forceScheme('https');
         Relation::morphMap([
 //            Variable::MODELS[User::class] => User::class,
 //            Variable::MODELS[Business::class] => Business::class,

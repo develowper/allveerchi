@@ -131,7 +131,7 @@ class OrderController extends Controller
                     $wallet = $uf->wallet ?? 0;
                     $maxDebit = $uf->max_debit ?? $settingDebit;
                     if (($wallet + $maxDebit) - $sum < 0)
-                        return response()->json(['message' => sprintf(__('validator.min_wallet'), number_format($sum - ($wallet + $maxDebit)) . " " . __('currency'), $wallet), 'cart' => $cart], Variable::ERROR_STATUS);
+                        return response()->json(['message' => sprintf(__('validator.min_wallet'), number_format($sum - ($wallet + $maxDebit)) . " " . __('currency'), $wallet)], Variable::ERROR_STATUS);
 
                 } else
                     $response = Pay::makeUri(Carbon::now()->getTimestampMs(), "{$data->total_price}0", $user->fullname, $user->phone, $user->email, $description, $user->id, Variable::$BANK);

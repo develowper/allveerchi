@@ -240,6 +240,37 @@
 
             </ul>
           </li>
+          <!--pre orders links -->
+          <li v-if="  hasAccess('view_user_order') || hasAccess('view_agency_order') " class="relative ">
+            <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.preorder.*' )}"
+               class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+               data-te-sidenav-link-ref>
+              <PencilSquareIcon class="w-5 h-5  "/>
+              <span class="mx-2 text-sm "> {{ __('preorders') }} </span>
+              <span
+                  class="  right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                  data-te-sidenav-rotate-icon-ref>
+                <ChevronDownIcon class="h-5 w-5"/>
+              </span>
+            </a>
+            <ul
+                v-bind="{ 'data-te-collapse-show':menuIsActive ( 'admin.panel.preorder.*' )?true:null }"
+                class="  !visible relative m-0 hidden list-none    data-[te-collapse-show]:block "
+                data-te-collapse-item data-te-sidenav-collapse-ref>
+              <li class="relative ps-7">
+
+                <Link v-if="  hasAccess('view_user_order') " :href="route('admin.panel.preorder.index')"
+                      role="menuitem"
+                      :class="subMenuIsActive( 'admin.panel.preorder.index' )"
+                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
+                  <Bars2Icon class="w-5 h-5 mx-1"/>
+                  {{ __('list') }}
+                </Link>
+
+              </li>
+
+            </ul>
+          </li>
 
 
           <!-- Guarantee links -->
@@ -821,8 +852,40 @@
               </li>
 
             </ul>
+          </li>
+          <!-- pre orders links -->
+          <li class="relative ">
+            <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'user.panel.preorder.*' )}"
+               class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+               data-te-sidenav-link-ref>
+              <PencilSquareIcon class="w-5 h-5  "/>
+              <span class="mx-2 text-sm "> {{ __('preorders') }} </span>
+              <span
+                  class="  right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                  data-te-sidenav-rotate-icon-ref>
+                <ChevronDownIcon class="h-5 w-5"/>
+              </span>
+            </a>
+            <ul
+                v-bind="{ 'data-te-collapse-show':menuIsActive ( 'user.panel.preorder.*' )?true:null }"
+                class="  !visible relative m-0 hidden list-none    data-[te-collapse-show]:block "
+                data-te-collapse-item data-te-sidenav-collapse-ref>
+              <li class="relative ps-7">
 
-            <!-- Financial links -->
+                <Link :href="route('user.panel.preorder.index')"
+                      role="menuitem"
+                      :class="subMenuIsActive( 'user.panel.preorder.index' )"
+                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
+                  <Bars2Icon class="w-5 h-5 mx-1"/>
+                  {{ __('list') }}
+                </Link>
+
+
+              </li>
+
+            </ul>
+          </li>
+          <!-- Financial links -->
           <li class="relative  ">
             <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'user.panel.financial.*' )}"
                class="flex   cursor-pointer items-center truncate rounded-[5px] px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
@@ -894,7 +957,6 @@
 
             </ul>
           </div>
-          </li>
 
 
         </ul>

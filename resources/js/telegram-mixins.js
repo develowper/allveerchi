@@ -1,11 +1,6 @@
 import {usePage,} from "@inertiajs/vue3";
-import {inject, ref, defineEmits} from 'vue'
-import {Dropdown, Modal} from "tw-elements";
-import HmacSHA256 from "crypto-js/hmac-sha256";
-import Hex from "crypto-js/enc-hex";
-import Base64 from 'crypto-js/enc-base64';
+
 import WebApp from "@twa-dev/sdk";
-import axios, {isCancel, AxiosError} from 'axios';
 
 let self;
 export default {
@@ -66,7 +61,7 @@ export default {
 
             this.tgVerifyInitData(WebApp.initData).then((res) => {
                 // alert(WebApp.initData);
-
+                // console.log(res)
                 if (res === true)
                     this.tgSetInitData();
             }).catch((res) => {

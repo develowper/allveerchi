@@ -15,6 +15,18 @@ use Inertia\Inertia;
 class CatalogController extends Controller
 {
 
+    public
+    function view(Request $request, $id)
+    {
+        $data = Catalog::where('id', $id)->firstOrNew();
+        $data->seo = strip_tags("$data->name_fa $data->pn");
+        return Inertia::render('DZ/Catalog/View', [
+            'back_link' => url()->previous(),
+            'data' => $data,
+        ]);
+
+    }
+
     public function edit(Request $request, $id)
     {
 
@@ -106,6 +118,27 @@ class CatalogController extends Controller
         $paginate = $request->paginate ?: 24;
 
         $query = Catalog::query();
+
+        if ($search)
+            $query = $query
+                ->where('name_fa', 'like', "%$search%")
+                ->orWhere('name_en', 'like', "%$search%")
+                ->orWhere('pn', 'like', "%$search%");
+
+        return $query->orderBy($orderBy, $dir)->paginate($paginate, ['*'], 'page', $page);
+    }
+
+    public
+    function search(Request $request)
+    {
+
+        $search = $request->search;
+        $page = $request->page ?: 1;
+        $orderBy = $request->order_by ?: 'id';
+        $dir = $request->dir ?: 'DESC';
+        $paginate = $request->paginate ?: 24;
+
+        $query = Catalog::query()->where('status', 'active');
 
         if ($search)
             $query = $query

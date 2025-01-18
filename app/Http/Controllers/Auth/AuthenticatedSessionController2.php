@@ -35,9 +35,11 @@ class AuthenticatedSessionController2 extends Controller
     {
         $request->authenticate();
 
+        $redirectTo = session('redirect_to');
+
         $request->session()->regenerate();
 
-        return redirect()->intended(route(auth()->user()->isAdmin() ? 'panel.admin.index' : 'panel.index'));
+        return redirect()->intended($redirectTo ?? route(auth()->user()->isAdmin() ? 'panel.admin.index' : 'panel.index'));
     }
 
     /**

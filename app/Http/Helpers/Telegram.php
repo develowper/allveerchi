@@ -567,6 +567,44 @@ class Telegram
                     $msg .= " 📝 " . "اصلاحیه: " . number_format($data->change_price) . PHP_EOL;
                     $msg .= " 🛒 " . "نهایی: " . number_format($data->total_price) . PHP_EOL;
                     break;
+                case 'preorder_created':
+                case 'preorder_edited':
+
+                    $cities = City::whereIn('id', [$data->province_id, $data->county_id, $data->district_id])->get();
+                    $data->province = $cities->where('id', $data->province_id)->first()->name ?? '';
+                    $data->county = $cities->where('id', $data->county_id)->first()->name ?? '';
+                    $data->district = $cities->where('id', $data->district_id)->first()->name ?? '';
+                    $data->agency = Agency::find($data->agency_id) ?? new Agency();
+
+                    $topic = self::TOPIC_ORDER;
+                    if ($isCreate)
+                        $msg .= " 🟢 " . "یک پیش سفارش ثبت شد" . PHP_EOL;
+                    if ($isEdit)
+                        $msg .= " 🟠 " . "یک پیش سفارش ویرایش شد" . PHP_EOL;
+
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    $msg .= " 👤 " . "کاربر: " . PHP_EOL;
+                    $msg .= "$us->fullname ( $us->phone )" . PHP_EOL;
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    $msg .= " 🆔 " . "شناسه: " . $data->id . PHP_EOL;
+                    $msg .= " 🚥 " . "وضعیت: " . __($data->status) . PHP_EOL;
+                    $msg .= " 🚩 " . "نمایندگی: " . "({$data->agency->id})" . ' ' . $data->agency->name . PHP_EOL;
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    foreach (collect($data->products ?? [])->map(fn($i) => (object)$i) as $item) {
+//                        $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                        $msg .= " 🛒 ($item->id) " . $item->name_fa . ' تعداد ' . " [$item->qty] " . PHP_EOL;
+                    }
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    $msg .= " 🔖 " . "آدرس: " . PHP_EOL . "$data->province - $data->county - $data->district" . PHP_EOL;
+                    $msg .= " 🪧 " . $data->address . PHP_EOL;
+                    $msg .= " کد پستی: " . ($data->postal_code ?? '_') . PHP_EOL;
+                    $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
+                    $msg .= " 👤 " . "دریافت کننده: " . "$data->receiver_fullname ( $data->receiver_phone )" . PHP_EOL;
+                    $msg .= " 🚛 " . "کرایه: " . number_format($data->total_shipping_price) . PHP_EOL;
+                    $msg .= " 📦 " . "اقلام: " . number_format($data->total_items_price) . PHP_EOL;
+                    $msg .= " 📝 " . "اصلاحیه: " . number_format($data->change_price) . PHP_EOL;
+                    $msg .= " 🛒 " . "نهایی: " . number_format($data->total_price) . PHP_EOL;
+                    break;
                 case 'agency_created'  :
                 case 'agency_edited':
                     if ($isCreate)

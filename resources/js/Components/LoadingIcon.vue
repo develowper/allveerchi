@@ -260,7 +260,7 @@ export default {
 $border-radius: .25rem;
 $gray-400: #ced4da;
 $purple: #32cd32;
-$indigo: #1d8d1d;
+$primary: rgb(245 158 11);
 .progress-line {
   border-radius: $border-radius;
   background-color: $gray-400;
@@ -272,7 +272,7 @@ $indigo: #1d8d1d;
     height: .5rem;
     width: 100%;
     margin: 0;
-    background-color: $indigo;
+    background-color: $primary;
     content: '';
     -webkit-animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;

@@ -208,7 +208,7 @@ import {Modal} from "tw-elements";
 let call;
 export default {
   name: "UserSelector",
-  props: ['id', 'mode', 'text', 'preload', 'paginate', 'selected', 'placeholder', 'error', 'link', 'label', 'colsData', 'labelsData', 'callback', 'multi', 'editable'],
+  props: ['id', 'mode', 'text', 'preload', 'paginate', 'selected', 'placeholder', 'error', 'link', 'label', 'colsData', 'labelsData', 'callback', 'multi', 'editable', 'clearable'],
   components: {
     ChevronDownIcon,
     MagnifyingGlassIcon,
@@ -298,6 +298,9 @@ export default {
       this.$emit('update:selected', this.selectedItem);
       this.$emit('update:text', this.selectedText);
       this.$emit('change', item);
+
+      if (this.clearable)
+        this.clear()
     },
     getData() {
 

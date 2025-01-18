@@ -277,7 +277,7 @@ export default {
       window.axios.get(this.link, {params: this.params}, {})
 
           .then((response) => {
-
+            
             this.data = response.data;
 
             delete response.data;

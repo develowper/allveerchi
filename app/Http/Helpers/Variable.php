@@ -16,6 +16,7 @@ use App\Models\Car;
 use App\Models\Catalog;
 use App\Models\City;
 use App\Models\Driver;
+use App\Models\DrZantia\PreOrder;
 use App\Models\Message;
 use App\Models\Order;
 use App\Models\Podcast;
@@ -141,7 +142,7 @@ class Variable
 
     const  TRANSACTION_TYPES = ['pay', 'profit', 'settlement', 'charge', 'shipping'];
     const  FINANCIALS = ['admin' => AdminFinancial::class, 'user' => UserFinancial::class, 'agency' => AgencyFinancial::class];
-    const  TRANSACTION_MODELS = ['order' => Order::class, 'repo-order' => RepositoryOrder::class, 'admin' => Admin::class, 'user' => User::class, 'agency' => Agency::class, 'operator' => Admin::class];
+    const  TRANSACTION_MODELS = ['order' => Order::class, 'repo-order' => RepositoryOrder::class, 'admin' => Admin::class, 'user' => User::class, 'agency' => Agency::class, 'operator' => Admin::class, 'pre-order' => PreOrder::class];
     const  PAYER_TYPES = ['admin' => Admin::class, 'operator' => Admin::class, 'user' => User::class, 'agency' => Agency::class];
     const REF_TYPES = ['register',];
     const BANK_GATEWAY = 'nextpay';

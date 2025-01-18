@@ -11,6 +11,7 @@ use App\Models\Catalog;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Driver;
+use App\Models\DrZantia\PreOrder;
 use App\Models\Order;
 use App\Models\Pack;
 use App\Models\Product;
@@ -234,6 +235,9 @@ class AdminPolicy
                     $res = $admin->hasAccess('edit_car');
                     break;
                 case   $item instanceof Order :
+                    $res = $admin->hasAccess('edit_order');
+                    break;
+                case   $item instanceof PreOrder :
                     $res = $admin->hasAccess('edit_order');
                     break;
                 case   $item instanceof Shipping :

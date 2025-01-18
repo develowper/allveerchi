@@ -53,6 +53,7 @@ class RegisteredUserController extends Controller
             'phone_verified' => true,
             'ref_id' => User::makeRefCode($request->phone),
             'password' => Hash::make($request->password),
+            'telegram_id' => session('telegram_id', null)
         ]);
 
         event(new Registered($user));
@@ -60,6 +61,6 @@ class RegisteredUserController extends Controller
         Auth::login($user);
         Telegram::log(null, 'user_created', $user);
         SMSHelper::deleteCode($user->phone);
-        return redirect(RouteServiceProvider::HOME);
+        return redirect(session('redirect_to', null) ?? RouteServiceProvider::HOME);
     }
 }

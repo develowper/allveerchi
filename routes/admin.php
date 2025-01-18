@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\PreOrderController;
 use App\Http\Controllers\SampleController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CategoryController;
@@ -251,8 +252,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('order/user/search', [OrderController::class, 'searchPanel'])->name('admin.panel.order.user.search');
         Route::patch('order/user/update', [OrderController::class, 'update'])->name('admin.panel.order.user.update');
         Route::get('order/user/{order}', [OrderController::class, 'edit'])->name('admin.panel.order.user.edit');
-
         Route::get('order/factor/{order}', [OrderController::class, 'factor'])->name('admin.panel.order.factor');
+
+        PanelController::makeInertiaRoute('get', 'preorder/index', 'admin.panel.preorder.index', 'Panel/Admin/PreOrder/Index', ['order_statuses' => Variable::ORDER_STATUSES]);
+        Route::get('preorder/search', [PreOrderController::class, 'searchPanel'])->name('admin.panel.preorder.search');
+        Route::patch('preorder/update', [PreOrderController::class, 'update'])->name('admin.panel.preorder.update');
+        Route::get('preorder/{preorder}', [PreOrderController::class, 'edit'])->name('admin.panel.preorder.edit');
+        Route::get('preorder/factor/{preorder}', [PreOrderController::class, 'factor'])->name('admin.panel.preorder.factor');
 
         PanelController::makeInertiaRoute('get', 'order/agency/index', 'admin.panel.order.agency.index', 'Panel/Admin/Order/Agency/Index', ['order_statuses' => collect(Variable::ORDER_STATUSES)->filter(fn($e) => $e['name'] != 'request'),]);
         PanelController::makeInertiaRoute('get', 'order/agency/create', 'admin.panel.order.agency.create', 'Panel/Admin/Order/Agency/Create', ['order_statuses' => collect(Variable::ORDER_STATUSES)->filter(fn($e) => $e['name'] != 'request'),]);

@@ -73,7 +73,13 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate($guard);
 
         $request->session()->regenerate();
-        Cart::where('ip', $request->ip())->whereNull('user_id')->update(['user_id' => auth($guard)->id()]);
+        $user = auth($guard)->user();
+        Cart::where('ip', $request->ip())->whereNull('user_id')->update(['user_id' => $user->id]);
+        $sTi = session('telegram_id');
+        if ($user && !$user->telegram_id && $sTi) {
+            $user->telegram_id = $sTi;
+            $user->save();
+        }
         if ($guard == 'admin')
             return redirect()->to(route('admin.panel.index'));
         return redirect()->intended(/*route($guard == 'admin' ? 'admin.panel.index' : 'panel.index')*/);

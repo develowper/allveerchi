@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\DrZantia;
 
 use App\Helpers\Helper;
 use App\Helpers\SmsHelper;
@@ -9,21 +9,19 @@ use App\Http\Controllers\Api\v2\PaymentController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Wallet\PayRequest;
 use App\Models\Adv;
+use App\Models\Catalog;
 use App\Models\Plan;
 use App\Models\PreUser;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
-use PhpParser\Node\Expr\Variable;
-use PHPUnit\TextUI\Help;
-use App\Models\User;
 
 class TMAController extends Controller
 {
@@ -36,7 +34,8 @@ class TMAController extends Controller
     public function index(Request $request)
     {
 
-        return Inertia::render('Index', [
+        return Inertia::render('DZ/Index', [
+            'catalog_count' => Catalog::count(),
             'tutorials' => [
                 'آموزش دریافت ابلاغیه' => 'https://www.youtube.com/watch?v=BMhxPOjye9E',
                 'آموزش فراموشی رمز ثنا' => 'https://www.youtube.com/watch?v=wqnQD-2fUrk',
@@ -66,7 +65,7 @@ class TMAController extends Controller
         $check_hash = FALSE;
         $telegram_id = null;
 //        auth()->logout();
-        $user = auth()->user() ?? auth('api')->user();
+        $user = auth('sanctum')->user() ?? auth('api')->user();
         foreach ($data_check_arr as &$val) {
 
             if (substr($val, 0, strlen($needle)) === $needle) {
@@ -84,25 +83,30 @@ class TMAController extends Controller
         sort($data_check_arr);
 
         $data_check_string = implode("\n", $data_check_arr);
-        $secret_key = hash_hmac('sha256', env('TELEGRAM_BOT_TOKEN'), "WebAppData", TRUE);
+        $secret_key = hash_hmac('sha256', env('TELEGRAM_BOT_DRZANTIA'), "WebAppData", TRUE);
         $hash = bin2hex(hash_hmac('sha256', $data_check_string, $secret_key, TRUE));
 //        Telegram::sendMessage(Telegram::LOGS[0], $initData);
         $success = strcmp($hash, $check_hash) === 0;
+
         if ($success) {
+            if ($user) {
+                if (!$user->telegram_id) {
+                    $user->telegram_id = $telegram_id;
+                    $user->save();
+                }
+            }
             if (!$user) {
                 $user = User::whereNotNull('telegram_id')->where('telegram_id', $telegram_id)->first();
 
                 if ($user) {
+
                     auth()->loginUsingId($user->id);
                 }
             }
         }
 
-        if ($user) {
-            $user->plan_days = $user->getPlanDays();
-        }
-
-        return response()->json(['status' => $success ? 'success' : 'danger', 'user' => $user, 'result' => $success], $success ? Helper::STATUS_SUCCESS : Helper::STATUS_ERROR);
+        session()->put('telegram_id', $telegram_id);
+        return response()->json(['status' => $success ? 'success' : 'danger', 'user' => $user, 'result' => $success], $success ? 200 : 401);
 
     }
 
