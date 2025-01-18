@@ -67,12 +67,16 @@ Route::get('/cache', function () {
 Route::get('test', function () {
 
     foreach (Catalog::get() as $catalog) {
-        $ex = explode('/', $catalog->image_url ?? '');
-        $number = $ex[count($ex) - 1];
-        if ($number) {
-            $catalog->image_url = route('storage.catalogs') . "/$number.jpg";
-            $catalog->save();
-        }
+
+        $catalog->image_url = str_replace('.jpg.jpg', '.jpg', $catalog->image_url);
+        $catalog->save();
+
+//        $ex = explode('/', $catalog->image_url ?? '');
+//        $number = $ex[count($ex) - 1];
+//        if ($number) {
+//            $catalog->image_url = route('storage.catalogs') . "/$number";
+//            $catalog->save();
+//        }
 
     }
 
