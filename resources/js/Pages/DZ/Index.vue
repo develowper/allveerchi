@@ -26,68 +26,55 @@
               <div class="bg-white  shadow-md rounded-lg  "
                    v-for="(p,idx) in products">
                 <Link :href=" route( 'dz.catalog.view',{id:p.id,name:p.pn})" :id="p.id"
-                      class="overflow-hidden flex flex-row ssm:flex-col   hover:cursor-pointer hover:scale-[101%] duration-300">
-                  <div class="flex flex-col">
-                    <div class="md:mx-auto ssm:h-64 ssm:w-full  h-24    w-32 shadow-md  ">
+                      class="overflow-hidden flex flex-col     hover:cursor-pointer hover:scale-[101%] duration-300">
+                  <div class="flex flex-row">
+                    <div class="md:mx-auto ssm:h-64 ssm:w-full  h-24    w-24 shadow-md  ">
                       <!--                <Image :data-lity="route('storage.variations')+`/${p.id}/thumb.jpg`"-->
                       <!--                       classes="object-cover  h-full w-full  rounded-t-lg rounded-b   "-->
                       <!--                       :src="route('storage.variations')+`/${p.id}/thumb.jpg`"></Image> -->
-                      <Image classes="object-contain  h-full w-full  rounded-t-lg rounded-b  "
-                             :src="p.image_url">
+                      <Image classes="object-cover  h-full w-full  rounded-t-lg rounded-b  "
+                             :src="p.image_url" disabled="true">
 
                       </Image>
                     </div>
-                    <div class="flex my-1 items-center justify-start text-xs text-gray-400">
-                      <div class="  rounded p-1 px-2  "> {{ toRelativeTime(p.updated_at) }}</div>
+
+                    <div
+                        class="p-2  grow flex flex-col items-stretch justify-start items-start items-between">
+
+                      <div class="flex items-center justify-between">
+                        <div class="text-primary-600 ms-1 text-xs  ">{{ cropText(p.name_fa, 50) }}</div>
+                        <!--                <div class="text-sm text-neutral-500 mx-2 ">{{ __('grade') + ' ' + p.grade }}</div>-->
+
+                      </div>
+                      <hr class="border-gray-200  m-2">
+                      <div class="text-neutral-500 text-sm">{{ p.name_en }}</div>
+                      <div class="text-sm">{{ __('pn') + ` : ${p.pn}` }}</div>
+                      <div class="flex items-center text-sm">
+                        <div v-if=" p.in_shop>0">{{ __('in_stock') + ` : ${parseFloat(p.in_shop)}` }}</div>
+                        <div class="text-sm text-neutral-500 mx-2" v-if="getPack(p.pack_id)">{{
+                            ` ${getPack(p.pack_id)} `
+                          }}
+                        </div>
+
+                      </div>
+
+                      <div class="flex items-center justify-end">
+                        <div class="flex items-center "
+                        >
+                          {{ asPrice(Math.round(p.price)) }}
+
+                        </div>
+                        <TomanIcon class="w-4 h-4 mx-2"/>
+
+                      </div>
+
                     </div>
+
                   </div>
-                  <div class="hidden ssm:flex min-w-[36%] my-1  mx-auto">
+
+
+                  <div class="flex  p-2 min-w-[100%]    ">
                     <CartItemButton :key="p.id" class="w-full " :product-id="p.id"/>
-                  </div>
-
-                  <div
-                      class="p-4   w-full flex flex-col items-stretch justify-start items-start items-between">
-
-                    <div class="flex items-center justify-between">
-                      <div class="text-primary-600 ms-1 text-xs  ">{{ cropText(p.name_fa, 50) }}</div>
-                      <!--                <div class="text-sm text-neutral-500 mx-2 ">{{ __('grade') + ' ' + p.grade }}</div>-->
-
-                    </div>
-                    <hr class="border-gray-200  m-2">
-                    <div class="text-neutral-500 text-sm">{{ p.name_en }}</div>
-                    <div class="text-sm">{{ __('pn') + ` : ${p.pn}` }}</div>
-                    <div class="flex items-center text-sm">
-                      <div v-if=" p.in_shop>0">{{ __('in_stock') + ` : ${parseFloat(p.in_shop)}` }}</div>
-                      <div class="text-sm text-neutral-500 mx-2" v-if="getPack(p.pack_id)">{{
-                          ` ${getPack(p.pack_id)} `
-                        }}
-                      </div>
-
-                    </div>
-                    <!--              <div v-if="p.unit != 'qty'" class="flex items-center text-sm">-->
-                    <!--                <div>{{ (__('weight')) + ` : ${parseFloat(p.weight)}` }}</div>-->
-                    <!--                <div class="text-sm text-neutral-500 mx-2">{{-->
-                    <!--                    p.weight > 0 && p.weight < 1 ? __('gr') : __('kg')-->
-                    <!--                  }}-->
-                    <!--                </div>-->
-
-                    <!--              </div>-->
-                    <div class="flex items-center justify-end">
-                      <div class="flex items-center "
-                      >
-                        {{ asPrice(Math.round(p.price)) }}
-
-
-                      </div>
-
-                      <TomanIcon class="w-4 h-4 mx-2"/>
-
-                    </div>
-
-                    <div class="flex ssm:hidden  min-w-[100%] xs:min-w-[70%]    ">
-                      <CartItemButton :key="p.id" class="w-full " :product-id="p.id"/>
-                    </div>
-
                   </div>
                 </Link>
 

@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        URL::forceScheme('https');
+//        URL::forceScheme('https');
         Relation::morphMap([
 //            Variable::MODELS[User::class] => User::class,
 //            Variable::MODELS[Business::class] => Business::class,
