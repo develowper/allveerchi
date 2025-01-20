@@ -31,7 +31,7 @@ const focusNext = (elem) => {
 
 <template>
   <div>
-    <div class="     rounded border border-neutral-300  ">
+    <div class="     rounded-lg border border-neutral-300  ">
       <div class="relative    mx-auto  ">
         <div
             class="absolute top-0 bottom-0 start-4 flex items-center opacity-60  hover:cursor-pointer   ">
