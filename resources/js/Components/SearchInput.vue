@@ -29,7 +29,6 @@ const focusNext = (elem) => {
 }
 </script>
 
-
 <template>
   <div>
     <div class="     rounded-lg border border-neutral-300  ">
