@@ -11,9 +11,9 @@ jobs:
       - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: 195.214.235.148
-          protocol: ftps
-          port: 22
+          server: ailverchi.ir
+          protocol: ftp
+          port: 21
           username: allveerchi
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /allveerchi/
