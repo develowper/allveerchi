@@ -251,10 +251,18 @@ export default {
     this.Modal = new Modal(modalEl);
 
     this.getData();
-    if (this.preload && this.preload.id) {
-      this.selectItem(this.preload);
+    if (this.preload)
+      if (!this.multi) {
+        if (this.preload.id) {
+          console.log(this.preload)
+          this.selectItem(this.preload);
 
-    }
+        }
+      } else {
+        for (let i = 0; i < this.preload.length; i++) {
+          this.selectItem(this.preload[i]);
+        }
+      }
   },
   methods: {
     clear(id = null) {

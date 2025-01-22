@@ -45,6 +45,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('sell_count')->default(0);
             $table->longText('description')->nullable();
             $table->timestamps();
+            $table->json('categories')->nullable();
 
         });
     }

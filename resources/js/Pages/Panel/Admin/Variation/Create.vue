@@ -112,6 +112,43 @@
               </div>
 
               <div class="my-2">
+                <UserSelector :multi="true" :colsData="['id','name','level', ]"
+                              :labelsData="['id','name','level', ]"
+
+                              :error="null"
+                              :link="route('admin.panel.category.search') "
+                              :label="__('categories')"
+                              :id="'categories'" v-model:selected="form.categories"
+                              :preload="null">
+                  <template v-slot:selector="props">
+                    <div v-if="(props.selectedText || []).length==0" :class=" 'py-2'"
+                         class=" px-4 border border-gray-300 rounded hover:bg-gray-100 cursor-pointer flex items-center ">
+                      <div class="grow">
+                        {{ __('select') }}
+                      </div>
+                    </div>
+
+                    <template v-for="(text,idx) in props.selectedText">
+                      <div :class=" 'py-2 m-1'"
+                           class=" px-4 border border-gray-300 rounded hover:bg-gray-100 cursor-pointer flex items-center ">
+                        <div class="grow">
+                          {{ text }}
+                        </div>
+                        <div
+                            class="bg-danger rounded p-2   cursor-pointer text-white hover:bg-danger-400"
+                            @click.stop="props.clear(props.selectedItem[idx]  )">
+                          <XMarkIcon class="w-5 h-5"/>
+
+                        </div>
+                      </div>
+                      <InputError
+                          :message="form.errors && form.errors[`repo_ids.${idx}`]?form.errors[`repo_ids.${idx}`]:null"/>
+                    </template>
+                  </template>
+                </UserSelector>
+              </div>
+
+              <div class="my-2">
                 <TextInput
                     :id="`weight`"
                     type="number"
@@ -254,6 +291,7 @@ export default {
         in_repo: null,
         in_shop: null,
         uploading: false,
+        categories: null,
 
       }),
       img: null,

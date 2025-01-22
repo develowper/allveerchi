@@ -37,10 +37,12 @@ class Variation extends Model
         'guarantee_months',
         'customer_id',
         'unit',
+        'categories',
     ];
 
     protected $casts = [
         'in_auction' => 'boolean',
+        'categories' => 'array',
     ];
 
     public static function getImages($id)

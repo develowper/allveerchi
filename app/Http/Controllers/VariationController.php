@@ -8,6 +8,7 @@ use App\Http\Helpers\Variable;
 use App\Http\Requests\VariationRequest;
 use App\Models\Admin;
 use App\Models\Agency;
+use App\Models\Category;
 use App\Models\Log;
 use App\Models\Pack;
 use App\Models\Product;
@@ -171,6 +172,7 @@ class VariationController extends Controller
             $all = Variation::getImages($data->id);
             $data->images = collect($all)->filter(fn($e) => !str_contains($e, 'thumb'))->all();
             $data->thumb_img = collect($all)->filter(fn($e) => str_contains($e, 'thumb'))->first();
+            $data->categories = Category::whereIn('id', $data->categories ?? [])->select('id', 'name')->get();
         }
         return Inertia::render('Panel/Admin/Variation/Edit', [
             'statuses' => Variable::STATUSES,
@@ -184,7 +186,7 @@ class VariationController extends Controller
         if (!$request->uploading) { //send again for uploading images
             return back()->with(['resume' => true]);
         }
-        \Illuminate\Support\Facades\Log::alert('hi');
+//        \Illuminate\Support\Facades\Log::alert('hi');
         $request->merge([
             'status' => 'active',
         ]);
@@ -221,6 +223,7 @@ class VariationController extends Controller
                     'agency_id' => $repo->agency_id,
                     'weight' => $request->weight,
                     'price' => $request->price,
+                    'categories' => $request->categories,
                     'description' => null,
                     'name' => $request->name ?? $product->name,
                     'category_id' => $product->category_id,
@@ -327,20 +330,29 @@ class VariationController extends Controller
 
             switch ($cmnd) {
                 case 'change-name'   :
+
+
+                    $categories = Category::get()->pluck('id');
                     $request->validate(
                         [
                             'name' => ['required', 'max:200'],
+                            'categories' => ['nullable', 'array', 'min:0'],
+                            'categories.*' => ['required', Rule::in($categories)],
                         ],
                         [
                             'name.required' => sprintf(__("validator.required"), __('name')),
                             'name.unique' => sprintf(__("validator.unique"), __('name')),
                             'name.max' => sprintf(__("validator.max_len"), __('name'), 200, mb_strlen($request->name)),
+                            'categories.array' => sprintf(__("validator.invalid"), __('categories')),
+                            'categories.*.in' => sprintf(__("validator.invalid"), __('categories')),
+
 
                         ],
                     );
                     $product = Product::find($data->product_id);
 
                     $data->name = $request->name;
+                    $data->categories = $request->categories ?? [];
 //                    $data->weight = $product->weight;
                     $data->save();
                     if ($request->wantsJson())

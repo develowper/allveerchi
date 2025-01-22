@@ -44,6 +44,7 @@ class VariationRequest extends FormRequest
         $products = Product::select('id', 'name')->get();
         $packs = Pack::pluck('id');
         $grades = Variable::GRADES;
+        $categories = Category::get()->pluck('id');
         $tmp = [];
         if (!$this->cmnd) {
 
@@ -58,6 +59,8 @@ class VariationRequest extends FormRequest
 //                "grade" => ['required', Rule::in($grades)],
                 "weight" => ['required', 'numeric', 'gte:0', 'lt:99999', /*$this->pack_id == null ? Rule::in(1) :*/ 'numeric'],
                 "price" => ['required', 'numeric', 'gte:0'],
+                'categories' => ['nullable', 'array', 'min:0'],
+                'categories.*' => ['required', Rule::in($categories)],
 //                "batch_count" => ['required', 'numeric', 'gte:0'],
 //                "produced_at" => ['required', 'string', 'regex:/\d{4}\/\d{1,2}\/\d{1,2}/'],
 //                "guarantee_months" => ['nullable', 'numeric', 'gte:0'],
@@ -124,6 +127,9 @@ class VariationRequest extends FormRequest
             'img.required' => sprintf(__("validator.required"), __('image')),
             'img.base64_image_size' => sprintf(__("validator.max_size"), __("image"), Variable::PRODUCT_IMAGE_LIMIT_MB),
             'img.base64_image_mime' => sprintf(__("validator.invalid_format"), __("image"), implode(",", Variable::PRODUCT_ALLOWED_MIMES)),
+
+            'categories.array' => sprintf(__("validator.invalid"), __('categories')),
+            'categories.*.in' => sprintf(__("validator.invalid"), __('categories')),
 
         ];
     }

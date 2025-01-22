@@ -90,32 +90,12 @@ class CategoryController extends Controller
         $dir = $request->dir ?: 'DESC';
         $paginate = $request->paginate ?: 24;
         $status = $request->status;
-        $query = Car::query()->select('*');
-        $driverId = $request->driver_id;
-        $myAgency = Agency::find($admin->agency_id);
+        $query = Category::query()->select('*');
 
-        $agencies = $admin->allowedAgencies($myAgency)->select('id', 'name')->get();
-        $query->whereIntegerInRaw('agency_id', $agencies->pluck('id'));
         if ($search)
-            $query = $query->where(function ($query) use ($search) {
-                $query->orWhere('fullname', 'like', "%$search%")
-                    ->orWhere('phone', 'like', "%$search%");
-            });
+            $query->where('name', 'like', "%$search%");
 
-        if ($driverId)
-            $query->where('driver_id', $driverId);
-
-        return tap($query->orderBy($orderBy, $dir)->paginate($paginate, ['*'], 'page', $page), function ($paginated) use ($agencies) {
-            return $paginated->getCollection()->transform(
-                function ($item) use ($agencies) {
-                    $item->setRelation('agency', $agencies->where('id', $item->agency_id)->first());
-
-
-                    return $item;
-                }
-
-            );
-        });
+        return $query->orderBy($orderBy, $dir)->paginate($paginate, ['*'], 'page', $page);
 
 
     }
@@ -171,7 +151,7 @@ class CategoryController extends Controller
                     $beforeItem = $data->find($item->id);
                     $beforeItem->parent_id = $parentId;
                     $beforeItem->level = $level;
-                    $beforeItem->status = $item->checked?'active':'inactive';
+                    $beforeItem->status = $item->checked ? 'active' : 'inactive';
 
                     updateChildren($item->children, $data, $item->id, $level + 1);
                     $beforeItem->children = collect($item->children)->pluck('id');
