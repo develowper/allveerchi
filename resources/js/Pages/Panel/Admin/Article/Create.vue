@@ -105,11 +105,11 @@
 
               <div class="    mt-4">
 
-                <PrimaryButton class="w-full  "
+                <PrimaryButton class="w-full flex  justify-center"
                                :class="{ 'opacity-25': form.processing }"
                                :disabled="form.processing">
                   <LoadingIcon class="w-4 h-4 mx-3 " v-if="  form.processing"/>
-                  <span class=" text-lg  ">  {{ __('register_info') }} </span>
+                  <span v-if="!form.processing" class=" text-lg  ">  {{ __('register_info') }} </span>
                 </PrimaryButton>
 
               </div>
@@ -229,7 +229,7 @@ export default {
 
       // this.isLoading(true, this.form.progress ? this.form.progress.percentage : null);
 
-      this.form.post(route('panel.admin.article.create'), {
+      this.form.post(route('admin.panel.article.create'), {
         preserveScroll: false,
 
         onSuccess: (data) => {
@@ -243,7 +243,7 @@ export default {
               img: this.img,
 
             }))
-                .post(route('panel.admin.article.create'), {
+                .post(route('admin.panel.article.create'), {
                   preserveScroll: false,
                   onSuccess: (data) => {
 

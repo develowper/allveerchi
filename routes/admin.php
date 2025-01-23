@@ -4,6 +4,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PanelController;
 use App\Http\Controllers\AgencyController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
@@ -162,6 +163,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
                 'statuses' => Variable::STATUSES,
             ]
         );
+
+        Route::post('/article/create', [ArticleController::class, 'create'])->name('admin.panel.article.create')->middleware('can:create,App\Models\Admin,App\Models\Article,""');
+        Route::patch('article/update', [ArticleController::class, 'update'])->name('admin.panel.article.update');
+
+        Route::get('/article/search', [ArticleController::class, 'searchPanel'])->name('admin.panel.article.search');
+        Route::get('/article/{article}', [ArticleController::class, 'edit'])->name('admin.panel.article.edit');
 
 
         PanelController::makeInertiaRoute('get', 'transaction/index', 'admin.panel.financial.transaction.index', 'Panel/Financial/Transaction/Index',

@@ -31,7 +31,7 @@
                 <ImageUploader :replace="$page.props.max_images_limit==1"
                                :preload="route('storage.articles')+`/${$page.props.data.id}.jpg`"
                                mode="edit" :for-id="$page.props.data.id"
-                               :link="route('panel.admin.article.update')"
+                               :link="route('admin.panel.article.update')"
                                ref="imageCropper" :label="__('image_cover_jpg')" cropRatio="1.25" id="img"
                                height="10" class="grow "/>
                 <InputError class="mt-1 " :message="form.errors.img"/>
@@ -137,12 +137,12 @@
 
               <div class="    mt-4">
 
-                <PrimaryButton class="w-full  "
+                <PrimaryButton class="w-full flex justify-center "
                                @click.prevent="isAdmin()? submit():  showDialog('primary',__('will_active_after_review'), __('ok') , submit )"
                                :class="{ 'opacity-25': form.processing }"
                                :disabled="form.processing">
                   <LoadingIcon class="w-4 h-4 mx-3 " v-if="  form.processing"/>
-                  <span class=" text-lg  ">  {{ __('register_info') }}</span>
+                  <span v-if="!form.processing" class=" text-lg  ">  {{ __('register_info') }}</span>
                 </PrimaryButton>
 
               </div>
@@ -299,7 +299,7 @@ export default {
       //   let tmp = this.$refs.imageCropper[i].getCroppedData();
       //   if (tmp) this.images.push(tmp);
       // }
-      this.form.patch(route('panel.admin.article.update'), {
+      this.form.patch(route('admin.panel.article.update'), {
         preserveScroll: false,
 
         onSuccess: (data) => {

@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\AdminFinancial;
 use App\Models\Agency;
 use App\Models\AgencyFinancial;
+use App\Models\Article;
 use App\Models\Car;
 use App\Models\Catalog;
 use App\Models\Category;
@@ -156,6 +157,9 @@ class AdminPolicy
                 case    Catalog::class:
                     $res = $admin->hasAccess('create_catalog');
                     break;
+                case    Article::class:
+                    $res = $admin->hasAccess('create_article');
+                    break;
 
             }
 
@@ -262,6 +266,9 @@ class AdminPolicy
                     break;
                 case   $item instanceof Catalog :
                     $res = $admin->hasAccess('edit_catalog');
+                    break;
+                case   $item instanceof Article :
+                    $res = $admin->hasAccess('edit_article');
                     break;
             }
 

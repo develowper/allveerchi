@@ -27,7 +27,7 @@
 
             <div class="  px-3    flex  items-stretch justify-center">
               <!--              <PrimaryButton class="mx-2 p-2 grow  ">{{ __('register_article') }}</PrimaryButton>-->
-              <SecondaryButton v-if="false" @click="$inertia.visit(route('panel.admin.article.create'))"
+              <SecondaryButton v-if="false" @click="$inertia.visit(route('admin.panel.article.create'))"
                                class="md:mx-2 p-2  text-xs md:text-sm  ">
                 {{ __('register_article') }}
               </SecondaryButton>

@@ -7,6 +7,7 @@ use App\Http\Helpers\Telegram;
 use App\Http\Helpers\Util;
 use App\Http\Helpers\Variable;
 use App\Http\Requests\ArticleRequest;
+use App\Models\Admin;
 use App\Models\ArticleTransaction;
 use App\Models\Category;
 use App\Models\County;
@@ -32,8 +33,8 @@ class ArticleController extends Controller
     {
 
         $data = Article::with('category')->with('owner:id,fullname,phone')->find($id);
-        $this->authorize('edit', [User::class, $data]);
 
+        $this->authorize('edit', [Admin::class, $data]);
         if ($data->content)
             $data->content = json_decode($data->content);
 
@@ -56,8 +57,9 @@ class ArticleController extends Controller
         $id = $request->id;
         $cmnd = $request->cmnd;
         $data = Article::find($id);
+
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('update', [User::class, $data]);
+            $this->authorize('edit', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {
@@ -188,7 +190,7 @@ class ArticleController extends Controller
 //            SMSHelper::deleteCode($phone);
             Telegram::log(null, 'article_created', $article);
         } else    $res = ['flash_status' => 'danger', 'flash_message' => __('response_error')];
-        return to_route('panel.admin.article.index')->with($res);
+        return to_route('admin.panel.article.index')->with($res);
     }
 
     public
