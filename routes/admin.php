@@ -82,6 +82,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::post('setting/create', [SettingController::class, 'create'])->name('admin.panel.setting.create')->middleware("can:create,App\Models\Admin,App\Models\Ticket,'1'");
         Route::get('setting/{setting}', [SettingController::class, 'edit'])->name('admin.panel.setting.edit');
 
+        Route::get('skin/index', [SettingController::class, 'skinIndex'])->name('admin.panel.skin.index');
+
 
         PanelController::makeInertiaRoute('get', 'slider/index', 'admin.panel.slider.index', 'Panel/Admin/Slider/Index',
             [

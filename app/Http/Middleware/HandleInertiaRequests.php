@@ -71,7 +71,11 @@ class HandleInertiaRequests extends Middleware
             'locale' => function () {
                 return app()->getLocale();
             },
-            'slides' => [],
+            'head_notification' => Setting::getValue('head_notification'),
+            'slider' => collect(json_decode(Setting::getValue('slider') ?? '[]') ?? [])->map(function ($item) {
+                $item->image = route('storage.slides') . "/" . ($item->id ?? '') . ".jpg";
+                return $item;
+            }),
             'statuses' => Variable::STATUSES,
             'categories' => \App\Models\Category::get(),
             'langs' => Variable::LANGS,

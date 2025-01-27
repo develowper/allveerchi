@@ -10,9 +10,13 @@
       <div
           class="relative    bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-rose-300 to-rose-700">
         <!--Hero-->
-        <div
-            class="opacity-60   bg-no-repeat  bg-cover  blur-sm   z-0 absolute  bottom-2     w-full   h-full      "
-            :style="`background-image: url(${heroImage})`"></div>
+        <div v-if="$page.props.slider.length>0"
+             class="   shadow-md bg-white    overflow-hidden h-72 lg:h-72 xl:h-[24rem] w-full   start-0 end-0  ">
+          <Slider image-classes="object-cover " :items="$page.props.slider" :delay="8000"></Slider>
+        </div>
+        <div v-else
+             class="opacity-60   bg-no-repeat  bg-cover  blur-sm   z-0 absolute  bottom-2     w-full   h-full      "
+             :style="`background-image: url(${heroImage})`"></div>
 
 
         <div class="pt-24 md:pt-32 xl:py-32   z-10 z-[1044]   mx-auto    ">
@@ -128,7 +132,7 @@
         </div>
 
 
-        <div class="    ">
+        <div v-if="false" class="    ">
           <Cube class="" :data="$page.props.rubikFaces">
           </Cube>
         </div>

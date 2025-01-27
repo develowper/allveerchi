@@ -159,6 +159,8 @@ class AdminPolicy
                     break;
                 case    Article::class:
                     $res = $admin->hasAccess('create_article');
+                case    Setting::class:
+                    $res = $admin->hasAccess('create_setting');
                     break;
 
             }
