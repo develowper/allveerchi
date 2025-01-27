@@ -18,7 +18,7 @@
 
         <!-- Dropdown menu -->
         <ul v-if="  chevronShow" @mouseover="chevronRotate=true" @mouseleave="chevronRotate=false"
-            class="flex flex-col    bg-white  border shadow-xl rounded-lg transform scale-0 group-hover:scale-100  absolute end-0 top-10
+            class="flex flex-col  z-10  bg-white  border shadow-xl rounded-lg transform scale-0 group-hover:scale-100  absolute end-0 top-10
                     transition duration-200 ease-in-out origin-top     ">
           <li>
             <Link href="#"

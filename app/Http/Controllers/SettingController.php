@@ -97,6 +97,7 @@ class SettingController extends Controller
             }
 
             if ($data->save()) {
+                $data->value = json_encode($data->value);
                 Telegram::log(null, 'setting_updated', $data);
                 return response()->json(['message' => __('updated_successfully'),], Variable::SUCCESS_STATUS);
 

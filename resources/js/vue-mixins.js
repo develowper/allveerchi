@@ -242,6 +242,17 @@ export default {
 
             document.body.removeChild(textArea);
         },
+        startsWith(str, substring, position = 0) {
+            return str.slice(position, position + substring.length) === substring;
+        },
+        goTo(link) {
+            if (link) {
+                if (!this.startsWith(link, "http"))
+                    link = `http://${link}`
+                window.location = link;
+            }
+        },
+
         myMap(arr, callbackFn) {
             var tmp = [];
             for (var i = 0; i < arr.length; i++) {
@@ -337,7 +348,8 @@ export default {
                 return '' + Math.round(elapsed / msPerYear) + ` ${this.__('year')} ${this.__('ago')}`;
             }
         }
-    },
+    }
+    ,
 
 
 }

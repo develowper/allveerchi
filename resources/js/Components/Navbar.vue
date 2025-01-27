@@ -72,7 +72,7 @@
     </div>
     <!-- mobile menu -->
     <div
-        class=" h-0  block md:hidden    mobile-menu  transform transition-all duration-500  bg-primary-500 px-4 shadow-md  ">
+        class=" h-0  block md:hidden     mobile-menu  transform transition-all duration-500  bg-primary-500 px-4 shadow-md  ">
       <div class="mobile-menu-content flex flex-col ">
         <Link :href="route('/')" class="px-4 mobile nav-item m-1" :class="navClasses('/')">
           {{ __('home') }}

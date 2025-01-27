@@ -8,10 +8,12 @@
 
     <div v-if="true">
       <div
-          class="relative    bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-rose-300 to-rose-700">
+          class="relative    bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-300 to-primary-600">
         <!--Hero-->
         <div v-if="$page.props.slider.length>0"
-             class="   shadow-md bg-white    overflow-hidden h-72 lg:h-72 xl:h-[24rem] w-full   start-0 end-0  ">
+             class="    shadow-md bg-white    overflow-hidden h-72 lg:h-72 xl:h-[24rem] w-full   start-0 end-0  ">
+          <div
+              class="absolute top-0 start-0 w-full h-16   z-10 bg-gradient-to-b from-primary-500 to-transparent"></div>
           <Slider image-classes="object-cover " :items="$page.props.slider" :delay="8000"></Slider>
         </div>
         <div v-else
@@ -19,7 +21,7 @@
              :style="`background-image: url(${heroImage})`"></div>
 
 
-        <div class="pt-24 md:pt-32 xl:py-32   z-10 z-[1044]   mx-auto    ">
+        <div class="p-4   mx-auto    ">
           <div class="justify-center  px-3  sm:px-1  flex   flex-col md:flex-row items-center">
             <!--                    Right Col-->
             <div v-if="false" class=" z-10 md:w-2/5 py-6 text-center">
@@ -58,7 +60,7 @@
 
 
               </div>
-              <div class=" p-3    gap-2 grid  grid-cols-1 sm:grid-cols-2 items-center">
+              <div class=" p-2  mb-8  gap-2 grid  grid-cols-1 sm:grid-cols-2 items-center">
 
                 <SecondaryButton @click="$inertia.visit(route('shop.index'))"
                                  class="   grow    "
