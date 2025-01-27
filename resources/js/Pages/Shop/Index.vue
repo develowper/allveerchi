@@ -40,7 +40,7 @@
                       v-for="p in $page.props.products">
           <div>
             <Image classes="rounded-full h-12 w-12 border-primary-500 border"
-                   :src="route('storage.products')+`/${p.id}.jpg`"></Image>
+                   :src="route('storage.products')+`/${p.id}.jpg`" disabled="true"></Image>
           </div>
           <div :class="{'text-white':params.parent_ids.filter((e)=>e==p.id).length>0}"
                class="text-xs text-center text-neutral-500">{{ replaceAll(p.name, ' ', "‌") }}
