@@ -18,6 +18,7 @@ class CartItem extends Model
         'delivery_date',
         'delivery_timestamp',
         'qty',
+        'price_type',
     ];
 
     public function product()

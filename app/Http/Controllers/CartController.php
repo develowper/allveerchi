@@ -38,6 +38,7 @@ class CartController extends Controller
         $ip = $request->ip();
         $productId = $request->variation_id;
         $qty = $request->qty;
+        $priceType = $request->price_type;
         $cmnd = $request->cmnd;
         $cityId = session()->get('city_id');
         $addressIdx = $request->address_idx;
@@ -59,7 +60,7 @@ class CartController extends Controller
 //            if (!in_array($cityId, $repository->cities))
 //                return response()->json(['message' => __('repository_not_support_city')], Variable::ERROR_STATUS);
 //        }
-        $cols = 'items.product:id,name,repo_id,price,auction_price,in_shop,weight,pack_id,grade,unit';
+        $cols = 'items.product:id,name,repo_id,price,auction_price,in_shop,weight,pack_id,grade,unit,prices';
         $carts = Cart::where(function ($query) use ($ip) {
             $query->whereNotNull('ip')->where('ip', $ip);
         })->orWhere(function ($query) use ($user) {
@@ -129,12 +130,17 @@ class CartController extends Controller
             $product = optional($cartItem)->getRelation('product') ?? Variation::find($productId);
             $inShopQty = optional($product)->in_shop ?? 0;
             $minAllowed = optional($product)->min_allowed ?? 0;
+            $prices = collect(optional($product)->prices ?? []);
+            $priceSelected = $prices->where('type', $priceType)->where('from', '<=', $qty)->where('to', '>=', $qty)->first();
             if ($qty < 0)
                 return response()->json(['message' => sprintf(__('validator.invalid'), __('requested_qty'))], Variable::ERROR_STATUS);
             elseif ($qty > $inShopQty)
                 return response()->json(['message' => sprintf(__('validator.max_items'), __('product'), floatval($inShopQty), floatval($qty))], Variable::ERROR_STATUS);
             elseif ($qty < $minAllowed)
                 return response()->json(['message' => sprintf(__('validator.min_order_product'), $minAllowed)], Variable::ERROR_STATUS);
+            elseif
+            ($qty > 0 && !$priceSelected)
+                return response()->json(['message' => sprintf(__('price_type_not_found'), $qty, __($priceType))], Variable::ERROR_STATUS);
 
             if ($cartItem) {
                 if ($qty == 0) {
@@ -148,6 +154,7 @@ class CartController extends Controller
 
                 }
                 $cartItem->qty = $qty;
+                $cartItem->price_type = $priceType;
 
                 $cartItem->save();
 //                dd($cartItems);
@@ -159,6 +166,7 @@ class CartController extends Controller
                     'cart_id' => $cart->id,
                     'variation_id' => $productId,
                     'qty' => $qty,
+                    'price_type' => $priceType,
 
                 ]);
                 $cartItem->setRelation('product', $product);
@@ -186,11 +194,15 @@ class CartController extends Controller
                 $cartItem->error_message = sprintf(__('validator.min_order_product'), $product->min_allowed);
                 $errors[] = ['key' => $product->name, 'type' => 'product', 'message' => $cartItem->error_message];
             }
-            $isAuctionItem = $isAuction && $product->auction_price;
+            $priceSelected = collect(optional($product)->prices ?? [])->where('type', $cartItem->price_type)->where('from', '<=', $cartItem->qty)->where('to', '>=', $cartItem->qty)->first();
 
-            $itemTotalPrice = $cartItem->qty * ($isAuctionItem ? $product->auction_price : $product->price);
+
+            $isAuctionItem = $isAuction && $product->auction_price;
+            $price = $priceSelected['price'] ?? ($isAuctionItem ? $product->auction_price : $product->price);
+            $itemTotalPrice = $cartItem->qty * $price;
 //            $cartItem->save();
-            $cartItem->total_discount = $isAuctionItem ? ($cartItem->qty * ($product->price - $product->auction_price)) : 0;
+//            $cartItem->total_discount = isset($priceSelected['price']) ? 0 : ($isAuctionItem ? ($cartItem->qty * ($price - $product->auction_price)) : 0);
+            $cartItem->total_discount = 0;
             $cartItem->total_price = $itemTotalPrice;
             $cartItem->total_weight = $cartItem->qty * $product->weight;
             $cartItem->unit = $product->unit;
@@ -452,9 +464,11 @@ class CartController extends Controller
         $cart->total_shipping_price = 0;
         $cart->total_items = 0;
         $cart->total_weight = 0;
+        $totalPrices = [];
 
         $shipments = [];
         foreach ($cart->shipments as $i => $items) {
+            $prices = [];
             $totalWeight = 0;
             $totalShippingPrice = 0;
             $totalItemsPrice = 0;
@@ -470,13 +484,14 @@ class CartController extends Controller
             $deliveryDate = null;
             $deliveryTimestamp = null;
             $distance = null;
+
             foreach ($items as $idx => $item) {
                 $cartItem = $item['cart_item'];
                 $repoLocation = $item['repo_location'];
                 $distance = Util::distance($cart->address['lat'] ?? null, $cart->address['lon'] ?? null, explode(',', $repoLocation)[0] ?? null, explode(',', $repoLocation)[1] ?? null, 'k');
                 $product = $cartItem->getRelation('product');
                 $totalWeight += $product->weight * $cartItem->qty;
-                $totalShippingPrice += ($product->weight * $cartItem->qty * ($item['shipping']['per_weight_price'] ?? 0));
+                $totalShippingPrice += intval($product->weight * $cartItem->qty * ($item['shipping']['per_weight_price'] ?? 0));
                 $basePrice = $basePrice > 0 ? $basePrice : ($item['shipping']['base_price'] ?? 0) + ($distance * ($item['shipping']['per_distance_price'] ?? 0));
                 $cart->total_items += $cartItem->qty ?? 0;
                 $totalItems += $cartItem->qty ?? 0;
@@ -488,7 +503,10 @@ class CartController extends Controller
                 $deliveryDate = $cartItem->delivery_date;
                 $deliveryTimestamp = $cartItem->delivery_timestamp;
                 $totalItemsPrice += $cartItem->total_price;
+
                 $totalItemsDiscount += $cartItem->total_discount;
+
+                $prices[$cartItem->price_type] = ($prices[$cartItem->price_type] ?? 0) + $cartItem->total_price;
 
                 $shipping = $item['shipping'];
                 unset($item['shipping']);
@@ -506,6 +524,8 @@ class CartController extends Controller
                 $shipping['error_message'] = $shipping['error_message'] ?? $errorMessage;
                 $errors[] = ['key' => 'location', 'type' => 'shipping', 'message' => $errorMessage];
             }
+            $prices['cash'] = ($prices['cash'] ?? 0) + $basePrice + $totalShippingPrice;
+
             $shipments[] = [
 
                 'delivery_timestamp' => $deliveryTimestamp,
@@ -524,13 +544,22 @@ class CartController extends Controller
                 'tax_price' => round($totalItemsPrice * $taxPercent / 100),
                 'total_items_discount' => $totalItemsDiscount,
                 'has_available_shipping' => $hasAvailableShipping,
-                'total_shipping_price' => $basePrice + $totalShippingPrice
+                'total_shipping_price' => $basePrice + $totalShippingPrice,
+                'prices' => $prices,
             ];
             $cart->total_shipping_price += $basePrice + $totalShippingPrice;
+
             $cart->total_weight += $totalWeight;
+
+            foreach ($prices as $key => $value) {
+                $totalPrices[$key] = ($totalPrices[$key] ?? 0) + $value;
+            }
         }
+
         $cart->errors = $errors ?? [];
         $cart->shipments = $shipments;
+        $cart->prices = $totalPrices;
+        $cart->total_cash_price = $totalPrices['cash'] ?? 0;
         $cart->tax_price = round($cart->total_items_price * $taxPercent / 100);
         $cart->total_discount = $cart->total_items_discount;
         $cart->total_price = $cart->total_items_price + $cart->total_shipping_price + $cart->tax_price /*- $cart->total_discount*/
@@ -574,6 +603,7 @@ class CartController extends Controller
             $tmpCart->total_items = 0;
             $tmpCart->total_price = 0;
             $tmpCart->total_weight = 0;
+            $tmpCart->total_cash_price = 0;
             $tmpCart->distance = null;
             $tmpShipments = collect();
             foreach ($shipments as $shipment) {
@@ -582,6 +612,7 @@ class CartController extends Controller
                 $tmpCart->repo_id = $shipment['repo_id'];
                 $tmpCart->agency_id = $shipment['agency_id'];
                 $tmpCart->distance = $shipment['distance'];
+                $tmpCart->prices = $shipment['prices'];
                 $tmpShipments->add($shipment);
                 $tmpCart->total_items_discount += $shipment['total_items_discount'];
                 $tmpCart->total_discount += $shipment['total_items_discount'];
@@ -592,12 +623,15 @@ class CartController extends Controller
 
                 $tmpCart->total_items += $shipment['total_items'];
                 $tmpCart->total_price += ($shipment['total_items_price'] + $shipment['total_shipping_price'] + $shipment['tax_price'] /*- $shipment['total_items_discount']*/);
+                $tmpCart->total_cash_price += $tmpCart->prices['cash'] ?? 0;
             }
+
             $tmpCart->shipments = $tmpShipments;
             $orders->add(clone $tmpCart);
         }
 
         $cart->orders = $orders;
+
         unset ($cart->items);
         unset ($cart->shipments);
 

@@ -39,6 +39,8 @@ return new class extends Migration {
             $table->enum('grade', Variable::GRADES)->nullable();
 
             $table->timestamps();
+            $table->enum('price_type', array_column(Variable::PRICE_TYPES, 'key'))->nullable();//deliver|cancel
+
         });
     }
 

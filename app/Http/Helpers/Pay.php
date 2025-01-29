@@ -98,6 +98,7 @@ class Pay
                         ->withUserAgent('ZarinPal Rest Api v4')
                         ->post("https://api.zarinpal.com/pg/v4/payment/request.json",
                             $data);
+
                     $result = json_decode($response->body(), true);
                     if (empty($result['errors']) && $result['data']['code'] == 100)
                         return ['status' => 'success', 'order_id' => $result['data']["authority"], 'url' => "https://www.zarinpal.com/pg/StartPay/" . $result['data']["authority"]];

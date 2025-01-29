@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helpers\Variable;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -12,7 +13,7 @@ class ShopController extends Controller
     function index()
     {
         return Inertia::render('Shop/Index', [
-
+            'price_types' => array_column(Variable::PRICE_TYPES, 'key')
         ]);
 
     }
@@ -21,6 +22,7 @@ class ShopController extends Controller
     function cartPage()
     {
         return Inertia::render('Shop/Cart', [
+            'price_types' => array_column(Variable::PRICE_TYPES, 'key')
 
         ]);
 
@@ -30,13 +32,17 @@ class ShopController extends Controller
     function shippingPage()
     {
         return Inertia::render('Shop/Cart', [
+            'price_types' => array_column(Variable::PRICE_TYPES, 'key')
 
         ]);
 
-    }   public
+    }
+
+    public
     function paymentPage()
     {
         return Inertia::render('Shop/Cart', [
+            'price_types' => array_column(Variable::PRICE_TYPES, 'key')
 
         ]);
 

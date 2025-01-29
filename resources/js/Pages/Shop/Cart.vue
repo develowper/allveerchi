@@ -26,7 +26,7 @@
               <div>{{ payment.name }}</div>
               <div class="text-xs text-gray-400 ">{{ payment.description }}</div>
             </div>
-            <CheckCircleIcon v-if="payment.selected" class="w-6 fill-primary-700"/>
+            <CheckCircleIcon v-if="payment.selected" class="w-6  "/>
 
           </div>
         </div>
@@ -101,7 +101,7 @@
 
                     <div class="text-neutral-600 mx-1">{{ __('price') }}:</div>
                     <div class="text-neutral-600 mx-1">{{
-                        asPrice(Math.round(item.cart_item.product.price))
+                        asPrice(Math.round(item.cart_item.total_price))
                       }}
                     </div>
                     <TomanIcon class="w-5 h-5 text-neutral-400"/>
@@ -111,9 +111,10 @@
                     <!--                    <div class="text-neutral-600 mx-1">{{ __('weight_unit') }}:</div>-->
                     <!--                    <div class="text-neutral-600 mx-1">{{ parseFloat(item.cart_item.product.weight) }}</div>-->
                     <!--                   -->
+
                     <div class="text-neutral-600 mx-1">{{ __('total_weight') }}:</div>
                     <div class="text-neutral-600 mx-1">{{
-                        parseFloat(item.cart_item.product.weight * item.cart_item.qty)
+                        parseFloat(item.cart_item.total_weight.toFixed(3))
                       }}
                     </div>
                     <div class="text-neutral-400 mx-1">{{ __('kg') }}</div>
@@ -128,11 +129,16 @@
               <div class="flex flex-wrap items-center justify-start my-2">
                 <CartItemButton :product-id="item.cart_item.variation_id"
                                 class="flex  min-w-[100%]   xs:min-w-[50%] sm:min-w-[36%] lg:min-w-[20%]  hover:cursor-pointer"/>
-                <div class="flex">
+                <div class="flex items-center">
                   <div class="mx-2 ">{{ asPrice(item.cart_item.total_price) }}</div>
                   <div>
                     <TomanIcon class=""/>
                   </div>
+                  <div v-if="item.cart_item.price_type" class="mx-2 text-sm text-neutral-500 ">{{
+                      `( ${__(item.cart_item.price_type)} )`
+                    }}
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -210,11 +216,22 @@
               </div>
             </div>
           </div>
-          <div class="flex border-t items-center justify-end font-bold text-sm  p-4 py-2">
-            <div class="text-neutral-600 mx-1">{{ __('order_price') }}:</div>
-            <div class="text-neutral-800 mx-1">{{ asPrice(cart.total_price) }}</div>
-            <TomanIcon class="w-5 h-5 text-neutral-400"/>
+          <div class="flex flex-col  items-end justify-center">
+
+            <div class="flex  items-center text-xs px-2 text-neutral-500 gap-1">
+              <div class="flex  " v-if="cart.prices" v-for="(price,type) in cart.prices">
+                <div v-if="price" class="font-bold">{{ asPrice(price) }}</div>
+                <div class="" v-if="price">{{ `( ${__(type)} )` }}</div>
+              </div>
+            </div>
+            <hr class="border border-b w-full  ">
+            <div class="flex  items-center justify-end font-bold text-sm  p-4 py-2">
+              <div class="text-neutral-600 mx-1">{{ __('order_price') }}:</div>
+              <div class="text-neutral-800 mx-1">{{ asPrice(cart.total_price) }}</div>
+              <TomanIcon class="w-5 h-5 text-neutral-400"/>
+            </div>
           </div>
+
         </div>
       </section>
 
@@ -249,10 +266,19 @@
             <div class="text-neutral-800 mx-1">{{ asPrice(cart.tax_price) }}</div>
             <TomanIcon class="w-5 h-5 text-neutral-400"/>
           </div>
-          <div class="flex  items-center justify-start font-bold text-sm  p-4 py-2">
-            <div class="text-neutral-600 mx-1">{{ __('total_price') }}:</div>
-            <div class="text-neutral-800 mx-1">{{ asPrice(cart.total_price) }}</div>
-            <TomanIcon class="w-5 h-5 text-neutral-400"/>
+          <div class="flex flex-col items-end justify-center">
+            <div class="flex border-b items-center text-xs p-2 text-neutral-500 gap-1">
+              <div class="flex gap-2" v-if="cart.prices" v-for="(price,type) in cart.prices">
+                <div class="font-bold">{{ asPrice(price) }}</div>
+                <div>{{ `( ${__(type)} )` }}</div>
+              </div>
+            </div>
+
+            <div class="flex  items-center justify-start font-bold text-sm  p-4 py-2">
+              <div class="text-neutral-600 mx-1">{{ __('total_price') }}:</div>
+              <div class="text-neutral-800 mx-1">{{ asPrice(cart.total_price) }}</div>
+              <TomanIcon class="w-5 h-5 text-neutral-400"/>
+            </div>
           </div>
 
 

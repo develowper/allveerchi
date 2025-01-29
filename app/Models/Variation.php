@@ -38,11 +38,13 @@ class Variation extends Model
         'customer_id',
         'unit',
         'categories',
+        'prices',
     ];
 
     protected $casts = [
         'in_auction' => 'boolean',
         'categories' => 'array',
+        'prices' => 'array',
     ];
 
     public static function getImages($id)

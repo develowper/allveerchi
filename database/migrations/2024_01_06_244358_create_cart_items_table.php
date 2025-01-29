@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Helpers\Variable;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -31,6 +32,7 @@ return new class extends Migration {
             $table->timestamps();
             $table->date('delivery_date')->nullable();//deliver|cancel
             $table->string('delivery_timestamp', 15)->nullable();//deliver|cancel
+            $table->enum('price_type', array_column(Variable::PRICE_TYPES, 'key'))->nullable();//deliver|cancel
 
         });
     }

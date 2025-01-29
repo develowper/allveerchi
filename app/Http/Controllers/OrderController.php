@@ -125,7 +125,7 @@ class OrderController extends Controller
                 $response = ['order_id' => Carbon::now()->getTimestampMs(), 'status' => 'success', 'url' => route('user.panel.order.index')];
 
                 if ($payMethod == 'wallet') {
-                    $sum = $data->total_price;
+                    $sum = $data->total_prices['cash'] ?? $data->total_price;
                     $settingDebit = Setting::getValue("max_debit_$user->role") ?? 0;
                     $uf = UserFinancial::firstOrCreate(['user_id' => $user->id], ['wallet' => 0]);
                     $wallet = $uf->wallet ?? 0;
@@ -134,7 +134,7 @@ class OrderController extends Controller
                         return response()->json(['message' => sprintf(__('validator.min_wallet'), number_format($sum - ($wallet + $maxDebit)) . " " . __('currency'), $wallet)], Variable::ERROR_STATUS);
 
                 } else
-                    $response = Pay::makeUri(Carbon::now()->getTimestampMs(), "{$data->total_price}0", $user->fullname, $user->phone, $user->email, $description, $user->id, Variable::$BANK);
+                    $response = Pay::makeUri(Carbon::now()->getTimestampMs(), ($data->total_prices['cash'] ?? $data->total_price) * 10, $user->fullname, $user->phone, $user->email, $description, $user->id, Variable::$BANK);
 
                 $t = Transaction::where('for_type', 'order')
                     ->where('for_id', $data->id)
@@ -163,12 +163,12 @@ class OrderController extends Controller
                         'info' => null,
                         'coupon' => null,
                         'payed_at' => $payMethod == 'wallet' ? $now : null,
-                        'amount' => $data->total_price,
+                        'amount' => $data->total_prices['cash'] ?? $data->total_price,
                         'pay_id' => $response['order_id'],
                     ]);
                 }
                 if ($payMethod == 'wallet') {
-                    $uf->wallet -= $data->total_price;
+                    $uf->wallet -=($data->total_prices['cash'] ?? $data->total_price);
                     $uf->save();
                     $user->updateOrderNotifications();
                     $data->payed_at = $now;
@@ -407,7 +407,9 @@ class OrderController extends Controller
             return response()->json(['message' => __('cart_is_empty'), 'cart' => $cart], Variable::ERROR_STATUS);
         }
         if ($payMethod == 'wallet') {
-            $sum = $cart->orders->sum('total_price');
+//            $sum = $cart->orders->sum('total_price');
+            $sum = $cart->orders->pluck('total_cash_price');
+
             $settingDebit = Setting::getValue("max_debit_$user->role") ?? 0;
             $uf = UserFinancial::firstOrCreate(['user_id' => $user->id], ['wallet' => 0]);
             $wallet = $uf->wallet ?? 0;
@@ -447,6 +449,8 @@ class OrderController extends Controller
                 'tax_price' => $cart->tax_price,
                 'total_weight' => $cart->total_weight,
                 'payment_method' => $cart->payment_method,
+                'total_prices' => $cart->prices,
+
             ]);
             if ($order) {
 
@@ -454,6 +458,7 @@ class OrderController extends Controller
                     'total_items_price' => $cart->total_items_price,
                     'total_price' => $cart->total_price,
                     'user_id' => $cart->user_id,
+                    'total_cash_price' => $cart->total_cash_price,
                     'agency_id' => $cart->agency_id]);
 
                 if ($payMethod == 'online')
@@ -485,6 +490,8 @@ class OrderController extends Controller
                             'total_price' => $cartItem->total_price ?? 0,
                             'discount_price' => $cartItem->discount_price ?? 0,
                             'created_at' => Carbon::now(),
+                            'price_type' => $cartItem->price_type,
+
 
                         ];
                     }
@@ -506,7 +513,8 @@ class OrderController extends Controller
         }
 //        $order_id = Carbon::now()->getTimestampMs();
         $order_ids_string = $orders->pluck('id')->join('-');
-        $price = $orders->sum('total_price');
+//        $price = $orders->sum('total_price');
+        $price = $orders->sum('total_cash_price');
 
         $description = sprintf(__('pay_orders_*_*'), $order_ids_string, $user->phone);
 
@@ -533,7 +541,8 @@ class OrderController extends Controller
                     'info' => null,
                     'coupon' => null,
                     'payed_at' => $payMethod == 'wallet' ? Carbon::now() : null,
-                    'amount' => $o['total_price'],
+                    'amount' => $o['total_cash_price'],
+//                    'amount' => $o['total_price'],
                     'pay_id' => $response['order_id'],
                 ]);
                 Order::where('id', $o['id'])->update(['transaction_id' => $t->id, 'status' => $payMethod == 'wallet' ? 'processing' : 'pending', 'payed_at' => $payMethod == 'wallet' ? Carbon::now() : null]);

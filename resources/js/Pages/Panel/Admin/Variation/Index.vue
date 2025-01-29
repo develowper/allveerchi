@@ -201,7 +201,7 @@
                         <ArrowsUpDownIcon class="w-4 h-4 "/>
                       </div>
                     </th>
-                    <th scope="col"
+                    <th v-if="false" scope="col"
                         class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
                         @click="params.order_by='auction_price';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
                       <div class="flex items-center justify-center">
@@ -454,7 +454,7 @@
                     </td>
                     <td class="px-2 py-4    ">
                       <button
-                          @click="d.idx=idx;d.cmnd='change-price';d.new_price=d.price;d.new_auction_price=d.auction_price; selected=d; "
+                          @click="d.idx=idx;d.cmnd='change-price';d.new_prices=d.prices ==null || d.prices.length ==0 ? [{}]:d.prices ;d.new_price=d.price;d.new_auction_price=d.auction_price; selected=d; "
                           id="PriceId"
                           aria-expanded="false"
                           data-te-ripple-init
@@ -466,7 +466,7 @@
                       </button>
 
                     </td>
-                    <td class="px-2 py-4    ">
+                    <td v-if="false" class="px-2 py-4    ">
                       <button
                           @click="d.idx=idx;d.cmnd='change-price';d.new_price=d.price;d.new_auction_price=d.auction_price; selected=d; "
                           id="PriceId"
@@ -607,7 +607,7 @@
               <div @click.self="selected=null;errors={}"
                    class="flex min-h-full   justify-center p-4 text-center sm:items-center sm:p-0">
                 <div
-                    class="relative transform overflow-auto rounded-lg bg-white   shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                    class="relative transform overflow-auto rounded-lg bg-white   shadow-xl transition-all sm:my-8  w-full   m-2 ">
                   <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div class=" flex flex-col items-stretch">
                       <div class="flex items-center  gap-2">
@@ -757,7 +757,7 @@
                               </div>
                             </div>
                           </div>
-                          <div v-if="selected.cmnd=='change-price'"
+                          <div v-if="false"
                                class="   text-sm text-gray-500 ">
                             <span class="text-xs py-2 text-danger-500">{{ __('help_price') }}</span>
                             <div class="flex flex-col  space-y-2 text-start ">
@@ -807,6 +807,79 @@
                               </div>
                             </div>
                           </div>
+                          <div v-if="selected.cmnd=='change-price'"
+                               class="   text-sm text-gray-500 ">
+                            <span v-if="false" class="text-xs py-2 text-danger-500">{{ __('help_price') }}</span>
+                            <table class="table-auto my-2  text-sm   text-gray-500 ">
+                              <thead>
+                              <tr>
+                                <th>{{ __('from') }}</th>
+                                <th>{{ __('until') }}</th>
+                                <th>{{ __('type') }}</th>
+                                <th>{{ __('price') }}</th>
+                                <th>{{ __('actions') }}</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr v-for="(p,idx) in selected.new_prices">
+                                <td>
+                                  <input :class="{'border-2 border-red-500':errors[`new_prices.${idx}.from`]}"
+                                         class="w-24 px-1  text-sm border-gray-400 rounded" type="number"
+                                         v-model="p.from">
+                                </td>
+                                <td>
+                                  <input :class="{'border-2 border-red-500':errors[`new_prices.${idx}.to`]}"
+                                         class="w-24  px-1 text-sm border-gray-400 rounded" type="number"
+                                         v-model="p.to">
+                                </td>
+                                <td>
+                                  <select :class="{'border-2 border-red-500':errors[`new_prices.${idx}.type`]}"
+                                          class="grow rounded  border-gray-400 cursor-pointer" name=""
+
+                                          :id=" `priceTypeSelector` " v-model="p.type">
+                                    <option class="text-start   rounded   m-1"
+                                            v-for="d in $page.props.price_types  "
+                                            :value="d.id">
+                                      <div class="p-2"> {{ __(d.name) }}</div>
+                                    </option>
+                                  </select>
+
+                                </td>
+                                <td>
+                                  <input :class="{'border-2 border-red-500':errors[`new_prices.${idx}.price`]}"
+                                         class="w-24 px-1  text-sm border-gray-400 rounded" type="number"
+                                         v-model="p.price">
+                                </td>
+                                <td class="">
+                                  <div class="flex items-center gap-1 mx-2">
+                                    <button
+                                        @click="selected.new_prices.splice(idx+1,0,{})   "
+                                        class="bg-green-500 rounded-md hover:bg-green-400 hover:cursor-pointer text-white ">
+                                      <ChevronDownIcon class="w-6 h-6 m-2"/>
+                                    </button>
+                                    <button
+                                        @click="selected.new_prices.splice(idx,1)   "
+                                        class="bg-red-500 rounded-md hover:bg-red-400 hover:cursor-pointer text-white ">
+                                      <TrashIcon class="w-6 h-6 m-2"/>
+                                    </button>
+                                    <button
+                                        @click="selected.new_prices.splice(idx ,0,{})   "
+                                        class="bg-green-500 rounded-md hover:bg-green-400 hover:cursor-pointer text-white ">
+                                      <ChevronUpIcon class="w-6 h-6 m-2"/>
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                              </tbody>
+
+
+                            </table>
+                            <button
+                                class="bg-success-200 text-success-700 p-2 rounded-lg  hover:bg-success-300 w-full"
+                                @click="edit({'idx':selected.idx ,'id':selected.id,'cmnd':'change-price','new_prices':selected.new_prices,  })">
+                              {{ __('accept') }}
+                            </button>
+                          </div>
                           <div v-if="selected.cmnd=='change-qty'"
                                class="   text-sm text-gray-500 ">
                             <span class="text-xs py-2 text-danger-500">{{ __('help_repo_shop_qty') }}</span>
@@ -850,7 +923,7 @@
                                 </div>
                                 <button
                                     class="bg-success-200 text-success-700 p-2 rounded-lg  hover:bg-success-300 w-full"
-                                    @click="edit({'idx':selected.idx ,'id':selected.id,'cmnd':'change-qty','new_in_repo':selected.new_in_repo,'new_in_shop':selected.new_in_shop, })">
+                                    @click="edit({'idx':selected.idx ,'id':selected.id,'cmnd':'change-price','new_in_repo':selected.new_in_repo,'new_in_shop':selected.new_in_shop, })">
                                   {{ __('accept') }}
                                 </button>
 
@@ -888,12 +961,14 @@ import {
   Bars2Icon,
   MagnifyingGlassIcon,
   ChevronDownIcon,
+  ChevronUpIcon,
   HomeIcon,
   XMarkIcon,
   ArrowsUpDownIcon,
   Squares2X2Icon,
   CurrencyDollarIcon,
   DocumentDuplicateIcon,
+  TrashIcon,
 
 } from "@heroicons/vue/24/outline";
 import Image from "@/Components/Image.vue"
@@ -936,6 +1011,7 @@ export default {
     Link,
     HomeIcon,
     ChevronDownIcon,
+    ChevronUpIcon,
     Panel,
     Bars2Icon,
     Image,
@@ -948,6 +1024,7 @@ export default {
     Selector,
     CurrencyDollarIcon,
     DocumentDuplicateIcon,
+    TrashIcon,
   },
   mounted() {
 
@@ -1127,6 +1204,7 @@ export default {
 
           .catch((error) => {
             this.error = this.getErrors(error);
+
 
             this.showToast('danger', this.error);
           })

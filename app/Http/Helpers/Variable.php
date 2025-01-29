@@ -126,6 +126,11 @@ class Variable
 
 
     ];
+    const PRICE_TYPES = [
+        ['key' => 'cash',],
+        ['key' => '1_check',],
+        ['key' => '2_check',],
+    ];
     const TIMESTAMPS = [
         ['from' => 7, 'to' => 10, 'active' => true],
         ['from' => 10, 'to' => 13, 'active' => true],

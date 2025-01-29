@@ -72,7 +72,7 @@
     </div>
     <!-- mobile menu -->
     <div
-        class=" h-0  block md:hidden     mobile-menu  transform transition-all duration-500  bg-primary-500 px-4 shadow-md  ">
+        class="      md:hidden     mobile-menu  transform transition-all duration-500  bg-primary-500 px-4 shadow-md  ">
       <div class="mobile-menu-content flex flex-col ">
         <Link :href="route('/')" class="px-4 mobile nav-item m-1" :class="navClasses('/')">
           {{ __('home') }}
@@ -129,26 +129,27 @@ export default {
 
       if (menu.style.height === "0px" || menu.style.height === "") {
         // Measure the height of the content
+        menuContent.classList.remove('hidden')
+
         const contentHeight = menuContent.offsetHeight;
 
         // Set the height dynamically
         menu.style.height = `${contentHeight}px`;
-        menuContent.classList.add('opacity-0')
 
       } else {
         // Collapse the menu
         menu.style.height = "0px";
-        menuContent.classList.remove('opacity-0')
+        menuContent.classList.add('hidden')
 
 
       }
     }
 
-    menuContent.classList.add('opacity-0')
+    menuContent.classList.add('hidden')
 
     btn.addEventListener("click", () => {
       slide()
-      menuContent.classList.toggle('opacity-0')
+
     });
 
     this.setScrollListener();

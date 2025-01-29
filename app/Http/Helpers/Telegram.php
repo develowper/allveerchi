@@ -646,6 +646,7 @@ class Telegram
                     $msg .= " 🔷 " . "در فروشگاه: " . floatval($data->in_shop) . PHP_EOL;
                     $msg .= " 🔶 " . "در انبار: " . floatval($data->in_repo) . PHP_EOL;
                     $msg .= " 🔷 " . "قیمت: " . number_format($data->price) . PHP_EOL;
+                    $msg .= " 🔷 " . "قیمتها: " . json_encode($data->prices) . PHP_EOL;
                     $msg .= " 🔷 " . "قیمت حراج: " . number_format($data->auction_price) . PHP_EOL;
                     $msg .= " 🖼 " . "تصویر:" . PHP_EOL . url("storage/variations/$data->id/thumb.jpg") . "?rev=" . random_int(100, 999) . PHP_EOL;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;

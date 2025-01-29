@@ -42,7 +42,12 @@ class Order extends Model
         'tax_price',
         'total_weight',
         'payment_method',
+        'total_prices',
+        'is_payable',
+    ];
 
+    protected $casts = [
+        'total_prices' => 'array',
     ];
 
     public function store(OrderRequest $request)
@@ -104,5 +109,10 @@ class Order extends Model
             default:
                 return $statuses->whereIn('name', []);
         }
+    }
+
+    public function isPayable()
+    {
+        return !$this->payed_at && in_array($this->status, ['pending', 'ready', 'shipping']);
     }
 }

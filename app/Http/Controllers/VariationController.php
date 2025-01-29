@@ -14,6 +14,7 @@ use App\Models\Pack;
 use App\Models\Product;
 use App\Models\Repository;
 use App\Models\Variation;
+use Faker\Extension\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
@@ -36,6 +37,11 @@ class VariationController extends Controller
                 $e['message'] = sprintf(__('*_will_change_to_*'), __('status'), __($e['name']));
                 return $e;
             }),
+            'price_types' => collect(Variable::PRICE_TYPES)->map(function ($e) {
+                $e['id'] = $e['key'];
+                $e['name'] = __($e['key']);
+                return $e;
+            }),
         ]);
 
     }
@@ -49,6 +55,7 @@ class VariationController extends Controller
         $data->seo = strip_tags($data->description);
         return Inertia::render('Variation/View', [
             'back_link' => url()->previous(),
+            'price_types' => array_column(Variable::PRICE_TYPES, 'key'),
             'data' => $data,
         ]);
 
@@ -139,7 +146,7 @@ class VariationController extends Controller
             'variations.pack_id as pack_id',
             'variations.grade as grade',
             'variations.price as price',
-            'variations.auction_price as auction_price',
+            'variations.prices as prices',
             'variations.auction_price as auction_price',
             'variations.weight as weight',
             'variations.in_auction as in_auction',
@@ -578,6 +585,53 @@ class VariationController extends Controller
                     return response()->json(['message' => __('updated_successfully'),], $successStatus);
 
                     break;
+                case 'change-price':
+                    $request->merge([
+                        'changed' => $request->new_prices != $data->prices],
+                    );
+                    $request->validate(
+                        [
+                            'changed' => [Rule::in([true])],
+                            'new_prices' => ['sometimes', 'array', 'min:0'],
+                            'new_prices.*.from' => ['required', 'integer', 'gte:0'],
+                            'new_prices.*.to' => ['required', 'integer', 'gt:new_prices.*.from'],
+                            'new_prices.*.type' => ['required', Rule::in(array_column(Variable::PRICE_TYPES, 'key'))],
+                            'new_prices.*.price' => ['required', 'integer', 'gte:0'],
+
+                        ],
+                        [
+                            'new_prices.*.from.required' => sprintf(__('validator.required'), __('from')),
+                            'new_prices.*.from.numeric' => sprintf(__('validator.invalid'), __('from')),
+
+                            'new_prices.*.to.required' => sprintf(__('validator.required'), __('until')),
+                            'new_prices.*.to.numeric' => sprintf(__('validator.invalid'), __('until')),
+                            'new_prices.*.to.gt' => sprintf(__('validator.gt'), __('until'), __('from')),
+
+                            'new_prices.*.type.required' => sprintf(__('validator.required'), __('type')),
+                            'new_prices.*.type.in' => sprintf(__('validator.invalid'), __('type')),
+
+                            'new_prices.*.price.required' => sprintf(__('validator.required'), __('price')),
+                            'new_prices.*.price.numeric' => sprintf(__('validator.invalid'), __('price')),
+                            'new_prices.*.price.gte' => sprintf(__('validator.gt'), __('price'), 0),
+
+                            'new_price.required' => sprintf(__('validator.required'), __('new_price')),
+                            'new_price.numeric' => sprintf(__('validator.invalid'), __('new_price')),
+                            'new_price.gt' => sprintf(__('validator.gt'), __('new_price'), __('new_auction_price')),
+
+                            'new_auction_price.required' => sprintf(__('validator.required'), __('new_auction_price')),
+                            'new_auction_price.numeric' => sprintf(__('validator.invalid'), __('new_auction_price')),
+                            'new_auction_price.min' => sprintf(__('validator.min'), __('new_auction_price'), 0),
+
+                            'changed' => __('not_any_change'),
+                        ]);
+                    $data->update(['prices' => $request->new_prices,]);
+
+                    $data->repo = Repository::find($data->repo_id);
+                    $data->agency = Agency::find($data->agency_id);
+                    Telegram::log(null, 'variation_edited', $data);
+
+                    return response()->json(['message' => __('updated_successfully'),], $successStatus);
+
                 case 'change-price':
                     $request->merge([
                         'changed' => $request->new_price != $data->price || $request->new_auction_price != $data->auction_price],

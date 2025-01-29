@@ -60,7 +60,8 @@
                     <div class="text-sm text-neutral-500   ">{{ __('kg') }}</div>
 
                   </div>
-                  <div class="flex items-center justify-end text-neutral-900 font-bold">
+                  <div v-if="!data.prices || data.prices.length==0"
+                       class="flex items-center justify-end text-neutral-900 font-bold">
                     <div class="flex items-center "
                          :class="{'line-through  ':$page.props.is_auction && data.in_auction}">
                       {{ asPrice(data.price) }}
@@ -81,6 +82,22 @@
 
                     </div>
                     <TomanIcon class="w-4 h-4 mx-2"/>
+                  </div>
+                  <div v-else class="flex items-center justify-end">
+                    <div class="flex flex-col items-end  ">
+                      <div v-for="(pr,idx) in data.prices" class="">
+                        <div class="flex   text-xs justify-between gap-2 items-center">
+
+                          <div>{{ `${pr.from} - ${pr.to}` }}</div>
+                          <div>{{ `( ${__(pr.type)} )` }}</div>
+                          <div class="flex items-center">
+                            <div>{{ asPrice(Math.round(pr.price)) }}</div>
+                            <TomanIcon class="w-4 h-4 mx-2"/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>

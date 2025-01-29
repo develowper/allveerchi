@@ -55,7 +55,7 @@ return new class extends Migration {
             $table->unsignedInteger('distance')->nullable();
             $table->unsignedInteger('tax_price')->default(0);
             $table->unsignedDecimal('total_weight', 8, 3)->default(0); //kg
-
+            $table->json('total_prices')->nullable();
         });
     }
 
