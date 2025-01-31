@@ -226,7 +226,17 @@ export default {
 
     createName(d) {
       if (!d) return '';
-      return `${d.name} | ${this.getPack(d.pack_id)} | ${this.__('grade')} ${d.grade} | ${parseFloat(d.weight)} ${this.__('kg')} `
+      let s = [];
+      if (d.name)
+        s.push(d.name)
+
+      if (d.pack_id)
+        s.push(this.getPack(d.pack_id))
+      if (d.grade)
+        s.push(d.grade)
+      s.push(`${parseFloat(d.weight)} ${this.__('kg')}`)
+      return s.join(' _ ')
+      return `${d.name} | ${this.getPack(d.pack_id)} | ${d.grade ? this.__('grade') : ''} ${d.grade || ''} | ${parseFloat(d.weight)} ${this.__('kg')} `
     },
     remove(idx) {
       this.selecteds.splice(idx, 1);
@@ -277,7 +287,7 @@ export default {
       window.axios.get(this.link, {params: this.params}, {})
 
           .then((response) => {
-            
+
             this.data = response.data;
 
             delete response.data;

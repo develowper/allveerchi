@@ -39,6 +39,7 @@ class Order extends Model
         'distance',
         'coupon',
         'change_price',
+        'change_prices',
         'tax_price',
         'total_weight',
         'payment_method',
@@ -48,6 +49,7 @@ class Order extends Model
 
     protected $casts = [
         'total_prices' => 'array',
+        'change_prices' => 'array',
     ];
 
     public function store(OrderRequest $request)

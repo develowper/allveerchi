@@ -91,18 +91,27 @@ class OrderController extends Controller
             $data->repository->setRelation('shippingMethods', $methods);
         }
         $data->delivery_date = $data->delivery_date ? Jalalian::fromDateTime($data->delivery_date)->format('Y/m/d') : null;
+        $changePrices = [];
+        foreach (array_column(Variable::PRICE_TYPES, 'key') as $item) {
+            $changePrices[$item] = $data->change_prices[$item] ?? 0;
+        }
+        $data->change_prices = $changePrices;
+
         $items = $data->getRelation('items');
+        $variations = Variation::whereIn('id', $items->pluck('variation_id'))->select('id', 'prices')->get();
         foreach ($items as $item) {
             $item->id = $item->variation_id;
             $item->qty = floatval($item->qty);
             $item->price = $item->total_price / ($item->qty ?? 1);
             $item->weight = $item->total_weight / ($item->qty ?? 1);
+            $item->prices = $variations->where('id', $item->variation_id)->first()->prices ?? [];
         }
+
         $data->setRelation('products', $items);
         return Inertia::render('Panel/' . ($user instanceof Admin ? 'Admin/Order/User' : 'Order') . '/Edit', [
             'statuses' => Variable::STATUSES,
             'data' => $data,
-
+            'price_types' => array_column(Variable::PRICE_TYPES, 'key'),
         ]);
     }
 
@@ -123,9 +132,9 @@ class OrderController extends Controller
                 $payMethod = $request->payment_method ?? 'online';
                 $description = sprintf(__('pay_orders_*_*'), $data->id, $user->phone);
                 $response = ['order_id' => Carbon::now()->getTimestampMs(), 'status' => 'success', 'url' => route('user.panel.order.index')];
-
+                $cashPrice = $data->total_prices['cash'] ?? 0;
                 if ($payMethod == 'wallet') {
-                    $sum = $data->total_prices['cash'] ?? $data->total_price;
+                    $sum = $cashPrice;
                     $settingDebit = Setting::getValue("max_debit_$user->role") ?? 0;
                     $uf = UserFinancial::firstOrCreate(['user_id' => $user->id], ['wallet' => 0]);
                     $wallet = $uf->wallet ?? 0;
@@ -133,8 +142,8 @@ class OrderController extends Controller
                     if (($wallet + $maxDebit) - $sum < 0)
                         return response()->json(['message' => sprintf(__('validator.min_wallet'), number_format($sum - ($wallet + $maxDebit)) . " " . __('currency'), $wallet)], Variable::ERROR_STATUS);
 
-                } else
-                    $response = Pay::makeUri(Carbon::now()->getTimestampMs(), ($data->total_prices['cash'] ?? $data->total_price) * 10, $user->fullname, $user->phone, $user->email, $description, $user->id, Variable::$BANK);
+                } elseif ($cashPrice)
+                    $response = Pay::makeUri(Carbon::now()->getTimestampMs(), ($cashPrice) * 10, $user->fullname, $user->phone, $user->email, $description, $user->id, Variable::$BANK);
 
                 $t = Transaction::where('for_type', 'order')
                     ->where('for_id', $data->id)
@@ -143,13 +152,13 @@ class OrderController extends Controller
                 if ($t) {
                     $t->pay_id = $response['order_id'];
                     $t->amount = $data->total_price;
-                    $t->payed_at = $payMethod == 'wallet' ? $now : null;
+                    $t->payed_at = $payMethod == 'wallet' || $cashPrice == 0 ? $now : null;
                     $t->pay_gate = $payMethod == 'online' ? Variable::$BANK : $payMethod;
                     $t->title = sprintf(($payMethod == 'wallet' ? __('pay_orders_wallet_*_*') : __('pay_orders_*_*')), $data->id, $user->phone);
 
                     $t->save();
                 }
-                if (!$t) {
+                if (!$t && $cashPrice) {
                     $t = Transaction::create([
                         'title' => sprintf(($payMethod == 'wallet' ? __('pay_orders_wallet_*_*') : __('pay_orders_*_*')), $data->id, $user->phone),
                         'type' => "pay",
@@ -162,13 +171,13 @@ class OrderController extends Controller
                         'to_id' => 1,
                         'info' => null,
                         'coupon' => null,
-                        'payed_at' => $payMethod == 'wallet' ? $now : null,
-                        'amount' => $data->total_prices['cash'] ?? $data->total_price,
+                        'payed_at' => $payMethod == 'wallet' || $cashPrice == 0 ? $now : null,
+                        'amount' => $cashPrice,
                         'pay_id' => $response['order_id'],
                     ]);
                 }
                 if ($payMethod == 'wallet') {
-                    $uf->wallet -=($data->total_prices['cash'] ?? $data->total_price);
+                    $uf->wallet -= $cashPrice;
                     $uf->save();
                     $user->updateOrderNotifications();
                     $data->payed_at = $now;
@@ -176,7 +185,8 @@ class OrderController extends Controller
                     $data->transaction_id = $t->id;
                     $data->status = $data->status == 'pending' ? 'processing' : $data->status;
                     $data->save();
-                    Telegram::log(null, 'transaction_created', $t);
+                    if ($t)
+                        Telegram::log(null, 'transaction_created', $t);
                     Telegram::log(null, 'order_status_edited', $data);
                     return response(['status' => $data->status, 'payed_at' => $now->toDateTimeString(), 'wallet' => $uf->wallet ?? 0, 'message' => __('payed_successfully'), 'url' => $response['url']], Variable::SUCCESS_STATUS);
 
@@ -247,7 +257,7 @@ class OrderController extends Controller
                             $userF = UserFinancial::firstOrNew(['user_id' => $data->user_id]);
                             if (!$data->user_id)
                                 return response()->json(['message' => __('user_not_found'), 'status' => $data->status,], $errorStatus);
-                            $userF->wallet += $data->total_price;
+                            $userF->wallet += $data->total_prices['cash'] ?? 0;
                             $userF->save();
                         }
                         //return order to repo
@@ -279,7 +289,7 @@ class OrderController extends Controller
             }
         } elseif ($data) {
 
-
+//
             $request->validate(
                 [
                     'new_in_repo' => in_array($cmnd, ['change-repo', 'change-grade-pack-weight']) ? [Rule::requiredIf(in_array($cmnd, ['change-repo', 'change-grade-pack-weight'])), 'numeric', "max:$data->in_repo", 'min:0'] : [],
@@ -300,7 +310,8 @@ class OrderController extends Controller
             ]);
             $beforeItems = $data->getRelation('items');
             $databaseProducts = $request->database_products;
-
+            $totalPrices = [];
+            $changePrices = $request->change_prices;
             //delete removed order items
             $returnItemsToShop = OrderItem::where('order_id', $data->id)->whereNotIn('variation_id', array_column($request->products, 'id'))->get();
             foreach ($returnItemsToShop as $item) {
@@ -312,22 +323,29 @@ class OrderController extends Controller
                 OrderItem::whereId($item->id)->delete();
             }
             foreach ($request->products as $p) {
+
                 if ($p['qty'] == 0) {
                     OrderItem::where('variation_id', $p['id'])->delete();
                     continue;
                 }
                 $beforeItem = $beforeItems->where('variation_id', $p['id'])->first();
                 $product = $databaseProducts->where('id', $p['id'])->first();
+
+                $price = collect($product->prices ?? [])->where('type', '=', $p['price_type'])->where('from', '<=', $p['qty'])->where('to', '>=', $p['qty'])->first()['price'] ?? 0;
+                $p['total_price'] = $price * $p['qty'];
+                $totalPrices[$p['price_type']] = ($totalPrices[$p['price_type']] ?? 0) + $p['total_price'];
                 if ($beforeItem) {
                     $dif = $beforeItem->qty - $p['qty'];
 
-
                     $beforeItem->qty = $p['qty'];
                     $beforeItem->total_price = $p['total_price'];
+                    $beforeItem->price_type = $p['price_type'];
 
                     $beforeItem->save();
                     $item = $beforeItem;
+
                 } else {
+
                     $dif = -$p['qty'];
                     DB::table('order_items')->insert([
                         'title' => "$product->name ( " . floatval($p['qty']) . " " . optional(Pack::find($product->pack_id))->name . " " . ($product->grade ? (__('grade') . " $product->grade ") : '') . floatval($product->weight) . " " . __('kg') . " )",
@@ -341,6 +359,7 @@ class OrderController extends Controller
                         'repo_id' => $data->repo_id,
                         'total_price' => $p['total_price'],
                         'discount_price' => $p['discount_price'],
+                        'price_type' => $p['price_type'],
                         'created_at' => Carbon::now(),
                     ]);
                     $item = (object)['variation_id' => $product->id];
@@ -355,6 +374,17 @@ class OrderController extends Controller
 
                 }
             }
+
+            $changePrices = $request->change_prices ?? [];
+            foreach ($changePrices as $idx => $changePrice) {
+                $changePrices[$idx] = $changePrices[$idx] ?? 0;
+
+            }
+            foreach ($totalPrices as $idx => $price) {
+                $totalPrices[$idx] = ($totalPrices[$idx] ?? 0) + ($request->change_prices[$idx] ?? 0);
+            }
+            $totalPrices['cash'] = ($totalPrices['cash'] ?? 0) + ($request->total_shipping_price ?? 0);
+            $request->merge(['change_prices' => $changePrices, 'total_prices' => $totalPrices, 'total_price' => array_sum($totalPrices)]);
 
 
             $order = $data;
@@ -461,7 +491,7 @@ class OrderController extends Controller
                     'total_cash_price' => $cart->total_cash_price,
                     'agency_id' => $cart->agency_id]);
 
-                if ($payMethod == 'online')
+                if ($payMethod == 'online' && $cart->total_cash_price > 0)
                     $pendingOrders++;
                 $items = [];
                 $shippings = [];
@@ -520,32 +550,33 @@ class OrderController extends Controller
 
         $response = ['order_id' => Carbon::now()->getTimestampMs(), 'status' => 'success', 'url' => route('user.panel.order.index')];
 
-        if ($payMethod == 'online')
+        if ($payMethod == 'online' && $price > 0)
             $response = Pay::makeUri($order_ids_string, "{$price}0", $user->fullname, $user->phone, $user->email, $description, optional($user)->id, Variable::$BANK);
 
         if ($response['status'] != 'success')
             return response()->json(['status' => 'danger', 'message' => $response['message']], Variable::ERROR_STATUS);
         elseif ($payMethod != 'local') { //success
             foreach ($orders as $o) {
-
-                $t = Transaction::create([
-                    'title' => sprintf(($payMethod == 'wallet' ? __('pay_orders_wallet_*_*') : __('pay_orders_*_*')), $o['id'], $user->phone),
-                    'type' => "pay",
-                    'pay_gate' => $payMethod == 'online' ? Variable::$BANK : $payMethod,
-                    'for_type' => 'order',
-                    'for_id' => $o['id'],
-                    'from_type' => 'user',
-                    'from_id' => $o['user_id'],
-                    'to_type' => 'agency',
-                    'to_id' => 1,
-                    'info' => null,
-                    'coupon' => null,
-                    'payed_at' => $payMethod == 'wallet' ? Carbon::now() : null,
-                    'amount' => $o['total_cash_price'],
+                $t = null;
+                if ($o['total_cash_price'] > 0)
+                    $t = Transaction::create([
+                        'title' => sprintf(($payMethod == 'wallet' ? __('pay_orders_wallet_*_*') : __('pay_orders_*_*')), $o['id'], $user->phone),
+                        'type' => "pay",
+                        'pay_gate' => $payMethod == 'online' ? Variable::$BANK : $payMethod,
+                        'for_type' => 'order',
+                        'for_id' => $o['id'],
+                        'from_type' => 'user',
+                        'from_id' => $o['user_id'],
+                        'to_type' => 'agency',
+                        'to_id' => 1,
+                        'info' => null,
+                        'coupon' => null,
+                        'payed_at' => $payMethod == 'wallet' ? Carbon::now() : null,
+                        'amount' => $o['total_cash_price'],
 //                    'amount' => $o['total_price'],
-                    'pay_id' => $response['order_id'],
-                ]);
-                Order::where('id', $o['id'])->update(['transaction_id' => $t->id, 'status' => $payMethod == 'wallet' ? 'processing' : 'pending', 'payed_at' => $payMethod == 'wallet' ? Carbon::now() : null]);
+                        'pay_id' => $response['order_id'],
+                    ]);
+                Order::where('id', $o['id'])->update(['transaction_id' => $t->id ?? null, 'status' => ($payMethod == 'wallet' || $o['total_cash_price'] == 0) ? 'processing' : 'pending', 'payed_at' => $payMethod == 'wallet' ? Carbon::now() : null]);
 
             }
             if ($payMethod == 'wallet') {
@@ -648,6 +679,7 @@ class OrderController extends Controller
             'total_discount',
             'total_items',
             'total_price',
+            'total_prices',
             'total_items_price',
             'total_shipping_price',
             'created_at',

@@ -47,6 +47,7 @@ class ProductController extends Controller
             'variations.pack_id as pack_id',
             'variations.grade as grade',
             'variations.price as price',
+            'variations.prices as prices',
             'variations.auction_price as auction_price',
             'variations.auction_price as auction_price',
             'variations.weight as weight',

@@ -254,7 +254,6 @@ export default {
     if (this.preload)
       if (!this.multi) {
         if (this.preload.id) {
-          console.log(this.preload)
           this.selectItem(this.preload);
 
         }

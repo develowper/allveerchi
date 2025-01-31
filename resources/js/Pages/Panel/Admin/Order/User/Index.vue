@@ -308,7 +308,12 @@
                       {{ asPrice(d.total_discount) }}
                     </td>
                     <td>
-                      {{ asPrice(d.total_price) }}
+                      <div class="flex flex-col">
+                        <div class="font-bold"> {{ asPrice(d.total_price) }}</div>
+                        <template v-for="(pr,idx) in d.total_prices">
+                          <div class=" text-neutral-500">{{ `${asPrice(pr)}(${__(idx)})` }}</div>
+                        </template>
+                      </div>
                     </td>
                     <td>
                       {{ toShamsi(d.created_at, true) }}

@@ -112,7 +112,7 @@
                                      :link="route('admin.panel.product.tree')+`?repo_id=${data.repo_id}`"
                                      :multi="true" mode="count"
                                      :preload="data.products "
-                                     @change="($e)=> data.products=$e.map(e=>{e.qty=(data.items.filter(el=>el.variation_id==e.id)[0]||{qty:0}).qty ;return e;})"
+                                     @change="($e)=> data.products=$e.map(e=>{e.qty=(data.products.filter(el=>el.id==e.id)[0]||{qty:0}).qty ;e.price_type=(data.products.filter(el=>el.id==e.id)[0]||{price_type:null}).price_type ;return e;})"
                                      :label="__('products')"
                                      :error="``"/>
                     <div class="     w-full overflow-x-auto   md:rounded-lg">
@@ -158,6 +158,12 @@
                             </div>
                           </th>
 
+                          <th scope="col"
+                              class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]">
+                            <div class="flex items-center justify-center">
+                              <span class="px-2">    {{ __('price_type') }} </span>
+                            </div>
+                          </th>
                           <th scope="col"
                               class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]">
                             <div class="flex items-center justify-center">
@@ -222,6 +228,25 @@
 
                           </td>
                           <td class="px-2 py-4    ">
+                            <div class=" font-semibold ">
+                              <select
+                                  class="grow rounded w-24 ps-6 pe-0 text-xs  border-gray-400 cursor-pointer"
+                                  name=""
+
+                                  @change="($e)=>d.price=((d.prices || []).filter(i => i.type == d.price_type && d.qty >= i.from && d.qty <= i.to)[0] || [{price: 0}]).price"
+                                  :id=" `priceTypeSelector` " v-model="d.price_type">
+
+                                <option class="text-start  text-neutral-500  rounded   m-1"
+                                        v-for="(d,idx) in d.prices  " :name="d.type"
+                                        :value="d.type">
+                                  <div class="m-1"> {{ `${d.from}-${d.to} ${__(d.type)}` }}</div>
+                                </option>
+                              </select>
+                            </div>
+
+                          </td>
+                          <td class="px-2 py-4    ">
+
                             <div class=" font-semibold ">{{
                                 asPrice(d.price)
                               }}
@@ -292,25 +317,24 @@
                       <TomanIcon class="mx-1"/>
                     </div>
                   </div>
+
                   <div class="flex items-center">
                     <div>{{ __('change_price') }}:</div>
-                    <div class="font-semibold mx-1 flex items-center">
-                      <span> {{ asPrice(data.change_price) }}</span>
-                      <TomanIcon class="mx-1"/>
+                    <div class="flex flex-col items-center" v-for="(pr,idx) in $page.props.price_types">
+                      <div class="flex items-center">
+                        <TextInput class="w-32"
+                                   id="change_price"
+                                   type="number"
+                                   placeholder=""
+                                   classes=" p-1 mx-1  "
+                                   v-model="data.change_prices[pr]"
+                                   autocomplete="change_price"
+                                   :error="errors.change_prices?errors.change_prices[pr]:null">
+                        </TextInput>
+                        <TomanIcon class="mx-1"/>
+                      </div>
+                      <div class="text-xs font-bold">{{ __(pr) }}</div>
                     </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div>{{ __('items_price') }}:</div>
-                    <TextInput
-                        id="items_price"
-                        type="number"
-                        placeholder=""
-                        classes=" p-1 mx-1   "
-                        v-model="data.total_items_price"
-                        autocomplete="change_price"
-                        :error="errors.total_items_price">
-                    </TextInput>
-                    <TomanIcon class="mx-1"/>
                   </div>
                   <div class="flex items-center">
                     <div>{{ __('shipping_price') }}:</div>
@@ -325,12 +349,23 @@
                     </TextInput>
                     <TomanIcon class="mx-1"/>
                   </div>
-
+                  <div class="flex items-center">
+                    <div>{{ __('price') }}:</div>
+                    <div v-for="(pr,idx) in  $page.props.price_types">
+                      <div class="font-semibold mx-1 flex items-center">
+                        <span> {{
+                            asPrice(parseInt(data.change_prices[pr] || 0) + (pr == 'cash' ? data.total_shipping_price : 0) + mySum(data.products.filter(i => i.price_type == pr).map(ix => ix.price * ix.qty)))
+                          }}</span>
+                        <TomanIcon class="mx-1"/>
+                        <div class="mx-1">({{ __(pr) }})</div>
+                      </div>
+                    </div>
+                  </div>
 
                   <div class="flex items-center border-t py-2">
                     <div class="font-bold">{{ __('sum') }}:</div>
                     <div class="font-semibold mx-1">{{
-                        asPrice(mySum([parseInt(data.total_items_price), Math.abs(data.total_shipping_price) || 0, -Math.abs(data.total_discount) || 0,]))
+                        asPrice(mySum([parseInt(data.total_items_price), Math.abs(data.total_shipping_price) || 0, -Math.abs(data.total_discount) || 0, mySum($page.props.price_types.map(pr => parseInt((data.change_prices || {})[pr]) || 0))]))
                       }}
                     </div>
                     <TomanIcon class="mx-1"/>
@@ -530,8 +565,9 @@ export default {
       params.agency_id = this.data.agency_id;
       params._method = 'PATCH';
       params.products = this.data.products.map(e => {
-        return {id: e.id, qty: e.qty}
+        return {id: e.id, qty: e.qty, price_type: e.price_type}
       });
+      params.change_prices = this.data.change_prices;
       params.delivery_date = this.data.delivery_date;
       params.delivery_timestamp = this.data.delivery_timestamp;
 
