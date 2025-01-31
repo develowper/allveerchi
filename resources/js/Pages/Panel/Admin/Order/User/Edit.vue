@@ -263,6 +263,7 @@
                                   :placeholder="``"
                                   classes=" p-0 max-w-[5rem]"
                                   v-model="d.qty"
+                                  @input="($e)=>d.price=((d.prices || []).filter(i => i.type == d.price_type && d.qty >= i.from && d.qty <= i.to)[0] || [{price: 0}]).price"
                                   autocomplete="qty"
                                   :error="errors[`products.${idx}.qty`]">
 
@@ -354,7 +355,7 @@
                     <div v-for="(pr,idx) in  $page.props.price_types">
                       <div class="font-semibold mx-1 flex items-center">
                         <span> {{
-                            asPrice(parseInt(data.change_prices[pr] || 0) + (pr == 'cash' ? data.total_shipping_price : 0) + mySum(data.products.filter(i => i.price_type == pr).map(ix => ix.price * ix.qty)))
+                            asPrice(parseInt(data.change_prices[pr] || 0) + (pr == 'cash' ? parseInt(data.total_shipping_price) : 0) + mySum(data.products.filter(i => i.price_type == pr).map(ix => ix.price * ix.qty)))
                           }}</span>
                         <TomanIcon class="mx-1"/>
                         <div class="mx-1">({{ __(pr) }})</div>
