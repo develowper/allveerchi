@@ -112,7 +112,7 @@
                                      :link="route('admin.panel.product.tree')+`?repo_id=${data.repo_id}`"
                                      :multi="true" mode="count"
                                      :preload="data.products "
-                                     @change="($e)=> data.products=$e.map(e=>{e.qty=(data.products.filter(el=>el.id==e.id)[0]||{qty:0}).qty ;e.price_type=(data.products.filter(el=>el.id==e.id)[0]||{price_type:null}).price_type ;return e;})"
+                                     @change="($e)=> updateProducts($e)"
                                      :label="__('products')"
                                      :error="``"/>
                     <div class="     w-full overflow-x-auto   md:rounded-lg">
@@ -186,7 +186,7 @@
                         </thead>
                         <tbody
                             class="       text-xs   ">
-                        <tr v-for="(d,idx) in   data.products  "
+                        <tr v-for="(d,idx,index) in   data.products  " :key="index"
                             class="text-center border-b hover:bg-gray-50 " :class="idx%2==1?'bg-gray-50':'bg-white'">
 
                           <td class="px-2 py-4    ">
@@ -263,7 +263,7 @@
                                   :placeholder="``"
                                   classes=" p-0 max-w-[5rem]"
                                   v-model="d.qty"
-                                  @input="($e)=>d.price=((d.prices || []).filter(i => i.type == d.price_type && d.qty >= i.from && d.qty <= i.to)[0] || [{price: 0}]).price"
+                                  @input="($e)=> d.price=((d.prices || []).filter(i => i.type == d.price_type && d.qty >= i.from && d.qty <= i.to)[0] || [{price: 0}]).price"
                                   autocomplete="qty"
                                   :error="errors[`products.${idx}.qty`]">
 
@@ -278,7 +278,7 @@
                                 class=" inline-flex rounded-md shadow-sm transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
                                 role="group">
                               <PrimaryButton type="button"
-                                             @click="data.products.splice(idx,1);$refs.variationSelector.selecteds.splice(idx,1) "
+                                             @click="$refs.variationSelector.remove(idx ); "
                                              class="bg-red-500 hover:bg-red-400 text-sm  ms-auto">
                                 <TrashIcon class="w-4 h-4 "/>
                               </PrimaryButton>
@@ -366,7 +366,7 @@
                   <div class="flex items-center border-t py-2">
                     <div class="font-bold">{{ __('sum') }}:</div>
                     <div class="font-semibold mx-1">{{
-                        asPrice(mySum([parseInt(data.total_items_price), Math.abs(data.total_shipping_price) || 0, -Math.abs(data.total_discount) || 0, mySum($page.props.price_types.map(pr => parseInt((data.change_prices || {})[pr]) || 0))]))
+                        asPrice(mySum([mySum(data.products.map(i => i.price * i.qty)), Math.abs(data.total_shipping_price) || 0, -Math.abs(data.total_discount) || 0, mySum($page.props.price_types.map(pr => parseInt((data.change_prices || {})[pr]) || 0))]))
                       }}
                     </div>
                     <TomanIcon class="mx-1"/>
@@ -532,6 +532,16 @@ export default {
         this.updateAddress(this.preloadAddress);
 
       });
+    },
+    updateProducts($e) {
+      // this.log($e)
+      this.data.products = $e.map(e => {
+        let item = this.data.products.filter(el => el.id == e.id)[0] || {qty: 0, price_type: null, price: 0};
+        e.qty = item.qty;
+        e.price_type = item.price_type;
+        e.price = item.price;
+        return e;
+      })
     },
     updateAddress(address) {
       address = address || {};

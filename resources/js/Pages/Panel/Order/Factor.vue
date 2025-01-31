@@ -156,9 +156,10 @@
             }}
           </td>
           <td class="border text-center p-2  ">
-            {{
-              `${asPrice(item.total_price) || ''}`
-            }}
+            <div class="flex flex-col items-center">
+              <div> {{ asPrice(item.total_price) }}</div>
+              <div class="text-xs text-neutral-500">{{ __(item.price_type) }}</div>
+            </div>
           </td>
         </tr>
         <tr>
@@ -173,7 +174,8 @@
           <td colspan="5" class="border text-center p-2">{{ __('shipping_price') }}</td>
           <td colspan="1" class="border text-center p-2">{{
               data.shipping_method && data.shipping_method.pay_type == 'local' ? __('local') : asPrice(data.total_shipping_price)
-            }}</td>
+            }}
+          </td>
         </tr>
 
         <tr v-if="data.change_price">

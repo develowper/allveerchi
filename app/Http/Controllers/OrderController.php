@@ -376,15 +376,17 @@ class OrderController extends Controller
             }
 
             $changePrices = $request->change_prices ?? [];
+            $totalItemsPrice = array_sum($totalPrices);
             foreach ($changePrices as $idx => $changePrice) {
                 $changePrices[$idx] = $changePrices[$idx] ?? 0;
 
             }
-            foreach ($totalPrices as $idx => $price) {
+            foreach (array_column(Variable::PRICE_TYPES, 'key') as $idx) {
                 $totalPrices[$idx] = ($totalPrices[$idx] ?? 0) + ($request->change_prices[$idx] ?? 0);
             }
             $totalPrices['cash'] = ($totalPrices['cash'] ?? 0) + ($request->total_shipping_price ?? 0);
-            $request->merge(['change_prices' => $changePrices, 'total_prices' => $totalPrices, 'total_price' => array_sum($totalPrices)]);
+
+            $request->merge(['change_prices' => $changePrices, 'change_price' => array_sum($changePrices), 'total_prices' => $totalPrices, 'total_items_price' => $totalItemsPrice, 'total_price' => array_sum($totalPrices)]);
 
 
             $order = $data;
