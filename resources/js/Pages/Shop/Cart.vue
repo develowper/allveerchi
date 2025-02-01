@@ -95,16 +95,25 @@
                     <div class="text-neutral-400"> {{ getPack(item.cart_item.product.pack_id) }}</div>
                   </div>
 
-                  <div class="flex  items-center text-sm">
-                    <!--                    <div class="text-neutral-600 mx-1">{{ __('price_unit') }}:</div>-->
-                    <!--                    <div class="text-neutral-600 mx-1">{{ asPrice(item.cart_item.product.price) }}</div>-->
-
-                    <div class="text-neutral-600 mx-1">{{ __('price') }}:</div>
-                    <div class="text-neutral-600 mx-1">{{
-                        asPrice(Math.round(item.cart_item.total_price))
-                      }}
+                  <div class="flex flex-col  items-start text-sm">
+                    <div class="flex"
+                         v-if="(item.cart_item.product.prices || []).filter(i => i.type == item.cart_item.price_type && i.from <= item.cart_item.qty && i.to >= item.cart_item.qty).length>0">
+                      <div class="text-neutral-500 mx-1">{{ __('price_unit') }}:</div>
+                      <div class="text-neutral-700 mx-1">{{
+                          asPrice((item.cart_item.product.prices || []).filter(i => i.type == item.cart_item.price_type && i.from <= item.cart_item.qty && i.to >= item.cart_item.qty)[0].price)
+                        }}
+                      </div>
+                      <TomanIcon class="w-5 h-5 text-neutral-400"/>
+                      
                     </div>
-                    <TomanIcon class="w-5 h-5 text-neutral-400"/>
+                    <div class="flex">
+                      <div class="text-neutral-500 mx-1">{{ __('price') }}:</div>
+                      <div class="text-neutral-700 mx-1">{{
+                          asPrice(Math.round(item.cart_item.total_price))
+                        }}
+                      </div>
+                      <TomanIcon class="w-5 h-5 text-neutral-400"/>
+                    </div>
 
                   </div>
                   <div v-if="true" class="flex  items-center text-sm">
