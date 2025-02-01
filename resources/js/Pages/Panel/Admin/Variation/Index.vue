@@ -923,7 +923,7 @@
                                 </div>
                                 <button
                                     class="bg-success-200 text-success-700 p-2 rounded-lg  hover:bg-success-300 w-full"
-                                    @click="edit({'idx':selected.idx ,'id':selected.id,'cmnd':'change-price','new_in_repo':selected.new_in_repo,'new_in_shop':selected.new_in_shop, })">
+                                    @click="edit({'idx':selected.idx ,'id':selected.id,'cmnd':'change-qty','new_in_repo':selected.new_in_repo,'new_in_shop':selected.new_in_shop, })">
                                   {{ __('accept') }}
                                 </button>
 
