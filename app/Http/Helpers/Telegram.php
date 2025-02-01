@@ -1252,7 +1252,7 @@ class Telegram
 
                     break;
 
-                case 'product_edited':
+                case 'product_edited2':
                     $shop = \App\Models\Shop::firstOrNew(['id' => $data->shop_id]);
                     $msg .= " 🟪 " . ($admin ? "ادمین *$admin* $attribute یک محصول را ویرایش کرد" : " $attribute یک محصول ویرایش شد") . PHP_EOL;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
