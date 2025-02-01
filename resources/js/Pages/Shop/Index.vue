@@ -67,7 +67,7 @@
                     <!--                       classes="object-cover  h-full w-full  rounded-t-lg rounded-b   "-->
                     <!--                       :src="route('storage.variations')+`/${p.id}/thumb.jpg`"></Image> -->
                     <Image classes="object-contain  h-full w-full  rounded-t-lg rounded-b  "
-                           :src="route('storage.variations')+`/${p.id}/thumb.jpg`"
+                           :src="route('storage.variations')+`/${p.id}/thumb.jpg`" disabled="true"
                            :failUrl="route('storage.products')+`/${p.product_id}.jpg`"
                     ></Image>
                   </div>
