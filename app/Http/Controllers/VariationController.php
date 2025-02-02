@@ -183,6 +183,7 @@ class VariationController extends Controller
         }
         return Inertia::render('Panel/Admin/Variation/Edit', [
             'statuses' => Variable::STATUSES,
+            'packs' => Pack::select('id', 'name')->get(),
             'data' => $data,
 
         ]);
@@ -336,15 +337,18 @@ class VariationController extends Controller
 
 
             switch ($cmnd) {
-                case 'change-name'   :
+                case 'change-primary'   :
 
-
+                    $packs = Pack::pluck('id');
                     $categories = Category::get()->pluck('id');
                     $request->validate(
                         [
                             'name' => ['required', 'max:200'],
                             'categories' => ['nullable', 'array', 'min:0'],
                             'categories.*' => ['required', Rule::in($categories)],
+                            "pack_id" => ['required', 'nullable', Rule::in($packs)],
+                            "weight" => ['required', 'numeric', 'gte:0', 'lt:99999', /*$this->pack_id == null ? Rule::in(1) :*/ 'numeric'],
+
                         ],
                         [
                             'name.required' => sprintf(__("validator.required"), __('name')),
@@ -352,13 +356,21 @@ class VariationController extends Controller
                             'name.max' => sprintf(__("validator.max_len"), __('name'), 200, mb_strlen($request->name)),
                             'categories.array' => sprintf(__("validator.invalid"), __('categories')),
                             'categories.*.in' => sprintf(__("validator.invalid"), __('categories')),
+                            "pack_id.required" => sprintf(__("validator.required"), __('pack')),
+                            "pack_id.in" => sprintf(__("validator.invalid"), __('pack')),
+
+                            "weight.required" => sprintf(__("validator.required"), __('weight')),
+                            "weight.numeric" => sprintf(__("validator.numeric"), __('weight')),
+                            "weight.gte" => sprintf(__("validator.gt"), __('weight'), 0),
 
 
                         ],
                     );
-                    $product = Product::find($data->product_id);
+//                    $product = Product::find($data->product_id);
 
                     $data->name = $request->name;
+                    $data->pack_id = $request->pack_id;
+                    $data->weight = $request->weight;
                     $data->categories = $request->categories ?? [];
 //                    $data->weight = $product->weight;
                     $data->save();

@@ -68,11 +68,11 @@ export default {
   data() {
     return {
       selecteds: this.multiple ? [] : this.modelValue,
-      selected: null,
+      selected: this.modelValue,
       closeButton: null,
     }
   },
-  props: ['id', 'label', 'data', 'modelValue', 'error', 'multiple', 'placeholder'],
+  props: ['id', 'label', 'data', 'modelValue', 'error', 'multiple', 'placeholder', 'preload'],
   emits: ['update:modelValue'],
   components: {InputLabel, InputError, XMarkIcon},
   watch: {
@@ -90,6 +90,8 @@ export default {
   },
   mounted() {
     // this.log(this.data);
+    if (this.preload)
+      this.selecteds = this.preload
     new Select(document.getElementById(this.id));
 
     this.closeButton = document.querySelector(`#${this.id + '-wrapper'} span[data-te-select-clear-btn-ref]`);
@@ -100,7 +102,7 @@ export default {
       this.closeButton.classList.add('opacity-0');
 
     // if (!window.Select) {
-    //   this.$forceUpdate();
+    // this.$forceUpdate();
     //   this.$nextTick(function () {
     //     initTE({Select})
     //     window.Select = Select;

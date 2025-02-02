@@ -42,11 +42,11 @@ class VariationRequest extends FormRequest
         $admin = $this->user();
         $allowedRepositories = Repository::whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))->pluck('id');
         $products = Product::select('id', 'name')->get();
-        $packs = Pack::pluck('id');
         $grades = Variable::GRADES;
-        $categories = Category::get()->pluck('id');
         $tmp = [];
         if (!$this->cmnd) {
+            $categories = Category::get()->pluck('id');
+            $packs = Pack::pluck('id');
 
             $tmp = array_merge($tmp, [
                 'name' => ['required', 'max:200'],

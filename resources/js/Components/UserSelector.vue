@@ -290,7 +290,7 @@ export default {
             if (item[this.cols[idx]] && this.callback && this.callback[this.cols[idx]])
               item[this.cols[idx]] = this.callback[this.cols[idx]](item[this.cols[idx]])
           this.itemMulti.push(item);
-          item = this.itemMulti;
+          item = this.itemMulti.map(i => i.id);
         } else {
           this.clear(item.id);
         }
@@ -305,7 +305,6 @@ export default {
       this.$emit('update:selected', this.selectedItem);
       this.$emit('update:text', this.selectedText);
       this.$emit('change', item);
-
       if (this.clearable)
         this.clear()
     },

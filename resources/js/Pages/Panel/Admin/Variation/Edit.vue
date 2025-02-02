@@ -74,13 +74,48 @@
                   </template>
                 </TextInput>
               </div>
+              <div v-if="false" class="my-2">
+                <Selector ref="gradeSelector" v-model="form.grade"
+                          :data="$page.props.grades.map(e=>{return{id:e,name:e}})"
+                          :error="form.errors.grade"
+                          :label="__('grade')" classes=""
+                          :id="`grade`">
+
+                </Selector>
+              </div>
+              <div class="my-2">
+                <Selector ref="packSelector" v-model="form.pack_id"
+                          :preload="$page.props.data.pack_id"
+                          :data="$page.props.packs"
+                          @change="($e)=> {if(form.pack_id==-1)form.weight=1}"
+                          :error="form.errors.pack_id"
+                          :label="__('pack')" classes=""
+                          :id="`pack`">
+
+                </Selector>
+              </div>
+              <div class="my-2">
+                <TextInput
+                    :id="`weight`"
+                    type="number"
+                    :placeholder="`${__('unit_weight')} (${__('kg')})`"
+                    :disabled="form.pack_id==-1? true:false"
+                    classes=" p-2   min-w-[5rem]"
+                    v-model="form.weight"
+                    autocomplete="weight"
+                    :error="form.errors.weight">
+
+                </TextInput>
+              </div>
               <div class="my-4">
                 <UserSelector :multi="true" :colsData="['id','name','level', ]"
                               :labelsData="['id','name','level', ]"
                               :error="null"
                               :link="route('admin.panel.category.search') "
                               :label="__('categories')"
-                              :id="'categories'" v-model:selected="form.categories"
+                              :id="'categories'"
+                              v-model:selected="form.categories"
+                              @change="($e)=>form.categories=$e"
                               :preload="(  this.data || {}).categories">
                   <template v-slot:selector="props">
                     <div v-if="(props.selectedText || []).length==0" :class=" 'py-2'"
@@ -197,6 +232,8 @@ export default {
         uploading: false,
         cmnd: null,
         categories: null,
+        pack_id: null,
+        weight: null,
 
       }),
       img: null,
@@ -251,8 +288,12 @@ export default {
 
     this.form.id = this.data.id;
     this.form.name = this.data.name;
-    this.form.categories = this.data.categories;
-    this.form.cmnd = 'change-name';
+    // this.form.categories = this.data.categories;
+    this.form.pack_id = this.data.pack_id;
+    this.$refs.packSelector.set(this.form.pack_id);
+    this.form.weight = parseFloat(this.data.weight);
+    this.form.cmnd = 'change-primary';
+
   },
   methods: {
 
