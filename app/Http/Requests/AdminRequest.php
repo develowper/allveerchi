@@ -77,8 +77,8 @@ class AdminRequest extends FormRequest
                 'fullname' => ['required', 'string', 'max:200'],
                 'national_code' => ['required', 'numeric'   /*, Rule::unique('drivers', 'national_code')->ignore($this->id)*/],
                 'phone' => ['required', 'numeric', 'digits:11', Rule::unique('admins')->where(function ($query) {
-                    $query->where('agency_id', $this->agency_id)
-                        ->where('phone', $this->phone);
+//                    $query->where('agency_id', $this->agency_id)
+                    $query->where('phone', $this->phone);
                 })->ignore($this->id)],
                 'phone_verify' => [Rule::requiredIf($phoneChanged), $phoneChanged ? Rule::exists('sms_verify', 'code')->where('phone', $this->phone) : '',],
                 'card' => ['nullable', 'numeric', 'digits:16'],

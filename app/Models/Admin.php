@@ -230,10 +230,10 @@ class Admin extends Authenticatable
 
             if (!$myAgency)
                 $data->where('id', 0);
-            elseif ($myAgency->level == '1')
-                $data->whereIn('province_id', $myAgency->access);
-            elseif ($myAgency->level == '2')
-                $data->whereIn('id', $myAgency->access);
+//            elseif ($myAgency->level == '1')
+//                $data->whereIn('province_id', $myAgency->access);
+            elseif ($myAgency->level >= '1')
+                $data->whereIn('id', $myAgency->access ?? []);
             elseif ($myAgency->level == '3')
                 $data->where('id', $myAgency->id);
             if ($myAgency)
