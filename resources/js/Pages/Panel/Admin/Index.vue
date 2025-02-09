@@ -139,7 +139,7 @@
           </Link>
 
           <!-- users card -->
-          <Link v-if="route().current('admin.panel.user.index') && hasAccess('view_user')"
+          <Link v-if="  hasAccess('view_user')"
                 :href="route('admin.panel.user.index')"
                 :class="cardShadow"
                 class="flex hover:scale-[101%] transition duration-300 cursor-pointer   items-center justify-around   p-4 bg-white  rounded-lg">
