@@ -9,6 +9,7 @@ use App\Http\Helpers\Variable;
 use App\Http\Requests\ProfileRequest;
 use App\Models\Hire;
 use App\Models\User;
+use App\Models\UserFinancial;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -55,7 +56,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'telegram_id' => session('telegram_id', null)
         ]);
-
+        UserFinancial::create(['user_id' => $user->id, 'wallet' => 0]);
         event(new Registered($user));
 
         Auth::login($user);

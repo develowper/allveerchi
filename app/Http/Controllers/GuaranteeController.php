@@ -17,6 +17,7 @@ use App\Models\Sample;
 use App\Models\Setting;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserFinancial;
 use App\Models\Variation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -70,7 +71,7 @@ class GuaranteeController extends Controller
                 'phone_verified' => true,
                 'ref_id' => User::makeRefCode($phone),
             ]);
-
+            UserFinancial::create(['user_id' => $customer->id, 'wallet' => 0]);
         }
         $agency = Agency::find($operator->agency_id);
         $guaranteeMonths = $sample->guarantee_months;
@@ -153,7 +154,7 @@ class GuaranteeController extends Controller
                 'phone_verified' => true,
                 'ref_id' => User::makeRefCode($phone),
             ]);
-
+            UserFinancial::create(['user_id' => $customer->id, 'wallet' => 0]);
         }
         $guaranteeMonths = $sample->guarantee_months;
         $sample->guarantee_expires_at = Carbon::now()->addMonths($guaranteeMonths);

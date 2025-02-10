@@ -12,6 +12,7 @@ use App\Models\City;
 use App\Models\Hire;
 use App\Models\Notification;
 use App\Models\User;
+use App\Models\UserFinancial;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
@@ -34,6 +35,7 @@ class UserController extends Controller
         ]);
         $user = User::create($request->all());
         if ($user) {
+            UserFinancial::create(['user_id' => $user->id, 'wallet' => 0]);
             if ($request->img)
                 Util::createImage($request->img, Variable::IMAGE_FOLDERS[User::class], $user->id);
             $res = ['flash_status' => 'success', 'flash_message' => __('done_successfully')];
