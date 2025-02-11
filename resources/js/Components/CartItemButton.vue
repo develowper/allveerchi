@@ -137,7 +137,7 @@ export default {
   methods: {
     updateRange(count) {
       this.inCart = count;
-      this.selectedPrice = ((Array.isArray(this.prices) ? this.prices : []).filter((i) => i.from <= count && i.to >= count) || [{price: 0}])[0].price
+      this.selectedPrice = ((Array.isArray(this.prices) ? this.prices : []).filter((i) => i.from <= count && i.to >= count)[0] || {price: 0}).price
     },
     setInCartQty() {
       this.inCart = 0
