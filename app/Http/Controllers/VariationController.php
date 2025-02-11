@@ -607,7 +607,7 @@ class VariationController extends Controller
                             'new_prices' => ['sometimes', 'array', 'min:0'],
                             'new_prices.*.from' => ['required', 'integer', 'gte:0'],
                             'new_prices.*.to' => ['required', 'integer', 'gt:new_prices.*.from'],
-                            'new_prices.*.type' => ['required', Rule::in(array_column(Variable::PRICE_TYPES, 'key'))],
+//                            'new_prices.*.type' => ['required', Rule::in(array_column(Variable::PRICE_TYPES, 'key'))],
                             'new_prices.*.price' => ['required', 'integer', 'gte:0'],
 
                         ],
@@ -636,6 +636,11 @@ class VariationController extends Controller
 
                             'changed' => __('not_any_change'),
                         ]);
+
+                    $request->new_prices = collect($request->new_prices ?? [])->map(function ($i) {
+                        $i['type'] = 'cash';
+                        return $i;
+                    });
                     $data->update(['prices' => $request->new_prices,]);
 
                     $data->repo = Repository::find($data->repo_id);

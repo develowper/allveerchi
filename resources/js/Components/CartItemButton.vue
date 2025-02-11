@@ -19,24 +19,38 @@
         <XMarkIcon class="w-8  mx-2"/>
       </div>
     </div>
+    <div v-if="show" class="flex items-center gap-1 justify-center text-neutral-500 text-sm p-2" dir="ltr">
+      <div>{{ asPrice(selectedPrice) }}</div>
+      <div class="text-xs">✖️</div>
+      <div>{{ inCart }}</div>
+      <div class="text-xs">🟰</div>
+      <div>{{ asPrice(inCart * selectedPrice) }}</div>
+    </div>
     <Transition name="fade">
       <div v-show=" show">
-        <div class="   my-2 flex justify-center items-stretch text-primary-500 "
+        <div class=" h-full  py-3 my-2 flex justify-center items-stretch text-primary-500 "
         >
           <div @click.prevent="plus()"
                class=" items-center flex   border rounded-s border-primary-500 hover:bg-primary-500 hover:text-white hover:cursor-pointer">
             <PlusIcon
                 class="w-6  mx-3 "/>
           </div>
-          <input @click.prevent type="number" min="0" v-model="inCart"
-                 class="  flex w-full shrink text-lg p-1 border text-center focus:border-primary-500 border-primary-500 focus:ring-primary-500">
+          <!--          <input @click.prevent type="number" min="0" v-model="inCart"-->
+          <!--                 class="  flex w-full shrink text-lg p-1 border text-center focus:border-primary-500 border-primary-500 focus:ring-primary-500">-->
+          <div class="flex   grow">
+            <RangeSlider :ref="`rs-${productId}`"
+                         :min="sliderData.min"
+                         :max=" sliderData.max"
+                         @change="($e)=>updateRange( $e)" class="w-full" :value="inCart"
+                         :id="`rs-${productId}`"></RangeSlider>
+          </div>
           <div @click.prevent="minus()"
                class="items-center flex  border rounded-e border-primary-500 hover:bg-primary-500 hover:text-white hover:cursor-pointer">
             <MinusIcon
                 class="w-6 mx-3"/>
           </div>
         </div>
-        <div v-if="show && $page.props.price_types">
+        <div v-if="false && show && $page.props.price_types">
           <div class="    flex justify-center my-3  text-primary-500  rounded bg-primary-100  ">
             <div @click.prevent="priceType=item" v-for="item,idx in $page.props.price_types"
                  class="   grow justify-center   ">
@@ -53,6 +67,7 @@
 
           </div>
         </div>
+
       </div>
     </Transition>
 
@@ -72,6 +87,7 @@ import {
 import TextInput from "@/Components/TextInput.vue";
 import LoadingIcon from "@/Components/LoadingIcon.vue";
 import RadioGroup from "@/Components/RadioGroup.vue";
+import RangeSlider from "@/Components/RangeSlider.vue";
 
 
 export default {
@@ -81,10 +97,13 @@ export default {
       inCartOld: 0,
       inCart: 0,
       priceType: this.$page.props.price_types && this.$page.props.price_types.length > 0 ? this.$page.props.price_types[0] : null,
+      prices: {},
+      selectedPrice: 0,
       show: false,
       modal: null,
       loading: false,
       cart: this.$page.props.cart,
+      sliderData: {min: null, max: null},
     }
   },
   expose: ['update:cart'],
@@ -99,6 +118,7 @@ export default {
     LoadingIcon,
     XMarkIcon,
     RadioGroup,
+    RangeSlider,
   },
   mounted() {
     // if (!window.Modal) {
@@ -115,6 +135,10 @@ export default {
     });
   },
   methods: {
+    updateRange(count) {
+      this.inCart = count;
+      this.selectedPrice = ((this.prices || []).filter((i) => i.from <= count && i.to >= count) || [{price: 0}])[0].price
+    },
     setInCartQty() {
       this.inCart = 0
 
@@ -125,6 +149,39 @@ export default {
               if (this.cart.orders[ix].shipments[idx].items[id].cart_item.variation_id == this.productId) {
                 this.inCart = this.cart.orders[ix].shipments[idx].items[id].cart_item.qty;
                 this.priceType = this.cart.orders[ix].shipments[idx].items[id].cart_item.price_type;
+                this.prices = (this.cart.orders[ix].shipments[idx].items[id].cart_item.product.prices || []).filter(i => i.type == 'cash');
+                for (const i in this.prices) {
+                  if (this.sliderData.min == null || this.sliderData.min > this.prices[i].from) {
+                    this.sliderData.min = this.prices[i].from;
+                  }
+                  if (this.sliderData.max == null || this.sliderData.max < this.prices[i].to) {
+                    this.sliderData.max = this.prices[i].to;
+                  }
+                }
+                if (this.$refs[`rs-${this.productId}`]) {
+                  this.$refs[`rs-${this.productId}`].set(this.sliderData.min, this.sliderData.max, this.inCart);
+
+                  const shows = this.prices.map(i => i.from) || [];
+                  shows.push(this.sliderData.max)
+                  const points = document.getElementById(`rs-${this.productId}`).shadowRoot.querySelectorAll('.mark-points .mark');
+                  const values = document.getElementById(`rs-${this.productId}`).shadowRoot.querySelectorAll('.mark-values .mark-value');
+                  points.forEach((i) => {
+                    i.style.opacity = 0;
+                    shows.forEach(el => {
+                      if (i.classList.contains(`mark-${el}`))
+                        i.style.opacity = 1;
+
+                    })
+                  })
+                  values.forEach((i) => {
+                    i.style.opacity = 0;
+                    shows.forEach(el => {
+                      if (el != 0 && (i.classList.contains(`mark-value-${el}`)))
+                        i.style.opacity = 1;
+
+                    })
+                  })
+                }
                 this.inCart = this.inCart ? parseFloat(this.inCart) : 0;
                 break;
               }

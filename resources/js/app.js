@@ -14,7 +14,6 @@ import Mixins from "@/vue-mixins";
 import TgMixins from "@/telegram-mixins";
 import LoadScript from 'vue-plugin-load-script';
 import VueDragscroll from "vue-dragscroll";
-
 import './scripts';
 import mitt from 'mitt';
 

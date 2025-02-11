@@ -30,7 +30,6 @@
     "vue": "^3.2.31"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-upload": "^39.0.1",
     "@ckeditor/ckeditor5-alignment": "^39.0.1",
     "@ckeditor/ckeditor5-autoformat": "^39.0.1",
     "@ckeditor/ckeditor5-basic-styles": "^39.0.1",
@@ -50,6 +49,7 @@
     "@ckeditor/ckeditor5-remove-format": "^39.0.1",
     "@ckeditor/ckeditor5-table": "^39.0.1",
     "@ckeditor/ckeditor5-theme-lark": "^39.0.1",
+    "@ckeditor/ckeditor5-upload": "^39.0.1",
     "@ckeditor/vite-plugin-ckeditor5": "^0.1.3",
     "@he-tree/vue": "^2.8.2",
     "@heroicons/vue": "^2.0.18",
@@ -67,6 +67,7 @@
     "lity": "^2.4.1",
     "mitt": "^3.0.1",
     "swiper": "^10.3.1",
+    "toolcool-range-slider": "^4.0.28",
     "tw-elements": "^1.0.0",
     "video.js": "^8.5.2",
     "vue-dragscroll": "^4.0.5",

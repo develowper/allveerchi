@@ -462,7 +462,7 @@
                           class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
                           :class="`bg-indigo-50 border border-indigo-300 hover:bg-indigo-200 text-indigo-500`"
                       >
-                        {{ asPrice(d.price) }}
+                        {{ (d.prices || [{price: '?'}]).map((i) => asPrice(i.price)).join('|') }}
                       </button>
 
                     </td>
@@ -815,7 +815,7 @@
                               <tr>
                                 <th>{{ __('from') }}</th>
                                 <th>{{ __('until') }}</th>
-                                <th>{{ __('type') }}</th>
+                                <th v-if="false">{{ __('type') }}</th>
                                 <th>{{ __('price') }}</th>
                                 <th>{{ __('actions') }}</th>
                               </tr>
@@ -832,7 +832,7 @@
                                          class="w-24  px-1 text-sm border-gray-400 rounded" type="number"
                                          v-model="p.to">
                                 </td>
-                                <td>
+                                <td v-if="false">
                                   <select :class="{'border-2 border-red-500':errors[`new_prices.${idx}.type`]}"
                                           class="grow rounded  border-gray-400 cursor-pointer" name=""
 

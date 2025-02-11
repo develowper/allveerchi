@@ -33,6 +33,9 @@ export default defineConfig({
                     base: null,
                     includeAbsolute: false,
                 },
+                compilerOptions: {
+                    isCustomElement: (tag) => ['tc-range-slider'].includes(tag),
+                }
             },
         }),
         ckeditor5({theme: require.resolve('@ckeditor/ckeditor5-theme-lark')})

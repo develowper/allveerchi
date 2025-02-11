@@ -50,15 +50,15 @@
     </section>
 
 
-    <section v-if="products.length>0" class="container-lg p-2  mx-auto  ">
+    <section v-if="products.length>0" class="container-lg   p-2  mx-auto  ">
 
       <div
           class="  mt-6   gap-y-3 gap-x-2 grid   sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-        <div class="bg-white  shadow-md rounded-lg  "
+        <div class="bg-white   shadow-md rounded-lg    "
              v-for="(p,idx) in products">
           <div :id="p.id"
-               class="overflow-hidden flex flex-row sm:flex-col   hover:scale-[101%] duration-300">
-            <div class="flex flex-col p-3 w-full">
+               class="   flex flex-row sm:flex-col h-full    hover:scale-[101%] duration-300">
+            <div class="flex flex-col h-full justify-between p-3 w-full ">
 
               <Link :href=" route( 'variation.view',{id:p.id,name:p.name})">
                 <div class="flex  sm:flex-col  ">
@@ -74,7 +74,7 @@
                   <div v-if="false" class="flex my-1 items-center justify-start text-xs text-gray-400">
                     <div class="  rounded p-1 px-2  "> {{ toRelativeTime(p.updated_at) }}</div>
                   </div>
-                  <div class="flex flex-col p-2 w-full ">
+                  <div class="flex flex-col   p-2 w-full ">
                     <div class="flex items-center justify-between">
                       <div class="text-primary-600 ms-1 text-sm ">{{ p.name }}</div>
                       <!--                <div class="text-sm text-neutral-500 mx-2 ">{{ __('grade') + ' ' + p.grade }}</div>-->
@@ -97,7 +97,7 @@
                 <!--            </div>-->
 
                 <div
-                    class="    flex flex-col items-stretch justify-start items-start items-between">
+                    class="     flex flex-col items-stretch justify-end   ">
 
 
                   <!--              <div v-if="p.unit != 'qty'" class="flex items-center text-sm">-->
@@ -108,7 +108,8 @@
                   <!--                </div>-->
 
                   <!--              </div>-->
-                  <div v-if="!p.prices || p.prices.length==0" class="flex items-center justify-end">
+                  <div v-if="false &&( !p.prices || p.prices.length==0)"
+                       class="flex items-center justify-end ">
                     <div class="flex items-center "
                          :class="{'line-through text-neutral-500':$page.props.is_auction && p.in_auction}">
                       {{ asPrice(Math.round(p.price)) }}
@@ -131,8 +132,10 @@
                     <TomanIcon class="w-4 h-4 mx-2"/>
 
                   </div>
-                  <div v-else class="flex items-center justify-end">
-                    <div class="flex flex-col items-end  ">
+                  <div class="flex   w-full   justify-end items-center font-bold">
+                    <div class="text-xs  ">{{ (p.prices || []).map(i => asPrice(i.price)).join(' | ') }}</div>
+                    <TomanIcon v-if="p.prices" class="w-4 h-4 mx-2"/>
+                    <div v-if="false" class="flex flex-col items-end  ">
                       <div v-for="(pr,idx) in p.prices" class="">
                         <div class="flex   text-xs justify-between gap-2 items-center">
 
