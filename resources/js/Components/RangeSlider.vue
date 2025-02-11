@@ -53,10 +53,13 @@ export default {
       const wrapper = document.getElementById(`wrapper-sr-${this.id}`);
 
       this.slider = document.getElementById(`${this.id}`);
-      if (this.slider)
+      if (this.slider) {
+        this.slider.step = 1;
+        this.slider.round = 0;
         this.slider.addEventListener('change', (evt) => {
-          this.$emit("change", evt.detail.value);
+          this.$emit("change", parseInt(evt.detail.value));
         })
+      }
       // this.set(0, 100, 0)
     },
     set(min, max, value) {
