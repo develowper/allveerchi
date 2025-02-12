@@ -20,11 +20,11 @@
       </div>
     </div>
     <div v-if="show" class="flex items-center gap-1 justify-center text-neutral-500 text-sm p-2" dir="ltr">
-      <div>{{ asPrice(selectedPrice) }}</div>
-      <div class="text-xs">✖️</div>
-      <div>{{ inCart }}</div>
-      <div class="text-xs">🟰</div>
-      <div>{{ asPrice(inCart * selectedPrice) }}</div>
+      <div class="text-neutral-700">{{ asPrice(selectedPrice) }}</div>
+      <XMarkIcon class="w-4   "/>
+      <div class="text-neutral-700">{{ inCart }}</div>
+      <Bars2Icon class="w-4  "/>
+      <div class="text-neutral-700 ">{{ asPrice(inCart * selectedPrice) }}</div>
     </div>
     <Transition name="fade">
       <div v-show=" show">
@@ -83,6 +83,7 @@ import {
   PlusIcon,
   MinusIcon,
   XMarkIcon,
+  Bars2Icon,
 } from "@heroicons/vue/24/outline";
 import TextInput from "@/Components/TextInput.vue";
 import LoadingIcon from "@/Components/LoadingIcon.vue";
@@ -97,7 +98,6 @@ export default {
       inCartOld: 0,
       inCart: 0,
       priceType: this.$page.props.price_types && this.$page.props.price_types.length > 0 ? this.$page.props.price_types[0] : null,
-      prices: {},
       selectedPrice: 0,
       show: false,
       modal: null,
@@ -107,7 +107,7 @@ export default {
     }
   },
   expose: ['update:cart'],
-  props: ['productId', 'inShop', 'link'],
+  props: ['productId', 'inShop', 'link', 'prices'],
   components: {
     TextInput,
     ChevronDownIcon,
@@ -119,6 +119,7 @@ export default {
     XMarkIcon,
     RadioGroup,
     RangeSlider,
+    Bars2Icon,
   },
   mounted() {
     // if (!window.Modal) {
@@ -127,6 +128,7 @@ export default {
     // }
 
     this.setInCartQty();
+    this.setPrices();
     this.inCartOld = this.inCart;
 
     this.emitter.on('updateCart', (cart) => {
@@ -135,6 +137,40 @@ export default {
     });
   },
   methods: {
+    setPrices() {
+      for (const i in this.prices) {
+        if (this.sliderData.min == null || this.sliderData.min > this.prices[i].from) {
+          this.sliderData.min = this.prices[i].from;
+        }
+        if (this.sliderData.max == null || this.sliderData.max < this.prices[i].to) {
+          this.sliderData.max = this.prices[i].to;
+        }
+      }
+      if (true || this.$refs[`rs-${this.productId}`]) {
+        this.$refs[`rs-${this.productId}`].set(this.sliderData.min, this.sliderData.max, this.inCart);
+
+        const shows = this.prices.map(i => i.from) || [];
+        shows.push(this.sliderData.max)
+        const points = document.getElementById(`rs-${this.productId}`).shadowRoot.querySelectorAll('.mark-points .mark');
+        const values = document.getElementById(`rs-${this.productId}`).shadowRoot.querySelectorAll('.mark-values .mark-value');
+        points.forEach((i) => {
+          i.style.opacity = 0;
+          shows.forEach(el => {
+            if (i.classList.contains(`mark-${el}`))
+              i.style.opacity = 1;
+
+          })
+        })
+        values.forEach((i) => {
+          i.style.opacity = 0;
+          shows.forEach(el => {
+            if (el != 0 && (i.classList.contains(`mark-value-${el}`)))
+              i.style.opacity = 1;
+
+          })
+        })
+      }
+    },
     updateRange(count) {
       this.inCart = count;
       this.selectedPrice = ((Array.isArray(this.prices) ? this.prices : []).filter((i) => i.from <= count && i.to >= count)[0] || {price: 0}).price
@@ -149,39 +185,7 @@ export default {
               if (this.cart.orders[ix].shipments[idx].items[id].cart_item.variation_id == this.productId) {
                 this.inCart = this.cart.orders[ix].shipments[idx].items[id].cart_item.qty;
                 this.priceType = this.cart.orders[ix].shipments[idx].items[id].cart_item.price_type;
-                this.prices = (this.cart.orders[ix].shipments[idx].items[id].cart_item.product.prices || []).filter(i => i.type == 'cash');
-                for (const i in this.prices) {
-                  if (this.sliderData.min == null || this.sliderData.min > this.prices[i].from) {
-                    this.sliderData.min = this.prices[i].from;
-                  }
-                  if (this.sliderData.max == null || this.sliderData.max < this.prices[i].to) {
-                    this.sliderData.max = this.prices[i].to;
-                  }
-                }
-                if (this.$refs[`rs-${this.productId}`]) {
-                  this.$refs[`rs-${this.productId}`].set(this.sliderData.min, this.sliderData.max, this.inCart);
 
-                  const shows = this.prices.map(i => i.from) || [];
-                  shows.push(this.sliderData.max)
-                  const points = document.getElementById(`rs-${this.productId}`).shadowRoot.querySelectorAll('.mark-points .mark');
-                  const values = document.getElementById(`rs-${this.productId}`).shadowRoot.querySelectorAll('.mark-values .mark-value');
-                  points.forEach((i) => {
-                    i.style.opacity = 0;
-                    shows.forEach(el => {
-                      if (i.classList.contains(`mark-${el}`))
-                        i.style.opacity = 1;
-
-                    })
-                  })
-                  values.forEach((i) => {
-                    i.style.opacity = 0;
-                    shows.forEach(el => {
-                      if (el != 0 && (i.classList.contains(`mark-value-${el}`)))
-                        i.style.opacity = 1;
-
-                    })
-                  })
-                }
                 this.inCart = this.inCart ? parseFloat(this.inCart) : 0;
                 break;
               }

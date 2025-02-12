@@ -133,7 +133,10 @@
 
                   </div>
                   <div class="flex   w-full   justify-end items-center font-bold">
-                    <div class="text-xs  ">{{ (p.prices || []).map(i => asPrice(i.price)).join(' | ') }}</div>
+                    <div class="text-xs  ">{{
+                        (Array.isArray(p.prices) ? p.prices : []).map(i => asPrice(i.price)).join(' | ')
+                      }}
+                    </div>
                     <TomanIcon v-if="p.prices" class="w-4 h-4 mx-2"/>
                     <div v-if="false" class="flex flex-col items-end  ">
                       <div v-for="(pr,idx) in p.prices" class="">
@@ -154,7 +157,8 @@
                 </div>
               </Link>
               <div @click.self class="flex    min-w-[100%]    ">
-                <CartItemButton :key="p.id" class="w-full " :product-id="p.id"/>
+                <CartItemButton :key="p.id" class="w-full " :prices="Array.isArray(p.prices)?p.prices :[]"
+                                :product-id="p.id"/>
               </div>
             </div>
           </div>

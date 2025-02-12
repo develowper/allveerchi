@@ -32,7 +32,7 @@
             <div class="grow max-w-sm mx-auto">
               <div class="     bg-neutral-50 rounded-lg p-2 text-neutral-700">
                 <div class="w-full   my-1   ">
-                  <CartItemButton :key="data.id" class="w-full " :product-id="data.id"/>
+                  <CartItemButton :key="data.id" class="w-full " :prices="data.prices" :product-id="data.id"/>
                 </div>
                 <div class="flex items-center justify-between">
                   <div class="text-primary-600 ms-1 font-bold ">{{ data.name }}</div>
@@ -60,7 +60,7 @@
                     <div class="text-sm text-neutral-500   ">{{ __('kg') }}</div>
 
                   </div>
-                  <div v-if="!data.prices || data.prices.length==0"
+                  <div v-if="false && (!data.prices || data.prices.length==0)"
                        class="flex items-center justify-end text-neutral-900 font-bold">
                     <div class="flex items-center "
                          :class="{'line-through  ':$page.props.is_auction && data.in_auction}">
@@ -83,8 +83,13 @@
                     </div>
                     <TomanIcon class="w-4 h-4 mx-2"/>
                   </div>
-                  <div v-else class="flex items-center justify-end">
-                    <div class="flex flex-col items-end  ">
+                  <div class="flex   w-full   justify-end items-center font-bold">
+                    <div class="text-xs  ">{{
+                        (Array.isArray(data.prices) ? data.prices : []).map(i => asPrice(i.price)).join(' | ')
+                      }}
+                    </div>
+                    <TomanIcon v-if="data.prices" class="w-4 h-4 mx-2"/>
+                    <div v-if="false" class="flex flex-col items-end  ">
                       <div v-for="(pr,idx) in data.prices" class="">
                         <div class="flex   text-xs justify-between gap-2 items-center">
 
