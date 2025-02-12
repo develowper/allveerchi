@@ -166,6 +166,9 @@ export default {
           shows.forEach(el => {
             if (el != 0 && (i.classList.contains(`mark-value-${el}`)))
               i.style.opacity = 1;
+            i.style.fontSize = '12px';
+            i.style.transformOrigin = 'center left';
+            i.style.transform = 'rotate(90deg) translateX(-90%)';
 
           })
         })
