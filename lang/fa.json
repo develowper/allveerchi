@@ -66,6 +66,8 @@
   "transactions_list": "لیست تراکنش\u200Cها",
   "view_site": "مشاهده سایت",
   "wallet": "کیف پول",
+  "check_wallet": "کیف چک",
+  "wallet_type": "نوع کیف پول",
   "site_balance": "موجودی سایت",
   "profile_setting": "تنظیمات پروفایل",
   "change_password": "تغییر رمزعبور",

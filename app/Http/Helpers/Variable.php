@@ -69,6 +69,7 @@ class Variable
         ['name' => 'gardener', 'color' => 'lemon'],
 
     ];
+    const WALLET_TYPES = ['wallet', 'check_wallet'];
 
     const  STATUSES = [
         ["name" => 'inactive', "color" => 'gray'],
@@ -213,8 +214,10 @@ class Variable
     {
         return [
             ['name' => __('online_payment'), 'description' => '', 'key' => 'online', 'selected' => true, 'active' => true],
-            ['name' => __('local_payment'), 'description' => '', 'key' => 'local', 'selected' => false, 'active' => true],
-            ['name' => __('wallet_payment'), 'description' => '', 'key' => 'wallet', 'selected' => false, 'active' => true]
+//            ['name' => __('local_payment'), 'description' => '', 'key' => 'local', 'selected' => false, 'active' => true],
+            ['name' => __('wallet_payment'), 'description' => '', 'key' => 'wallet', 'selected' => false, 'active' => true],
+            ['name' => __('1_check'), 'description' => '', 'key' => '1_check', 'selected' => false, 'active' => true],
+            ['name' => __('2_check'), 'description' => '', 'key' => '2_check', 'selected' => false, 'active' => true]
         ];
     }
 
@@ -317,6 +320,8 @@ class Variable
             ['key' => 'order_percent_level_2', 'value' => 0, "created_at" => \Carbon\Carbon::now(),],
             ['key' => 'order_percent_level_3', 'value' => 0, "created_at" => \Carbon\Carbon::now(),],
             ['key' => 'operator_profit_percent', 'value' => 20, "created_at" => \Carbon\Carbon::now(),],
+            ['key' => '1_check_profit_percent', 'value' => 6, "created_at" => \Carbon\Carbon::now(),],
+            ['key' => '2_check_profit_percent', 'value' => 6, "created_at" => \Carbon\Carbon::now(),],
 
         ];
     }

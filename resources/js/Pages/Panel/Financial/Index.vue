@@ -166,6 +166,14 @@
                   <ArrowsUpDownIcon class="w-4 h-4 "/>
                 </div>
               </th>
+              <th scope="col"
+                  class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
+                  @click="params.order_by='check_wallet';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
+                <div class="flex items-center justify-center">
+                  <span class="px-2">    {{ __('check_wallet') }} </span>
+                  <ArrowsUpDownIcon class="w-4 h-4 "/>
+                </div>
+              </th>
               <th>
                 {{ __('actions') }}
               </th>
@@ -257,19 +265,23 @@
               <td class="px-2 py-4    ">
                 <div> {{ asPrice(d.wallet) }}</div>
               </td>
+              <td class="px-2 py-4    ">
+                <div> {{ asPrice(d.check_wallet) }}</div>
+              </td>
               <td class="px-2 py-4 flex  ">
                 <!-- Actions Group -->
-                <button @click=" d.idx=idx;d.amount=d.wallet; d.cmnd='settlement';  selected=d; "
-                        :disabled="d.wallet && d.wallet>0 ?null:true"
-                        type="button"
-                        :class="`${d.wallet && d.wallet>0?'bg-green-500 hover:bg-green-400 cursor-pointer':'bg-gray-400'}` "
-                        class="inline-block rounded  mx-1   text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out    focus:outline-none focus:ring-0  "
-                        data-te-ripple-init
-                        data-te-ripple-color="light">
+                <button
+                    @click=" d.idx=idx;d.amount=d.wallet; d.cmnd='settlement';d.wallet_type=$page.props.wallet_types[0];  selected=d; "
+                    :disabled="d.wallet && d.wallet>0 ?null:null"
+                    type="button"
+                    :class="`${d.wallet && d.wallet>0 ||true ?'bg-green-500 hover:bg-green-400 cursor-pointer':'bg-gray-400'}` "
+                    class="inline-block rounded  mx-1   text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out    focus:outline-none focus:ring-0  "
+                    data-te-ripple-init
+                    data-te-ripple-color="light">
                   {{ __('settlement') }}
                 </button>
                 <button
-                    @click=" d.idx=idx;d.amount=0; d.cmnd='charge';  selected=d; "
+                    @click=" d.idx=idx;d.amount=0; d.cmnd='charge';d.wallet_type=$page.props.wallet_types[0];  selected=d; "
                     type="button"
                     class="inline-block rounded cursor-pointer bg-sky-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-sky-400   focus:outline-none focus:ring-0  "
                     data-te-ripple-init
@@ -318,9 +330,25 @@
 
                       <div
                           class="   text-sm text-gray-500 ">
-                        <span class="text-sm py-2 text-danger-500">{{
-                            `${selected.cmnd == 'settlement' ? __('max') : __('current_balance')}: ${asPrice(selected.wallet)} ${__('currency')}`
-                          }}</span>
+                        <div class=" ">
+                          <div class="text-sm  text-danger-500">{{
+                              `${__('wallet')}: ${asPrice(selected.wallet)} ${__('currency')}`
+                            }}
+                          </div>
+                          <div class="text-sm   text-danger-500">{{
+                              `${__('check_wallet')}: ${asPrice(selected.check_wallet)} ${__('currency')}`
+                            }}
+                          </div>
+                        </div>
+                        <div>
+                          <RadioGroup ref="typeSelector" class="grow mx-2" name="status" v-model="selected.wallet_type"
+                                      :items="$page.props.wallet_types"
+                                      :before-selected="$page.props.wallet_types[0]"/>
+
+                        </div>
+                        <div>
+
+                        </div>
                         <div class="flex flex-col  space-y-2 text-start ">
 
                           <div class="flex flex-col  ">
@@ -344,7 +372,7 @@
                             </div>
                             <button
                                 class="bg-success-200 text-success-700 p-2 rounded-lg  hover:bg-success-300 w-full"
-                                @click="edit({'idx':selected.idx ,'id':selected.id,'cmnd':selected.cmnd,'amount':selected.amount, 'type':selected.type,  })">
+                                @click="edit({'idx':selected.idx ,'id':selected.id,'cmnd':selected.cmnd,'amount':selected.amount, 'type':selected.type,  'wallet_type':selected.wallet_type   })">
                               {{ __(selected.cmnd) }}
                             </button>
 
@@ -391,6 +419,7 @@ import Image from "@/Components/Image.vue"
 import Tooltip from "@/Components/Tooltip.vue"
 import {Dropdown} from "tw-elements";
 import TextInput from "@/Components/TextInput.vue";
+import RadioGroup from "@/Components/RadioGroup.vue";
 
 export default {
   data() {
@@ -426,6 +455,7 @@ export default {
     ArrowsUpDownIcon,
     Tooltip,
     CurrencyDollarIcon,
+    RadioGroup,
   },
   mounted() {
     this.tableWrapper = document.querySelector('table').parentElement;
@@ -509,8 +539,9 @@ export default {
               this.showToast('success', response.data.message);
 
             }
-            if (response.data.wallet) {
+            if (response.data.wallet != null) {
               this.data[params.idx].wallet = response.data.wallet;
+              this.data[params.idx].check_wallet = response.data.check_wallet;
             }
             this.selected = null;
 

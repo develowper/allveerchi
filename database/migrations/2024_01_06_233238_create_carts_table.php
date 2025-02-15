@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->timestamp('last_activity')->index();
             $table->unsignedBigInteger('order_id')->nullable();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('no action');
+            $table->enum('payment_method', array_column(Variable::getPaymentMethods(), 'key'))->nullable();//deliver|cancel
 
             $table->timestamps();
         });

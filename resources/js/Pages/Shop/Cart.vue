@@ -97,14 +97,14 @@
 
                   <div class="flex flex-col  items-start text-sm">
                     <div class="flex"
-                         v-if="(item.cart_item.product.prices || []).filter(i => i.type == item.cart_item.price_type && i.from <= item.cart_item.qty && i.to >= item.cart_item.qty).length>0">
+                         v-if=" false && (item.cart_item.product.prices || []).filter(i => i.type == item.cart_item.price_type && i.from <= item.cart_item.qty && i.to >= item.cart_item.qty).length>0">
                       <div class="text-neutral-500 mx-1">{{ __('price_unit') }}:</div>
                       <div class="text-neutral-700 mx-1">{{
                           asPrice((item.cart_item.product.prices || []).filter(i => i.type == item.cart_item.price_type && i.from <= item.cart_item.qty && i.to >= item.cart_item.qty)[0].price)
                         }}
                       </div>
                       <TomanIcon class="w-5 h-5 text-neutral-400"/>
-                      
+
                     </div>
                     <div class="flex">
                       <div class="text-neutral-500 mx-1">{{ __('price') }}:</div>
@@ -136,14 +136,18 @@
                 {{ item.cart_item.error_message }}
               </div>
               <div class="flex flex-wrap items-center justify-start my-2">
+
                 <CartItemButton :product-id="item.cart_item.variation_id"
-                                class="flex  min-w-[100%]   xs:min-w-[50%] sm:min-w-[36%] lg:min-w-[20%]  hover:cursor-pointer"/>
+                                :prices="Array.isArray(item.cart_item.product.prices)?item.cart_item.product.prices :[]"
+                                class=" flex min-w-[100%] xs:min-w-[50%] sm:min-w-[36%] lg:min-w-[20%]
+                                hover:cursor-pointer
+                "/>
                 <div class="flex items-center">
                   <div class="mx-2 ">{{ asPrice(item.cart_item.total_price) }}</div>
                   <div>
                     <TomanIcon class=""/>
                   </div>
-                  <div v-if="item.cart_item.price_type" class="mx-2 text-sm text-neutral-500 ">{{
+                  <div v-if="false && item.cart_item.price_type" class="mx-2 text-sm text-neutral-500 ">{{
                       `( ${__(item.cart_item.price_type)} )`
                     }}
                   </div>
@@ -228,7 +232,7 @@
           <div class="flex flex-col  items-end justify-center">
 
             <div class="flex  items-center text-xs px-2 text-neutral-500 gap-1">
-              <div class="flex  " v-if="cart.prices" v-for="(price,type) in cart.prices">
+              <div class="flex  " v-if="false && cart.prices" v-for="(price,type) in cart.prices">
                 <div v-if="price" class="font-bold">{{ asPrice(price) }}</div>
                 <div class="" v-if="price">{{ `( ${__(type)} )` }}</div>
               </div>
@@ -277,7 +281,7 @@
           </div>
           <div class="flex flex-col items-end justify-center">
             <div class="flex border-b items-center text-xs p-2 text-neutral-500 gap-1">
-              <div class="flex gap-2" v-if="cart.prices" v-for="(price,type) in cart.prices">
+              <div class="flex gap-2" v-if="false && cart.prices" v-for="(price,type) in cart.prices">
                 <div class="font-bold">{{ asPrice(price) }}</div>
                 <div>{{ `( ${__(type)} )` }}</div>
               </div>

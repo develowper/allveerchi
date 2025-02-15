@@ -40,6 +40,7 @@ class  FinancialController extends Controller
         })
             ->select(
                 'user_financials.wallet As wallet',
+                'user_financials.check_wallet As check_wallet',
                 'user_financials.card As card',
                 'user_financials.sheba As sheba',
                 DB::raw('NULL as agency_id'),
@@ -54,6 +55,7 @@ class  FinancialController extends Controller
         })
             ->select(
                 'admin_financials.wallet As wallet',
+                'admin_financials.check_wallet As check_wallet',
                 'admin_financials.card As card',
                 'admin_financials.sheba As sheba',
                 'admins.agency_id As agency_id',
@@ -65,6 +67,7 @@ class  FinancialController extends Controller
             $join->on('agencies.id', '=', 'agency_financials.agency_id');
         })->select(
             'agency_financials.wallet',
+            'agency_financials.check_wallet As check_wallet',
             'agency_financials.card',
             'agency_financials.sheba',
             'agencies.id As agency_id',
@@ -105,6 +108,7 @@ class  FinancialController extends Controller
         $cmnd = $request->cmnd;
         $amount = $request->amount;
         $type = $request->type;
+        $walletType = $request->wallet_type;
         $user = $request->user();
         $data = Variable::FINANCIALS [$type]::where("{$type}_id", $id)->first();
         if (!starts_with($cmnd, 'bulk'))
@@ -116,12 +120,12 @@ class  FinancialController extends Controller
         if ($cmnd) {
             switch ($cmnd) {
                 case  'settlement' :
-                    if ($data->wallet < $amount)
+                    if (($walletType == 'wallet' && $data->wallet < $amount) || ($walletType == 'check_wallet' && $data->check_wallet < $amount))
                         return response()->json(['message' => sprintf(__('validator.max_amount'), __('settlement'), $data->wallet, $amount)], $errorStatus);
 
                     $t = Transaction::create([
                         'title' => sprintf(__('settlement_*_*_*'), number_format($amount), __($type), "$modelName ($id)"),
-                        'type' => 'settlement',
+                        'type' => $walletType == 'check_wallet' ? 'check_settlement' : 'settlement',
                         'for_type' => $type,
                         'for_id' => $id,
                         'from_type' => 'agency',
@@ -136,18 +140,21 @@ class  FinancialController extends Controller
                         'pay_id' => null,
                     ]);
                     if ($t) {
-                        $data->wallet -= $amount;
+                        if ($walletType == 'wallet')
+                            $data->wallet -= $amount;
+                        elseif ($walletType == 'check_wallet')
+                            $data->check_wallet -= $amount;
                         $data->save();
                         $t->user = $user;
                         Telegram::log(null, 'transaction_created', $t);
                     }
-                    return response()->json(['message' => __('updated_successfully'), 'wallet' => $data->wallet], $successStatus);
+                    return response()->json(['message' => __('updated_successfully'), 'wallet' => $data->wallet, 'check_wallet' => $data->check_wallet], $successStatus);
 
                 case  'charge' :
 
                     $t = Transaction::create([
                         'title' => sprintf(__('charge_*_*_*'), number_format($amount), __($type), "$modelName ($id)"),
-                        'type' => 'charge',
+                        'type' => $walletType == 'check_wallet' ? 'check_charge' : 'charge',
                         'for_type' => $type,
                         'for_id' => $id,
                         'from_type' => 'agency',
@@ -162,12 +169,15 @@ class  FinancialController extends Controller
                         'pay_id' => null,
                     ]);
                     if ($t) {
-                        $data->wallet += $amount;
+                        if ($walletType == 'wallet')
+                            $data->wallet += $amount;
+                        elseif ($walletType == 'check_wallet')
+                            $data->check_wallet += $amount;
                         $data->save();
                         $t->user = $user;
                         Telegram::log(null, 'transaction_created', $t);
                     }
-                    return response()->json(['message' => __('updated_successfully'), 'wallet' => $data->wallet], $successStatus);
+                    return response()->json(['message' => __('updated_successfully'), 'wallet' => $data->wallet, 'check_wallet' => $data->check_wallet], $successStatus);
 
 
             }

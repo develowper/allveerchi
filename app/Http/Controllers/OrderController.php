@@ -136,7 +136,7 @@ class OrderController extends Controller
                 if ($payMethod == 'wallet') {
                     $sum = $cashPrice;
                     $settingDebit = Setting::getValue("max_debit_$user->role") ?? 0;
-                    $uf = UserFinancial::firstOrCreate(['user_id' => $user->id], ['wallet' => 0]);
+                    $uf = UserFinancial::firstOrCreate(['user_id' => $user->id], ['wallet' => 0, 'check_wallet' => 0]);
                     $wallet = $uf->wallet ?? 0;
                     $maxDebit = $uf->max_debit ?? $settingDebit;
                     if (($wallet + $maxDebit) - $sum < 0)
@@ -443,7 +443,7 @@ class OrderController extends Controller
             $sum = $cart->orders->pluck('total_cash_price');
 
             $settingDebit = Setting::getValue("max_debit_$user->role") ?? 0;
-            $uf = UserFinancial::firstOrCreate(['user_id' => $user->id], ['wallet' => 0]);
+            $uf = UserFinancial::firstOrCreate(['user_id' => $user->id], ['wallet' => 0, 'check_wallet' => 0]);
             $wallet = $uf->wallet ?? 0;
             $maxDebit = $uf->max_debit ?? $settingDebit;
             if (($wallet + $maxDebit) - $sum < 0)

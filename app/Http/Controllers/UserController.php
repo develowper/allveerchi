@@ -35,7 +35,7 @@ class UserController extends Controller
         ]);
         $user = User::create($request->all());
         if ($user) {
-            UserFinancial::create(['user_id' => $user->id, 'wallet' => 0]);
+            UserFinancial::create(['user_id' => $user->id, 'wallet' => 0, 'check_wallet' => 0]);
             if ($request->img)
                 Util::createImage($request->img, Variable::IMAGE_FOLDERS[User::class], $user->id);
             $res = ['flash_status' => 'success', 'flash_message' => __('done_successfully')];

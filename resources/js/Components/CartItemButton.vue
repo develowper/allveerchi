@@ -149,7 +149,7 @@ export default {
       if (true || this.$refs[`rs-${this.productId}`]) {
         this.$refs[`rs-${this.productId}`].set(this.sliderData.min, this.sliderData.max, this.inCart);
 
-        const shows = this.prices.map(i => i.from) || [];
+        const shows = (this.prices || []).map(i => i.from) || [];
         shows.push(this.sliderData.max)
         const points = document.getElementById(`rs-${this.productId}`).shadowRoot.querySelectorAll('.mark-points .mark');
         const values = document.getElementById(`rs-${this.productId}`).shadowRoot.querySelectorAll('.mark-values .mark-value');

@@ -48,6 +48,7 @@ class FinancialRequest extends FormRequest
                 'amount' => ['required', 'integer', 'gt:0'],
                 'cmnd' => ['required', Rule::in(Variable::TRANSACTION_TYPES)],
                 'type' => ['required', Rule::in(array_keys(Variable::FINANCIALS))],
+                'wallet_type' => ['required', Rule::in(Variable::WALLET_TYPES)],
 
             ]);
         return $tmp;
@@ -63,6 +64,9 @@ class FinancialRequest extends FormRequest
 
             'type.required' => sprintf(__("validator.required"), __('type')),
             'type.in' => sprintf(__("validator.invalid"), __('type')),
+
+            'wallet_type.required' => sprintf(__("validator.required"), __('wallet_type')),
+            'wallet_type.in' => sprintf(__("validator.invalid"), __('wallet_type')),
 
             'cmnd.required' => sprintf(__("validator.required"), __('item')),
             'cmnd.in' => sprintf(__("validator.invalid"), __('item')),

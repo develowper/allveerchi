@@ -179,7 +179,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('transaction/search', [TransactionController::class, 'searchPanel'])->name('admin.panel.financial.transaction.search');
 
         PanelController::makeInertiaRoute('get', 'financial/index', 'admin.panel.financial.index', 'Panel/Financial/Index',
-            []
+            ['wallet_types' => Variable::WALLET_TYPES]
         );
         Route::get('financial/search', [FinancialController::class, 'searchMerged'])->name('admin.panel.financial.search');
         Route::patch('financial/update', [FinancialController::class, 'update'])->name('admin.panel.financial.update');

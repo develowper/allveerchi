@@ -62,7 +62,7 @@ class PreOrderController extends Controller
                 if ($payMethod == 'wallet') {
                     $sum = $data->total_price;
                     $settingDebit = Setting::getValue("max_debit_$user->role") ?? 0;
-                    $uf = UserFinancial::firstOrCreate(['user_id' => $user->id], ['wallet' => 0]);
+                    $uf = UserFinancial::firstOrCreate(['user_id' => $user->id], ['wallet' => 0, 'check_wallet' => 0]);
                     $wallet = $uf->wallet ?? 0;
                     $maxDebit = $uf->max_debit ?? $settingDebit;
                     if (($wallet + $maxDebit) - $sum < 0)

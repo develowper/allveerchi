@@ -44,7 +44,7 @@ class CartController extends Controller
         $addressIdx = $request->address_idx;
         $needAddress = false;
         $needSelfReceive = false;
-        $paymentMethod = 'online';
+        $paymentMethod = $request->payment_method ?? 'online';
         if (($user instanceof Admin) && ($productId || in_array($request->current, ['checkout.payment', 'checkout.shipping'])))
             return response()->json(['message' => __('admin_can_not_order')], Variable::ERROR_STATUS);
 //        if ($cmnd == 'count') {
@@ -100,6 +100,10 @@ class CartController extends Controller
                 $cartItem->delivery_timestamp = null;
                 $cartItem->save();
             }
+            $cart->save();
+        }
+        if ($request->payment_method || $cart->payment_method == null) {
+            $cart->payment_method = $paymentMethod;
             $cart->save();
         }
         $addressIdx = $addressIdx ?? $cart->address_idx;
@@ -202,6 +206,10 @@ class CartController extends Controller
             $itemTotalPrice = $cartItem->qty * $price;
 //            $cartItem->save();
 //            $cartItem->total_discount = isset($priceSelected['price']) ? 0 : ($isAuctionItem ? ($cartItem->qty * ($price - $product->auction_price)) : 0);
+            if (in_array($cart->payment_method, array_column(Variable::getPaymentMethods(), 'key'))) {
+                $itemTotalPrice = $itemTotalPrice + round((Setting::getValue("{$request->payment_method}_profit_percent") ?? 0) * $itemTotalPrice / 100);
+            }
+
             $cartItem->total_discount = 0;
             $cartItem->total_price = $itemTotalPrice;
             $cartItem->total_weight = $cartItem->qty * $product->weight;
@@ -349,7 +357,7 @@ class CartController extends Controller
             if (!$repo) {
             } elseif ($repo->status != 'active') {
                 $methodId = 'repo-inactive-' . $repo->id;
-            } elseif (!$repo->allow_visit) {
+            } elseif (!$repo->allow_visit && $cartItem->visit_checked) {
                 $methodId = 'repo-no-visit-' . $repo->id;
                 $errorMessage = __('repo_not_support_location');
             } else {
@@ -502,6 +510,7 @@ class CartController extends Controller
                 $agencyId = $item['agency_id'];
                 $deliveryDate = $cartItem->delivery_date;
                 $deliveryTimestamp = $cartItem->delivery_timestamp;
+
                 $totalItemsPrice += $cartItem->total_price;
 
                 $totalItemsDiscount += $cartItem->total_discount;
@@ -525,6 +534,7 @@ class CartController extends Controller
                 $errors[] = ['key' => 'location', 'type' => 'shipping', 'message' => $errorMessage];
             }
             $prices['cash'] = ($prices['cash'] ?? 0) + $basePrice + $totalShippingPrice;
+
 
             $shipments[] = [
 
@@ -578,9 +588,14 @@ class CartController extends Controller
                 $uf = UserFinancial::where('user_id', $user->id)->first();
                 $e['description'] .= (__('balance') . ' : ' . number_format(($uf->wallet ?? 0) + ($uf->max_debit ?? Setting::getValue("max_debit_$user->role") ?? 0)) . ' ' . __('currency'));
             }
+            if ($e ['key'] == '1_check' || $e ['key'] == '2_check') {
+                $uf = UserFinancial::where('user_id', $user->id)->first();
+                $e['description'] .= (__('balance') . ' : ' . number_format(($uf->check_wallet ?? 0)) . ' ' . __('currency'));
+            }
             return $e;
         }) : [];
         $cart->payment_method = $paymentMethod;
+
         //        if ($user) {
 //            $res = User::getLocation(Variable::$CITIES);
 //            $addresses = $user->addresses;
@@ -616,6 +631,7 @@ class CartController extends Controller
                 $tmpShipments->add($shipment);
                 $tmpCart->total_items_discount += $shipment['total_items_discount'];
                 $tmpCart->total_discount += $shipment['total_items_discount'];
+
                 $tmpCart->total_items_price += $shipment['total_items_price'];
                 $tmpCart->total_shipping_price += $shipment['total_shipping_price'];
                 $tmpCart->tax_price += $shipment['tax_price'];

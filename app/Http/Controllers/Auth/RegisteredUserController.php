@@ -55,8 +55,9 @@ class RegisteredUserController extends Controller
             'ref_id' => User::makeRefCode($request->phone),
             'password' => Hash::make($request->password),
             'telegram_id' => session('telegram_id', null)
+
         ]);
-        UserFinancial::create(['user_id' => $user->id, 'wallet' => 0]);
+        UserFinancial::create(['user_id' => $user->id, 'wallet' => 0, 'check_wallet' => 0]);
         event(new Registered($user));
 
         Auth::login($user);

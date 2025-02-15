@@ -71,7 +71,7 @@ class GuaranteeController extends Controller
                 'phone_verified' => true,
                 'ref_id' => User::makeRefCode($phone),
             ]);
-            UserFinancial::create(['user_id' => $customer->id, 'wallet' => 0]);
+            UserFinancial::create(['user_id' => $customer->id, 'wallet' => 0, 'check_wallet' => 0]);
         }
         $agency = Agency::find($operator->agency_id);
         $guaranteeMonths = $sample->guarantee_months;
@@ -154,7 +154,7 @@ class GuaranteeController extends Controller
                 'phone_verified' => true,
                 'ref_id' => User::makeRefCode($phone),
             ]);
-            UserFinancial::create(['user_id' => $customer->id, 'wallet' => 0]);
+            UserFinancial::create(['user_id' => $customer->id, 'wallet' => 0, 'check_wallet' => 0]);
         }
         $guaranteeMonths = $sample->guarantee_months;
         $sample->guarantee_expires_at = Carbon::now()->addMonths($guaranteeMonths);
