@@ -439,8 +439,8 @@ class OrderController extends Controller
             return response()->json(['message' => __('cart_is_empty'), 'cart' => $cart], Variable::ERROR_STATUS);
         }
         if ($payMethod == 'wallet') {
-//            $sum = $cart->orders->sum('total_price');
-            $sum = $cart->orders->pluck('total_cash_price');
+            $sum = $cart->orders->sum('total_price');
+//            $sum = $cart->orders->pluck('total_cash_price');
 
             $settingDebit = Setting::getValue("max_debit_$user->role") ?? 0;
             $uf = UserFinancial::firstOrCreate(['user_id' => $user->id], ['wallet' => 0, 'check_wallet' => 0]);
@@ -448,6 +448,16 @@ class OrderController extends Controller
             $maxDebit = $uf->max_debit ?? $settingDebit;
             if (($wallet + $maxDebit) - $sum < 0)
                 return response()->json(['message' => sprintf(__('validator.min_wallet'), number_format($sum - ($wallet + $maxDebit)) . " " . __('currency'), $wallet), 'cart' => $cart], Variable::ERROR_STATUS);
+
+        }
+        if (in_array($payMethod, ['1_check', '2_check'])) {
+            $sum = $cart->orders->sum('total_price');
+//            $sum = $cart->orders->pluck('total_cash_price');
+
+            $uf = UserFinancial::firstOrCreate(['user_id' => $user->id], ['wallet' => 0, 'check_wallet' => 0]);
+            $wallet = $uf->check_wallet ?? 0;
+            if (($wallet) - $sum < 0)
+                return response()->json(['message' => sprintf(__('validator.min_wallet'), number_format($sum) . " " . __('currency'), $wallet), 'cart' => $cart], Variable::ERROR_STATUS);
 
         }
 //split cart to each repo
@@ -493,7 +503,7 @@ class OrderController extends Controller
                     'total_cash_price' => $cart->total_cash_price,
                     'agency_id' => $cart->agency_id]);
 
-                if ($payMethod == 'online' && $cart->total_cash_price > 0)
+                if ($payMethod == 'online' && $cart->total_price > 0)
                     $pendingOrders++;
                 $items = [];
                 $shippings = [];
@@ -545,8 +555,8 @@ class OrderController extends Controller
         }
 //        $order_id = Carbon::now()->getTimestampMs();
         $order_ids_string = $orders->pluck('id')->join('-');
-//        $price = $orders->sum('total_price');
-        $price = $orders->sum('total_cash_price');
+        $price = $orders->sum('total_price');
+//        $price = $orders->sum('total_cash_price');
 
         $description = sprintf(__('pay_orders_*_*'), $order_ids_string, $user->phone);
 
@@ -560,9 +570,9 @@ class OrderController extends Controller
         elseif ($payMethod != 'local') { //success
             foreach ($orders as $o) {
                 $t = null;
-                if ($o['total_cash_price'] > 0)
+                if ($o['total_price'] > 0)
                     $t = Transaction::create([
-                        'title' => sprintf(($payMethod == 'wallet' ? __('pay_orders_wallet_*_*') : __('pay_orders_*_*')), $o['id'], $user->phone),
+                        'title' => sprintf(($payMethod == 'wallet' ? __('pay_orders_wallet_*_*') : (in_array($payMethod, ['1_check', '2_check']) ? __("pay_orders_{$payMethod}_wallet_*_*") : __('pay_orders_*_*'))), $o['id'], $user->phone),
                         'type' => "pay",
                         'pay_gate' => $payMethod == 'online' ? Variable::$BANK : $payMethod,
                         'for_type' => 'order',
@@ -573,16 +583,20 @@ class OrderController extends Controller
                         'to_id' => 1,
                         'info' => null,
                         'coupon' => null,
-                        'payed_at' => $payMethod == 'wallet' ? Carbon::now() : null,
-                        'amount' => $o['total_cash_price'],
-//                    'amount' => $o['total_price'],
+                        'payed_at' => in_array($payMethod, ['1_check', '2_check', 'wallet']) ? Carbon::now() : null,
+//                        'amount' => $o['total_cash_price'],
+                        'amount' => $o['total_price'],
                         'pay_id' => $response['order_id'],
                     ]);
                 Order::where('id', $o['id'])->update(['transaction_id' => $t->id ?? null, 'status' => ($payMethod == 'wallet' || $o['total_cash_price'] == 0) ? 'processing' : 'pending', 'payed_at' => $payMethod == 'wallet' ? Carbon::now() : null]);
-
+                if ($t->payed_at)
+                    Telegram::log(null, 'transaction_created', $t);
             }
             if ($payMethod == 'wallet') {
                 $uf->wallet -= $price;
+                $uf->save();
+            } elseif (in_array($payMethod, ['1_check', '2_check'])) {
+                $uf->check_wallet -= $price;
                 $uf->save();
             }
             if ($pendingOrders) {

@@ -862,6 +862,8 @@
   "accept_cancel_shipping": "حمل و نقل لغو و سفارشات آماده تحویل از آن حذف می شوند",
   "orders_*_not_allowed": "سفارشات در حالت %s مجاز نیستند",
   "pay_orders_*_*": "پرداخت سفارش %s توسط %s",
+  "pay_orders_1_check_wallet_*_*": "پرداخت 1 چکی سفارش %s توسط %s",
+  "pay_orders_2_check_wallet_*_*": "پرداخت 2 چکی سفارش %s توسط %s",
   "online_payment": "پرداخت مستقیم",
   "local_payment": "پرداخت در محل",
   "wallet_payment": "پرداخت با کیف پول/اعتبار",

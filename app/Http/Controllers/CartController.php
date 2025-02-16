@@ -244,7 +244,6 @@ class CartController extends Controller
 
             if ($repo && $repo->status == 'active') {
                 $shippingMethods = $repo->getRelation('shippingMethods')->where('status', 'active');
-
                 $shipments[$idx] = null;
                 $supportCity = count($repo->cities ?? []) == 0 || in_array($cityId, $repo->cities ?? []);
 
@@ -344,11 +343,15 @@ class CartController extends Controller
             //use default shipping (go to repo)
 
             $default = collect(Variable::getDefaultShippingMethods()[0]);
-            $default['address'] = optional($repo)->address;
-            $default['location'] = optional($repo)->location;
-            $default['province_id'] = optional($repo)->province_id;
-            $default['county_id'] = optional($repo)->county_id;
-            $default['pay_type'] = 'online';
+            $default['address'] = $cart->address['address'] ?? null/* optional($repo)->address*/
+            ;
+            $default['location'] = $cart->address['location'] ?? null/*optional($repo)->location*/
+            ;
+            $default['province_id'] = $cart->address['province_id'] ?? null/*optional($repo)->province_id*/
+            ;
+            $default['county_id'] = $cart->address['county_id'] ?? null /*optional($repo)->county_id*/
+            ;
+            $default['pay_type'] = 'local';
             $default['timestamps'] = Variable::TIMESTAMPS;
 //            $errors = $cart->errors ?? [];
             $methodId = 'rand-' . time();
@@ -363,14 +366,15 @@ class CartController extends Controller
             } else {
                 $methodId = 'repo-' . $repo->id;
                 $errorMessage = null;
-                $needSelfReceive = !$shipments[$idx] || $cartItem->visit_checked;
+                $needSelfReceive = /*!$shipments[$idx] ||*/
+                    $cartItem->visit_checked;
             }
             $default['id'] = $methodId;
             if ($errorMessage) {
                 $errors[] = ['key' => $methodId, 'type' => 'shipping', 'message' => $errorMessage];
                 $default['error_message'] = $errorMessage;
             }
-            if (!$shipments[$idx] || $cartItem->visit_checked) {
+            if ( !$shipments[$idx] ||  $cartItem->visit_checked) {
                 $shipments[$idx] = [
                     'method_id' => $methodId,
                     'cart_item' => $cartItem,
@@ -594,7 +598,7 @@ class CartController extends Controller
             }
             return $e;
         }) : [];
-        $cart->payment_method = $paymentMethod;
+//        $cart->payment_method = $paymentMethod;
 
         //        if ($user) {
 //            $res = User::getLocation(Variable::$CITIES);

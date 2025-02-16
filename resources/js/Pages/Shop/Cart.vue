@@ -21,7 +21,7 @@
 
           <div v-for="(payment,idx) in cart.payment_methods" @click="update({payment_method:payment.key})"
                class="border flex items-center justify-between p-4 cursor-pointer hover:bg-primary-50 "
-               :class="`${ payment.selected?'bg-primary-100 text-primary-700 ':' '} ${idx==cart.payment_methods.length-1 ?'rounded-b-lg ':' '} ${idx==0 ?'rounded-t-lg ':' '}`">
+               :class="`${ payment.key==cart.payment_method?'bg-primary-100 text-primary-700 ':' '} ${idx==cart.payment_methods.length-1 ?'rounded-b-lg ':' '} ${idx==0 ?'rounded-t-lg ':' '}`">
             <div class="">
               <div>{{ payment.name }}</div>
               <div class="text-xs text-gray-400 ">{{ payment.description }}</div>

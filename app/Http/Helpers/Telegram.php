@@ -559,6 +559,7 @@ class Telegram
                     $msg .= " کد پستی: " . ($data->postal_code ?? '_') . PHP_EOL;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     $msg .= " 👤 " . "دریافت کننده: " . "$data->receiver_fullname ( $data->receiver_phone )" . PHP_EOL;
+                    $msg .= " ⭐ " . "نوع پرداخت: " . __($data->payment_method) . PHP_EOL;
                     $msg .= " 📅 " . "تحویل: " . (ShippingMethod::find($data->shipping_method_id)->name ?? '') . ($data->delivery_date ? Jalalian::forge($data->delivery_date)->format('Y/m/d') . " ($data->delivery_timestamp) " : '  ') . PHP_EOL;
                     $msg .= " ➡️ " . "مسافت: " . $data->distance . ' km' . PHP_EOL;
                     $msg .= " ⚓️ " . "وزن: " . floatval($data->total_weight) . ' kg' . PHP_EOL;
@@ -601,6 +602,7 @@ class Telegram
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     $msg .= " 👤 " . "دریافت کننده: " . "$data->receiver_fullname ( $data->receiver_phone )" . PHP_EOL;
                     $msg .= " 🚛 " . "کرایه: " . number_format($data->total_shipping_price) . PHP_EOL;
+                    $msg .= " ⭐ " . "نوع پرداخت: " . __($data->payment_method) . PHP_EOL;
                     $msg .= " 📦 " . "اقلام: " . number_format($data->total_items_price) . PHP_EOL;
                     $msg .= " 📝 " . "اصلاحیه: " . number_format($data->change_price) . PHP_EOL;
                     $msg .= " 🛒 " . "نهایی: " . number_format($data->total_price) . PHP_EOL;
