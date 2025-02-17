@@ -582,7 +582,6 @@ class Telegram
                         $msg .= " 🟢 " . "یک پیش سفارش ثبت شد" . PHP_EOL;
                     if ($isEdit)
                         $msg .= " 🟠 " . "یک پیش سفارش ویرایش شد" . PHP_EOL;
-
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                     $msg .= " 👤 " . "کاربر: " . PHP_EOL;
                     $msg .= "$us->fullname ( $us->phone )" . PHP_EOL;
@@ -591,7 +590,7 @@ class Telegram
                     $msg .= " 🚥 " . "وضعیت: " . __($data->status) . PHP_EOL;
                     $msg .= " 🚩 " . "نمایندگی: " . "({$data->agency->id})" . ' ' . $data->agency->name . PHP_EOL;
                     $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
-                    foreach (collect($data->products ?? [])->map(fn($i) => (object)$i) as $item) {
+                    foreach (collect($data->items ?? [])->map(fn($i) => (object)$i) as $item) {
 //                        $msg .= "\xD8\x9C" . "➖➖➖➖➖➖➖➖➖➖➖" . PHP_EOL;
                         $msg .= " 🛒 ($item->id) " . $item->name_fa . ' تعداد ' . " [$item->qty] " . PHP_EOL;
                     }
