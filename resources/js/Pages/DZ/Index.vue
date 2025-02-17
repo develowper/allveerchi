@@ -61,7 +61,7 @@
                       <div class="flex items-center justify-end">
                         <div class="flex items-center "
                         >
-                          {{ asPrice(Math.round(p.price)) }}
+                          {{ (p.prices || []).map(i => asPrice(i.price)).join(' | ') }}
 
                         </div>
                         <TomanIcon class="w-4 h-4 mx-2"/>
@@ -74,7 +74,8 @@
 
 
                   <div class="flex  p-2 min-w-[100%]    ">
-                    <CartItemButton :key="p.id" class="w-full " :product-id="p.id"/>
+                    <CartItemButton :key="p.id" class="w-full " :product-id="p.id"
+                                    :prices="Array.isArray(p.prices)?p.prices :[]"/>
                   </div>
                 </Link>
 

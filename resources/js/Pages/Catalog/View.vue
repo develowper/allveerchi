@@ -32,7 +32,8 @@
             <div class="grow max-w-sm mx-auto">
               <div class="     bg-neutral-50 rounded-lg p-2 text-neutral-700">
                 <div class="w-full   my-1   ">
-                  <CartItemButton :key="data.id" class="w-full " :product-id="data.id"/>
+                  <CartItemButton :key="data.id" class="w-full " :product-id="data.id"
+                                  :prices="Array.isArray(data.prices)?data.prices :[]"/>
                 </div>
                 <div class="flex items-center justify-between">
                   <div class="text-primary-600 ms-1 font-bold ">{{ data.name }}</div>

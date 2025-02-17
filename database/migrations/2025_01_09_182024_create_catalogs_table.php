@@ -24,7 +24,8 @@ return new class extends Migration {
             $table->unsignedInteger('in_shop')->default(0);
             $table->unsignedInteger('in_repo')->default(0);
             $table->enum('status', array_column(Variable::STATUSES, 'name'))->default('active');
-
+            $table->json('categories')->nullable();
+            $table->json('prices')->nullable();
             $table->timestamps();
         });
     }

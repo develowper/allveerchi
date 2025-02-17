@@ -20,6 +20,12 @@ class Catalog extends Model
         'image_indicator',
         'in_shop',
         'in_repo',
+        'prices',
+        'categories',
+    ];
+    protected $casts = [
+        'categories' => 'array',
+        'prices' => 'array',
     ];
 
     static function seed()

@@ -46,12 +46,14 @@ class CartController extends Controller
         $ip = $request->ip();
         $productId = $request->variation_id;
         $qty = $request->qty;
+        $priceType = $request->price_type;
         $cmnd = $request->cmnd;
         $cityId = session()->get('city_id');
         $addressIdx = $request->address_idx;
         $needAddress = true;
         $needSelfReceive = false;
-        $paymentMethod = 'online';
+        $paymentMethod = $request->payment_method ?? 'online';
+
         if (($user instanceof Admin) && ($productId || in_array($request->current, ['checkout.payment', 'checkout.shipping'])))
             return response()->json(['message' => __('admin_can_not_order')], Variable::ERROR_STATUS);
 //        if ($cmnd == 'count') {
@@ -92,6 +94,10 @@ class CartController extends Controller
         }
         $cart->update(['address' => $address]);
 
+        if ($request->payment_method || $cart->payment_method == null) {
+
+            $cart->update(['payment_method' => $paymentMethod]);
+        }
 
 //        $productRepositories = Repository::whereIn('id', $cartItems->pluck('product.repo_id'))->get();
 

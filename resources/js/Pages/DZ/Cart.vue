@@ -95,7 +95,7 @@
                     <!--                    <div class="text-neutral-600 mx-1">{{ __('price_unit') }}:</div>-->
                     <!--                    <div class="text-neutral-600 mx-1">{{ asPrice(item.cart_item.product.price) }}</div>-->
 
-                    <div class="text-neutral-600 mx-1">{{ __('price') }}:</div>
+                    <div class="text-neutral-600 mx-1">{{ __('unit_price') }}:</div>
                     <div class="text-neutral-600 mx-1">{{
                         asPrice(Math.round(item.price))
                       }}
@@ -111,10 +111,10 @@
                 {{ item.error_message }}
               </div>
               <div class="flex flex-wrap items-center justify-start my-2">
-                <CartItemButton :product-id="idx"
+                <CartItemButton :product-id="idx" :key="idx" :prices="Array.isArray(item.prices)?item.prices :[]"
                                 class="flex  min-w-[100%]   xs:min-w-[50%] sm:min-w-[36%] lg:min-w-[20%]  hover:cursor-pointer"/>
                 <div class="flex">
-                  <div class="mx-2 ">{{ asPrice(item.price) }}</div>
+                  <div class="mx-2 ">{{ asPrice(item.price * item.qty) }}</div>
                   <div>
                     <TomanIcon class=""/>
                   </div>

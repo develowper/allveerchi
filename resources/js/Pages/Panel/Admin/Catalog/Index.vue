@@ -279,8 +279,19 @@
                 {{ d.pn }}
               </td>
 
-              <td class="px-2 py-4">
-                {{ asPrice(d.price) }}
+              <td class="px-2 py-4    ">
+                <button
+                    @click="d.idx=idx;d.cmnd='change-price';d.new_prices=d.prices ==null || d.prices.length ==0 ? [{}]:d.prices ;d.new_price=d.price;d.new_auction_price=d.auction_price; selected=d; "
+                    id="PriceId"
+                    aria-expanded="false"
+                    data-te-ripple-init
+                    data-te-ripple-color="light"
+                    class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
+                    :class="`bg-indigo-50 border border-indigo-300 hover:bg-indigo-200 text-indigo-500`"
+                >
+                  {{ (d.prices || [{price: '?'}]).map((i) => asPrice(i.price)).join('|') }}
+                </button>
+
               </td>
               <td class="px-2 py-4">
                 {{ d.image_indicator }}
@@ -367,6 +378,125 @@
 
             </tbody>
           </table>
+          <!--Modals-->
+
+          <div v-if="selected" class="relative z-[1050]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+            <div class="fixed inset-0 z-10  w-screen overflow-y-auto">
+              <div @click.self="selected=null;errors={}"
+                   class="flex min-h-full   justify-center p-4 text-center sm:items-center sm:p-0">
+                <div
+                    class="relative transform overflow-auto rounded-lg bg-white   shadow-xl transition-all sm:my-8  w-full   m-2 ">
+                  <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class=" flex flex-col items-stretch">
+                      <div class="flex items-center  gap-2">
+                        <div
+                            class="  flex text-warning  h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-warning-100 sm:mx-0 sm:h-10 sm:w-10">
+                          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                               fill="currentColor" viewBox="0 0 16 16">
+                            <path
+                                d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+                          </svg>
+                        </div>
+                        <h3 class="text-base     text-gray-900" id="modal-title">
+                          {{
+                            [selected.name_fa, selected.name_en, selected.pn].join(' | ')
+                          }}
+                        </h3>
+                      </div>
+                      <div class="m-2  text-start">
+                        <!--                         modal body-->
+                        <div class="mt-2">
+
+                          <div v-if="selected.cmnd=='change-price'"
+                               class="   text-sm text-gray-500 ">
+                            <span v-if="false" class="text-xs py-2 text-danger-500">{{ __('help_price') }}</span>
+                            <table class="table-auto my-2  text-sm   text-gray-500 ">
+                              <thead>
+                              <tr>
+                                <th>{{ __('from') }}</th>
+                                <th>{{ __('until') }}</th>
+                                <th v-if="false">{{ __('type') }}</th>
+                                <th>{{ __('price') }}</th>
+                                <th>{{ __('actions') }}</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr v-for="(p,idx) in selected.new_prices">
+                                <td>
+                                  <input :class="{'border-2 border-red-500':errors[`new_prices.${idx}.from`]}"
+                                         class="w-24 px-1  text-sm border-gray-400 rounded" type="number"
+                                         v-model="p.from">
+                                </td>
+                                <td>
+                                  <input :class="{'border-2 border-red-500':errors[`new_prices.${idx}.to`]}"
+                                         class="w-24  px-1 text-sm border-gray-400 rounded" type="number"
+                                         v-model="p.to">
+                                </td>
+                                <td v-if="false">
+                                  <select :class="{'border-2 border-red-500':errors[`new_prices.${idx}.type`]}"
+                                          class="grow rounded  border-gray-400 cursor-pointer" name=""
+
+                                          :id=" `priceTypeSelector` " v-model="p.type">
+                                    <option class="text-start   rounded   m-1"
+                                            v-for="d in $page.props.price_types  "
+                                            :value="d.id">
+                                      <div class="p-2"> {{ __(d.name) }}</div>
+                                    </option>
+                                  </select>
+
+                                </td>
+                                <td>
+                                  <input :class="{'border-2 border-red-500':errors[`new_prices.${idx}.price`]}"
+                                         class="w-24 px-1  text-sm border-gray-400 rounded" type="number"
+                                         v-model="p.price">
+                                </td>
+                                <td class="">
+                                  <div class="flex items-center gap-1 mx-2">
+                                    <button
+                                        @click="selected.new_prices.splice(idx+1,0,{})   "
+                                        class="bg-green-500 rounded-md hover:bg-green-400 hover:cursor-pointer text-white ">
+                                      <ChevronDownIcon class="w-6 h-6 m-2"/>
+                                    </button>
+                                    <button
+                                        @click="selected.new_prices.splice(idx,1)   "
+                                        class="bg-red-500 rounded-md hover:bg-red-400 hover:cursor-pointer text-white ">
+                                      <TrashIcon class="w-6 h-6 m-2"/>
+                                    </button>
+                                    <button
+                                        @click="selected.new_prices.splice(idx ,0,{})   "
+                                        class="bg-green-500 rounded-md hover:bg-green-400 hover:cursor-pointer text-white ">
+                                      <ChevronUpIcon class="w-6 h-6 m-2"/>
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                              </tbody>
+
+
+                            </table>
+                            <button
+                                class="bg-success-200 text-success-700 p-2 rounded-lg  hover:bg-success-300 w-full"
+                                @click="edit({'idx':selected.idx ,'id':selected.id,'cmnd':'change-price','new_prices':selected.new_prices,  })">
+                              {{ __('accept') }}
+                            </button>
+                          </div>
+                          <button class="bg-gray-200 my-2 text-gray-700 p-2 rounded-lg  hover:bg-gray-300 w-full"
+                                  @click="selected=null;errors={}">
+                            {{ __('cancel') }}
+                          </button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
 
         </div>
 
@@ -389,6 +519,8 @@ import {
   HomeIcon,
   XMarkIcon,
   ArrowsUpDownIcon,
+  TrashIcon,
+  ChevronUpIcon,
 
 } from "@heroicons/vue/24/outline";
 import Image from "@/Components/Image.vue"
@@ -405,11 +537,13 @@ export default {
         order_by: null,
         dir: 'DESC',
       },
+      selected: null,
       data: [],
       pagination: {},
       toggleSelect: false,
       loading: false,
       error: null,
+      errors: {},
     }
   },
   components: {
@@ -425,6 +559,8 @@ export default {
     Pagination,
     ArrowsUpDownIcon,
     Tooltip,
+    TrashIcon,
+    ChevronUpIcon,
   },
   mounted() {
 
@@ -523,6 +659,9 @@ export default {
             if (response.data.meta) {
               this.data[params.idx].meta = response.data.meta;
               this.user.meta_wallet = response.data.meta_wallet;
+            }
+            if (response.data.prices) {
+              this.data[params.idx].prices = response.data.prices;
             }
 
           })

@@ -16,6 +16,7 @@ class Cart
     public array $errors;
     public $address;
     public $items;
+    public $payment_method;
 
 
     static function instance(): Cart
@@ -90,13 +91,17 @@ class Cart
             if (isset($items->{$catalog->id}))
                 $items->{$catalog->id}->qty = $qty;
             else {
+                $prices = collect($catalog->prices ?? []);
+                $priceSelected = $prices->where('from', '<=', $qty)->where('to', '>=', $qty)->first()['price'] ?? 0;
+
                 $items->{$catalog->id} = (object)[
                     'name_fa' => $catalog->name_fa,
                     'name_en' => $catalog->name_en,
                     'pn' => $catalog->pn,
                     'image_url' => $catalog->image_url,
                     'image_indicator' => $catalog->image_indicator,
-                    'price' => $catalog->price,
+                    'price' => $priceSelected,
+                    'prices' => $prices,
                     'qty' => $qty,
                 ];
             }
