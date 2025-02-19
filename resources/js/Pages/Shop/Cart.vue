@@ -139,7 +139,7 @@
 
                 <CartItemButton :product-id="item.cart_item.variation_id"
                                 :prices="Array.isArray(item.cart_item.product.prices)?item.cart_item.product.prices :[]"
-                                class=" flex min-w-[100%] xs:min-w-[50%] sm:min-w-[36%] lg:min-w-[20%]
+                                class=" flex min-w-[100%]   xs:min-w-[100%] sm:min-w-[60%] lg:min-w-[50%]
                                 hover:cursor-pointer
                 "/>
                 <div class="flex items-center">
