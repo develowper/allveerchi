@@ -14,6 +14,7 @@ use App\Models\Business;
 use App\Models\BusinessTransaction;
 use App\Models\Car;
 use App\Models\Catalog;
+use App\Models\Category;
 use App\Models\City;
 use App\Models\Driver;
 use App\Models\DrZantia\PreOrder;
@@ -184,6 +185,7 @@ class Variable
         Driver::class => 'drivers',
         Car::class => 'cars',
         Catalog::class => 'catalogs',
+        Category::class => 'categories',
     ];
     const NOTIFICATION_TYPES = [
         "pay",

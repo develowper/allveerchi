@@ -65,11 +65,12 @@ class CategoryController extends Controller
 //        $request->merge([
 //            'status' => 'active',
 //        ]);
-        $data = Car::create($request->all());
+        $data = Category::create($request->all());
 
         if ($data) {
+
             if ($request->img)
-                Util::createImage($request->img, Variable::IMAGE_FOLDERS[Car::class], $data->id);
+                Util::createImage($request->img, Variable::IMAGE_FOLDERS[Category::class], $data->id);
 
             $res = ['flash_status' => 'success', 'flash_message' => __('created_successfully')];
             Telegram::log(null, 'car_created', $data);
@@ -121,6 +122,8 @@ class CategoryController extends Controller
                         'name' => $request->name,
                         'status' => $request->checked ? 'active' : 'inactive',
                     ]);
+                    if ($request->img)
+                        Util::createImage($request->img, Variable::IMAGE_FOLDERS[Category::class], $data->id);
 
                     $tree = $this->getTree(new Request())->getData()->data;
                     Telegram::log(null, 'category_created', $tree);
@@ -137,6 +140,13 @@ class CategoryController extends Controller
                     Telegram::log(null, 'category_edited', $tree);
                     return response()->json(['tree_data' => $tree, 'message' => __('updated_successfully')]);
                     break;
+                case  'upload-img' :
+
+                    if (!$request->img) //  add extra image
+                        return response()->json(['errors' => [__('file_not_exists')], 422]);
+                    Util::createImage($request->img, Variable::IMAGE_FOLDERS[Category::class], $request->id);
+                    return response()->json(['message' => __('updated_successfully')], $successStatus);
+
             }
         } elseif ($treeData) {
 

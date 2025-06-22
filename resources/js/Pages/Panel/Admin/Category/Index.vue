@@ -133,7 +133,15 @@
               >
 
                 <form @submit.prevent="">
-
+                  <div class="my-2">
+                    <ImageUploader :key="params.id" :replace="params.id" id="img"
+                                   :preload="params.id?route('storage.categories')+`/${params.id}.jpg`:null"
+                                   :mode="params.cmnd" :for-id="params.id" :cropRatio="1"
+                                   :link="route(`admin.panel.category.update`)"
+                                   ref="imageCropper" :label="__('image_cover_jpg')" cropRatio="1"
+                                   height="10" class="grow w-48 mx-auto"/>
+                    <InputError class="mt-1 " :message="params.errors.img"/>
+                  </div>
                   <TextInput
                       id="checked"
                       type="checkbox"
@@ -192,7 +200,8 @@
 
                   <div class="    mt-4">
 
-                    <PrimaryButton @click="edit(params)" type="button" class="w-full  "
+                    <PrimaryButton @click="edit( params   )" type="button"
+                                   class="w-full  "
                                    :class="{ 'opacity-25': loading}"
                                    :disabled="loading">
                       <LoadingIcon class="w-4 h-4 mx-3 " v-if="  loading"/>
@@ -242,6 +251,8 @@ import LoadingIcon from "@/Components/LoadingIcon.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Selector from "@/Components/Selector.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import ImageUploader from "@/Components/ImageUploader.vue";
+import InputError from "@/Components/InputError.vue";
 
 export default {
   data() {
@@ -262,6 +273,8 @@ export default {
     }
   },
   components: {
+    InputError,
+    ImageUploader,
     InputLabel,
     TextInput,
     Head,
@@ -365,7 +378,7 @@ export default {
     },
     edit(params) {
 
-
+      params.img = this.$refs.imageCropper.getCroppedData();
       this.isLoading(true);
       window.axios.patch(route('admin.panel.category.update'), params,
           {})
