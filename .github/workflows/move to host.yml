@@ -26,3 +26,6 @@ jobs:
             server.php
             resources/**
             app/**
+            database/**
+            config/**
+            storage/**
