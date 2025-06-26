@@ -48,7 +48,7 @@ const focusNext = (elem) => {
         <input id="search-toggle" :value="modelValue" type="search"
                @input="$emit('update:modelValue', $event.target.value)"
                :placeholder="__('hero_search_placeholder')"
-               class="placeholder-gray-400 border-transparent   w-full py-2 ps-12 pe-4 focus:ring-primary-500   text-gray-600 bg-gray-100 rounded-lg  "
+               class="placeholder-gray-400 border-transparent   w-full py-2 ps-12 pe-4 focus:ring-primary-500 focus:border-primary-500  text-gray-600 bg-gray-100 rounded-lg  "
                @search="$emit('search' )">
 
       </div>

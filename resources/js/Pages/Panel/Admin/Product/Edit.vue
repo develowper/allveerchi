@@ -59,6 +59,7 @@
               </div>
               <div class="my-2">
                 <Selector ref="categorySelector" v-model="form.category_id"
+                          :multiple="true"
                           :data="$page.props.categories" :error="form.errors.category_id"
                           :label="__('category')"
                           id="category_id">

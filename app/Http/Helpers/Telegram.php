@@ -3,6 +3,7 @@
 namespace App\Http\Helpers;
 
 
+use App\Events\SendToTelegram;
 use App\Models\Admin;
 use App\Models\Agency;
 use App\Models\Category;
@@ -110,7 +111,7 @@ class Telegram
 
     static function creator($method, $datas = [])
     {
-//        if (!str_contains(url('/'), '.com') && !str_contains(url('/'), '.ir')) return;
+        if (!str_contains(url('/'), '.com') && !str_contains(url('/'), '.ir')) return;
 //        $url = "https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN', '') . "/" . $method;
 
         $url = "https://bot.drzantia.ir/api/bot/telegram/ailverchi";
@@ -469,6 +470,12 @@ class Telegram
     }
 
     static function log($to, $type, $data)
+    {
+        SendToTelegram::dispatch($to, $type, $data);
+
+    }
+
+    static function sendLog($to, $type, $data)
     {
 
         try {

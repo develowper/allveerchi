@@ -29,6 +29,10 @@ export default {
             return document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 
         },
+        getQueryParams(url) {
+            const params = new URL(url).searchParams;
+            return Object.fromEntries(params.entries());
+        },
         updateCart(cart) {
             this.emitter.emit('updateCart', cart);
         },

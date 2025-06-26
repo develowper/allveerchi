@@ -1,20 +1,38 @@
 <template>
   <nav class="fixed w-full z-[1043] top-0 ">
     <div class="max-w-7xl  mx-auto   px-2 lg:px-4">
-      <div class="flex justify-between">
-        <div class="flex space-x-4">
-          <!-- Website Logo -->
-          <div>
-            <Link :href="route('/')" class="flex items-center py-4 px-2">
-              <ApplicationLogo class="w-9 h-9 fill-current text-primary-600"/>
-              <span class="font-semibold text-white nav-item text-lg mx-2"
-              >{{ __('app_name') }}</span>
+      <div class="flex flex-col py-2">
+        <div class="flex justify-between">
+          <div class="flex space-x-4 grow items-center justify-start">
+            <!-- Website Logo -->
+            <div>
+              <Link :href="route('/')" class="flex items-center py-4 px-2">
+                <ApplicationLogo class="w-9 h-9 fill-current text-primary-600"/>
+                <span class="font-semibold text-white nav-item text-lg mx-2"
+                >{{ __('app_name') }}</span>
 
-            </Link>
+              </Link>
+            </div>
+            <div class="  grow   max-w-md mx-auto ">
+              <SearchInput class="hidden md:block " v-model="params.search"
+                           @search="search( )"/>
+            </div>
           </div>
+          <!-- Primary Navbar items -->
 
+          <!-- Secondary Navbar items -->
+          <div class="   flex items-center space-x-3   ">
+            <CartButton/>
+            <UserButton/>
+            <!--          <LanguageButton/>-->
+          </div>
+          <!-- Mobile menu button -->
+          <div class="md:hidden flex items-center nav-item ">
+            <button class="h-9 w-9   border-2 rounded  mobile-menu-button ">
+              <Bars3Icon class=" " className="  "/>
+            </button>
+          </div>
         </div>
-        <!-- Primary Navbar items -->
         <div
             class="hidden md:flex items-center grow  justify-start  text-xs  transition-all duration-500">
           <div class="flex items-center">
@@ -56,24 +74,15 @@
           </div>
 
         </div>
-        <!-- Secondary Navbar items -->
-        <div class="   flex items-center space-x-3   ">
-          <CartButton/>
-          <UserButton/>
-          <!--          <LanguageButton/>-->
-        </div>
-        <!-- Mobile menu button -->
-        <div class="md:hidden flex items-center nav-item ">
-          <button class="h-9 w-9   border-2 rounded  mobile-menu-button ">
-            <Bars3Icon class=" " className="  "/>
-          </button>
-        </div>
       </div>
     </div>
     <!-- mobile menu -->
     <div
         class="      md:hidden     mobile-menu  transform transition-all duration-500  bg-primary-500 px-4 shadow-md  ">
       <div class="mobile-menu-content flex flex-col ">
+
+        <SearchInput class="         " v-model="params.search" @search="search( )"/>
+
         <Link :href="route('/')" class="px-4 mobile nav-item m-1" :class="navClasses('/')">
           {{ __('home') }}
         </Link>
@@ -104,9 +113,11 @@ import UserButton from "@/Components/UserButton.vue";
 import {Head, Link} from '@inertiajs/vue3';
 import {Bars3Icon, UserIcon} from "@heroicons/vue/24/outline";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import SearchInput from "@/Components/SearchInput.vue";
 
 export default {
   components: {
+    SearchInput,
     ApplicationLogo,
     LanguageButton,
     UserButton,
@@ -119,8 +130,10 @@ export default {
   },
   props: ['theme'],
   data() {
-    return {}
+    return {params: {}}
   }, mounted() {
+
+    this.params = this.getQueryParams(window.location) ?? {};
     const btn = document.querySelector("button.mobile-menu-button");
     const menu = document.querySelector(".mobile-menu");
     const menuContent = document.querySelector("div.mobile-menu-content");
@@ -155,6 +168,9 @@ export default {
     this.setScrollListener();
   },
   methods: {
+    search() {
+      window.location = this.route('shop.index', this.params)
+    },
     navClasses(item) {
       let base = "py-4 rounded-lg px-2 lg:px-2    font-semibold  transition    hover:bg-primary-400 hover:text-white  duration-300 ";
       if (item && (this.route().current(`${item}.*`) || this.route().current(`${item}`)))

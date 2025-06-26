@@ -79,7 +79,7 @@
                class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                data-te-sidenav-link-ref>
               <CubeIcon class="w-5 h-5  "/>
-              <span class="mx-2 text-sm "> {{ __('parent_products') }} </span>
+              <span class="mx-2 text-sm "> {{ __('products') }} </span>
               <span
                   class="  right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
                   data-te-sidenav-rotate-icon-ref>

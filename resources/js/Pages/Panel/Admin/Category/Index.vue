@@ -29,23 +29,45 @@
       <div class="px-2 flex flex-col   md:px-4">
 
         <div class="flex-col p-2 md:p-4  bg-white  overflow-x-auto shadow-lg  rounded-lg">
-          <Draggable class="mtl-tree" v-model="treeData" treeLine dir="ltr">
-            <template #default="{ node, stat }">
+          <Draggable class="mtl-tree   p-1  " v-model="treeData" :defaultOpen="false" treeLine dir="ltr">
+            <template #default="{ node, stat }" class="  ">
 
-              <OpenIcon
-                  v-if="stat.children.length"
-                  :open="stat.open"
-                  class="mtl-mr"
-                  @click.native="stat.open = !stat.open"
-              />
-              <input
-                  class="mtl-checkbox mtl-mr"
-                  type="checkbox" @change="node.status=stat.checked?'active':'inactive'"
-                  v-model="node.checked"
-              />
-              <span
-                  @click="params.cmnd='edit'; params.checked=node.checked;params.id=node.id;params.parent_id=node.parent_id;params.name=node.name; modal.show()"
-                  class="mtl-ml p-1 select-none cursor-pointer">{{ node.name }}</span>
+              <div
+                  :class="`${stat.children.length? `my-1 bg-gray-${stat.level}00 hover:bg-gray-100`:''}`"
+                  class="border  border-gray-400  p-1 rounded  flex items-center hover:cursor-grab">
+                <OpenIcon
+                    v-if="stat.children.length"
+                    :open="stat.open"
+                    class="mtl-mr text-lg border rounded-full p-1 bg-gray-600 hover:bg-gray-500 cursor-pointer    fill-white hover:scale-[120%] duration-200"
+                    @click="stat.open = !stat.open"
+                />
+
+                <input
+                    class="mtl-checkbox mtl-mr rounded-full p-2 cursor-pointer hover:text-primary-300 text-primary-500 focus:border-primary"
+                    type="checkbox" @change="node.status=stat.checked?'active':'inactive'"
+                    v-model="node.checked"
+                />
+                <span
+
+                    class="mtl-ml p-1 select-none ">{{ node.name }} {{ `(${node.id})` }}</span>
+
+                <WrenchIcon
+                    @click="params.cmnd='edit'; params.checked=node.checked;params.id=node.id;params.parent_id=node.parent_id;params.name=node.name; modal.show()"
+                    class="h-6   border rounded-full p-[2px] bg-blue-600 hover:bg-blue-500 cursor-pointer     text-white  hover:scale-[120%] duration-200"
+                    @click.native="stat.open = !stat.open"
+                />
+                <MinusIcon v-if="!stat.children.length"
+                           @click.prevent="showDialog('danger',__('remove_item?'),__('remove'),edit,{id:node.id,name:node.name,cmnd:'remove'})"
+                           class="h-6 mx-1  border rounded-full  bg-danger-600 hover:bg-danger-500 cursor-pointer     text-white  hover:scale-[120%] duration-200"
+                           @click.native="stat.open = !stat.open"
+                />
+                <PlusIcon @click="params.cmnd='add'; params.parent_id=node.id;params.name=null;modal.show()"
+                          class="h-6   border rounded-full   bg-success-600 hover:bg-success-500 cursor-pointer    text-white hover:scale-[120%] duration-200"
+                          @click.native="stat.open = !stat.open"
+                />
+
+
+              </div>
             </template>
           </Draggable>
         </div>
@@ -238,6 +260,9 @@ import {
   ArrowsUpDownIcon,
   FolderPlusIcon,
   Squares2X2Icon,
+  PlusIcon,
+  MinusIcon,
+  WrenchIcon
 
 } from "@heroicons/vue/24/outline";
 import Image from "@/Components/Image.vue"
@@ -297,6 +322,9 @@ export default {
     FolderPlusIcon,
     Selector,
     Squares2X2Icon,
+    PlusIcon,
+    MinusIcon,
+    WrenchIcon
   },
   watch: {
     treeData() {

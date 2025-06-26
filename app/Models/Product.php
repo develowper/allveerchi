@@ -29,7 +29,7 @@ class Product extends Model
         'weight',
     ];
     protected $casts = [
-
+        'categories' => 'array',
     ];
 
     public static function getImages($id)

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\SendToTelegram;
 use App\Events\Viewed;
+use App\Listeners\SendToTelegramListener;
 use App\Listeners\ViewedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,7 +24,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         Viewed::class => [
             ViewedListener::class,
-        ]
+        ],
+        SendToTelegram::class => [
+            SendToTelegramListener::class,
+        ],
     ];
 
     /**

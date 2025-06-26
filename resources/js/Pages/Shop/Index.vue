@@ -6,7 +6,7 @@
     </template>
 
     <div
-        class="  py-8  shadow-md bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-400 to-primary-500">
+        class="  py-16  shadow-md bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-400 to-primary-500">
 
     </div>
 
@@ -15,7 +15,7 @@
       <!--      <LocationSelector-->
       <!--          @change="  params.province_id=$event.province_id;params.county_id=$event.county_id;params.district_id=$event.district_id; getData(0);"/>-->
 
-      <SearchInput class="shrink max-w-xs " v-model="params.search" @search="getData(0)"/>
+      <SearchInput v-if="false" class="shrink max-w-xs " v-model="params.search" @search="getData(0)"/>
 
       <Selector v-if="false" ref="gradeSelector" v-model="params.grade"
                 :data="$page.props.grades.map(e=>{return{id:e,name:`${__('grade')} ${e}`}})"
@@ -254,6 +254,8 @@ export default {
 
   }, mounted() {
     this.setScroll(this.$refs.loader);
+    this.params = Object.assign({}, this.params, this.getQueryParams(window.location) ?? {});
+
     this.getData();
   },
   methods: {

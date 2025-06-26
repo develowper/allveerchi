@@ -11,6 +11,7 @@ use App\Models\Admin;
 use App\Models\Agency;
 use App\Models\Car;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -138,6 +139,27 @@ class CategoryController extends Controller
                     }
                     $tree = $this->getTree(new Request())->getData()->data;
                     Telegram::log(null, 'category_edited', $tree);
+                    return response()->json(['tree_data' => $tree, 'message' => __('updated_successfully')]);
+                    break;
+                case 'remove':
+                    $data = Category::find($request->id);
+                    if ($data) {
+
+                        $categoryProducts = Product::whereJsonContains('categories', $data->id)->get();
+                        foreach ($categoryProducts as $cp) {
+                            $categories = array_filter($cp->categories, fn($id) => $id != $data->id);
+                            $cp->categories = array_values($categories);
+                            $cp->save();
+                        }
+
+                        if ($data->children)
+                            return response()->json(['errors' => [__('categories_have_children_cant_delete')], 422]);
+
+                        $data->delete();
+                    }
+
+                    $tree = $this->getTree(new Request())->getData()->data;
+                    Telegram::log(null, 'category_removed', $tree);
                     return response()->json(['tree_data' => $tree, 'message' => __('updated_successfully')]);
                     break;
                 case  'upload-img' :

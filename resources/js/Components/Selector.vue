@@ -1,6 +1,7 @@
 <template>
   <div>
     <InputLabel class="my-1  " :for="id" :value="label"/>
+
     <div class="flex " :id="`${id}-wrapper`">
          <span v-if="$slots.append"
                class=" flex bg-gray-100  text-gray-500 items-center whitespace-nowrap rounded-s border border-e-0 border-solid border-neutral-300  text-center text-base font-normal leading-[1.6]   dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
@@ -8,11 +9,13 @@
             <slot name="append"></slot>
         </span>
 
-      <span class="grow " dir="ltr">
+      <span class="grow touch" dir="ltr">
             <select :multiple="multiple" :id="id" class=" " :value="modelValue" v-model="selecteds"
                     @change=" set ( $event.target.value)"
                     data-te-select-init
+                    :data-te-multiple-init="multiple"
                     :name="id"
+                    data-te-select-auto-close="outside"
                     :data-te-select-all="false"
                     data-te-select-filter="true"
                     data-te-select-search-placeholder="..."
@@ -32,7 +35,7 @@
                     data-te-class-select-clear-btn="hidden absolute opacity-0 top-2 end-0 text-gray-50 outline-none"
                     data-te-class-select-arrow="absolute end-3 text-[0.8rem] cursor-pointer peer-focus:text-primary peer-data-[te-input-focused]:text-primary group-data-[te-was-validated]/validation:peer-valid:text-green-600 group-data-[te-was-validated]/validation:peer-invalid:text-[rgb(220,76,100)] w-5 h-5"
                     data-te-class-select-option="flex flex-row-reverse text-sm items-center justify-center w-full px-4 truncate text-gray-700 bg-transparent select-none cursor-pointer data-[te-input-multiple-active]:bg-black/5 hover:[&:not([data-te-select-option-disabled])]:bg-black/5 data-[te-input-state-active]:bg-black/5 data-[te-select-option-selected]:data-[te-input-state-active]:bg-black/5 data-[te-select-selected]:data-[te-select-option-disabled]:cursor-default data-[te-select-selected]:data-[te-select-option-disabled]:text-gray-400 data-[te-select-selected]:data-[te-select-option-disabled]:bg-transparent data-[te-select-option-selected]:bg-black/[0.02] data-[te-select-option-disabled]:text-gray-400 data-[te-select-option-disabled]:cursor-default group-data-[te-select-option-group-ref]/opt:pl-7 dark:text-gray-200 dark:hover:[&:not([data-te-select-option-disabled])]:bg-white/30 dark:data-[te-input-state-active]:bg-white/30 dark:data-[te-select-option-selected]:data-[te-input-state-active]:bg-white/30 dark:data-[te-select-option-disabled]:text-gray-400 dark:data-[te-input-multiple-active]:bg-white/30"
-
+                    data-te-select-option-text-ref=""
                     :data-te-select-all-label="__('select_all')"
                     :data-te-select-options-selected-label="__('item')"
                     :data-te-select-search-placeholder="__('search')"
@@ -59,7 +62,7 @@
 
 
 <script>
-import {Select, initTE} from "tw-elements";
+
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import {XMarkIcon} from "@heroicons/vue/24/outline"
@@ -77,7 +80,7 @@ export default {
   components: {InputLabel, InputError, XMarkIcon},
   watch: {
     modelValue(_new, _old) {
-      this.closeButton.classList.add('opacity-0');
+      this.closeButton?.classList.add('opacity-0');
       // if (!_new && !this.closeButton.classList.contains('opacity-0'))
       //   this.closeButton.classList.add('opacity-0');
       // else
@@ -88,11 +91,13 @@ export default {
 
 
   },
-  mounted() {
+  async mounted() {
     // this.log(this.data);
+    // const {Select, initTE} = await import( "tw-elements");
+    // initTE(Select)
     if (this.preload)
       this.selecteds = this.preload
-    new Select(document.getElementById(this.id));
+    // new Select(document.getElementById(this.id), {autoClose: false});
 
     this.closeButton = document.querySelector(`#${this.id + '-wrapper'} span[data-te-select-clear-btn-ref]`);
     this.input = document.querySelector(`#${this.id + '-wrapper'} input[data-te-select-input-ref]`);
@@ -100,6 +105,7 @@ export default {
       this.input.setAttribute('dir', 'rtl');
     if (this.closeButton && this.modelValue == null)
       this.closeButton.classList.add('opacity-0');
+
 
     // if (!window.Select) {
     // this.$forceUpdate();
