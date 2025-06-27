@@ -31,5 +31,5 @@ jobs:
             resources/**
             app/**
             database/**
-            config/**
             storage/**
+            public/**
