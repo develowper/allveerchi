@@ -13,7 +13,7 @@ jobs:
         with:
           server: ftp.ailverchi.ir
           #          protocol: ftp
-          port: 1396
+          #          port: 21
           username: allveerchi
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /allveerchi/
