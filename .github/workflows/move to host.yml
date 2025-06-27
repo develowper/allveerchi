@@ -29,8 +29,8 @@ jobs:
             composer.lock
             composer.json
             package-lock.json
-            resources/**
             app/**
             database/**
             storage/**
             public/**
+            config/**
