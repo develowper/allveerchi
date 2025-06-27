@@ -11,7 +11,7 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: ftps.ailverchi.ir
+          server: ftp.ailverchi.ir
           #          protocol: ftp
           #          port: 21
           username: allveerchi
