@@ -11,13 +11,14 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: ftp.ailverchi.ir
-          #          protocol: ftp
-          #          port: 21
+          server: ailverchi.ir
+          protocol: ftp
+          port: 21
           username: allveerchi
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /allveerchi/
           dangerous-clean-slate: false
+          timeout: 60000
           exclude: |
             **/.git*
             **/.git*/**
