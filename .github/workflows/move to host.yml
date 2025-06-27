@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ailverchi.ir
           protocol: ftp
