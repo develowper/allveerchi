@@ -19,7 +19,7 @@ jobs:
           server-dir: /allveerchi/
           dangerous-clean-slate: false
           timeout: 60000
-          dry-run: false
+          dry-run: true
           exclude: |
             **/.git*
             **/.git*/**
@@ -30,6 +30,7 @@ jobs:
             composer.json
             package-lock.json
             resources/**
+            app/**
             database/**
             storage/**
             public/**
