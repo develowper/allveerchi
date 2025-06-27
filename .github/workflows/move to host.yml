@@ -32,3 +32,4 @@ jobs:
             config/**
             storage/**
             public/**
+            tests/**
