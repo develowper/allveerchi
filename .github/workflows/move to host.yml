@@ -11,8 +11,8 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: ailverchi.ir
-          protocol: ftp
+          server: ftp.ailverchi.ir
+          #          protocol: ftp
           port: 1396
           username: allveerchi
           password: ${{ secrets.FTP_PASSWORD }}
