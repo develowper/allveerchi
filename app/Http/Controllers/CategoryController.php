@@ -133,6 +133,22 @@ class CategoryController extends Controller
                 case 'edit':
                     $data = Category::find($request->id);
                     if ($data) {
+                        if ($data->parent_id != $request->parent_id) {
+                            $oldParent = Category::find($data->parent_id);
+                            $newParent = Category::find($request->parent_id);
+//                            if (!$newParent)
+//                                return response()->json(['errors' => [sprintf(__("validator.invalid"), __('parent'))]], 422);
+                            if ($oldParent) {
+                                $oldParent->children = array_filter($oldParent->children ?? [], fn($i) => $i != $data->id);
+                                $oldParent->save();
+                            }
+                            if ( $newParent) {
+                                $newParent->children = array_unique(array_merge($newParent->children ?? [], [$data->id]));
+                                $newParent->save();
+                            }
+
+                        }
+                        $data->parent_id = $request->parent_id;
                         $data->name = $request->name;
                         $data->status = $request->checked ? 'active' : 'inactive';
                         $data->save();
@@ -153,7 +169,7 @@ class CategoryController extends Controller
                         }
 
                         if ($data->children)
-                            return response()->json(['errors' => [__('categories_have_children_cant_delete')], 422]);
+                            return response()->json(['errors' => [__('categories_have_children_cant_delete')]], 422);
 
                         $data->delete();
                     }

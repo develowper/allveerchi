@@ -52,7 +52,7 @@
                     class="mtl-ml p-1 select-none ">{{ node.name }} {{ `(${node.id})` }}</span>
 
                 <WrenchIcon
-                    @click="params.cmnd='edit'; params.checked=node.checked;params.id=node.id;params.parent_id=node.parent_id;params.name=node.name; modal.show()"
+                    @click="params.cmnd='edit'; params.checked=node.checked;params.id=node.id;params.parent_id=node.parent_id;params.name=node.name;$refs.categorySelector.selecteds  = node.parent_id ; modal.show()"
                     class="h-6   border rounded-full p-[2px] bg-blue-600 hover:bg-blue-500 cursor-pointer     text-white  hover:scale-[120%] duration-200"
                     @click.native="stat.open = !stat.open"
                 />
@@ -182,16 +182,33 @@
                            class="bg-red-500 cursor-pointer text-white align-middle rounded-s hover:bg-red-400">
                         <XMarkIcon class="w-8 h-6 m-2 "/>
                       </div>
+
                       <select class="grow rounded-e border-gray-300 cursor-pointer" name=""
+                              data-twe-select-filter="true"
+                              data-twe-select-init
                               :id=" `selectParentId` " v-model="params.parent_id">
                         <option class="text-start rounded p-2 m-2"
                                 v-for="d in $page.props.categories "
                                 :value="d.id">
-                          <div class="p-2"> {{ __(d.name) }}</div>
+                          <div class="p-2"> {{ __(d.name) }} {{ `(${d.id})` }}</div>
                         </option>
                       </select>
                     </div>
 
+                  </div>
+                  <div class="my-2">
+                    <Selector ref="categorySelector" v-model="params.parent_id"
+                              :data="$page.props.categories?.map( i =>({  ...i, name:`${i.name}(${i.id})` }))"
+                              :error="params.errors.parent_id"
+                              :preload="params.parent_id"
+                              :label="__('parent')"
+                              id="parent_id">
+                      <template v-slot:append>
+                        <div class="  p-3">
+                          <Squares2X2Icon class="h-5 w-5"/>
+                        </div>
+                      </template>
+                    </Selector>
                   </div>
                   <div class="my-2">
                     <TextInput
@@ -425,13 +442,10 @@ export default {
 
           .catch((error) => {
             this.error = this.getErrors(error);
+            // console.log(error)
             if (error.response && error.response.data) {
-              if (error.response.data.charge) {
-                this.data[params.idx].charge = error.response.data.charge;
-              }
-              if (error.response.data.view_fee) {
-                this.data[params.idx].view_fee = error.response.data.view_fee;
-              }
+
+
               if (error.response.data.meta) {
                 this.data[params.idx].meta = error.response.data.meta;
               }

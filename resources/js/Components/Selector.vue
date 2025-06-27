@@ -95,6 +95,7 @@ export default {
     // this.log(this.data);
     // const {Select, initTE} = await import( "tw-elements");
     // initTE(Select)
+    // console.log(this.preload)
     if (this.preload)
       this.selecteds = this.preload
     // new Select(document.getElementById(this.id), {autoClose: false});
