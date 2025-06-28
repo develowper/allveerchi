@@ -27,7 +27,6 @@ jobs:
             vendor/**
             server.php
             composer.lock
-            composer.json
             package-lock.json
             resources/**
             app/**
