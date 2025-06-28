@@ -33,4 +33,3 @@ jobs:
             database/**
             storage/**
             public/**
-            config/**
