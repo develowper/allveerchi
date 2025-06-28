@@ -111,7 +111,7 @@
                 </Selector>
               </div>
 
-              <div class="my-2">
+              <div v-if="false" class="my-2">
                 <UserSelector :multi="true" :colsData="['id','name','level', ]"
                               :labelsData="['id','name','level', ]"
 

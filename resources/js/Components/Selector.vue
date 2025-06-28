@@ -10,7 +10,7 @@
         </span>
 
       <span class="grow touch" dir="ltr">
-            <select :multiple="multiple" :id="id" class=" " :value="modelValue" v-model="selecteds"
+            <select :multiple="multiple" :id="id" class="select " :value="modelValue" v-model="selecteds"
                     @change=" set ( $event.target.value)"
                     data-te-select-init
                     :data-te-multiple-init="multiple"

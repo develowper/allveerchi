@@ -107,7 +107,7 @@
 
                 </TextInput>
               </div>
-              <div class="my-4">
+              <div v-if="false" class="my-4">
                 <UserSelector :multi="true" :colsData="['id','name','level', ]"
                               :labelsData="['id','name','level', ]"
                               :error="null"

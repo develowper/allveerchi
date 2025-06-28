@@ -73,6 +73,7 @@ window.tailwindElements = () => {
         return d;
     });
 
+
     // window.Popover = Popover;
     // window.Tooltip = Tooltip;
     // window.Select = Select;
@@ -82,7 +83,7 @@ window.tailwindElements = () => {
     // window.Modal = Modal;
     // window.Dropdown = Dropdown;
     initTE({Popover, Tooltip, Ripple, Input, Select, Alert, Toast, Sidenav, Modal,}, {
-        // allowReinits: true,
+        allowReinits: true,
         autoReinits: true,
         checkOtherImports: false,
     });
@@ -97,7 +98,10 @@ window.tailwindElements = () => {
     // }
     document.querySelectorAll("[data-te-input-notch-ref]").forEach(el => el.setAttribute("dir", "ltr"))
     document.querySelectorAll("[data-te-input-notch-ref]").forEach(el => el.innerHTML = '')
-
+    const selectElements = document.querySelectorAll('select.select');
+    // selectElements.forEach(el => {
+    //     new Select(el) // Log or use the ID
+    // });
     const alertEl = document.getElementById('alert');
     const toastEl = document.getElementById('toast');
     const modalEl = document.getElementById('modal');
