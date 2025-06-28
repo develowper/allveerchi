@@ -8,6 +8,7 @@ use App\Http\Helpers\Variable;
 use App\Http\Requests\ProductRequest;
 use App\Models\Admin;
 use App\Models\Agency;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Variation;
 use App\Models\Repository;
@@ -86,6 +87,7 @@ class ProductController extends Controller
         return Inertia::render('Panel/Admin/Product/Edit', [
             'statuses' => Variable::STATUSES,
             'data' => $data,
+            'categories' => Category::get(),
 
         ]);
     }
@@ -102,7 +104,8 @@ class ProductController extends Controller
         $data = Product::create($request->all());
 
         if ($data) {
-            Util::createImage($request->img, Variable::IMAGE_FOLDERS[Product::class], $data->id);
+            if ($request->img)
+                Util::createImage($request->img, Variable::IMAGE_FOLDERS[Product::class], $data->id);
 
             $data->img = url("storage/products/$data->id.jpg");
             $res = ['flash_status' => 'success', 'flash_message' => __('created_successfully')];
@@ -216,7 +219,6 @@ class ProductController extends Controller
                 'tags' => $request->tags,
 
             ]);
-
 
             if ($data->update($request->all())) {
 

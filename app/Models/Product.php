@@ -27,6 +27,8 @@ class Product extends Model
 //        'in_auction',
 //        'repo_id',
         'weight',
+        'PN',
+        'categories',
     ];
     protected $casts = [
         'categories' => 'array',

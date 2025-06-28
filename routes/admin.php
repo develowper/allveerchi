@@ -39,6 +39,7 @@ use App\Http\Controllers\VariationController;
 use App\Http\Helpers\Variable;
 use App\Models\Agency;
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Variation;
 use Illuminate\Support\Facades\Route;
@@ -339,7 +340,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 
         PanelController::makeInertiaRoute('get', 'product/create', 'admin.panel.product.create', 'Panel/Admin/Product/Create',
             [
-
+                'categories' => Category::get(),
             ]
         );
 

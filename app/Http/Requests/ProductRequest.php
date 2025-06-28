@@ -37,12 +37,16 @@ class ProductRequest extends FormRequest
         $editMode = (bool)$this->id;
         $this->tags = is_array($this->tags) ? join(',', $this->tags) : $this->tags;
         $tmp = [];
+        $categories = Category::pluck('id');
         if (!$this->cmnd) {
 
             $tmp = array_merge($tmp, [
                 'name' => ['required', 'max:200', Rule::unique('products', 'name')->ignore($this->id)],
+                'PN' => ['nullable', 'string', 'max:20'],
                 'tags' => ['nullable', 'string', 'max:1024'],
-                'category_id' => ['nullable', Rule::in(Category::pluck('id'))],
+//                'category_id' => ['nullable', Rule::in($categories)],
+                'categories' => ['nullable', 'array'],
+                'categories.*' => ['nullable', Rule::in($categories)],
 //                "weight" => ['required', 'numeric', 'gte:0', 'lt:99999', /*$this->pack_id == null ? Rule::in(1) :*/ 'numeric'],
 
 //                "price" => ['required', 'numeric', 'gte:0'],
@@ -53,7 +57,7 @@ class ProductRequest extends FormRequest
         }
         if ($this->uploading)
             $tmp = array_merge($tmp, [
-                'img' => ['required', 'base64_image_size:' . Variable::PRODUCT_IMAGE_LIMIT_MB * 1024, 'base64_image_mime:' . implode(",", Variable::PRODUCT_ALLOWED_MIMES)],
+                'img' => ['sometimes', 'base64_image_size:' . Variable::PRODUCT_IMAGE_LIMIT_MB * 1024, 'base64_image_mime:' . implode(",", Variable::PRODUCT_ALLOWED_MIMES)],
 
             ]);
         if ($this->cmnd)
@@ -95,6 +99,11 @@ class ProductRequest extends FormRequest
             "in_shop.required" => sprintf(__("validator.required"), __('shop_count')),
             "in_shop.numeric" => sprintf(__("validator.numeric"), __('shop_count')),
             "in_shop.gte" => sprintf(__("validator.gt"), __('shop_count'), 0),
+
+            'categories.array' => sprintf(__("validator.invalid"), __('categories')),
+            'categories.*.in' => sprintf(__("validator.invalid"), __('categories')),
+
+            'PN.max' => sprintf(__("validator.max_len"), __('PN'), 20, mb_strlen($this->PN)),
 
         ];
     }

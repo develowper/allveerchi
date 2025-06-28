@@ -90,4 +90,33 @@ class Category extends Model
         $this->findDescendants($category);
         return $this->descendants;
     }
+
+    protected static function getChildren($item, $data)
+    {
+        $children = $data->where('parent_id', $item->id);
+        foreach ($children as $item) {
+            $item->checked = $item->status == 'active';
+            $item->children = self::getChildren($item, $data);
+            $ids = array_column($item->children, 'id');
+            $data = $data->whereNotIn('id', $ids);
+        }
+        return $children->values();
+    }
+
+    public static function getTree()
+    {
+        $data = Category::select('id', 'name', 'parent_id', 'level', 'status', 'children')->get();
+
+
+//
+        foreach ($data as $item) {
+            $item->checked = $item->status == 'active';
+            $item->children = self::getChildren($item, $data);
+            $ids = array_column($item->children, 'id');
+            $data = $data->whereNotIn('id', $ids);
+
+        }
+
+        return $data->values();
+    }
 }

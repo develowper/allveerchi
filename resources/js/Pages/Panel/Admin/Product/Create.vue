@@ -54,16 +54,27 @@
                 </TextInput>
               </div>
               <div class="my-2">
-                <Selector ref="categorySelector" v-model="form.category_id"
-                          :data="$page.props.categories" :error="form.errors.category_id"
-                          :label="__('category')"
-                          id="category_id">
-                  <template v-slot:append>
-                    <div class="  p-3">
-                      <Squares2X2Icon class="h-5 w-5"/>
+                <TextInput
+                    id="PN"
+                    type="text"
+                    :placeholder="__('PN')"
+                    classes="  "
+                    v-model="form.PN"
+                    autocomplete="name"
+                    :error="form.errors.PN"
+                >
+                  <template v-slot:prepend>
+                    <div class="p-3">
+                      <Bars2Icon class="h-5 w-5"/>
                     </div>
                   </template>
-                </Selector>
+                </TextInput>
+              </div>
+              <div class="my-4">
+                <TreeSelector :multi="true" :label="__('categories')" v-model="form.categories"
+                              :data=" $page.props.categories"
+                              :preload="form.categories"
+                              :error="form.errors.categories"/>
               </div>
               <div v-if="false" class="my-2">
                 <TextInput
@@ -159,7 +170,7 @@ import SocialFields from "@/Components/SocialFields.vue";
 import TextEditor from "@/Components/TextEditor.vue";
 import UserSelector from "@/Components/UserSelector.vue";
 import AddressSelector from "@/Components/AddressSelector.vue";
-import CitySelector from "@/Components/CitySelector.vue";
+import TreeSelector from "@/Components/TreeSelector.vue";
 
 
 export default {
@@ -168,6 +179,8 @@ export default {
     return {
       form: useForm({
 
+        PN: null,
+        categories: null,
         name: null,
         uploading: false,
         category_id: false,
@@ -213,7 +226,7 @@ export default {
     TextEditor,
     PencilIcon,
     XMarkIcon,
-    CitySelector,
+    TreeSelector,
     ScaleIcon,
 
   },

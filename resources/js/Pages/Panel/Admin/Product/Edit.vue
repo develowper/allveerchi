@@ -58,17 +58,27 @@
                 </TextInput>
               </div>
               <div class="my-2">
-                <Selector ref="categorySelector" v-model="form.category_id"
-                          :multiple="true"
-                          :data="$page.props.categories" :error="form.errors.category_id"
-                          :label="__('category')"
-                          id="category_id">
-                  <template v-slot:append>
-                    <div class="  p-3">
-                      <Squares2X2Icon class="h-5 w-5"/>
+                <TextInput
+                    id="PN"
+                    type="text"
+                    :placeholder="__('PN')"
+                    classes="  "
+                    v-model="form.PN"
+                    autocomplete="name"
+                    :error="form.errors.PN"
+                >
+                  <template v-slot:prepend>
+                    <div class="p-3">
+                      <Bars2Icon class="h-5 w-5"/>
                     </div>
                   </template>
-                </Selector>
+                </TextInput>
+              </div>
+              <div class="my-4">
+                <TreeSelector :multi="true" :label="__('categories')" v-model="form.categories"
+                              :data=" $page.props.categories"
+                              :preload="$page.props.data.categories"
+                              :error="form.errors.categories"/>
               </div>
               <div v-if="false" class="my-2">
                 <TextInput
@@ -166,7 +176,7 @@ import Article from "@/Components/Article.vue";
 import TextEditor from "@/Components/TextEditor.vue";
 import UserSelector from "@/Components/UserSelector.vue";
 import AddressSelector from "@/Components/AddressSelector.vue";
-import CitySelector from "@/Components/CitySelector.vue";
+import TreeSelector from "@/Components/TreeSelector.vue";
 
 
 export default {
@@ -182,6 +192,8 @@ export default {
         category_id: false,
         tags: null,
         weight: null,
+        PN: null,
+        categories: null,
 
       }),
       img: null,
@@ -224,23 +236,25 @@ export default {
     UserSelector,
     XMarkIcon,
     AddressSelector,
-    CitySelector,
     ScaleIcon,
+    TreeSelector,
   },
   created() {
 
   },
   mounted() {
 
-    // console.log(this.data);
+    // console.log(this.$page.props.categories);
 
 
     this.form.id = this.data.id;
     this.form.name = this.data.name;
+    this.form.PN = this.data.PN;
     this.form.weight = parseFloat(this.data.weight);
     this.form.category_id = this.data.category_id;
+    this.form.categories = this.data.categories;
     this.form.tags = this.data.tags;
-    this.$refs.categorySelector.selecteds = this.form.category_id;
+    // this.$refs.categorySelector.selecteds = this.form.category_id;
     this.$refs.tags.set(this.data.tags);
 
   },

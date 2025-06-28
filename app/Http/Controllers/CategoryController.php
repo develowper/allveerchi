@@ -18,33 +18,6 @@ use Inertia\Inertia;
 class CategoryController extends Controller
 {
 
-    public function getTree(Request $request)
-    {
-        $data = Category::select('id', 'name', 'parent_id', 'level', 'status', 'children')->get();
-
-        function getChildren($item, $data)
-        {
-            $children = $data->where('parent_id', $item->id);
-            foreach ($children as $item) {
-                $item->checked = $item->status == 'active';
-                $item->children = getChildren($item, $data);
-                $ids = array_column($item->children, 'id');
-                $data = $data->whereNotIn('id', $ids);
-            }
-            return $children->values();
-        }
-
-//
-        foreach ($data as $item) {
-            $item->checked = $item->status == 'active';
-            $item->children = getChildren($item, $data);
-            $ids = array_column($item->children, 'id');
-            $data = $data->whereNotIn('id', $ids);
-
-        }
-
-        return response()->json(['data' => $data->values()]);
-    }
 
     public function edit(Request $request, $id)
     {
@@ -54,6 +27,7 @@ class CategoryController extends Controller
         return Inertia::render('Panel/Admin/Shipping/Car/Edit', [
             'statuses' => Variable::STATUSES,
             'data' => $data,
+
 
         ]);
     }
@@ -126,7 +100,7 @@ class CategoryController extends Controller
                     if ($request->img)
                         Util::createImage($request->img, Variable::IMAGE_FOLDERS[Category::class], $data->id);
 
-                    $tree = $this->getTree(new Request())->getData()->data;
+                    $tree = Category::getTree();
                     Telegram::log(null, 'category_created', $tree);
                     return response()->json(['tree_data' => $tree, 'message' => __('created_successfully')]);
                     break;
@@ -142,7 +116,7 @@ class CategoryController extends Controller
                                 $oldParent->children = array_filter($oldParent->children ?? [], fn($i) => $i != $data->id);
                                 $oldParent->save();
                             }
-                            if ( $newParent) {
+                            if ($newParent) {
                                 $newParent->children = array_unique(array_merge($newParent->children ?? [], [$data->id]));
                                 $newParent->save();
                             }
@@ -153,7 +127,7 @@ class CategoryController extends Controller
                         $data->status = $request->checked ? 'active' : 'inactive';
                         $data->save();
                     }
-                    $tree = $this->getTree(new Request())->getData()->data;
+                    $tree = Category::getTree();
                     Telegram::log(null, 'category_edited', $tree);
                     return response()->json(['tree_data' => $tree, 'message' => __('updated_successfully')]);
                     break;
@@ -174,7 +148,7 @@ class CategoryController extends Controller
                         $data->delete();
                     }
 
-                    $tree = $this->getTree(new Request())->getData()->data;
+                    $tree = Category::getTree();
                     Telegram::log(null, 'category_removed', $tree);
                     return response()->json(['tree_data' => $tree, 'message' => __('updated_successfully')]);
                     break;
@@ -210,7 +184,7 @@ class CategoryController extends Controller
 
             updateChildren(collect($treeData), $data, null, 1);
 
-            $res = $this->getTree(new Request())->getData()->data;
+            $res = Category::getTree();
             Telegram::log(null, 'category_edited', $res);
             return response()->json(['tree_data' => $res, 'message' => __('updated_successfully')]);
 
