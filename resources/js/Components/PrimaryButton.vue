@@ -13,7 +13,7 @@ defineProps({
 <template>
   <button @keydown.enter.self
           :type="type"
-          class=" relative bg-primary-500 text-white  rounded-lg   duration-300 hover:bg-primary-400   p-2  "
+          class=" relative shadow hover:scale-[101%] bg-primary-500 text-white  rounded-lg   duration-300 hover:bg-primary-400   p-2  "
           :class="classes">
     <slot class="  "/>
 

@@ -1,12 +1,12 @@
 <template>
-  <Scaffold navbar-theme="dark">
+  <Scaffold navbar-theme="light">
     <template v-slot:header>
       <title>{{__('shop')}}</title>
 
     </template>
 
     <div
-        class="  py-16  shadow-md bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-400 to-primary-500">
+        class="    shadow-md bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-400 to-primary-500">
 
     </div>
 

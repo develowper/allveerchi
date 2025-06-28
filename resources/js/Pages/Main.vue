@@ -1,5 +1,5 @@
 <template>
-  <Scaffold>
+  <Scaffold navbar-theme="light">
     <template v-slot:header>
       <title>{{__('home')}}</title>
 
@@ -8,20 +8,25 @@
 
     <div v-if="true">
       <div
-          class="relative    bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-300 to-primary-600">
+          class="relative  -h-72 -lg:h-72 -xl:h-[32rem]   bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-300 to-primary-600">
+
         <!--Hero-->
         <div v-if="$page.props.slider.length>0"
-             class="    shadow-md bg-white    overflow-hidden h-72 lg:h-72 xl:h-[24rem] w-full   start-0 end-0  ">
-          <div
-              class="absolute top-0 start-0 w-full h-16   z-10 bg-gradient-to-b from-primary-500 to-transparent"></div>
+             class="flex text-md py-1  animate-[slide-in-left_1s_both]  text-primary-900  justify-center  font-bold    shadow-primary-400    ">
+          <div> {{ heroText }}</div>
+        </div>
+        <div v-if="$page.props.slider.length>0"
+             class="    h-72  lg:h-72  xl:h-[32rem]  shadow-md bg-white      h-full w-full   start-0 end-0  ">
+          <!--          <div-->
+          <!--              class="  top-0 start-0 w-full h-32   z-10 bg-gradient-to-b   from-gray-50  via-gray-100    to-gray-100  "></div>-->
           <Slider image-classes="object-cover " :items="$page.props.slider" :delay="8000"></Slider>
         </div>
         <div v-else
-             class="opacity-60   bg-no-repeat  bg-cover  blur-sm   z-0 absolute  bottom-2     w-full   h-full      "
+             class="opacity-60 absolute    bg-no-repeat  bg-cover  blur-sm   z-0    bottom-2     w-full   h-full      "
              :style="`background-image: url(${heroImage})`"></div>
 
 
-        <div class="p-4   mx-auto    ">
+        <div class="pt-4   mx-auto    ">
           <div class="justify-center  px-3  sm:px-1  flex   flex-col md:flex-row items-center">
             <!--                    Right Col-->
             <div v-if="false" class=" z-10 md:w-2/5 py-6 text-center">
@@ -32,9 +37,10 @@
             </div>
             <!--Left Col-->
             <div
-                class="flex flex-col max-w-lg text-white w-full    justify-center   text-center  ">
+                class="flex flex-col max-w-lg text-white w-full  pb-2  justify-center   text-center  ">
 
-              <p class="   font-bold  text-xl py-4 shadow-[rgba(0,0,15,0.1)_0px_5px_20px_0px] shadow-primary-400 lg:text-2xl  mb-8 z-10   delay-300">
+              <p v-if="$page.props.slider.length==0"
+                 class="   font-bold  text-xl py-4 shadow-[rgba(0,0,15,0.1)_0px_5px_20px_0px] shadow-primary-400 lg:text-2xl  mb-8 z-10   delay-300">
                 {{ heroText }}
               </p>
               <!--                        search-->
@@ -60,7 +66,8 @@
 
 
               </div>
-              <div class=" p-2  mb-8  gap-2 grid  grid-cols-1 sm:grid-cols-2 items-center">
+              <div
+                  class="    animate-[slide-in-bottom_1s_both] p-2     gap-2 grid  grid-cols-1 sm:grid-cols-2 items-center">
 
                 <SecondaryButton @click="$inertia.visit(route('shop.index'))"
                                  class="   grow    "
@@ -108,7 +115,7 @@
         </div>
 
         <!--wave-->
-        <div class="absolute  bottom-0 start-0 end-0">
+        <div class="  bottom-0 start-0 end-0">
           <svg viewBox="0 0 1428 174" version="1.1" xmlns="http://www.w3.org/2000/svg"
                xmlns:xlink="http://www.w3.org/1999/xlink">
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -140,7 +147,7 @@
         </div>
 
       </div>
-      <div class="container  mx-auto space-y-4 relative">
+      <div class="container   mx-auto space-y-4 relative">
         <div v-if="$page.props.slides.length>0"
              class="   shadow-md bg-white rounded-lg  overflow-hidden h-72 lg:h-72 xl:h-[24rem] w-full md:w-[90%] lg:w-[80%] md:mx-auto  start-0 end-0 md:-mt-32 -mt-16 ">
           <Slider :items="$page.props.slides" :delay="8000"></Slider>
@@ -148,7 +155,7 @@
 
         <Transition name="fade" mode="out-in">
           <section class="flex flex-col   justify-center   text-center ">
-            <h1 class="slide-in-bottom-h1 my-4 text-primary-500 mx-auto w-fit text-3xl font-bold border-primary       ">
+            <h1 class="animate-[slide-in-bottom_1s_both] my-4 text-primary-500 mx-auto w-fit text-3xl font-bold border-primary       ">
               {{ $page.props.section1Header }}
               <div
                   class="h-1 mx-auto bg-gradient-to-l from-primary-100 via-primary-500 to-primary-600 w-64 opacity-25 my-0 py-0 rounded-t"></div>
@@ -184,7 +191,8 @@
                             d="M 0.457 34.035 C 72 39 99 36 217 45 C 342 31 681 36 1216 12 C 1291 20 1402 29 1444 34 L 1441.191 104.352 L 1.121 104.031 L 0.457 34.035 Z"></path>
                       </g>
                     </g>
-                    <g transform="translate(0.000000, 50.000000)" class="fill-primary-200" fill="" fill-rule="nonzero">
+                    <g transform="translate(0.000000, 50.000000)" class="fill-primary-200" fill=""
+                       fill-rule="nonzero">
                       <path
                           d="M 0.457 34.035 C 71 22 156 3 208 -2 C 248 5 1039 48 1124 55 C 1237 46 1355 27 1442 12 L 1441.191 104.352 L 1.121 104.031 L 0.457 34.035 Z"></path>
                     </g>
@@ -201,7 +209,7 @@
 
 
         <div v-if="$page.props.articles.length>0"
-             class=" flex flex-col justify-center   rounded-lg  overflow-hidden h-72 lg:h-72    w-fit mx-auto     ">
+             class=" flex flex-col bg-gray-50 p-2 rounded-lg  w-full    rounded-lg  overflow-hidden h-72 lg:h-72    w-fit mx-auto     ">
           <Link :href="route('article.index')" class="text-lg text-primary-500 font-bold p-2 hover:text-primary-400">
             {{ __('articles') }}
           </Link>

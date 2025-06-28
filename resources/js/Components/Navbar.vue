@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed w-full z-[1043] top-0 ">
+  <nav class="shadow-lg   w-full z-[1043] top-0 ">
     <div class="max-w-7xl  mx-auto   px-2 lg:px-4">
       <div class="flex flex-col py-2">
         <div class="flex justify-between">
@@ -241,6 +241,7 @@ export default {
           nav.classList.remove("text-white");
           nav.classList.add("text-primary-500");
           nav.classList.add("shadow-lg");
+          // nav.classList.add("fixed");
 
           for (let el of links) {
             if (el.classList.contains('mobile')) continue;
@@ -262,6 +263,7 @@ export default {
           nav.classList.add("text-white");
           nav.classList.remove("text-primary-500");
           nav.classList.remove("shadow-lg");
+          // nav.classList.remove("fixed");
 
           for (let el of links) {
 
