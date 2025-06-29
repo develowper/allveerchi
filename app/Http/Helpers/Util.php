@@ -59,7 +59,7 @@ class Util
         $file->move(storage_path("app/public/$type"), "$name." . $file->extension());
     }
 
-    static function createImage($img, $type, $name = null, $folder = null, $maxSize = null, $watermark = true)
+    static function createImage($img, $type, $name = null, $folder = null, $maxSize = null, $watermark = false)
     {
 
         $image_parts = explode(";base64,", $img);
