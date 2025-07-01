@@ -71,7 +71,8 @@ class VariationController extends Controller
         $id = $request->id;
         $search = $request->search;
         $inShop = $request->in_shop;
-        $parentIds = $request->parent_ids ? (is_array($request->parent_ids) ? $request->parent_ids : explode(',', $request->parent_ids)) : null;
+        $categoryIds = $request->category_ids ? (is_array($request->category_ids) ? $request->category_ids : explode(',', $request->category_ids)) : null;
+
         $districtId = $request->district_id;
         $countyId = $request->county_id;
         $provinceId = $request->province_id;
@@ -103,7 +104,19 @@ class VariationController extends Controller
             return response()->json($data);
         }
 
-        $query = Variation::join('repositories', function ($join) use ($inShop, $parentIds, $countyId, $districtId, $provinceId, $agencyId) {
+        $query = Product::join('variations', function ($join) use ($categoryIds) {
+            $join->on('products.id', '=', 'variations.product_id')
+                ->where(function ($query) use ($categoryIds) {
+
+                    if ($categoryIds && is_array($categoryIds) && count($categoryIds) > 0) {
+//                        $ids = implode(',', $categoryIds);
+                        foreach ($categoryIds as $categoryId) {
+                            $query->orWhereJsonContains('products.categories', $categoryId);
+                        }
+
+                    }
+                });
+        })->join('repositories', function ($join) use ($inShop, $categoryIds, $countyId, $districtId, $provinceId, $agencyId) {
             $join->on('variations.repo_id', '=', 'repositories.id')
                 ->where('repositories.status', 'active')
                 ->where('repositories.is_shop', true)
@@ -115,9 +128,6 @@ class VariationController extends Controller
                 })->where(function ($query) use ($inShop) {
                     if ($inShop)
                         $query->where('variations.in_shop', '>', 0);
-                })->where(function ($query) use ($parentIds) {
-                    if ($parentIds && is_array($parentIds) && count($parentIds) > 0)
-                        $query->whereIntegerInRaw('variations.product_id', $parentIds);
                 })->where(function ($query) use ($provinceId) {
 //                    if ($provinceId === null)
 //                        $query->where('repositories.id', 0);

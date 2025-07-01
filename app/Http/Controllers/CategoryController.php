@@ -18,6 +18,11 @@ use Inertia\Inertia;
 class CategoryController extends Controller
 {
 
+    public function getTree()
+    {
+        return response()->json(['data' => Category::getTree()]);
+
+    }
 
     public function edit(Request $request, $id)
     {

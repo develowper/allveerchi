@@ -70,6 +70,13 @@ window.tailwindElements = () => {
         dropdownToggleEl.addEventListener('click', function (event) {
             d.toggle();
         })
+        // dropdownToggleEl.addEventListener('mouseenter', function (event) {
+        //     window.dropdownList.filter((e) => d._element?.id != dropdownToggleEl.id).forEach(e => e.hide())
+        //     d.show();
+        // })
+        // dropdownToggleEl.addEventListener('mouseleave', function (event) {
+        //     d.hide();
+        // })
         return d;
     });
 

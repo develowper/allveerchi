@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\Variable;
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,7 +14,8 @@ class ShopController extends Controller
     function index()
     {
         return Inertia::render('Shop/Index', [
-            'price_types' => array_column(Variable::PRICE_TYPES, 'key')
+            'price_types' => array_column(Variable::PRICE_TYPES, 'key'),
+            'categories' => Category::getTree(),
         ]);
 
     }
