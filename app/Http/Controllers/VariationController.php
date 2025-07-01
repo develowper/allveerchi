@@ -109,9 +109,12 @@ class VariationController extends Controller
                 ->where(function ($query) use ($categoryIds) {
 
                     if ($categoryIds && is_array($categoryIds) && count($categoryIds) > 0) {
+
 //                        $ids = implode(',', $categoryIds);
                         foreach ($categoryIds as $categoryId) {
-                            $query->orWhereJsonContains('products.categories', $categoryId);
+//                            $jsonId = json_encode($categoryId);
+//                            $query->orWhereRaw("JSON_CONTAINS(products.categories, ?, '$')", [$jsonId]);
+                            $query->orWhereJsonContains('products.categories', (int)$categoryId);
                         }
 
                     }
