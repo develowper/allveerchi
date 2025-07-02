@@ -10,6 +10,7 @@ use App\Models\Article;
 use App\Models\ArticleTransaction;
 use App\Models\Banner;
 use App\Models\BannerTransaction;
+use App\Models\Brand;
 use App\Models\Business;
 use App\Models\BusinessTransaction;
 use App\Models\Car;
@@ -186,6 +187,7 @@ class Variable
         Car::class => 'cars',
         Catalog::class => 'catalogs',
         Category::class => 'categories',
+        Brand::class => 'brands',
     ];
     const NOTIFICATION_TYPES = [
         "pay",

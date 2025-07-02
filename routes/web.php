@@ -151,6 +151,7 @@ Route::get('storage/drivers')->name('storage.drivers');
 Route::get('storage/cars')->name('storage.cars');
 Route::get('storage/catalogs')->name('storage.catalogs');
 Route::get('storage/categories')->name('storage.categories');
+Route::get('storage/brands')->name('storage.brands');
 
 Route::post('validation', [TMAController::class, 'validation'])->name('tma.validation');
 Route::prefix('drzantia/tma')->group(function ($route) {

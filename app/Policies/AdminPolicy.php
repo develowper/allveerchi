@@ -7,6 +7,7 @@ use App\Models\AdminFinancial;
 use App\Models\Agency;
 use App\Models\AgencyFinancial;
 use App\Models\Article;
+use App\Models\Brand;
 use App\Models\Car;
 use App\Models\Catalog;
 use App\Models\Category;
@@ -91,6 +92,10 @@ class AdminPolicy
                 case    Catalog::class:
                     $res = $admin->hasAccess('view_catalog');
                     break;
+                case
+                Brand::class:
+                    $res = $admin->hasAccess('view_brand');
+                    break;
             }
 
         if ($abort && empty($res))
@@ -161,6 +166,9 @@ class AdminPolicy
                     $res = $admin->hasAccess('create_article');
                 case    Setting::class:
                     $res = $admin->hasAccess('create_setting');
+                    break;
+                case    Brand::class:
+                    $res = $admin->hasAccess('create_brand');
                     break;
 
             }
@@ -271,6 +279,12 @@ class AdminPolicy
                     break;
                 case   $item instanceof Article :
                     $res = $admin->hasAccess('edit_article');
+                    break;
+                case   $item instanceof Category :
+                    $res = $admin->hasAccess('edit_category');
+                    break;
+                case   $item instanceof Brand :
+                    $res = $admin->hasAccess('edit_brand');
                     break;
             }
 

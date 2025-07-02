@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Agency;
+use App\Models\Brand;
 use App\Models\City;
 use Illuminate\Validation\Rules\File;
 use App\Http\Helpers\Variable;
@@ -38,6 +39,7 @@ class ProductRequest extends FormRequest
         $this->tags = is_array($this->tags) ? join(',', $this->tags) : $this->tags;
         $tmp = [];
         $categories = Category::pluck('id');
+        $brands = Brand::pluck('id');
         if (!$this->cmnd) {
 
             $tmp = array_merge($tmp, [
@@ -45,6 +47,7 @@ class ProductRequest extends FormRequest
                 'PN' => ['nullable', 'string', 'max:20'],
                 'tags' => ['nullable', 'string', 'max:1024'],
 //                'category_id' => ['nullable', Rule::in($categories)],
+                'brand_id' => ['nullable', Rule::in($brands)],
                 'categories' => ['nullable', 'array'],
                 'categories.*' => ['nullable', Rule::in($categories)],
 //                "weight" => ['required', 'numeric', 'gte:0', 'lt:99999', /*$this->pack_id == null ? Rule::in(1) :*/ 'numeric'],

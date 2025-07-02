@@ -2,7 +2,7 @@
 
   <Panel>
     <template v-slot:header>
-      <title>{{__('new_product')}}</title>
+      <title>{{__('new_brand')}}</title>
     </template>
 
 
@@ -12,7 +12,7 @@
           class="flex items-center justify-start px-4 py-2 text-primary-500 border-b md:py-4">
         <FolderPlusIcon class="h-7 w-7 mx-3"/>
 
-        <h1 class="text-2xl font-semibold">{{ __('new_product') }}</h1>
+        <h1 class="text-2xl font-semibold">{{ __('new_brand') }}</h1>
 
       </div>
 
@@ -28,7 +28,7 @@
           >
             <div class="flex-col   m-2 items-center rounded-lg max-w-xs  w-full mx-auto    ">
               <div class="my-2">
-                <ImageUploader ref="imageCropper" :label="__('product_image_jpg')" cropRatio="1.25" id="img"
+                <ImageUploader ref="imageCropper" :label="__('image_jpg')" :cropRatio="1" id="img"
                                height="10" class="grow " :crop-ratio="1"/>
                 <InputError class="mt-1 " :message="form.errors.img"/>
               </div>
@@ -52,64 +52,6 @@
                     </div>
                   </template>
                 </TextInput>
-              </div>
-              <div class="my-2">
-                <TextInput
-                    id="PN"
-                    type="text"
-                    :placeholder="__('PN')"
-                    classes="  "
-                    v-model="form.PN"
-                    autocomplete="PN"
-                    :error="form.errors.PN"
-                >
-                  <template v-slot:prepend>
-                    <div class="p-3">
-                      <Bars2Icon class="h-5 w-5"/>
-                    </div>
-                  </template>
-                </TextInput>
-              </div>
-              <div class="my-2">
-                <Selector ref="brandSelector" v-model="form.brand_id"
-                          :data="$page.props.brands "
-                          :error="form.errors.brand_id"
-
-                          :label="__('brand')"
-                          id="brand_id">
-                  <template v-slot:append>
-                    <div class="  p-3">
-                      <Squares2X2Icon class="h-5 w-5"/>
-                    </div>
-                  </template>
-                </Selector>
-              </div>
-              <div class="my-4">
-                <TreeSelector :multi="true" :label="__('categories')" v-model="form.categories"
-                              :data=" $page.props.categories"
-                              :preload="form.categories"
-                              :error="form.errors.categories"/>
-              </div>
-              <div v-if="false" class="my-2">
-                <TextInput
-                    :id="`weight`"
-                    type="number"
-                    :placeholder="`${__('weight')} (${__('kg')})`"
-                    :disabled="form.pack_id==1? true:false"
-                    classes=" "
-                    v-model="form.weight"
-                    autocomplete="weight"
-                    :error="form.errors.weight">
-                  <template v-slot:prepend>
-                    <div class="  p-3">
-                      <ScaleIcon class="h-5 w-5"/>
-                    </div>
-                  </template>
-                </TextInput>
-              </div>
-              <div class="my-4">
-                <TagInput :multi="true" :placeholder="__('tags')" v-model="form.tags"
-                          :error="form.errors.tags"/>
               </div>
 
 
@@ -150,41 +92,22 @@ import Scaffold from "@/Layouts/Scaffold.vue";
 import Panel from "@/Layouts/Panel.vue";
 import {Head, Link, useForm} from "@inertiajs/vue3";
 import {
-  ChevronDownIcon,
-  HomeIcon,
-  UserIcon,
-  EyeIcon,
   FolderPlusIcon,
   Bars2Icon,
-  ChatBubbleBottomCenterTextIcon,
-  Squares2X2Icon,
-  SignalIcon,
-  PencilIcon,
   XMarkIcon,
-  ScaleIcon,
 
 } from "@heroicons/vue/24/outline";
 import {QuestionMarkCircleIcon,} from "@heroicons/vue/24/solid";
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import RadioGroup from '@/Components/RadioGroup.vue'
 import LoadingIcon from "@/Components/LoadingIcon.vue";
 import Popover from "@/Components/Popover.vue";
 import Tooltip from "@/Components/Tooltip.vue";
-import TagInput from "@/Components/TagInput.vue";
 import ImageUploader from "@/Components/ImageUploader.vue";
 import Selector from "@/Components/Selector.vue";
-import ProvinceCounty from "@/Components/ProvinceCounty.vue";
-import PhoneFields from "@/Components/PhoneFields.vue";
-import SocialFields from "@/Components/SocialFields.vue";
-import TextEditor from "@/Components/TextEditor.vue";
 import UserSelector from "@/Components/UserSelector.vue";
-import AddressSelector from "@/Components/AddressSelector.vue";
-import TreeSelector from "@/Components/TreeSelector.vue";
 
 
 export default {
@@ -193,14 +116,8 @@ export default {
     return {
       form: useForm({
 
-        PN: null,
-        categories: null,
         name: null,
         uploading: false,
-        category_id: false,
-        tags: null,
-        weight: null,
-        brand_id: null,
 
       }),
       img: null,
@@ -208,41 +125,23 @@ export default {
     }
   },
   components: {
-    AddressSelector,
     UserSelector,
     ImageUploader,
     LoadingIcon,
     Head,
     Link,
-    HomeIcon,
-    ChevronDownIcon,
     Panel,
     InputLabel,
     TextInput,
     InputError,
     PrimaryButton,
-    RadioGroup,
-    UserIcon,
-    EyeIcon,
-    Checkbox,
     Popover,
     Tooltip,
     FolderPlusIcon,
     Bars2Icon,
-    ChatBubbleBottomCenterTextIcon,
-    TagInput,
     QuestionMarkCircleIcon,
     Selector,
-    Squares2X2Icon,
-    ProvinceCounty,
-    PhoneFields,
-    SocialFields,
-    SignalIcon,
-    TextEditor,
-    PencilIcon,
     XMarkIcon,
-    TreeSelector,
-    ScaleIcon,
 
   },
   mounted() {
@@ -264,7 +163,7 @@ export default {
       this.form.clearErrors();
       // this.isLoading(true, this.form.progress ? this.form.progress.percentage : null);
 
-      this.form.post(route('admin.panel.product.create'), {
+      this.form.post(route('admin.panel.brand.create'), {
         preserveScroll: false,
 
         onSuccess: (data) => {
@@ -278,7 +177,7 @@ export default {
               img: this.img,
 
             }))
-                .post(route('admin.panel.product.create'), {
+                .post(route('admin.panel.brand.create'), {
                   preserveScroll: false,
                   onSuccess: (data) => {
                     // else {

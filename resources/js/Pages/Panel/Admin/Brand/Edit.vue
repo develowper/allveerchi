@@ -2,7 +2,7 @@
 
   <Panel>
     <template v-slot:header>
-      <title>{{__('edit_product')}}</title>
+      <title>{{__('edit_brand')}}</title>
     </template>
 
 
@@ -12,7 +12,7 @@
           class="flex items-center justify-start px-4 py-2 text-primary-500 border-b md:py-4">
         <FolderPlusIcon class="h-7 w-7 mx-3"/>
 
-        <h1 class="text-2xl font-semibold">{{ __('edit_product') }}</h1>
+        <h1 class="text-2xl font-semibold">{{ __('edit_brand') }}</h1>
 
       </div>
 
@@ -29,10 +29,10 @@
             <div class="flex-col   m-2 items-center rounded-lg max-w-xs  w-full mx-auto    ">
               <div class="my-2">
                 <ImageUploader :replace="true"
-                               :preload="route('storage.products')+`/${$page.props.data.id}.jpg`"
+                               :preload="route('storage.brands')+`/${$page.props.data.id}.jpg`"
                                mode="edit" :for-id="$page.props.data.id"
-                               :link="route('admin.panel.product.update')"
-                               ref="imageCropper" :label="__('product_image_jpg')" :cropRatio="1" id="img"
+                               :link="route('admin.panel.brand.update')"
+                               ref="imageCropper" :label="__('image_jpg')" :cropRatio="1" id="img"
                                height="10" class="grow "/>
                 <InputError class="mt-1 " :message="form.errors.img"/>
               </div>
@@ -56,64 +56,6 @@
                     </div>
                   </template>
                 </TextInput>
-              </div>
-              <div class="my-2">
-                <TextInput
-                    id="PN"
-                    type="text"
-                    :placeholder="__('PN')"
-                    classes="  "
-                    v-model="form.PN"
-                    autocomplete="PN"
-                    :error="form.errors.PN"
-                >
-                  <template v-slot:prepend>
-                    <div class="p-3">
-                      <Bars2Icon class="h-5 w-5"/>
-                    </div>
-                  </template>
-                </TextInput>
-              </div>
-              <div class="my-2">
-                <Selector ref="brandSelector" v-model="form.brand_id"
-                          :data="$page.props.brands "
-                          :error="form.errors.brand_id"
-                          :preload="$page.props.data.brand_id"
-                          :label="__('brand')"
-                          id="brand_id">
-                  <template v-slot:append>
-                    <div class="  p-3">
-                      <Squares2X2Icon class="h-5 w-5"/>
-                    </div>
-                  </template>
-                </Selector>
-              </div>
-              <div class="my-4">
-                <TreeSelector :multi="true" :label="__('categories')" v-model="form.categories"
-                              :data=" $page.props.categories"
-                              :preload="$page.props.data.categories"
-                              :error="form.errors.categories"/>
-              </div>
-              <div v-if="false" class="my-2">
-                <TextInput
-                    :id="`weight`"
-                    type="number"
-                    :placeholder="`${__('weight')} (${__('kg')})`"
-                    :disabled="form.pack_id==1? true:false"
-                    classes=" "
-                    v-model="form.weight"
-                    autocomplete="weight"
-                    :error="form.errors.weight">
-                  <template v-slot:prepend>
-                    <div class="  p-3">
-                      <ScaleIcon class="h-5 w-5"/>
-                    </div>
-                  </template>
-                </TextInput>
-              </div>
-              <div class="my-4">
-                <TagInput ref="tags" :multi="true" :placeholder="__('tags')" v-model="form.tags"
-                          :error="form.errors.tags"/>
               </div>
 
 
@@ -167,30 +109,20 @@ import {
   ChatBubbleBottomCenterTextIcon,
   PencilIcon,
   XMarkIcon,
-  ScaleIcon,
+  PhoneIcon,
+  IdentificationIcon,
+  CreditCardIcon,
 } from "@heroicons/vue/24/outline";
 import {QuestionMarkCircleIcon,} from "@heroicons/vue/24/solid";
 import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import RadioGroup from '@/Components/RadioGroup.vue'
 import LoadingIcon from "@/Components/LoadingIcon.vue";
-import Popover from "@/Components/Popover.vue";
-import Tooltip from "@/Components/Tooltip.vue";
-import TagInput from "@/Components/TagInput.vue";
 import ImageUploader from "@/Components/ImageUploader.vue";
 import Selector from "@/Components/Selector.vue";
-import ProvinceCounty from "@/Components/ProvinceCounty.vue";
-import PhoneFields from "@/Components/PhoneFields.vue";
-import SocialFields from "@/Components/SocialFields.vue";
-import Article from "@/Components/Article.vue";
-import TextEditor from "@/Components/TextEditor.vue";
 import UserSelector from "@/Components/UserSelector.vue";
-import AddressSelector from "@/Components/AddressSelector.vue";
-import TreeSelector from "@/Components/TreeSelector.vue";
 
 
 export default {
@@ -199,23 +131,16 @@ export default {
     return {
       data: this.$page.props.data || {},
       form: useForm({
-
         id: null,
         name: null,
         uploading: false,
-        category_id: false,
-        tags: null,
-        weight: null,
-        PN: null,
-        categories: null,
-        brand_id: null,
+
 
       }),
       img: null,
     }
   },
   components: {
-    TextEditor,
     ImageUploader,
     LoadingIcon,
     Head,
@@ -227,50 +152,35 @@ export default {
     TextInput,
     InputError,
     PrimaryButton,
-    RadioGroup,
     UserIcon,
     EyeIcon,
     Checkbox,
-    Popover,
-    Tooltip,
     FolderPlusIcon,
     Bars2Icon,
     LinkIcon,
-    TagInput,
     QuestionMarkCircleIcon,
     Selector,
     Squares2X2Icon,
-    ProvinceCounty,
-    PhoneFields,
-    SocialFields,
     PencilSquareIcon,
-    Article,
     SignalIcon,
     ChatBubbleBottomCenterTextIcon,
     PencilIcon,
     UserSelector,
     XMarkIcon,
-    AddressSelector,
-    ScaleIcon,
-    TreeSelector,
+    PhoneIcon,
+    IdentificationIcon,
+    CreditCardIcon,
   },
   created() {
 
   },
   mounted() {
 
-    // console.log(this.$page.props.categories);
+    // console.log(this.data);
 
 
     this.form.id = this.data.id;
     this.form.name = this.data.name;
-    this.form.PN = this.data.PN;
-    this.form.weight = parseFloat(this.data.weight);
-    this.form.category_id = this.data.category_id;
-    this.form.categories = this.data.categories;
-    this.form.tags = this.data.tags;
-    // this.$refs.brandSelector.selecteds = this.form.brand_id;
-    this.$refs.tags.set(this.data.tags);
 
   },
   methods: {
@@ -288,7 +198,7 @@ export default {
       //   let tmp = this.$refs.imageCropper[i].getCroppedData();
       //   if (tmp) this.images.push(tmp);
       // }
-      this.form.patch(route('admin.panel.product.update'), {
+      this.form.patch(route('admin.panel.brand.update'), {
         preserveScroll: false,
 
         onSuccess: (data) => {

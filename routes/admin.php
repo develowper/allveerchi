@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\PreOrderController;
 use App\Http\Controllers\SampleController;
@@ -39,6 +40,7 @@ use App\Http\Controllers\VariationController;
 use App\Http\Helpers\Variable;
 use App\Models\Agency;
 use App\Models\Article;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Variation;
@@ -333,6 +335,16 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::post('category/create', [CategoryController::class, 'create'])->name('admin.panel.category.create')->middleware("can:create,App\Models\Admin,App\Models\Category,'1'");
         Route::get('category/{category}', [CategoryController::class, 'edit'])->name('admin.panel.category.edit');
 
+        PanelController::makeInertiaRoute('get', 'brand/index', 'admin.panel.brand.index', 'Panel/Admin/Brand/Index',
+            ['statuses' => Variable::STATUSES]);
+        PanelController::makeInertiaRoute('get', 'brand/create', 'admin.panel.brand.create', 'Panel/Admin/Brand/Create', [
+
+        ]);
+        Route::get('brand/search', [BrandController::class, 'searchPanel'])->name('admin.panel.brand.search');
+        Route::patch('brand/update', [BrandController::class, 'update'])->name('admin.panel.brand.update');
+        Route::post('brand/create', [BrandController::class, 'create'])->name('admin.panel.brand.create')->middleware("can:create,App\Models\Admin,App\Models\Brand,'1'");
+        Route::get('brand/{brand}', [BrandController::class, 'edit'])->name('admin.panel.brand.edit');
+
 
         PanelController::makeInertiaRoute('get', 'product/index', 'admin.panel.product.index', 'Panel/Admin/Product/Index',
             []
@@ -341,6 +353,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         PanelController::makeInertiaRoute('get', 'product/create', 'admin.panel.product.create', 'Panel/Admin/Product/Create',
             [
                 'categories' => Category::get(),
+                'brands' => Brand::select('id', 'name')->get(),
             ]
         );
 

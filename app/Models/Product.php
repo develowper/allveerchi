@@ -29,6 +29,7 @@ class Product extends Model
         'weight',
         'PN',
         'categories',
+        'brand_id',
     ];
     protected $casts = [
         'categories' => 'array',
@@ -45,5 +46,10 @@ class Product extends Model
             $images[$idx] = route('storage.products') . "/$id/" . basename($path, ""); //suffix=format
         }
         return $images;
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
 }

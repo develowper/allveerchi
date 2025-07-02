@@ -8,6 +8,7 @@ use App\Http\Helpers\Variable;
 use App\Http\Requests\ProductRequest;
 use App\Models\Admin;
 use App\Models\Agency;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Variation;
@@ -88,6 +89,7 @@ class ProductController extends Controller
             'statuses' => Variable::STATUSES,
             'data' => $data,
             'categories' => Category::get(),
+            'brands' => Brand::select('id', 'name')->get(),
 
         ]);
     }

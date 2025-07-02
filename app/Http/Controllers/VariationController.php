@@ -174,7 +174,7 @@ class VariationController extends Controller
         ;
 
         if ($search)
-            $query->where('variations.name', 'like', "%$search%");
+            $query->where('variations.name', 'like', "%$search%")->orWhere('variations.PN', 'like', "%$search%");
         if ($grade)
             $query = $query->where('variations.grade', $grade);
         $res = $query->paginate($paginate, ['*'], 'page', $page)//            ->getCollection()->groupBy('parent_id')
