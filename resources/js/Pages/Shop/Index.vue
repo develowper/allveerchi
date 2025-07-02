@@ -116,27 +116,65 @@
                   <!-- Filters -->
                   <form class="mt-4 border-t border-gray-200">
                     <h3 class="sr-only">Categories</h3>
-                    <ul role="list" class="px-2 py-3   font-medium text-gray-900">
-                      <li v-if="false" @click="toggleCategory(category.id)"
-                          v-for="category in $page.props.categories" :key="category.id"
-                          class="py-2 cursor-pointer hover:bg-gray-100"
-                      >
-                        <input :id="`filter-mobile-category-${category.id}`"
-                               :value="params.category_ids?.includes(category.id)" type="checkbox"
-                               class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"/>
-                        <label :for="`filter-mobile-category-${category.id}`"
-                               class="min-w-0 mx-2 text-sm select-none flex-1 text-gray-500">{{ category.name }}</label>
+                    <ul role="list" class="px-2 py-3  space-y-1 font-medium text-gray-900">
+
+                      <li v-if="$page.props.brands?.length>0">
+                        <Disclosure
+                            as="div" key="brands-disclosure "
+                            class="  " v-slot="{ open }">
+                          <h3 class=" flow-root  text-sm     ">
+                            <DisclosureButton
+                                :class="[open?'rounded-t-lg':'rounded-lg']"
+                                class="flex w-full   hover:bg-gray-200  border   items-center justify-between   px-4 py-5 text-gray-400 hover:text-gray-500">
+                              <span class="font-medium grow text-start text-gray-900">{{ __('brands') }}</span>
+                              <span class="ml-6 flex items-center">
+                          <PlusIcon v-if="!open  " class="size-5 h-5" aria-hidden="true"/>
+                          <MinusIcon v-else class="size-5 h-5"
+                                     aria-hidden="true"/>
+                        </span>
+                            </DisclosureButton>
+                          </h3>
+                          <Transition
+                              enter="transition duration-100 ease-out"
+                              enterFrom="transform scale-95 opacity-0"
+                              enterTo="transform scale-100 opacity-100"
+                              leave="transition duration-75 ease-out"
+                              leaveFrom="transform scale-100 opacity-100"
+                              leaveTo="transform scale-95 opacity-0"
+                          >
+                            <DisclosurePanel class="pt-1 ps-4 bg-gray-50 rounded-b-lg">
+                              <div class=" ">
+                                <div v-for="(brand, idx) in $page.props.brands " :key="brand.id" class="   ">
+                                  <div @click="toggleBrand(brand)"
+                                       class="hover:bg-gray-100  cursor-pointer py-2 px-1">
+                                    <input @click.stop.prevent tabindex="-1"
+                                           :id="`filter-mobile-brand-${brand.id}`"
+                                           :checked="params.brand_ids?.includes(brand.id)" type="checkbox"
+                                           class="col-start-1 row-start-1 pointer-events-none appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"/>
+                                    <label @click.prevent
+                                           :for="`filter-mobile-category-${brand.id}`"
+                                           class="min-w-0 mx-2 text-sm select-none cursor-pointer flex-1 text-gray-500">{{
+                                        brand.name
+                                      }}</label>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </DisclosurePanel>
+                          </Transition>
+                        </Disclosure>
                       </li>
 
-                      <li v-for="(category,idx) in $page.props.categories" :key="`lic-${category.id}`">
+                      <li v-for="(category,idx) in $page.props.categories"
+                          :key="`lic-${category.id}`">
                         <template v-if="category.children?.length>0">
                           <Disclosure
                               as="div" :key="`cat-${category.id}`"
-                              :class="{'border-t border-gray-200':idx>0}"
                               class="  " v-slot="{ open }">
-                            <h3 class=" flow-root text-sm  bg-white hover:bg-gray-200">
+                            <h3 class=" flow-root text-sm  bg-white ">
                               <DisclosureButton
-                                  class="flex w-full   items-center justify-between   px-4 py-5 text-gray-400 hover:text-gray-500">
+                                  :class="[open?'rounded-t-lg':'rounded-lg']"
+                                  class="flex w-full border hover:bg-gray-200  items-center justify-between   px-4 py-5 text-gray-400 hover:text-gray-500">
                                 <span class="font-medium grow text-start text-gray-900">{{ category.name }}</span>
                                 <span class="ml-6 flex items-center">
                           <PlusIcon v-if="!open && category.children?.length>0" class="size-5 h-5" aria-hidden="true"/>
@@ -153,7 +191,7 @@
                                 leaveFrom="transform scale-100 opacity-100"
                                 leaveTo="transform scale-95 opacity-0"
                             >
-                              <DisclosurePanel class="pt-1 ps-4 ">
+                              <DisclosurePanel class="pt-1 ps-4 bg-gray-50 rounded-b-lg">
                                 <div class=" ">
                                   <div v-for="(child, idx) in category.children??[]" :key="child.id" class="   ">
                                     <div @click="toggleCategory(child)"
@@ -269,19 +307,66 @@
 
                 <!-- Filters -->
                 <form class="mt-4 border-t border-gray-200">
-                  <h3 class="sr-only">Categories</h3>
-                  <ul role="list" class="px-2 py-3   font-medium text-gray-900">
+                  <h3 class="sr-only">Brands</h3>
+                  <ul role="list" class="px-2 py-3 space-y-1  font-medium text-gray-900">
 
+                    <li v-if="$page.props.brands?.length>0">
+                      <Disclosure
+                          as="div" key="brands-disclosure "
+
+                          class="  " v-slot="{ open }">
+                        <h3 class=" flow-root  text-sm    ">
+                          <DisclosureButton
+                              :class="[open?'rounded-t-lg':'rounded-lg']"
+                              class="flex w-full   hover:bg-gray-200   border   items-center justify-between   px-4 py-5 text-gray-400 hover:text-gray-500">
+                            <span class="font-medium grow text-start text-gray-900">{{ __('brands') }}</span>
+                            <span class="ml-6 flex items-center">
+                          <PlusIcon v-if="!open  " class="size-5 h-5" aria-hidden="true"/>
+                          <MinusIcon v-else class="size-5 h-5"
+                                     aria-hidden="true"/>
+                        </span>
+                          </DisclosureButton>
+                        </h3>
+                        <Transition
+                            enter="transition duration-100 ease-out"
+                            enterFrom="transform scale-95 opacity-0"
+                            enterTo="transform scale-100 opacity-100"
+                            leave="transition duration-75 ease-out"
+                            leaveFrom="transform scale-100 opacity-100"
+                            leaveTo="transform scale-95 opacity-0"
+                        >
+                          <DisclosurePanel class="pt-1 ps-4 bg-gray-50 rounded-b-lg">
+                            <div class=" ">
+                              <div v-for="(brand, idx) in $page.props.brands " :key="brand.id" class="   ">
+                                <div @click="toggleBrand(brand)"
+                                     class="hover:bg-gray-100  cursor-pointer py-2 px-1">
+                                  <input @click.stop.prevent tabindex="-1"
+                                         :id="`filter-mobile-brand-${brand.id}`"
+                                         :checked="params.brand_ids?.includes(brand.id)" type="checkbox"
+                                         class="col-start-1 row-start-1 pointer-events-none appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"/>
+                                  <label @click.prevent
+                                         :for="`filter-mobile-category-${brand.id}`"
+                                         class="min-w-0 mx-2 text-sm select-none cursor-pointer flex-1 text-gray-500">{{
+                                      brand.name
+                                    }}</label>
+                                </div>
+
+                              </div>
+                            </div>
+                          </DisclosurePanel>
+                        </Transition>
+                      </Disclosure>
+                    </li>
 
                     <li v-for="(category,idx) in $page.props.categories" :key="`lic-${category.id}`">
                       <template v-if="category.children?.length>0">
                         <Disclosure
                             as="div" :key="`cat-${category.id}`"
-                            :class="{'border-t border-gray-200':idx>0}"
                             class="  " v-slot="{ open }">
-                          <h3 class=" flow-root text-sm  bg-white hover:bg-gray-200">
+                          <h3 class=" flow-root text-sm  bg-white ">
                             <DisclosureButton
-                                class="flex w-full   items-center justify-between   px-4 py-5 text-gray-400 hover:text-gray-500">
+                                :class="[open?'rounded-t-lg':'rounded-lg']"
+                                class="flex w-full border hover:bg-gray-200 items-center justify-between   px-4 py-5 text-gray-400 hover:text-gray-500">
                               <span class="font-medium grow text-start text-gray-900">{{ category.name }}</span>
                               <span class="ml-6 flex items-center">
                           <PlusIcon v-if="!open && category.children?.length>0" class="size-5 h-5" aria-hidden="true"/>
@@ -298,7 +383,7 @@
                               leaveFrom="transform scale-100 opacity-100"
                               leaveTo="transform scale-95 opacity-0"
                           >
-                            <DisclosurePanel class="pt-1 ps-4 ">
+                            <DisclosurePanel class="pt-1 ps-4 bg-gray-50 rounded-b-lg">
                               <div class=" ">
                                 <div v-for="(child, idx) in category.children??[]" :key="child.id" class="   ">
                                   <div @click="toggleCategory(child)"
@@ -606,12 +691,22 @@ const params = reactive({
   order_by: null,
   dir: null,
   category_ids: [],
+  brand_ids: [],
   province_id: null,
   city_id: null,
 })
 const modules = [Navigation, Pagination, Scrollbar, A11y]
 
 // Category toggler
+function toggleBrand(item) {
+
+  const id = item.id
+  const set = new Set(params.brand_ids); // convert to Set
+  set.has(id) ? set.delete(id) : set.add(id); // toggle
+  params.brand_ids = Array.from(set);
+  getData(0)
+}
+
 function toggleCategory(item) {
   const allIds = collectTreeIds(item)
 

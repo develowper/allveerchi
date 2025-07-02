@@ -82,6 +82,7 @@ class VariationController extends Controller
         $paginate = $request->paginate ?: 24;
         $grade = $request->grade;
         $agencyId = $request->agency_id;
+        $brandIds = $request->brand_ids;
 
         if ($id) {
             $data = Variation::with('repository')->find($id);
@@ -104,19 +105,19 @@ class VariationController extends Controller
             return response()->json($data);
         }
 
-        $query = Product::join('variations', function ($join) use ($categoryIds) {
+        $query = Product::join('variations', function ($join) use ($categoryIds, $brandIds) {
             $join->on('products.id', '=', 'variations.product_id')
                 ->where(function ($query) use ($categoryIds) {
 
                     if ($categoryIds && is_array($categoryIds) && count($categoryIds) > 0) {
-
-//                        $ids = implode(',', $categoryIds);
                         foreach ($categoryIds as $categoryId) {
-//                            $jsonId = json_encode($categoryId);
-//                            $query->orWhereRaw("JSON_CONTAINS(products.categories, ?, '$')", [$jsonId]);
                             $query->orWhereJsonContains('products.categories', (int)$categoryId);
                         }
 
+                    }
+                })->where(function ($query) use ($brandIds) {
+                    if (!empty($brandIds)) {
+                        $query->whereIn('products.brand_id', $brandIds);
                     }
                 });
         })->join('repositories', function ($join) use ($inShop, $categoryIds, $countyId, $districtId, $provinceId, $agencyId) {

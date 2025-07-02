@@ -79,9 +79,9 @@
     <!-- mobile menu -->
     <div
         class="      md:hidden     mobile-menu  transform transition-all duration-500  bg-primary-500 px-4 shadow-md  ">
-      <div class="mobile-menu-content flex flex-col ">
+      <div class="mobile-menu-content flex flex-col p-2 ">
 
-        <SearchInput class="         " v-model="params.search" @search="search( )"/>
+        <SearchInput class="  " v-model="params.search" @search="search( )"/>
 
         <Link :href="route('/')" class="px-4 mobile nav-item m-1" :class="navClasses('/')">
           {{ __('home') }}
@@ -172,7 +172,7 @@ export default {
       window.location = this.route('shop.index', this.params)
     },
     navClasses(item) {
-      let base = "py-4 rounded-lg px-2 lg:px-2    font-semibold  transition    hover:bg-primary-400 hover:text-white  duration-300 ";
+      let base = "py-4 text-white rounded-lg px-2 lg:px-2  font-semibold  transition    hover:bg-primary-400 hover:text-white  duration-300 ";
       if (item && (this.route().current(`${item}.*`) || this.route().current(`${item}`)))
         base = "py-4 active rounded-lg px-2 lg:px-2 text-primary-500  bg-primary-100   font-semibold  transition    hover:bg-primary-400 hover:text-white  duration-300 ";
       return base;
@@ -190,6 +190,7 @@ export default {
         nav.classList.add("shadow-lg");
 
         for (let el of links) {
+          if (el.classList.contains('mobile')) continue;
           el.classList.remove("text-white");
           el.classList.add("text-primary-500");
         }
