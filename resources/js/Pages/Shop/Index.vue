@@ -555,13 +555,13 @@
                     {{ __('no_product_in_selected_city') }}
                   </div>
                 </section>
-
+                <section v-else ref="loader">
+                  <LoadingIcon v-show="loading" type="linear"/>
+                </section>
               </div>
             </div>
           </section>
-          <div ref="loader">
-            <LoadingIcon v-show="loading" type="linear"/>
-          </div>
+
         </main>
 
       </div>
