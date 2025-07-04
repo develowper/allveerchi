@@ -13,7 +13,7 @@
 
               </Link>
             </div>
-            <div class="  grow   max-w-md mx-auto ">
+            <div v-if="!route().current('shop.index')" class="  grow   max-w-md mx-auto ">
               <SearchInput class="hidden md:block " v-model="params.search"
                            @search="search( )"/>
             </div>

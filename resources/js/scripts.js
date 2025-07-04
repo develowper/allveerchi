@@ -89,7 +89,7 @@ window.tailwindElements = () => {
     // window.Sidenav = Sidenav;
     // window.Modal = Modal;
     // window.Dropdown = Dropdown;
-    initTE({Popover, Tooltip, Ripple, Input, Select, Alert, Toast, Sidenav, Modal,}, {
+    initTE({Popover, Tooltip, Ripple, Select, Alert, Toast, Sidenav, Modal,}, {
         allowReinits: true,
         autoReinits: true,
         checkOtherImports: false,

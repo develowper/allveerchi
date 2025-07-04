@@ -105,7 +105,7 @@ class VariationController extends Controller
             return response()->json($data);
         }
 
-        $query = Product::join('variations', function ($join) use ($categoryIds, $brandIds) {
+        $query = Product::join('variations', function ($join) use ($categoryIds, $brandIds, $search) {
             $join->on('products.id', '=', 'variations.product_id')
                 ->where(function ($query) use ($categoryIds) {
 
@@ -119,8 +119,12 @@ class VariationController extends Controller
                     if (!empty($brandIds)) {
                         $query->whereIn('products.brand_id', $brandIds);
                     }
+                })->where(function ($query) use ($search) {
+//                    if ($search)
+//                        $query->orWhere('products.PN', 'like', "%$search%");
+
                 });
-        })->join('repositories', function ($join) use ($inShop, $categoryIds, $countyId, $districtId, $provinceId, $agencyId) {
+        })->join('repositories', function ($join) use ($inShop, $search, $categoryIds, $countyId, $districtId, $provinceId, $agencyId) {
             $join->on('variations.repo_id', '=', 'repositories.id')
                 ->where('repositories.status', 'active')
                 ->where('repositories.is_shop', true)
@@ -151,6 +155,10 @@ class VariationController extends Controller
 //                    else
                     if ($districtId)
                         $query->whereJsonContains('repositories.cities', intval($districtId));
+                })->where(function ($query) use ($search) {
+                    if ($search)
+                        $query->where('variations.name', 'like', "%$search%")->orWhere('products.PN', 'like', "%$search%");
+
                 });
 
         })->select('variations.id', 'variations.product_id',
@@ -174,8 +182,7 @@ class VariationController extends Controller
             //            ->orderByRaw("IF(articles.charge >= articles.view_fee, articles.view_fee, articles.id) DESC")
         ;
 
-        if ($search)
-            $query->where('variations.name', 'like', "%$search%")->orWhere('variations.PN', 'like', "%$search%");
+
         if ($grade)
             $query = $query->where('variations.grade', $grade);
         $res = $query->paginate($paginate, ['*'], 'page', $page)//            ->getCollection()->groupBy('parent_id')

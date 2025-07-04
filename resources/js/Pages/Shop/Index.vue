@@ -241,7 +241,9 @@
           <div class="flex items-baseline justify-between border-b border-gray-200   pb-2">
             <h1 class="text-xl font-bold tracking-tight text-primary-500">{{ __('products') }}</h1>
 
-            <div class="flex items-center">
+            <div class="flex items-center sticky">
+              <SearchInput class=" grow max-w-lg mx-2" v-model="params.search" @search="getData(0)"/>
+
               <Menu as="div" class="relative inline-block text-start">
                 <div>
                   <MenuButton
@@ -431,20 +433,20 @@
 
                   <div class="lg:col-span-4">
                     <div
-                        class="  mt-6   gap-y-3 gap-x-2 grid   sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+                        class="  mt-6   gap-y-3 gap-x-2 grid xs:grid-cols-1 sm:grid-cols-3   lg:grid-cols-3 xl:grid-cols-4 ">
                       <div class="bg-white   shadow-md rounded-lg    "
                            v-for="(p,idx) in products">
                         <div :id="p.id"
-                             class="   flex flex-row sm:flex-col h-full    hover:scale-[101%] duration-300">
+                             class="     flex flex-row sm:flex-col h-full    hover:scale-[101%] duration-300">
                           <div class="flex flex-col h-full justify-between p-3 w-full ">
 
                             <Link :href=" route( 'variation.view',{id:p.id,name:p.name})">
                               <div class="flex  sm:flex-col  ">
-                                <div class="md:mx-auto sm:h-64 sm:w-full  h-24    w-32 shadow-md  ">
+                                <div class="md:mx-auto sm:h-48 sm:w-full  h-24     w-32    ">
                                   <!--                <Image :data-lity="route('storage.variations')+`/${p.id}/thumb.jpg`"-->
                                   <!--                       classes="object-cover  h-full w-full  rounded-t-lg rounded-b   "-->
                                   <!--                       :src="route('storage.variations')+`/${p.id}/thumb.jpg`"></Image> -->
-                                  <Image classes="object-contain  h-full w-full  rounded-t-lg rounded-b  "
+                                  <Image classes="object-cover  h-full w-full  rounded-lg    "
                                          :src="route('storage.products')+`/${p.product_id}.jpg`" disabled="true"
 
 
@@ -555,7 +557,7 @@
                     {{ __('no_product_in_selected_city') }}
                   </div>
                 </section>
-                <section v-else ref="loader">
+                <section v-show="loading" ref="loader">
                   <LoadingIcon v-show="loading" type="linear"/>
                 </section>
               </div>

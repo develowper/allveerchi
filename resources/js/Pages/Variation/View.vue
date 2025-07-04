@@ -24,8 +24,7 @@
 
             <div class=" max-w-sm     mx-auto   ">
               <Image
-                  :src="route('storage.variations')+`/${data.id}/thumb.jpg`"
-                  :failUrl="route('storage.products')+`/${data.product_id}.jpg`"
+                  :src="route('storage.products')+`/${data.product_id}.jpg`"
                   classes="object-contain rounded-lg cursor-pointer   "/>
 
             </div>
