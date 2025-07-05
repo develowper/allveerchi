@@ -197,7 +197,7 @@
                         class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
                         @click="params.order_by='price';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
                       <div class="flex items-center justify-center">
-                        <span class="px-2">    {{ __('fee') }} </span>
+                        <span class="px-2">    {{ __('price') }} </span>
                         <ArrowsUpDownIcon class="w-4 h-4 "/>
                       </div>
                     </th>
@@ -454,7 +454,7 @@
                     </td>
                     <td class="px-2 py-4    ">
                       <button
-                          @click="d.idx=idx;d.cmnd='change-price';d.new_prices=d.prices ==null || d.prices.length ==0 ? [{}]:d.prices ;d.new_price=d.price;d.new_auction_price=d.auction_price; selected=d; "
+                          @click="d.idx=idx;d.cmnd='change-price';d.new_prices=d.prices ==null || d.prices.length ==0 ? [ ]:d.prices ;d.new_price=d.price;d.new_auction_price=d.auction_price; selected=d; "
                           id="PriceId"
                           aria-expanded="false"
                           data-te-ripple-init
@@ -462,7 +462,8 @@
                           class="  min-w-[5rem]    p-2 cursor-pointer items-center text-center rounded-md  "
                           :class="`bg-indigo-50 border border-indigo-300 hover:bg-indigo-200 text-indigo-500`"
                       >
-                        {{ (d.prices || [{price: '?'}]).map((i) => asPrice(i.price)).join('|') }}
+                        {{ asPrice(d.price) }}
+                        <div>{{ (d.prices ?? []).length ? `(${d.prices.length})` : '' }}</div>
                       </button>
 
                     </td>
@@ -607,7 +608,7 @@
               <div @click.self="selected=null;errors={}"
                    class="flex min-h-full   justify-center p-4 text-center sm:items-center sm:p-0">
                 <div
-                    class="relative transform overflow-auto rounded-lg bg-white   shadow-xl transition-all sm:my-8  w-full   m-2 ">
+                    class="relative transform overflow-auto rounded-lg bg-white   shadow-xl transition-all sm:my-8  mx-auto   m-2 ">
                   <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div class=" flex flex-col items-stretch">
                       <div class="flex items-center  gap-2">
@@ -810,14 +811,51 @@
                           <div v-if="selected.cmnd=='change-price'"
                                class="   text-sm text-gray-500 ">
                             <span v-if="false" class="text-xs py-2 text-danger-500">{{ __('help_price') }}</span>
+
+                            <div class="mb-2">
+                              <TextInput
+                                  id="new_price"
+                                  type="number"
+                                  :placeholder="`${__('fee')}`"
+                                  classes="  "
+                                  v-model="selected.new_price"
+                                  :autocomplete="selected.new_price"
+                                  :error="  errors.new_price">
+
+                                <template v-slot:prepend>
+                                  <div class="p-3">
+                                    <CurrencyDollarIcon class="h-5 w-5"/>
+                                  </div>
+                                </template>
+                              </TextInput>
+                            </div>
+                            <div class="mb-6">
+                              <TextInput
+                                  id="new_auction_price"
+                                  type="number"
+                                  :placeholder="`${__('auction_fee')}`"
+                                  classes="  "
+                                  v-model="selected.new_auction_price"
+                                  :autocomplete="selected.new_auction_price"
+                                  :error="  errors.new_auction_price">
+
+                                <template v-slot:prepend>
+                                  <div class="p-3">
+                                    <CurrencyDollarIcon class="h-5 w-5"/>
+                                  </div>
+                                </template>
+                              </TextInput>
+                            </div>
+                            <div class="flex justify-center border-b">{{ __('discount_table') }}</div>
                             <table class="table-auto my-2  text-sm   text-gray-500 ">
                               <thead>
                               <tr>
-                                <th>{{ __('from') }}</th>
-                                <th>{{ __('until') }}</th>
-                                <th v-if="false">{{ __('type') }}</th>
-                                <th>{{ __('price') }}</th>
-                                <th>{{ __('actions') }}</th>
+                                <th class="px-2">{{ __('from') }}</th>
+                                <th class="px-2">{{ __('until') }}</th>
+                                <th class="px-2" v-if="false">{{ __('type') }}</th>
+                                <th class="px-2">{{ __('discount_percent') }}</th>
+                                <th class="px-2">{{ __('price') }}</th>
+                                <th class="px-2">{{ __('actions') }}</th>
                               </tr>
                               </thead>
                               <tbody>
@@ -846,29 +884,56 @@
 
                                 </td>
                                 <td>
-                                  <input :class="{'border-2 border-red-500':errors[`new_prices.${idx}.price`]}"
+                                  <input :class="{'border-2 border-red-500':errors[`new_prices.${idx}.discount`]}"
                                          class="w-24 px-1  text-sm border-gray-400 rounded" type="number"
-                                         v-model="p.price">
+                                         v-model="p.discount">
+                                </td>
+                                <td v-if="false">
+                                  <div :class="{'border-2 border-red-500':errors[`new_prices.${idx}.price`]}"
+                                       class="w-24 px-1  text-sm border-gray-400 rounded" type="number">{{ p.price }}
+                                  </div>
+                                </td>
+                                <td class="">
+                                  <div class="flex items-center justify-center gap-1 mx-2">
+                                    <div>{{
+                                        asPrice(Math.round(p.from * selected.new_price * (100 - p.discount) / 100))
+                                      }}
+                                    </div>
+                                    _
+                                    <div>{{
+                                        asPrice(Math.round(p.to * selected.new_price * (100 - p.discount) / 100))
+                                      }}
+                                    </div>
+                                  </div>
                                 </td>
                                 <td class="">
                                   <div class="flex items-center gap-1 mx-2">
-                                    <button
-                                        @click="selected.new_prices.splice(idx+1,0,{})   "
-                                        class="bg-green-500 rounded-md hover:bg-green-400 hover:cursor-pointer text-white ">
+                                    <button v-if="false"
+                                            @click="selected.new_prices.splice(idx+1,0,{})   "
+                                            class="bg-green-500 rounded-md hover:bg-green-400 hover:cursor-pointer text-white ">
                                       <ChevronDownIcon class="w-6 h-6 m-2"/>
+                                      <!--                                      <PlusIcon class="w-6 h-6 m-2"/>-->
                                     </button>
                                     <button
                                         @click="selected.new_prices.splice(idx,1)   "
                                         class="bg-red-500 rounded-md hover:bg-red-400 hover:cursor-pointer text-white ">
                                       <TrashIcon class="w-6 h-6 m-2"/>
                                     </button>
-                                    <button
-                                        @click="selected.new_prices.splice(idx ,0,{})   "
-                                        class="bg-green-500 rounded-md hover:bg-green-400 hover:cursor-pointer text-white ">
+                                    <button v-if="false"
+                                            @click="selected.new_prices.splice(idx ,0,{})   "
+                                            class="bg-green-500 rounded-md hover:bg-green-400 hover:cursor-pointer text-white ">
                                       <ChevronUpIcon class="w-6 h-6 m-2"/>
                                     </button>
                                   </div>
                                 </td>
+                              </tr>
+                              <tr>
+                                <button
+                                    @click="selected.new_prices.push( {})   "
+                                    class="bg-green-500 rounded-md hover:bg-green-400 hover:cursor-pointer text-white ">
+                                  <PlusIcon class="w-6 h-6 m-2"/>
+                                  <!--                                      <PlusIcon class="w-6 h-6 m-2"/>-->
+                                </button>
                               </tr>
                               </tbody>
 
@@ -876,7 +941,7 @@
                             </table>
                             <button
                                 class="bg-success-200 text-success-700 p-2 rounded-lg  hover:bg-success-300 w-full"
-                                @click="edit({'idx':selected.idx ,'id':selected.id,'cmnd':'change-price','new_prices':selected.new_prices,  })">
+                                @click="edit({'idx':selected.idx ,'id':selected.id,'cmnd':'change-price','new_prices':selected.new_prices ,'new_price':selected.new_price,  'new_auction_price':selected.new_auction_price,  })">
                               {{ __('accept') }}
                             </button>
                           </div>
@@ -970,6 +1035,8 @@ import {
   CurrencyDollarIcon,
   DocumentDuplicateIcon,
   TrashIcon,
+  PlusIcon,
+  MinusIcon,
 
 } from "@heroicons/vue/24/outline";
 import Image from "@/Components/Image.vue"
@@ -1012,6 +1079,8 @@ export default {
     Link,
     HomeIcon,
     ChevronDownIcon,
+    PlusIcon,
+    MinusIcon,
     ChevronUpIcon,
     Panel,
     Bars2Icon,

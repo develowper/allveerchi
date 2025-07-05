@@ -202,15 +202,23 @@ class CartController extends Controller
 
 
             $isAuctionItem = $isAuction && $product->auction_price;
-            $price = $priceSelected['price'] ?? ($isAuctionItem ? $product->auction_price : $product->price);
-            $itemTotalPrice = $cartItem->qty * $price;
+            $itemTotalDiscount = 0;
+            if ($priceSelected['discount']) {
+                $itemTotalDiscount = round($cartItem->qty * ($priceSelected['discount']) / 100 * ($isAuctionItem ? $product->auction_price : $product->price));
+                $itemTotalPrice = round($cartItem->qty * (100 - $priceSelected['discount']) / 100 * ($isAuctionItem ? $product->auction_price : $product->price));
+            } else {
+                $itemTotalDiscount = $cartItem->qty * ($product->price - ($isAuctionItem ? $product->auction_price : $product->price));
+                $itemTotalPrice = $cartItem->qty * ($isAuctionItem ? $product->auction_price : $product->price);
+            }
+//            $price = $priceSelected['price'] ?? ($isAuctionItem ? $product->auction_price : $product->price);
+//            $itemTotalPrice = $cartItem->qty * $price;
 //            $cartItem->save();
 //            $cartItem->total_discount = isset($priceSelected['price']) ? 0 : ($isAuctionItem ? ($cartItem->qty * ($price - $product->auction_price)) : 0);
-            if (in_array($cart->payment_method, array_column(Variable::getPaymentMethods(), 'key'))) {
-                $itemTotalPrice = $itemTotalPrice + round((Setting::getValue("{$request->payment_method}_profit_percent") ?? 0) * $itemTotalPrice / 100);
-            }
+//            if (in_array($cart->payment_method, array_column(Variable::getPaymentMethods(), 'key'))) {
+//                $itemTotalPrice = $itemTotalPrice + round((Setting::getValue("{$request->payment_method}_profit_percent") ?? 0) * $itemTotalPrice / 100);
+//            }
 
-            $cartItem->total_discount = 0;
+            $cartItem->total_discount = $itemTotalDiscount;
             $cartItem->total_price = $itemTotalPrice;
             $cartItem->total_weight = $cartItem->qty * $product->weight;
             $cartItem->unit = $product->unit;
@@ -374,7 +382,7 @@ class CartController extends Controller
                 $errors[] = ['key' => $methodId, 'type' => 'shipping', 'message' => $errorMessage];
                 $default['error_message'] = $errorMessage;
             }
-            if ( !$shipments[$idx] ||  $cartItem->visit_checked) {
+            if (!$shipments[$idx] || $cartItem->visit_checked) {
                 $shipments[$idx] = [
                     'method_id' => $methodId,
                     'cart_item' => $cartItem,
@@ -556,6 +564,7 @@ class CartController extends Controller
                 'total_items' => $totalItems,
                 'total_items_price' => $totalItemsPrice,
                 'tax_price' => round($totalItemsPrice * $taxPercent / 100),
+                'total_discount' => $totalItemsDiscount,
                 'total_items_discount' => $totalItemsDiscount,
                 'has_available_shipping' => $hasAvailableShipping,
                 'total_shipping_price' => $basePrice + $totalShippingPrice,

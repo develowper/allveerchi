@@ -1,13 +1,10 @@
 <template>
-  <Scaffold navbar-theme="dark">
+  <Scaffold navbar-theme="light">
     <template v-slot:header>
       <title>{{page=='shipping'?__('address'):__('cart')}}</title>
 
     </template>
-    <div
-        class="  py-16  shadow-md bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-400 to-primary-500">
 
-    </div>
 
     <div v-if="cart" class="flex flex-col md:flex-row p-2 lg:p-4 lg:max-w-5xl mx-auto">
 
@@ -107,6 +104,14 @@
 
                     </div>
                     <div class="flex">
+                      <div class="text-neutral-500 mx-1">{{ __('discount') }}:</div>
+                      <div class="text-neutral-700 mx-1">{{
+                          asPrice(item.cart_item.total_discount)
+                        }}
+                      </div>
+                      <TomanIcon class="w-5 h-5 text-neutral-400"/>
+                    </div>
+                    <div class="flex">
                       <div class="text-neutral-500 mx-1">{{ __('price') }}:</div>
                       <div class="text-neutral-700 mx-1">{{
                           asPrice(Math.round(item.cart_item.total_price))
@@ -114,7 +119,6 @@
                       </div>
                       <TomanIcon class="w-5 h-5 text-neutral-400"/>
                     </div>
-
                   </div>
                   <div v-if="true" class="flex  items-center text-sm">
                     <!--                    <div class="text-neutral-600 mx-1">{{ __('weight_unit') }}:</div>-->
@@ -129,6 +133,58 @@
                     <div class="text-neutral-400 mx-1">{{ __('kg') }}</div>
 
                   </div>
+                  <div class="flex items-center   my-2  ">
+                    <Menu
+
+                        v-if="item.cart_item.product.prices?.length" as="div"
+                        class="relative inline-block text-start">
+                      <div>
+                        <MenuButton ref="menuRefs"
+                                    class="group bg-success-50 flex text-success  hover:bg-success-100 cursor-pointer font-bold shadow-md rounded-lg   p-2 ">
+                          <div> {{
+                              (item.cart_item.product.prices?.length)
+                                  ? `${item.cart_item.product.prices.length === 1
+                                      ? item.cart_item.product.prices[0].discount
+                                      : `%${item.cart_item.product.prices[0].discount ?? '0'} ${__('until')} %${item.cart_item.product.prices[item.cart_item.product.prices.length - 1].discount ?? '0'}`
+                                  } ${__('discount')}` : ''
+                            }}
+                          </div>
+                          <ChevronDownIcon class="mx-1  h-5 text-success-400 group-hover:text-success-500"
+                                           aria-hidden="true"/>
+                        </MenuButton>
+                      </div>
+
+                      <transition enter-active-class="transition ease-out duration-100"
+                                  enter-from-class="transform opacity-0 scale-95"
+                                  enter-to-class="transform opacity-100 scale-100"
+                                  leave-active-class="transition ease-in duration-75"
+                                  leave-from-class="transform opacity-100 scale-100"
+                                  leave-to-class="transform opacity-0 scale-95">
+                        <MenuItems
+                            class="absolute p-2 right-0 z-10   w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black/5 focus:outline-hidden">
+                          <div class="py-1">
+                            <MenuItem
+                                v-for="(price,idx) in item.cart_item.product.prices??[]"
+                                :key="`price-item-${item.cart_item.product.id}-${idx}`"
+                                v-slot="{ active }">
+                              <div class="flex items-center justify-between ">
+                                <div class="font-bold text-success animate-pulse">{{
+                                    price.discount
+                                  }}%
+                                </div>
+                                <div>{{ price.from }}-{{ price.to }}</div>
+                              </div>
+                            </MenuItem>
+                          </div>
+                        </MenuItems>
+                      </transition>
+                    </Menu>
+                    <div v-if="item.cart_item.product.showDiscount"
+                         class="font-bold bg-success-50 text-success rounded-lg shadow-md p-2 bg-white"> {{
+                        item.cart_item.product.showDiscount
+                      }}
+                    </div>
+                  </div>
                 </div>
 
               </div>
@@ -138,6 +194,8 @@
               <div class="flex flex-wrap items-center justify-start my-2">
 
                 <CartItemButton :product-id="item.cart_item.variation_id"
+                                @qtyChanged="(price,discount)=>{item.cart_item.product.showPrice=price;item.cart_item.product.showDiscount=discount} "
+                                :price="item.cart_item.product.price"
                                 :prices="Array.isArray(item.cart_item.product.prices)?item.cart_item.product.prices :[]"
                                 class=" flex min-w-[100%]   xs:min-w-[100%] sm:min-w-[60%] lg:min-w-[50%]
                                 hover:cursor-pointer
@@ -168,6 +226,11 @@
               <div class="flex  items-center text-sm  p-2 py-2">
                 <div class="text-neutral-600 mx-1">{{ __('cart_total_price') }}:</div>
                 <div class="text-neutral-800 mx-1">{{ asPrice(shipment.total_items_price) }}</div>
+                <TomanIcon class="w-5 h-5 text-neutral-400"/>
+              </div>
+              <div class="flex  items-center text-sm  p-2 py-2">
+                <div class="text-neutral-600 mx-1">{{ __('discount') }}:</div>
+                <div class="text-neutral-800 mx-1">{{ asPrice(shipment.total_discount) }}</div>
                 <TomanIcon class="w-5 h-5 text-neutral-400"/>
               </div>
               <div class="flex  items-center text-sm  p-2 py-2">
@@ -275,6 +338,11 @@
           </div>
 
           <div class="flex  items-center justify-start   text-sm  p-4 py-2">
+            <div class="text-neutral-600 mx-1">{{ __('discount') }}:</div>
+            <div class="text-neutral-800 mx-1">{{ asPrice(cart.total_discount) }}</div>
+            <TomanIcon class="w-5 h-5 text-neutral-400"/>
+          </div>
+          <div class="flex  items-center justify-start   text-sm  p-4 py-2">
             <div class="text-neutral-600 mx-1">{{ __('tax') }}:</div>
             <div class="text-neutral-800 mx-1">{{ asPrice(cart.tax_price) }}</div>
             <TomanIcon class="w-5 h-5 text-neutral-400"/>
@@ -330,6 +398,7 @@ import {
   MapPinIcon,
   ShoppingBagIcon,
   CheckCircleIcon,
+  ChevronDownIcon,
 } from "@heroicons/vue/24/outline";
 import {
   PencilIcon,
@@ -346,6 +415,7 @@ import 'swiper/css/scrollbar';
 import CartItemButton from "@/Components/CartItemButton.vue";
 import {Dropdown, initTE, Modal} from "tw-elements";
 import Timestamp from "@/Components/Timestamp.vue";
+import {MenuButton, MenuItem, MenuItems, Menu} from "@headlessui/vue";
 
 export default {
   data() {
@@ -358,6 +428,10 @@ export default {
   },
   props: ['heroText'],
   components: {
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem,
     Timestamp,
     CartItemButton,
     SearchInput,
@@ -380,6 +454,7 @@ export default {
     AddressSelector,
     TextInput,
     CheckCircleIcon,
+    ChevronDownIcon,
   },
   // mixins: [Mixin],
   setup(props) {

@@ -620,11 +620,13 @@ class VariationController extends Controller
                     break;
                 case 'change-price':
                     $request->merge([
-                        'changed' => $request->new_prices != $data->prices],
+                        'changed' => $request->new_prices != $data->prices || $request->new_price != $data->price || $request->new_auction_price != $data->auction_price],
                     );
                     $request->validate(
                         [
                             'changed' => [Rule::in([true])],
+                            'new_price' => ['required', 'numeric', 'gte:new_auction_price'],
+                            'new_auction_price' => ['nullable', 'numeric', 'min:0'],
                             'new_prices' => ['sometimes', 'array', 'min:0'],
                             'new_prices.*.from' => ['required', 'integer', 'gte:0'],
                             'new_prices.*.to' => ['required', 'integer', 'gt:new_prices.*.from'],
@@ -633,6 +635,11 @@ class VariationController extends Controller
 
                         ],
                         [
+                            'new_price.required' => sprintf(__('validator.required'), __('new_price')),
+                            'new_price.numeric' => sprintf(__('validator.invalid'), __('new_price')),
+                            'new_price.gte' => sprintf(__('validator.gte'), __('new_price'), __('new_auction_price')),
+
+
                             'new_prices.*.from.required' => sprintf(__('validator.required'), __('from')),
                             'new_prices.*.from.numeric' => sprintf(__('validator.invalid'), __('from')),
 
@@ -647,9 +654,6 @@ class VariationController extends Controller
                             'new_prices.*.price.numeric' => sprintf(__('validator.invalid'), __('price')),
                             'new_prices.*.price.gte' => sprintf(__('validator.gt'), __('price'), 0),
 
-                            'new_price.required' => sprintf(__('validator.required'), __('new_price')),
-                            'new_price.numeric' => sprintf(__('validator.invalid'), __('new_price')),
-                            'new_price.gt' => sprintf(__('validator.gt'), __('new_price'), __('new_auction_price')),
 
                             'new_auction_price.required' => sprintf(__('validator.required'), __('new_auction_price')),
                             'new_auction_price.numeric' => sprintf(__('validator.invalid'), __('new_auction_price')),
@@ -662,7 +666,7 @@ class VariationController extends Controller
                         $i['type'] = 'cash';
                         return $i;
                     });
-                    $data->update(['prices' => $request->new_prices,]);
+                    $data->update(['prices' => $request->new_prices, 'price' => $request->new_price, 'auction_price' => $request->new_auction_price]);
 
                     $data->repo = Repository::find($data->repo_id);
                     $data->agency = Agency::find($data->agency_id);

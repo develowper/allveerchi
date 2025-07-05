@@ -19,7 +19,7 @@
         <XMarkIcon class="w-8  mx-2"/>
       </div>
     </div>
-    <div v-if="show" class="flex items-center gap-1 justify-center text-neutral-500 text-sm p-2" dir="ltr">
+    <div v-if="false && show" class="flex items-center gap-1 justify-center text-neutral-500 text-sm p-2" dir="ltr">
       <div class="text-neutral-700">{{ asPrice(selectedPrice) }}</div>
       <XMarkIcon class="w-4   "/>
       <div class="text-neutral-700">{{ inCart }}</div>
@@ -28,16 +28,16 @@
     </div>
     <Transition name="fade">
       <div v-show=" show">
-        <div class=" h-full  py-3 my-2 flex justify-center items-stretch text-primary-500 "
+        <div class=" h-full  py-3 my-1 flex justify-center items-stretch text-primary-500 "
         >
           <div @click.prevent="plus()"
                class=" items-center flex   border rounded-s border-primary-500 hover:bg-primary-500 hover:text-white hover:cursor-pointer">
             <PlusIcon
                 class="w-6  mx-3 "/>
           </div>
-          <!--          <input @click.prevent type="number" min="0" v-model="inCart"-->
-          <!--                 class="  flex w-full shrink text-lg p-1 border text-center focus:border-primary-500 border-primary-500 focus:ring-primary-500">-->
-          <div class="flex   grow">
+          <input @click.prevent type="number" min="0" v-model="inCart"
+                 class="  flex w-full shrink text-lg p-1 border text-center focus:border-primary-500 border-primary-500 focus:ring-primary-500">
+          <div v-if="false" class="flex   grow">
             <RangeSlider :ref="`rs-${productId}`"
                          :min="sliderData.min"
                          :max=" sliderData.max"
@@ -106,8 +106,8 @@ export default {
       sliderData: {min: null, max: null},
     }
   },
-  expose: ['update:cart'],
-  props: ['productId', 'inShop', 'link', 'prices'],
+  expose: ['update:cart', 'qtyChanged'],
+  props: ['productId', 'inShop', 'link', 'prices', 'price'],
   components: {
     TextInput,
     ChevronDownIcon,
@@ -128,7 +128,7 @@ export default {
     // }
 
     this.setInCartQty();
-    this.setPrices();
+    // this.setPrices();
     this.inCartOld = this.inCart;
 
     this.emitter.on('updateCart', (cart) => {
@@ -137,6 +137,27 @@ export default {
     });
   },
   methods: {
+    setShowPrice() {
+      const qty = this.inCart
+      let showPrice
+      let showDiscount
+      const findDiscount = this.prices?.find(pr =>
+          Number(pr.from) <= qty && Number(pr.to) >= qty
+      )
+
+      if (findDiscount) {
+        showPrice = Math.round((100 - findDiscount.discount) * this.price / 100)
+        showDiscount = `${findDiscount.discount}%`
+
+      } else {
+        showPrice = this.price
+      }
+      this.$nextTick(() => {
+
+        this.$emit('qtyChanged', showPrice, showDiscount)
+      })
+
+    },
     setPrices() {
       for (const i in this.prices) {
         if (this.sliderData.min == null || this.sliderData.min > this.prices[i].from) {
@@ -190,6 +211,8 @@ export default {
                 this.priceType = this.cart.orders[ix].shipments[idx].items[id].cart_item.price_type;
 
                 this.inCart = this.inCart ? parseFloat(this.inCart) : 0;
+                this.setShowPrice()
+
                 break;
               }
             }
