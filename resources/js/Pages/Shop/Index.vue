@@ -571,7 +571,7 @@
                               <div
                                   class="flex items-center justify-end my-2 ">
                                 <div class="flex items-center "
-                                     :class="{'line-through text-neutral-500':($page.props.is_auction && p.in_auction) || p.showPrice!=p.price}">
+                                     :class="{'line-through text-neutral-500':($page.props.is_auction && p.in_auction) || p.showPrice!=p.price || log(p.showPrice,p.price)}">
                                   {{ asPrice(Math.round(p.price)) }}
 
                                   <svg v-if="($page.props.is_auction && p.in_auction) || p.showPrice!=p.price"
