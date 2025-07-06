@@ -106,7 +106,7 @@
                   <!--              show price and discount-->
                   <div class="flex flex-col justify-start  ">
                     <!--                    discount section-->
-                    <div class="flex items-stretch justify-between my-2  ">
+                    <div class="flex items-stretch justify-between my-2  text-xs">
                       <Menu
 
                           v-if="data?.prices?.length" as="div"

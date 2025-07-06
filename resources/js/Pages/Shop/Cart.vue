@@ -133,7 +133,7 @@
                     <div class="text-neutral-400 mx-1">{{ __('kg') }}</div>
 
                   </div>
-                  <div class="flex items-center   my-2  ">
+                  <div class="flex items-center   my-2 text-xs ">
                     <Menu
 
                         v-if="item.cart_item.product.prices?.length" as="div"

@@ -154,7 +154,7 @@ export default {
       }
       this.$nextTick(() => {
 
-        this.$emit('qtyChanged', showPrice, showDiscount)
+        this.$emit('qtyChanged', Number(showPrice), Number(showDiscount))
       })
 
     },

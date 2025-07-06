@@ -517,7 +517,7 @@
                             </Link>
 
                             <div>
-                              <div class="flex items-stretch justify-between my-2  ">
+                              <div class="flex items-stretch justify-between my-2 text-xs ">
                                 <Menu
 
                                     v-if="p.prices?.length" as="div"
