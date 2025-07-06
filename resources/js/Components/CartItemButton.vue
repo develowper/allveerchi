@@ -147,7 +147,7 @@ export default {
 
       if (findDiscount) {
         showPrice = Math.round((100 - findDiscount.discount) * this.price / 100)
-        showDiscount = `${findDiscount.discount}%`
+        showDiscount = findDiscount.discount ? `${findDiscount.discount}%` : ''
 
       } else {
         showPrice = this.price
