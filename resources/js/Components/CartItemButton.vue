@@ -152,8 +152,8 @@ export default {
       } else {
         showPrice = this.price
       }
-      console.log(findDiscount)
-      console.log(this.price, showPrice, showDiscount)
+      // console.log(findDiscount)
+      // console.log(this.price, showPrice, showDiscount)
       this.$nextTick(() => {
 
         this.$emit('qtyChanged', showPrice, showDiscount)
