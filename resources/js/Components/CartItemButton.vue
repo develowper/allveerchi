@@ -213,13 +213,14 @@ export default {
                 this.priceType = this.cart.orders[ix].shipments[idx].items[id].cart_item.price_type;
 
                 this.inCart = this.inCart ? parseFloat(this.inCart) : 0;
-                this.setShowPrice()
+
 
                 break;
               }
             }
           }
         }
+      this.setShowPrice()
     }
     ,
     isInt(value) {
