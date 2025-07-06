@@ -571,7 +571,7 @@
                               <div
                                   class="flex items-center justify-end my-2 ">
                                 <div class="flex items-center "
-                                     :class="{'line-through text-neutral-500':    p.showPrice!=p.price   }">
+                                     :class="{'line-through text-neutral-500':  ($page.props.is_auction && p.in_auction) || p.showPrice!=p.price   }">
                                   {{ asPrice(Math.round(p.price)) }}
 
                                   <svg v-if="($page.props.is_auction && p.in_auction) || p.showPrice!=p.price"
@@ -857,6 +857,7 @@ function getData(page) {
         products.value = products.value.concat(response.data.data?.map(i => {
           i.prices = JSON.parse(i.prices);
           i.showPrice = i.price;
+          i.in_auction = Number(i.in_auction);
           return i
         }))
       })
