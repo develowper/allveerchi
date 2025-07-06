@@ -288,7 +288,7 @@ export default {
   mounted() {
 
     this.data = this.$page.props.data;
-    console.log(this.data)
+    // console.log(this.data)
     this.increaseView(this.data.id);
   },
   methods: {
