@@ -44,7 +44,6 @@ return new class extends Migration {
             $table->tinyInteger('step')->nullable();
             $table->rememberToken();
             $table->timestamps();
-
             $table->unsignedBigInteger('access_id')->nullable();
             $table->foreign('access_id')->references('id')->on('accesses')->onDelete('set null');
 
