@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\PreOrderController;
+use App\Http\Controllers\AccessController;
 use App\Http\Controllers\SampleController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CategoryController;
@@ -43,6 +44,7 @@ use App\Models\Article;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Access;
 use App\Models\Variation;
 use Illuminate\Support\Facades\Route;
 
@@ -346,6 +348,22 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('brand/{brand}', [BrandController::class, 'edit'])->name('admin.panel.brand.edit');
 
 
+        PanelController::makeInertiaRoute('get', 'access/index', 'admin.panel.access.index', 'Panel/Admin/Access/Index',
+            []
+        );
+
+        PanelController::makeInertiaRoute('get', 'access/create', 'admin.panel.access.create', 'Panel/Admin/Access/Create',
+            [
+                'access_data' => Access::getTree(),
+            ]
+        );
+        Route::get('access/search', [AccessController::class, 'searchPanel'])->name('admin.panel.access.search');
+        Route::patch('access/update', [AccessController::class, 'update'])->name('admin.panel.access.update');
+        Route::post('access/create', [AccessController::class, 'create'])->name('admin.panel.access.create')->middleware("can:create,App\Models\Admin,App\Models\Access,'1'");
+        Route::delete('access/delete/{id}', [AccessController::class, 'delete'])->name('admin.panel.access.delete');
+        Route::get('access/{access}', [AccessController::class, 'edit'])->name('admin.panel.access.edit');
+
+
         PanelController::makeInertiaRoute('get', 'product/index', 'admin.panel.product.index', 'Panel/Admin/Product/Index',
             []
         );
@@ -356,7 +374,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
                 'brands' => Brand::select('id', 'name')->get(),
             ]
         );
-
         Route::get('product/tree', [ProductController::class, 'getTree'])->name('admin.panel.product.tree');
         Route::get('product/search', [ProductController::class, 'searchPanel'])->name('admin.panel.product.search')->middleware("can:view,App\Models\Admin,App\Models\Product,'1'");
         Route::patch('product/update', [ProductController::class, 'update'])->name('admin.panel.product.update');

@@ -203,6 +203,33 @@ class Variable
 
     ];
 
+    const ACCESSES = [
+        'product' => ['create', 'delete',
+            'edit' => [
+                'name',
+                'PN',
+                'brand_id',
+                'categories',
+                'tags',
+                'status',
+                'description',
+            ]],
+        'variation' => ['create', 'delete',
+            'edit' => [
+                'image',
+                'name',
+                'tags',
+                'status',
+                'repo_id',
+                'product_id',
+                'pack_id',
+                'weight',
+                'in_repo',
+                'in_shop',
+                'prices',
+                'description',
+            ]],
+    ];
 
     const NOTIFICATION_LIMIT = 5;
     const CITY_ID = null; //61 تجریش

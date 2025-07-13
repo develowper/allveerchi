@@ -19,6 +19,7 @@ use App\Models\Pack;
 use App\Models\Product;
 use App\Models\Repository;
 use App\Models\RepositoryOrder;
+use App\Models\Access;
 use App\Models\Sample;
 use App\Models\Setting;
 use App\Models\Shipping;
@@ -96,6 +97,10 @@ class AdminPolicy
                 Brand::class:
                     $res = $admin->hasAccess('view_brand');
                     break;
+                case
+                Access::class:
+                    $res = $admin->hasAccess('view_access');
+                    break;
             }
 
         if ($abort && empty($res))
@@ -169,6 +174,9 @@ class AdminPolicy
                     break;
                 case    Brand::class:
                     $res = $admin->hasAccess('create_brand');
+                    break;
+                case    Access::class:
+                    $res = $admin->hasAccess('create_access');
                     break;
 
             }
@@ -285,6 +293,126 @@ class AdminPolicy
                     break;
                 case   $item instanceof Brand :
                     $res = $admin->hasAccess('edit_brand');
+                    break;
+                case   $item instanceof Access :
+                    $res = $admin->hasAccess('edit_access');
+                    break;
+            }
+
+        if ($abort && empty($res))
+            return abort(403, $message ?? __("access_denied"));
+        if (!empty($res))
+            return true;
+
+        return false;
+    }
+
+    public function delete(Admin $admin, $item, $abort = true, $option = null)
+    {
+        if (!$item) {
+            $message = __("item_not_found");
+
+        }
+        if ($admin->status == 'inactive') {
+            $message = __("user_is_inactive");
+
+        }
+        if ($admin->status == 'block') {
+            $message = __("user_is_blocked");
+        }
+
+        if ($item && $item->status == 'block') {
+            $message = __("item_is_blocked");
+        }
+        if (empty($message) && $item)
+            switch ($item) {
+                case  $item instanceof Agency  :
+                    $res = $admin->hasAccess('delete_agency');
+                    if ($res) {
+                        $myAgency = Agency::find($admin->agency_id);
+                        if (!$myAgency)
+                            $res = false;
+                        elseif ($myAgency->level == '1')
+                            $res = $myAgency->id == $item->id || in_array($myAgency->province_id, $item->access ?? []);
+                        elseif ($myAgency->level == '2')
+                            $res = $myAgency->id == $item->id || in_array($myAgency->id, $item->access ?? []);
+                        elseif ($myAgency->level == '3')
+                            $res = $myAgency->id == $item->id;
+
+                    }
+
+                    break;
+                case  $item instanceof Repository  :
+                    $res = $admin->hasAccess('delete_repository');
+
+                    break;
+                case  $item instanceof ShippingMethod  :
+                    $res = $admin->hasAccess('delete_shipping-method');
+                    break;
+
+                case  $item instanceof Pack  :
+                    $res = $admin->hasAccess('delete_pack');
+                    break;
+                case   $item instanceof Product :
+                    $res = $admin->hasAccess('delete_product');
+                    break;
+                case   $item instanceof Variation :
+                    $res = $admin->hasAccess('delete_variation');
+                    break;
+                case   $item instanceof Sample :
+                    $res = $admin->hasAccess('delete_sample');
+                    break;
+                case   $item instanceof RepositoryOrder :
+                    $res = $admin->hasAccess('delete_repository_order');
+                    if ($res)
+                        break;
+                    $agencyIds = $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id');
+                    $res = in_array($item->from_agency_id, $agencyIds->toArray());
+                    break;
+                case   $item instanceof Driver :
+                    $res = $admin->hasAccess('delete_driver');
+                    break;
+                case   $item instanceof Car :
+                    $res = $admin->hasAccess('delete_car');
+                    break;
+                case   $item instanceof Order :
+                    $res = $admin->hasAccess('delete_order');
+                    break;
+
+                case   $item instanceof Shipping :
+                    $res = $admin->hasAccess('delete_shipping');
+                    break;
+                case   $item instanceof Ticket :
+                    $res = $admin->hasAccess('delete_ticket');
+                    break;
+                case   $item instanceof User :
+                    $res = $admin->hasAccess('delete_user');
+                    break;
+                case   $item instanceof Admin :
+                    $res = $admin->hasAccess('delete_admin');
+                    break;
+                case   $item instanceof Setting :
+                    $res = $admin->hasAccess('delete_setting');
+                    break;
+                case   $item instanceof UserFinancial :
+                case   $item instanceof AdminFinancial :
+                case   $item instanceof AgencyFinancial :
+                    $res = $admin->hasAccess('delete_financial');
+                    break;
+                case   $item instanceof Catalog :
+                    $res = $admin->hasAccess('delete_catalog');
+                    break;
+                case   $item instanceof Article :
+                    $res = $admin->hasAccess('delete_article');
+                    break;
+                case   $item instanceof Category :
+                    $res = $admin->hasAccess('delete_category');
+                    break;
+                case   $item instanceof Brand :
+                    $res = $admin->hasAccess('delete_brand');
+                    break;
+                case   $item instanceof Access :
+                    $res = $admin->hasAccess('delete_access');
                     break;
             }
 

@@ -60,6 +60,7 @@ class Admin extends Authenticatable
         'district_id',
         'address',
         'location',
+        'access_id',
     ];
 
     /**
@@ -175,7 +176,7 @@ class Admin extends Authenticatable
         if (in_array($this->role, ['god']))
             return true;
 
-        if (in_array($item, ['create_variation', 'create_pack', 'edit_pack', 'create_product', 'edit_product', 'edit_repository_order', 'edit_setting', 'edit_financial', 'view_user', 'create_category', 'edit_category', 'create_guarantee', 'edit_guarantee', 'create_catalog', 'edit_catalog', 'view_catalog', 'create_brand', 'edit_brand', 'view_brand'])) {
+        if (in_array($item, ['create_variation', 'create_pack', 'edit_pack', 'create_product', 'edit_product', 'edit_repository_order', 'edit_setting', 'edit_financial', 'view_user', 'create_category', 'edit_category', 'create_guarantee', 'edit_guarantee', 'create_catalog', 'edit_catalog', 'view_catalog', 'create_brand', 'edit_brand', 'view_brand', 'edit_access', 'view_access'])) {
             return $this->agency_id == 1 && (in_array($this->role, ['owner', 'admin']) || in_array($item, $this->access));
         }
         if (in_array($item, ['create_repository_order'])) {
@@ -245,5 +246,10 @@ class Admin extends Authenticatable
         }
         return $data;
 
+    }
+
+    public function access()
+    {
+        return $this->belongsTo(Access::class, 'access_id');
     }
 }

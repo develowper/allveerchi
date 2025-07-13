@@ -158,7 +158,6 @@ export default {
 
         this.$emit('qtyChanged', showPrice, showDiscount)
       })
-
     },
     setPrices() {
       for (const i in this.prices) {
