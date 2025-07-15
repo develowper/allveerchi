@@ -219,7 +219,7 @@ class GuaranteeController extends Controller
         $status = $request->status;
         $grade = $request->grade;
 
-        $query = Sample::query()->select();
+        $query = Sample::query()->select()->whereNotNull('customer_id');
         $query->whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'));
         if ($search)
             $query = $query->where('name', 'like', "%$search%");
@@ -267,6 +267,26 @@ class GuaranteeController extends Controller
 
 
         return $data->orderBy($orderBy, $dir)->paginate($paginate, ['*'], 'page', $page);
+
+
+    }
+
+    public function delete(Request $request, $id)
+    {
+//        $id = $request->id;
+
+        $cmnd = $request->cmnd;
+        $data = Sample::find($id);
+        if (!starts_with($cmnd, 'bulk'))
+            $this->authorize('delete', [Admin::class, $data]);
+        $data->customer_id = null;
+        $data->guarantee_expires_at = null;
+        $data->operator_id = null;
+        if ($data->save()) {
+            Telegram::log(null, 'guarantee_deleted', $data);
+            return response()->json(['message' => __('done_successfully'),], Variable::SUCCESS_STATUS);
+        }
+        return response()->json(['message' => __('response_error'),], Variable::ERROR_STATUS);
 
 
     }

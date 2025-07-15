@@ -352,11 +352,11 @@
 
                              :src="`${route('storage.products')}/${d.product_id}.jpg`"
                              :alt="cropText(d.name,5)"/>
-                      <Link class="px-1 whitespace-nowra hover:text-gray-500"
-                            :href="route('admin.panel.sample.edit',d.id)">
+                      <div class="px-1 whitespace-nowra  "
+                      >
                         <div class=" font-semibold ">{{ cropText(d.name, 30) }}</div>
                         <div class="font-normal text-gray-500">{{ }}</div>
-                      </Link>
+                      </div>
                     </td>
                     <td class="px-2 py-4  font-bold  " style="font-family: Serif !important">
                       {{ f2e(d.barcode) }}
@@ -406,7 +406,7 @@
                                 <XMarkIcon class="w-8 h-6 my-2 "/>
                               </div>
                               <select class="grow rounded-e border-400 cursor-pointer" name=""
-                                      @change="($e)=>{log(d.agency_id);d.new_repo_id=$e.target.value;}"
+                                      @change="($e)=>{  d.new_repo_id=$e.target.value;}"
                                       :id=" `selectRepo${d.id}` " v-model="d.new_repo_id">
                                 <option class="text-start rounded p-2 m-2"
                                         v-for="d in filteredRepositories[d.agency_id] "
@@ -558,21 +558,21 @@
                           class=" inline-flex rounded-md shadow-sm transition duration-150 ease-in-out    focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
                           role="group">
 
-                        <Link v-if="false"
-                              type="button" :href="route('admin.panel.samples.edit',d.id)"
-                              class="inline-block rounded  bg-orange-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-orange-400   focus:outline-none focus:ring-0  "
-                              data-te-ripple-init
-                              data-te-ripple-color="light">
-                          {{ __('edit') }}
-                        </Link>
+                        <!--                        <Link v-if="false"-->
+                        <!--                              type="button" :href="route('admin.panel.samples.edit',d.id)"-->
+                        <!--                              class="inline-block rounded  bg-orange-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-orange-400   focus:outline-none focus:ring-0  "-->
+                        <!--                              data-te-ripple-init-->
+                        <!--                              data-te-ripple-color="light">-->
+                        <!--                          {{ __('edit') }}-->
+                        <!--                        </Link>-->
 
-                        <!--                  <button -->
-                        <!--                      type="button"-->
-                        <!--                      class="inline-block rounded-e bg-teal-500 px-6 py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-teal-400   focus:outline-none focus:ring-0  "-->
-                        <!--                      data-te-ripple-init-->
-                        <!--                      data-te-ripple-color="light">-->
-                        <!--                    {{ __('charge') }}-->
-                        <!--                  </button>-->
+                        <button @click=" showDialog('danger',__('remove_item?'), __('remove') , removeData,d.id )"
+                                type="button"
+                                class="inline-block rounded   bg-red-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-red-400   focus:outline-none focus:ring-0  "
+                                data-te-ripple-init
+                                data-te-ripple-color="light">
+                          {{ __('remove') }}
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -972,7 +972,32 @@ export default {
       this.tableWrapper.style.height = `${a}px`;
       // this.tableWrapper.firstChild.classList.add(`overflow-y-scroll`);
     },
+    removeData(id) {
+      this.loading = true;
+      window.axios.delete(route('admin.panel.sample.delete', id), {},
+          {})
+          .then((response) => {
+            if (response.data && response.data.message) {
+              this.showToast('success', response.data.message);
+              this.params.page = 1;
+              this.getData();
 
+            }
+
+
+          })
+
+          .catch((error) => {
+            this.error = this.getErrors(error);
+            if (error.response && error.response.data) {
+            }
+            this.showToast('danger', this.error);
+          })
+          .finally(() => {
+            // always executed
+            this.loading = false;
+          });
+    },
     getData() {
 
       this.loading = true;

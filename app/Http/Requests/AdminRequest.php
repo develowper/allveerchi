@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Access;
 use App\Models\Admin;
 use App\Models\Agency;
 use App\Models\City;
@@ -54,11 +55,12 @@ class AdminRequest extends FormRequest
                 ]);
         }
         $tmp = [];
-        $allowedRoles = array_values(array_filter(Variable::ADMIN_ROLES, function ($e) use ($admin) {
-            if (in_array($admin->role, ['god', 'owner']))
-                return in_array($e, ['owner', 'admin', 'operator']);
-            return in_array($e, ['admin', 'operator']);
-        }));
+//        $allowedRoles = array_values(array_filter(Variable::ADMIN_ROLES, function ($e) use ($admin) {
+//            if (in_array($admin->role, ['god', 'owner']))
+//                return in_array($e, ['owner', 'admin', 'operator']);
+//            return in_array($e, ['admin', 'operator']);
+//        }));
+        $allowedRoles = Access::where('agency_level', '>=', $this->myAgency->id ?? '2')->pluck('id');
         $allowedStatuses = collect(Variable::USER_STATUSES)->pluck('name');
         $user = $this->user();
         $availableAgencies = $user->allowedAgencies($this->myAgency)->get('id', 'name', 'level');
@@ -75,7 +77,7 @@ class AdminRequest extends FormRequest
                 'agency_id' => ['required', Rule::in($allowedAgencies)],
 
                 'fullname' => ['required', 'string', 'max:200'],
-                'national_code' => ['required', 'numeric'   /*, Rule::unique('drivers', 'national_code')->ignore($this->id)*/],
+                'national_code' => ['nullable', 'numeric'   /*, Rule::unique('drivers', 'national_code')->ignore($this->id)*/],
                 'phone' => ['required', 'numeric', 'digits:11', Rule::unique('admins')->where(function ($query) {
 //                    $query->where('agency_id', $this->agency_id)
                     $query->where('phone', $this->phone);
@@ -109,7 +111,7 @@ class AdminRequest extends FormRequest
             ]);
         if ($this->cmnd == 'role' || !$this->cmnd)
             $tmp = array_merge($tmp, [
-                'role' => ['required', Rule::in($allowedRoles)],
+                'access_id' => ['required', Rule::in($allowedRoles)],
                 'agency_id' => ['required', Rule::in($allowedAgencies)],
             ]);
         return $tmp;
@@ -165,8 +167,8 @@ class AdminRequest extends FormRequest
 
             'status.required' => sprintf(__("validator.required"), __('status')),
             'status.exists' => sprintf(__("validator.invalid"), __('status')),
-            'role.required' => sprintf(__("validator.required"), __('role')),
-            'role.exists' => sprintf(__("validator.invalid"), __('role')),
+            'access_id.required' => sprintf(__("validator.required"), __('role')),
+            'access_id.exists' => sprintf(__("validator.invalid"), __('role')),
 
         ];
     }

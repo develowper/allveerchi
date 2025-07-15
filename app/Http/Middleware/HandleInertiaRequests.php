@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Helpers\Variable;
+use App\Models\Access;
 use App\Models\Admin;
 use App\Models\AdminFinancial;
 use App\Models\Agency;
@@ -62,6 +63,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $user,
             ],
             'ip' => $request->ip(),
+            'admin_roles' => $user && $user instanceof Admin ? Access::select('id', 'name', 'agency_level', 'accesses')->where('agency_level', '>=', $user->agency_level ?? '2')->get() : [],
             'accesses' => $user && $user instanceof Admin ? $user->accesses() : [],
             'isAdmin' => $user && $user instanceof Admin,
             'agency' => $user && $user instanceof Admin ? Agency::with('financial')->find($user->agency_id) : (object)[],

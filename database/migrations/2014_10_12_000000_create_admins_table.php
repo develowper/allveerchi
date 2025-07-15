@@ -20,6 +20,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('agency_id')->nullable();
             $table->foreign('agency_id')->references('id')->on('agencies')->onDelete('no action');
             $table->enum('agency_level', array_column(Variable::AGENCY_TYPES, 'level'))->nullable();
+            $table->unsignedBigInteger('access_id')->nullable();
+            $table->foreign('access_id')->references('id')->on('accesses')->onDelete('set null');
 
             $table->string('fullname', 100);
             $table->string('email', 100)->unique()->nullable();
@@ -28,7 +30,7 @@ return new class extends Migration {
             $table->boolean('phone_verified')->default(false);
             $table->string('password', 200)->nullable();
             $table->json('access')->nullable()->default(null);
-            $table->enum('role', Variable::ADMIN_ROLES)->default(Variable::ADMIN_ROLES[0]);
+            $table->enum('role', Variable::ADMIN_ROLES)->default(Variable::ADMIN_ROLES[2]);
             $table->enum('status', array_column(Variable::USER_STATUSES, 'name'))->default(array_column(Variable::USER_STATUSES, 'name')[0]);
             $table->integer('notifications')->unsigned()->default(0);
             $table->unsignedInteger('wallet')->default(0);
@@ -44,8 +46,6 @@ return new class extends Migration {
             $table->tinyInteger('step')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->unsignedBigInteger('access_id')->nullable();
-            $table->foreign('access_id')->references('id')->on('accesses')->onDelete('set null');
 
         });
         DB::table('admins')->insert(Variable::getAdmins());

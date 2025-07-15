@@ -87,7 +87,7 @@
                   </template>
                 </Selector>
               </div>
-              <div class="my-2" v-if=" form.type_id==1 ">
+              <div class="my-2" v-show=" form.type_id==1 ">
                 <Selector
                     ref="provincesSelector" :multiple="true"
                     :data="$page.props.cities.filter((e)=>e.level==1)"
@@ -312,6 +312,7 @@ import TextEditor from "@/Components/TextEditor.vue";
 import UserSelector from "@/Components/UserSelector.vue";
 import AddressSelector from "@/Components/AddressSelector.vue";
 import TomanIcon from "@/Components/TomanIcon.vue";
+import {initTE, Select} from "tw-elements";
 
 
 export default {
@@ -430,6 +431,9 @@ export default {
         this.$refs.provincesSelector.selecteds = this.data.access;
         this.form.supported_provinces = this.data.access;
       }
+      // this.$nextTick(function () {
+      //   initTE({Select})
+      // });
     });
 
   },

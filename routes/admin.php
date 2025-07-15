@@ -138,11 +138,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         PanelController::makeInertiaRoute('get', 'admin/index', 'admin.panel.admin.index', 'Panel/Admin/Admin/Index',
             [
                 'user_statuses' => collect(Variable::USER_STATUSES)->filter(fn($e) => $e['name'] != 'block'),
-                'admin_roles' => array_values(array_filter(Variable::ADMIN_ROLES, fn($e) => $e != 'god'))
+//                'admin_roles' => array_values(array_filter(Variable::ADMIN_ROLES, fn($e) => $e != 'god'))
             ]);
         PanelController::makeInertiaRoute('get', 'admin/create', 'admin.panel.admin.create', 'Panel/Admin/Admin/Create',
             [
-                'admin_roles' => array_values(array_filter(Variable::ADMIN_ROLES, fn($e) => $e != 'god')),
+//                'admin_roles' => array_values(array_filter(Variable::ADMIN_ROLES, fn($e) => $e != 'god')),
                 'user_statuses' => collect(Variable::USER_STATUSES)->filter(fn($e) => $e['name'] != 'block')->pluck('name'),
 
             ]);
@@ -408,6 +408,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::patch('sample/update', [SampleController::class, 'update'])->name('admin.panel.sample.update');
         Route::post('sample/create', [SampleController::class, 'create'])->name('admin.panel.sample.create')->middleware("can:create,App\Models\Admin,App\Models\Sample,'1'");
         Route::post('sample/export', [SampleController::class, 'export'])->name('admin.panel.sample.export');
+        Route::delete('access/delete/{id}', [SampleController::class, 'delete'])->name('admin.panel.sample.delete');
         Route::get('sample/{sample}', [SampleController::class, 'edit'])->name('admin.panel.sample.edit');
 
 

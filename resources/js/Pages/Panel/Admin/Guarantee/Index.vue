@@ -175,6 +175,14 @@
                     </th>
                     <th scope="col"
                         class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
+                        @click="params.order_by='operator_id';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
+                      <div class="flex items-center justify-center">
+                        <span class="px-2">    {{ __('operator') }} </span>
+                        <ArrowsUpDownIcon class="w-4 h-4 "/>
+                      </div>
+                    </th>
+                    <th scope="col"
+                        class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[99%]"
                         @click="params.order_by='produced_at';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
                       <div class="flex items-center justify-center">
                         <span class="px-2">    {{ __('produced_at') }} </span>
@@ -441,6 +449,9 @@
                     <td class="px-2 py-4    ">
                       {{ d.customer_id }}
                     </td>
+                    <td class="px-2 py-4    ">
+                      {{ d.operator_id }}
+                    </td>
 
                     <td class="px-2 py-4    ">
                       {{ toShamsi(d.produced_at) }}
@@ -461,7 +472,7 @@
                       {{ toShamsi(d.guarantee_expires_at) }}
 
                     </td>
-<!--                    <td class="px-2 py-4    ">-->
+                    <!--                    <td class="px-2 py-4    ">-->
                     <!--                      {{ d.guarantee_months }}-->
 
                     <!--                    </td>-->

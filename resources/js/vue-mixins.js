@@ -128,6 +128,13 @@ export default {
                     return this.__(el.name);
             return '';
         },
+        getAdminRole(id) {
+            if (id == null || usePage().props.admin_roles == null) return '';
+            for (const el of usePage().props.admin_roles)
+                if (el.id == id)
+                    return this.__(el.name);
+            return '';
+        },
         getStatus(type, id) {
 
             if (id == null || type == null || (usePage().props[`statuses`] == null && usePage().props[type] == null)) return {

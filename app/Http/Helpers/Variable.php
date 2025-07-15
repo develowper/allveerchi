@@ -229,6 +229,28 @@ class Variable
                 'prices',
                 'description',
             ]],
+        'sample' => ['create', 'delete',
+        ],
+        'guarantee' => ['create', 'delete', 'edit' => []
+        ],
+        'order' => ['create', 'delete',
+            'edit' => [
+                'repo_id',
+                'shipping_method_id',
+                'province_id',
+                'county_id',
+                'district_id',
+                'address',
+                'receiver_fullname',
+                'receiver_phone',
+                'postal_code',
+                'status',
+                'change_price',
+                'products',
+
+            ]],
+        'agency' => ['create', 'delete', 'edit' => []
+        ],
     ];
 
     const NOTIFICATION_LIMIT = 5;

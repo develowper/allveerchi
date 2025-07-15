@@ -109,12 +109,13 @@
             <div class="inline-flex" role="group">
 
               <div v-for="(s,idx) in $page.props.admin_roles"
-                   type="button" @click="(params.role==s?params.role=null: params.role=s);params.page=1;getData()"
-                   class="inline-block border    border-1 w-16 p-2  text-center text-xs font-medium uppercase leading-normal  transition duration-150 ease-in-out hover:border-primary-accent-200   focus:border-primary-accent-200 focus:bg-secondary-50/50 focus:outline-none focus:ring-0 active:border-primary-accent-200 motion-reduce:transition-none dark:border-primary-400 dark:text-primary-300 dark:hover:bg-blue-950 dark:focus:bg-blue-950"
-                   :class="`bg-gray-200 cursor-pointer ${idx==0?'rounded-s-lg':idx==$page.props.admin_roles.length-1 ?'rounded-e-lg':''} border-dark-500 ${s==params.role?  `text-white bg-green-500` :`text-gray-400 bg-white`}`"
+                   type="button"
+                   @click="(params.access_id==s.id?params.access_id=null: params.access_id=s.id);params.page=1;getData()"
+                   class="inline-block border   border-1 w-16 p-2  text-center text-xs font-medium uppercase leading-normal  transition duration-150 ease-in-out hover:border-primary-accent-200   focus:border-primary-accent-200 focus:bg-secondary-50/50 focus:outline-none focus:ring-0 active:border-primary-accent-200 motion-reduce:transition-none dark:border-primary-400 dark:text-primary-300 dark:hover:bg-blue-950 dark:focus:bg-blue-950"
+                   :class="`bg-gray-200 cursor-pointer ${idx==0?'rounded-s-lg':idx==$page.props.admin_roles.length-1 ?'rounded-e-lg':''} border-dark-500 ${s.id==params.access_id?  `text-white bg-green-500` :`text-gray-400 bg-white`}`"
                    data-twe-ripple-init
                    data-twe-ripple-color="light">
-                {{ __(s) }}
+                {{ __(s.name) }}
               </div>
 
 
@@ -175,7 +176,7 @@
                   <ArrowsUpDownIcon class="w-4 h-4 "/>
                 </div>
               </th>
-              <th scope="col"
+              <th v-if="false" scope="col"
                   class="px-2 py-3   cursor-pointer duration-300 hover:text-gray-500 hover:scale-[105%]"
                   @click="params.order_by='access';params.dir=params.dir=='ASC'? 'DESC':'ASC'; params.page=1;getData()">
                 <div class="flex items-center justify-center">
@@ -309,19 +310,19 @@
                     data-te-ripple-color="light"
                     class="  min-w-[5rem]  px-1 cursor-pointer items-center text-center rounded-md py-[.2rem]"
                     :class="`bg-gray-100 hover:bg-gray-200 text-gray-500`">
-                  {{ __(d.role) }}
+                  {{ getAdminRole(d.access_id) || '-' }}
                 </button>
                 <ul :ref="`roleMenu${d.id}`" data-te-dropdown-menu-ref
                     class="  absolute z-[1000]   m-0 hidden   list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-center text-base shadow-lg [&[data-te-dropdown-show]]:block"
                     tabindex="-1" role="menu" aria-orientation="vertical" aria-label="Role menu"
                     :aria-labelledby="`dropdownRole${d.id}`">
 
-                  <li v-for="(s,ix) in  $page.props.admin_roles " role="menuitem"
-                      @click=" edit ({'idx':idx,'id':d.id,'cmnd':'role','role':s }) "
+                  <li v-for="(s,ix) in  $page.props.admin_roles  " role="menuitem"
+                      @click=" edit ({'idx':idx,'id':d.id,'cmnd':'role','access_id':s.id }) "
                       class="   cursor-pointer   text-sm   transition-colors hover:bg-gray-100">
                     <div class="flex items-center justify-center    px-6 py-2   "
                          :class="` hover:bg-gray-200 text-gray-500`">
-                      {{ __(s) }}
+                      {{ __(s.name) }}
                     </div>
                     <hr class="border-gray-200 ">
                   </li>
@@ -330,7 +331,7 @@
               </td>
 
 
-              <td
+              <td v-if="false"
                   class="px-2 py-4    " data-te-dropdown-ref>
                 <button
                     id="dropdownViewFee"
@@ -425,6 +426,7 @@ export default {
         order_by: null,
         dir: 'DESC',
         role: null,
+        access_id: null,
       },
       data: [],
       pagination: {},
@@ -536,8 +538,8 @@ export default {
             if (response.data.status) {
               this.data[params.idx].status = response.data.status;
             }
-            if (response.data.role) {
-              this.data[params.idx].role = response.data.role;
+            if (response.data.access_id) {
+              this.data[params.idx].access_id = response.data.access_id;
             }
             if (response.data.access) {
               this.data[params.idx].access = response.data.access;

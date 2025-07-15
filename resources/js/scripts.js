@@ -16,6 +16,7 @@ import {
 
 } from "tw-elements";
 import axios, {isCancel, AxiosError} from 'axios';
+import {router} from '@inertiajs/vue3'
 
 
 window.axios = axios.create();
@@ -89,11 +90,22 @@ window.tailwindElements = () => {
     // window.Sidenav = Sidenav;
     // window.Modal = Modal;
     // window.Dropdown = Dropdown;
-    initTE({Popover, Tooltip, Ripple, Select, Alert, Toast, Sidenav, Modal,}, {
+
+    initTE({Popover, Tooltip, Ripple, Alert, Toast, Sidenav, Modal,}, {
         allowReinits: true,
         autoReinits: true,
         checkOtherImports: false,
     });
+    // router.on('finish', (event) => {
+    //
+    //     setTimeout(() => {
+    //         initTE({Popover, Tooltip, Ripple, Alert, Select, Toast, Sidenav, Modal}, {
+    //             allowReinits: true,
+    //             autoReinits: true,
+    //             checkOtherImports: false,
+    //         });
+    //     }, 50);  // Small delay to ensure DOM is fully updated
+    // });
     // if (!window.Dropdown) {
     //     //
     //     window.Dropdown = Dropdown;
@@ -105,7 +117,7 @@ window.tailwindElements = () => {
     // }
     document.querySelectorAll("[data-te-input-notch-ref]").forEach(el => el.setAttribute("dir", "ltr"))
     document.querySelectorAll("[data-te-input-notch-ref]").forEach(el => el.innerHTML = '')
-    const selectElements = document.querySelectorAll('select.select');
+    // const selectElements = document.querySelectorAll('select.select');
     // selectElements.forEach(el => {
     //     new Select(el) // Log or use the ID
     // });

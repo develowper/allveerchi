@@ -66,6 +66,7 @@
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import {XMarkIcon} from "@heroicons/vue/24/outline"
+import {initTE, Select} from "tw-elements";
 
 export default {
   data() {
@@ -79,6 +80,11 @@ export default {
   emits: ['update:modelValue'],
   components: {InputLabel, InputError, XMarkIcon},
   watch: {
+    // multiple() {
+    //   this.$nextTick(() => {
+    //     initTE({Select});
+    //   });
+    // },
     modelValue(_new, _old) {
       this.closeButton?.classList.add('opacity-0');
       // if (!_new && !this.closeButton.classList.contains('opacity-0'))
@@ -107,7 +113,10 @@ export default {
     if (this.closeButton && this.modelValue == null)
       this.closeButton.classList.add('opacity-0');
 
-
+    // this.$nextTick(function () {
+    //   initTE({Select})
+    //   window.Select = Select;
+    // });
     // if (!window.Select) {
     // this.$forceUpdate();
     //   this.$nextTick(function () {
@@ -115,12 +124,18 @@ export default {
     //     window.Select = Select;
     //   });
     // }
-
+    const {initTE, Select} = await import('tw-elements')
+    this.$nextTick(() => {
+      const el = document.getElementById(this.id);
+      new Select(el)
+      // initTE({Select}, {autoReinits: true})
+    });
   }, methods: {
     set(val) {
       if (!this.multiple)
         this.$emit('update:modelValue', val);
       else {
+
         this.$emit('update:modelValue', this.selecteds);
 
       }

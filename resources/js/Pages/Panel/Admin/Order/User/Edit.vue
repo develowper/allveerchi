@@ -59,14 +59,15 @@
                       <InputLabel for="shipping_methods" :value="__('shipping_method')"/>
                       <InputError :message="errors.shipping_method"/>
                       <div v-for="(s,idx) in data.repository.shipping_methods">
-                        <div @click=" data.shipping_method_id=s.id "
-                             :class="{'bg-primary-200':data.shipping_method_id==s.id}"
-                             class="border-b rounded text-gray-700 p-2 text-sm hover:bg-gray-200 cursor-pointer">
+                        <div
+                            @click=" data.shipping_method_id==s.id?data.shipping_method_id=null: data.shipping_method_id=s.id "
+                            :class="{'bg-primary-200':data.shipping_method_id==s.id}"
+                            class="border-b rounded text-gray-700 p-2 text-sm hover:bg-gray-200 cursor-pointer">
                           <div class="font-semibold">{{ s.name }}</div>
                           <div class="text-gray-400 text-xs">{{ s.description }}</div>
                         </div>
                       </div>
-                      <div class="my-2 flex flex-col space-y-1">
+                      <div v-if="false" class="my-2 flex flex-col space-y-1">
 
                         <date-picker :id="`delivery_date`" class="rounded   fromdate  " inputClass=""
                                      :editable="true"

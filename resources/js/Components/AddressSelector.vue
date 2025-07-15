@@ -370,10 +370,24 @@ export default {
     MapIcon,
     TrashIcon,
   },
-  mounted() {
+  async mounted() {
     const modalEl = document.getElementById('locationModal');
     this.modal = new Modal(modalEl);
 
+    // modalEl.addEventListener('shown.te.modal', () => {
+    //   const selectElements = document.querySelectorAll('[data-te-modal-body-ref] select.select');
+    //   selectElements.forEach(el => {
+    //     new Select(el)
+    //   });
+    //
+    //   // re-initialize selects inside modal after modal shows
+    // });
+    // modalEl.addEventListener('hidden.te.modal', () => {
+    //   const selectElements = document.querySelectorAll('[data-te-modal-body-ref] select.select');
+    //   selectElements.forEach(el => {
+    //     Select.getInstance(el).dispose()
+    //   });
+    // });
     if (this.$page.props.auth.user) {
       this.addresses = this.$page.props.auth.user.addresses;
     }
@@ -385,9 +399,9 @@ export default {
       if (cart && this.type == 'cart')
         this.selectedAddress = cart.address;
     });
-
-    // initTE({Select})
-
+    // this.$nextTick(function () {
+    //   initTE({Select})
+    // });
     // if (!window.Select) {
     // this.$forceUpdate();
     // this.$nextTick(function () {
@@ -420,6 +434,10 @@ export default {
           this.show = 'addresses';
 
         this.modal.show();
+        // this.$nextTick(() => {
+        //   initTE({Select})
+        // });
+
       }
     }
     ,

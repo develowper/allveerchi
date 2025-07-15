@@ -902,4 +902,22 @@ class SampleController extends Controller
 
         return response()->json($response, $errorStatus);
     }
+
+    public function delete(Request $request, $id)
+    {
+//        $id = $request->id;
+
+        $cmnd = $request->cmnd;
+        $data = Sample::find($id);
+        if (!starts_with($cmnd, 'bulk'))
+            $this->authorize('delete', [Admin::class, $data]);
+
+        if ($data->delete()) {
+            Telegram::log(null, 'sample_deleted', $data);
+            return response()->json(['message' => __('done_successfully'),], Variable::SUCCESS_STATUS);
+        }
+        return response()->json(['message' => __('response_error'),], Variable::ERROR_STATUS);
+
+
+    }
 }

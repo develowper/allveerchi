@@ -50,9 +50,13 @@
 
                 <RadioGroup ref="statusSelector" class=" grow mx-2" name="status" v-model="form.status"
                             :items="$page.props.statuses" :before-selected=" $page.props.data.status "/>
-                <RadioGroup ref="roleSelector" class=" grow mx-2" name="role" v-model="form.role"
-                            :before-selected=" $page.props.data.role "
-                            :items="$page.props.roles"/>
+
+              </div>
+              <div class="flex flex-wrap items-center justify-center ">
+                <RadioGroup ref="roleSelector" class=" grow mx-2" name="role"
+                            @change="($e )=>form.access_id=$page.props.admin_roles.find((e)=>e.name==$e.target.value )?.id"
+                            :before-selected=" getAdminRole($page.props.data.access_id) "
+                            :items="$page.props.admin_roles?.map(i=>i.name)"/>
               </div>
               <div class="my-2" v-if="$page.props.agency && $page.props.agency.level<3">
                 <UserSelector :colsData="['name','phone','level']" :labelsData="['name','phone','type']"
@@ -335,6 +339,7 @@ export default {
         district_id: null,
         postal_code: null,
         preloadAddress: null,
+        access_id: null,
       }),
       profile: null,
     }
@@ -392,7 +397,7 @@ export default {
     // console.log(this.data);
     this.form.id = this.data.id;
     this.form.status = this.data.status;
-    this.form.role = this.data.role;
+    this.form.access_id = this.data.access_id;
     this.form.fullname = this.data.fullname;
     this.form.phone = this.data.phone;
     this.form.national_code = this.data.national_code;

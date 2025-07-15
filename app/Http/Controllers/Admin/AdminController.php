@@ -9,6 +9,7 @@ use App\Http\Helpers\Util;
 use App\Http\Helpers\Variable;
 use App\Http\Requests\AdminRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Access;
 use App\Models\Admin;
 use App\Models\AdminFinancial;
 use App\Models\Agency;
@@ -30,7 +31,7 @@ class AdminController extends Controller
         $cmnd = $request->cmnd;
         $data = $request->data;
         $status = $request->status;
-        $role = $request->role;
+        $roleId = $request->role_id;
         $admin = $request->user();
         if (!starts_with($cmnd, 'bulk'))
             $this->authorize('edit', [Admin::class, $data]);
@@ -43,9 +44,10 @@ class AdminController extends Controller
                     return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
 
                 case 'role':
-                    $data->role = $role;
+
+                    $data->access_id = $request->access_id;
                     $data->save();
-                    return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
+                    return response()->json(['message' => __('updated_successfully'), 'access_id' => $data->access_id,], $successStatus);
 
                 case  'upload-img' :
 
