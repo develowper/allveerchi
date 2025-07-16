@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Agency;
+use App\Models\Brand;
 use App\Models\City;
 use App\Models\Pack;
 use App\Models\Product;
@@ -43,6 +44,7 @@ class VariationRequest extends FormRequest
         $allowedRepositories = Repository::whereIntegerInRaw('agency_id', $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id'))->pluck('id');
         $products = Product::select('id', 'name')->get();
         $grades = Variable::GRADES;
+        $brands = Brand::pluck('id');
         $tmp = [];
         if (!$this->cmnd) {
             $categories = Category::get()->pluck('id');
@@ -61,6 +63,7 @@ class VariationRequest extends FormRequest
                 "price" => ['required', 'numeric', 'gte:0'],
                 'categories' => ['nullable', 'array', 'min:0'],
                 'categories.*' => ['required', Rule::in($categories)],
+                'brand_id' => ['nullable', Rule::in($brands)],
 //                "batch_count" => ['required', 'numeric', 'gte:0'],
 //                "produced_at" => ['required', 'string', 'regex:/\d{4}\/\d{1,2}\/\d{1,2}/'],
 //                "guarantee_months" => ['nullable', 'numeric', 'gte:0'],
@@ -130,6 +133,8 @@ class VariationRequest extends FormRequest
 
             'categories.array' => sprintf(__("validator.invalid"), __('categories')),
             'categories.*.in' => sprintf(__("validator.invalid"), __('categories')),
+
+            'brand_id.in' => sprintf(__("validator.invalid"), __('brand')),
 
         ];
     }

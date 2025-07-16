@@ -14,6 +14,7 @@ class Variation extends Model
 
     protected $fillable = [
         'name',
+        'name_en',
         'category_id',
         'unit',
         'product_id',
@@ -39,6 +40,7 @@ class Variation extends Model
         'unit',
         'categories',
         'prices',
+        'brand_id',
     ];
 
     protected $casts = [

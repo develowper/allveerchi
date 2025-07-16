@@ -48,9 +48,12 @@
 
                 <RadioGroup ref="statusSelector" class="grow mx-2" name="status" v-model="form.status"
                             :items="$page.props.user_statuses" :before-selected="$page.props.user_statuses[0]"/>
-                <RadioGroup ref="roleSelector" class="grow mx-2" name="role" v-model="form.role"
-                            :before-selected=" $page.props.admin_roles[0] "
-                            :items="$page.props.admin_roles"/>
+              </div>
+              <div class="flex flex-wrap items-center justify-center ">
+                <RadioGroup ref="roleSelector" class=" grow mx-2" name="role"
+                            @change="($e )=>form.access_id=$page.props.admin_roles.find((e)=>e.name==$e.target.value )?.id"
+                            :before-selected=" $page.props.admin_roles?.map(i=>i.name)[0] "
+                            :items="$page.props.admin_roles?.map(i=>i.name)"/>
               </div>
               <div class="my-2" v-if="$page.props.agency && $page.props.agency.level<3">
                 <UserSelector :colsData="['name','phone','level']" :labelsData="['name','phone','type']"
@@ -313,6 +316,7 @@ export default {
         county_id: null,
         district_id: null,
         postal_code: null,
+        access_id: this.$page.props.admin_roles?.map(i => i.id)[0],
       }),
       profile: null,
     }

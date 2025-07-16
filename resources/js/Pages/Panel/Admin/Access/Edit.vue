@@ -278,7 +278,7 @@ export default {
         onSuccess: (data) => {
           if (this.$page.props.flash.status)
             this.showAlert(this.$page.props.flash.status, this.$page.props.flash.message);
-
+          window.location.reload();
         },
         onError: () => {
           this.showToast('danger', Object.values(this.form.errors).join("<br/>"));

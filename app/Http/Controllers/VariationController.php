@@ -8,6 +8,7 @@ use App\Http\Helpers\Variable;
 use App\Http\Requests\VariationRequest;
 use App\Models\Admin;
 use App\Models\Agency;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Log;
 use App\Models\Pack;
@@ -117,7 +118,7 @@ class VariationController extends Controller
                     }
                 })->where(function ($query) use ($brandIds) {
                     if (!empty($brandIds)) {
-                        $query->whereIn('products.brand_id', $brandIds);
+                        $query->whereIn('variations.brand_id', $brandIds);
                     }
                 })->where(function ($query) use ($search) {
 //                    if ($search)
@@ -157,7 +158,7 @@ class VariationController extends Controller
                         $query->whereJsonContains('repositories.cities', intval($districtId));
                 })->where(function ($query) use ($search) {
                     if ($search)
-                        $query->where('variations.name', 'like', "%$search%")->orWhere('products.PN', 'like', "%$search%");
+                        $query->where('variations.name', 'like', "%$search%")->where('variations.name_en', 'like', "%$search%")->orWhere('products.PN', 'like', "%$search%")->orWhere('products.name_en', 'like', "%$search%");
 
                 });
 
@@ -255,6 +256,7 @@ class VariationController extends Controller
                     'categories' => $request->categories,
                     'description' => null,
                     'name' => $request->name ?? $product->name,
+                    'name_en' => $request->name_en ?? $product->name_en,
                     'category_id' => $product->category_id,
                     'agency_level' => $agency->level,
                     'in_auction' => false,
@@ -362,19 +364,24 @@ class VariationController extends Controller
 
                     $packs = Pack::pluck('id');
                     $categories = Category::get()->pluck('id');
+                    $brands = Brand::pluck('id');
                     $request->validate(
                         [
                             'name' => ['required', 'max:200'],
+                            'name_en' => ['required', 'max:200'],
                             'categories' => ['nullable', 'array', 'min:0'],
                             'categories.*' => ['required', Rule::in($categories)],
                             "pack_id" => ['required', 'nullable', Rule::in($packs)],
                             "weight" => ['required', 'numeric', 'gte:0', 'lt:99999', /*$this->pack_id == null ? Rule::in(1) :*/ 'numeric'],
-
+                            'brand_id' => ['nullable', Rule::in($brands)],
                         ],
                         [
                             'name.required' => sprintf(__("validator.required"), __('name')),
                             'name.unique' => sprintf(__("validator.unique"), __('name')),
                             'name.max' => sprintf(__("validator.max_len"), __('name'), 200, mb_strlen($request->name)),
+                            'name_en.required' => sprintf(__("validator.required"), __('name_en')),
+                            'name_en.unique' => sprintf(__("validator.unique"), __('name_en')),
+                            'name_en.max' => sprintf(__("validator.max_len"), __('name_en'), 200, mb_strlen($request->name_en)),
                             'categories.array' => sprintf(__("validator.invalid"), __('categories')),
                             'categories.*.in' => sprintf(__("validator.invalid"), __('categories')),
                             "pack_id.required" => sprintf(__("validator.required"), __('pack')),
@@ -384,13 +391,16 @@ class VariationController extends Controller
                             "weight.numeric" => sprintf(__("validator.numeric"), __('weight')),
                             "weight.gte" => sprintf(__("validator.gt"), __('weight'), 0),
 
+                            'brand_id.in' => sprintf(__("validator.invalid"), __('brand')),
 
                         ],
                     );
 //                    $product = Product::find($data->product_id);
 
                     $data->name = $request->name;
+                    $data->name_en = $request->name_en;
                     $data->pack_id = $request->pack_id;
+                    $data->brand_id = $request->brand_id;
                     $data->weight = $request->weight;
                     $data->categories = $request->categories ?? [];
 //                    $data->weight = $product->weight;
@@ -474,6 +484,7 @@ class VariationController extends Controller
                             'auction_price' => $data->auction_price,
                             'description' => $data->description,
                             'name' => $data->name,
+                            'name_en' => $data->name_en,
                             'in_shop' => $request->new_in_repo == 0 ? $data->in_shop : 0, //copy
                             'agency_level' => $newAgency->level ?? $data->agency_level,
                             'in_auction' => false,
@@ -554,6 +565,7 @@ class VariationController extends Controller
                             'category_id' => $data->category_id,
                             'description' => $data->description,
                             'name' => $data->name,
+                            'name_en' => $data->name_en,
                             'unit' => $request->new_pack_id == 1 ? 'kg' : 'qty',
                             'auction_price' => 0,
                             'min_allowed' => 0,
@@ -594,6 +606,7 @@ class VariationController extends Controller
                                 'category_id' => $data->category_id,
                                 'description' => $data->description,
                                 'name' => $data->name,
+                                'name_en' => $data->name_en,
                                 'auction_price' => 0,
                                 'min_allowed' => 0,
                                 'price' => 0,

@@ -79,14 +79,40 @@
 
               </Selector>
               <div class="my-2">
+                <Selector ref="brandSelector" v-model="form.brand_id"
+                          :data="$page.props.brands "
+                          :error="form.errors.brand_id"
+
+                          :label="__('brand')"
+                          id="brand_id">
+                  <template v-slot:append>
+                    <div class="  p-3">
+                      <Squares2X2Icon class="h-5 w-5"/>
+                    </div>
+                  </template>
+                </Selector>
+              </div>
+              <div class="my-2">
                 <TextInput
                     :id="`name`"
-                    type="name"
+                    type="text"
                     :placeholder="`${__('name')}`"
                     classes=" p-2   min-w-[5rem]"
                     v-model="form.name"
                     autocomplete="name"
                     :error="form.errors.name">
+
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
+                    :id="`name_en`"
+                    type="text"
+                    :placeholder="`${__('name_en')}`"
+                    classes=" p-2   min-w-[5rem]"
+                    v-model="form.name_en"
+                    autocomplete="name_en"
+                    :error="form.errors.name_en">
 
                 </TextInput>
               </div>
@@ -282,6 +308,7 @@ export default {
       form: useForm({
 
         name: null,
+        name_en: null,
         product_id: null,
         repo_ids: null,
         weight: null,
@@ -292,6 +319,7 @@ export default {
         in_shop: null,
         uploading: false,
         categories: null,
+        brand_id: null,
 
       }),
       img: null,

@@ -39,15 +39,16 @@ class ProductRequest extends FormRequest
         $this->tags = is_array($this->tags) ? join(',', $this->tags) : $this->tags;
         $tmp = [];
         $categories = Category::pluck('id');
-        $brands = Brand::pluck('id');
+
         if (!$this->cmnd) {
 
             $tmp = array_merge($tmp, [
                 'name' => ['required', 'max:200', Rule::unique('products', 'name')->ignore($this->id)],
+                'name_en' => ['required', 'max:200', Rule::unique('products', 'name_en')->ignore($this->id)],
                 'PN' => ['nullable', 'string', 'max:20'],
                 'tags' => ['nullable', 'string', 'max:1024'],
 //                'category_id' => ['nullable', Rule::in($categories)],
-                'brand_id' => ['nullable', Rule::in($brands)],
+
                 'categories' => ['nullable', 'array'],
                 'categories.*' => ['nullable', Rule::in($categories)],
 //                "weight" => ['required', 'numeric', 'gte:0', 'lt:99999', /*$this->pack_id == null ? Rule::in(1) :*/ 'numeric'],
@@ -81,6 +82,10 @@ class ProductRequest extends FormRequest
             'name.required' => sprintf(__("validator.required"), __('name')),
             'name.unique' => sprintf(__("validator.unique"), __('name')),
             'name.max' => sprintf(__("validator.max_len"), __('name'), 200, mb_strlen($this->name)),
+
+            'name_en.required' => sprintf(__("validator.required"), __('name_en')),
+            'name_en.unique' => sprintf(__("validator.unique"), __('name_en')),
+            'name_en.max' => sprintf(__("validator.max_len"), __('name_en'), 200, mb_strlen($this->name_en)),
 
             'tags.max' => sprintf(__("validator.max_len"), __('tags'), 1024, mb_strlen($this->tags)),
 

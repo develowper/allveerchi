@@ -55,6 +55,23 @@
               </div>
               <div class="my-2">
                 <TextInput
+                    id="name_en"
+                    type="text"
+                    :placeholder="__('name_en')"
+                    classes="  "
+                    v-model="form.name_en"
+                    autocomplete="name_en"
+                    :error="form.errors.name_en"
+                >
+                  <template v-slot:prepend>
+                    <div class="p-3">
+                      <Bars2Icon class="h-5 w-5"/>
+                    </div>
+                  </template>
+                </TextInput>
+              </div>
+              <div class="my-2">
+                <TextInput
                     id="PN"
                     type="text"
                     :placeholder="__('PN')"
@@ -70,20 +87,7 @@
                   </template>
                 </TextInput>
               </div>
-              <div class="my-2">
-                <Selector ref="brandSelector" v-model="form.brand_id"
-                          :data="$page.props.brands "
-                          :error="form.errors.brand_id"
 
-                          :label="__('brand')"
-                          id="brand_id">
-                  <template v-slot:append>
-                    <div class="  p-3">
-                      <Squares2X2Icon class="h-5 w-5"/>
-                    </div>
-                  </template>
-                </Selector>
-              </div>
               <div class="my-4">
                 <TreeSelector :multi="true" :label="__('categories')" v-model="form.categories"
                               :data=" $page.props.categories"
@@ -196,11 +200,12 @@ export default {
         PN: null,
         categories: null,
         name: null,
+        name_en: null,
         uploading: false,
         category_id: false,
         tags: null,
         weight: null,
-        brand_id: null,
+
 
       }),
       img: null,

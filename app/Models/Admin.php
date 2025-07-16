@@ -190,6 +190,7 @@ class Admin extends Authenticatable
 
     public function accesses()
     {
+        return $this->getRelation('role')->accesses ?? [];
 
         if ($this->role == 'god' || ($this->agency_id == 1 && (in_array($this->role, ['owner'])))) return 'all';
 

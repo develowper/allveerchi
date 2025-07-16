@@ -371,7 +371,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         PanelController::makeInertiaRoute('get', 'product/create', 'admin.panel.product.create', 'Panel/Admin/Product/Create',
             [
                 'categories' => Category::get(),
-                'brands' => Brand::select('id', 'name')->get(),
+
             ]
         );
         Route::get('product/tree', [ProductController::class, 'getTree'])->name('admin.panel.product.tree');

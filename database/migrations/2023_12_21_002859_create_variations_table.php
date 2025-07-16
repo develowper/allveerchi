@@ -16,10 +16,14 @@ return new class extends Migration {
         Schema::create('variations', function (Blueprint $table) {
             $table->id();
             $table->string('name', 200);
+            $table->string('name_en', 200)->nullable();
             $table->string('tags', 200)->nullable();
             $table->enum('status', array_column(Variable::VARIATION_STATUSES, 'name'))->default(array_column(Variable::VARIATION_STATUSES, 'name')[0]);
             $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('no action');
+            $table->unsignedInteger('brand_id')->nullable();
+            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('set null');
+
             $table->enum('grade', \App\Http\Helpers\Variable::GRADES)->nullable();
             $table->unsignedInteger('pack_id')->nullable();
             $table->foreign('pack_id')->references('id')->on('packs')->onDelete('no action');

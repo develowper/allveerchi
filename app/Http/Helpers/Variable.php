@@ -204,23 +204,25 @@ class Variable
     ];
 
     const ACCESSES = [
-        'product' => ['create', 'delete',
+        'product' => ['view', 'create', 'delete',
             'edit' => [
                 'name',
+                'name_en',
                 'PN',
-                'brand_id',
                 'categories',
                 'tags',
                 'status',
                 'description',
             ]],
-        'variation' => ['create', 'delete',
+        'variation' => ['view', 'create', 'delete',
             'edit' => [
                 'image',
                 'name',
+                'name_en',
                 'tags',
                 'status',
                 'repo_id',
+                'brand_id',
                 'product_id',
                 'pack_id',
                 'weight',
@@ -229,27 +231,138 @@ class Variable
                 'prices',
                 'description',
             ]],
-        'sample' => ['create', 'delete',
+        'sample' => ['view', 'create', 'delete',
         ],
-        'guarantee' => ['create', 'delete', 'edit' => []
+        'guarantee' => ['view', 'create', 'delete', 'edit' => []
         ],
-        'order' => ['create', 'delete',
+        'order' => ['view', 'create', 'delete',
             'edit' => [
                 'repo_id',
                 'shipping_method_id',
-                'province_id',
-                'county_id',
-                'district_id',
+//                'province_id',
+//                'county_id',
+//                'district_id',
+//                'receiver_fullname',
+//                'receiver_phone',
+//                'postal_code',
                 'address',
-                'receiver_fullname',
-                'receiver_phone',
-                'postal_code',
                 'status',
                 'change_price',
                 'products',
 
             ]],
-        'agency' => ['create', 'delete', 'edit' => []
+        'agency' => ['view', 'create', 'delete', 'edit' => [
+            'name',
+            'phone',
+            'level',
+            'parent_id',
+//            'province_id',
+//            'county_id',
+//            'district_id',
+//            'location',
+//            'postal_code',
+            'address',
+            'status',
+            'card',
+            'sheba',
+            'wallet',
+            'order_profit_percent',
+        ]
+        ],
+        'repository' => ['view', 'create', 'delete', 'edit' => [
+            'name',
+            'is_shop',
+            'allow_visit',
+            'agency_id',
+            'admin_id',
+            'phone',
+//            'province_id',
+//            'county_id',
+//            'district_id',
+//            'location',
+//            'postal_code',
+            'address',
+            'cities',
+            'status',
+
+        ]
+        ],
+        'shipping_method' => ['view', 'create', 'delete', 'edit' => [
+            'name',
+            'description',
+            'agency_id',
+            'repo_id',
+            'products',
+            'cities',
+            'min_order_weight',
+            'per_weight_price',
+            'per_distance_price',
+            'base_price',
+            'status',
+        ]
+        ],
+        'admin' => ['view', 'create', 'delete', 'edit' => [
+            'agency_id',
+            'access_id',
+            'fullname',
+            'phone',
+            'password',
+            'status',
+            'national_code',
+//            'postal_code',
+//            'province_id',
+//            'county_id',
+//            'district_id',
+//            'location',
+            'address',
+        ]
+        ],
+        'category' => ['view', 'create', 'delete', 'edit' => [
+            'image',
+            'name',
+            'level',
+            'status',
+            'parent_id',
+            'children',
+        ]
+        ],
+        'brand' => ['view', 'create', 'delete', 'edit' => [
+            'image',
+            'name',
+        ]
+        ],
+        'pack' => ['view', 'create', 'delete', 'edit' => [
+            'name',
+            'status',
+            'weight',
+            'height',
+            'width',
+            'length',
+            'price',
+        ]
+        ],
+        'article' => ['view', 'create', 'delete', 'edit' => [
+            'owner_id',
+            'author',
+            'title',
+            'slug',
+            'content',
+            'status',
+        ]
+        ],
+        'role' => ['view', 'create', 'delete', 'edit' => [
+            'name',
+            'agency_level',
+            'accesses',
+        ]
+        ],
+        'ticket' => ['view', 'create', 'delete', 'edit' => [
+
+        ]
+        ],
+        'notification' => ['view', 'create', 'delete', 'edit' => [
+
+        ]
         ],
     ];
 

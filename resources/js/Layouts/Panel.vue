@@ -62,7 +62,8 @@
               <div v-if="$page.props.auth.user"
                    class=" flex items-center justify-center text-center text-sm text-gray-500">
                 <UserIcon class="w-4  "/>
-                <span class="mx-2"> {{ $page.props.auth.user.fullname }}</span>
+                <span class="mx-2 text-gray-700 text-sm"> {{ $page.props.auth.user.fullname }} </span>
+                <span class=" text-xs"> ({{ $page.props.auth.user.role?.name }}) </span>
               </div>
               <div v-if="$page.props.agency" class="flex items-center justify-center text-center text-sm">
                 <UGP class="w-4 "/>
@@ -73,8 +74,43 @@
 
 
           </li>
+          <!-- Category links -->
+          <li v-if="  hasAccess('category:create' ) || hasAccess( 'category:view')" class="relative ">
+            <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.category.*' )}"
+               class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+               data-te-sidenav-link-ref>
+              <FolderIcon class="w-5 h-5  "/>
+              <span class="mx-2 text-sm "> {{ __('categories') }} </span>
+              <span
+                  class="  right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                  data-te-sidenav-rotate-icon-ref>
+                <ChevronDownIcon class="h-5 w-5"/>
+              </span>
+            </a>
+            <ul
+                v-bind="{ 'data-te-collapse-show':menuIsActive ( 'admin.panel.category.*' )?true:null }"
+                class="  !visible relative m-0 hidden list-none    data-[te-collapse-show]:block "
+                data-te-collapse-item data-te-sidenav-collapse-ref>
+              <li class="relative ps-7">
+
+                <Link v-if="hasAccess( 'category:view')" :href="route('admin.panel.category.index')" role="menuitem"
+                      :class="subMenuIsActive( 'admin.panel.category.index' )"
+                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
+                  <Bars2Icon class="w-5 h-5 mx-1"/>
+                  {{ __('list') }}
+                </Link>
+                <Link v-if="hasAccess( 'category:create')" :href="route('admin.panel.category.create')" role="menuitem"
+                      :class="subMenuIsActive ( 'admin.panel.category.create' )"
+                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
+                  <PlusSmallIcon class="w-5 h-5 mx-1"/>
+                  {{ __('new') }}
+                </Link>
+              </li>
+
+            </ul>
+          </li>
           <!-- Products links -->
-          <li v-if="  hasAccess('view_product') " class="relative ">
+          <li v-if="  hasAccess('product:create' ) || hasAccess( 'product:view')" class="relative ">
             <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.product.*' )}"
                class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                data-te-sidenav-link-ref>
@@ -92,13 +128,13 @@
                 data-te-collapse-item data-te-sidenav-collapse-ref>
               <li class="relative ps-7">
 
-                <Link :href="route('admin.panel.product.index')" role="menuitem"
+                <Link v-if="hasAccess( 'product:view')" :href="route('admin.panel.product.index')" role="menuitem"
                       :class="subMenuIsActive( 'admin.panel.product.index' )"
                       class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
                   <Bars2Icon class="w-5 h-5 mx-1"/>
                   {{ __('list') }}
                 </Link>
-                <Link :href="route('admin.panel.product.create')" role="menuitem"
+                <Link v-if="hasAccess( 'product:create')" :href="route('admin.panel.product.create')" role="menuitem"
                       :class="subMenuIsActive ( 'admin.panel.product.create' )"
                       class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
                   <PlusSmallIcon class="w-5 h-5 mx-1"/>
@@ -109,12 +145,14 @@
             </ul>
           </li>
           <!-- Variations links -->
-          <li v-if="  hasAccess('view_variation') " class="relative ">
+          <li v-if="  hasAccess('variation:create' ) || hasAccess( 'variation:view')" class="relative ">
             <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.variation.*' )}"
                class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                data-te-sidenav-link-ref>
               <RectangleGroupIcon class="w-5 h-5  "/>
-              <span class="mx-2 text-sm "> {{ __('variations') }} </span>
+              <span class="mx-2 text-sm "> {{
+                  hasAccess('product:create') || hasAccess('product:view') ? __('variations') : __('products')
+                }} </span>
               <span
                   class="  right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
                   data-te-sidenav-rotate-icon-ref>
@@ -143,6 +181,79 @@
 
             </ul>
           </li>
+
+          <!-- Admins links -->
+          <li v-if="  hasAccess('admin:create' ) || hasAccess( 'admin:view')" class="relative ">
+            <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.admin.*' )}"
+               class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+               data-te-sidenav-link-ref>
+              <UserCircleIcon class="w-5 h-5  "/>
+              <span class="mx-2 text-sm "> {{ __('username') }} </span>
+              <span
+                  class="  right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                  data-te-sidenav-rotate-icon-ref>
+                                             <ChevronDownIcon class="h-5 w-5"/>
+                                             </span>
+            </a>
+            <ul
+                v-bind="{ 'data-te-collapse-show':menuIsActive ( 'admin.panel.admin.*' )?true:null }"
+                class="  !visible relative m-0 hidden list-none    data-[te-collapse-show]:block "
+                data-te-collapse-item data-te-sidenav-collapse-ref>
+              <li class="relative ps-7">
+
+                <Link v-if="  hasAccess('admin:view' ) " :href="route('admin.panel.admin.index')" role="menuitem"
+                      :class="subMenuIsActive( 'admin.panel.admin.index' )"
+                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
+                  <Bars2Icon class="w-5 h-5 mx-1"/>
+                  {{ __('list') }}
+                </Link>
+                <Link v-if="  hasAccess('admin:create' ) " :href="route('admin.panel.admin.create')" role="menuitem"
+                      :class="subMenuIsActive ( 'admin.panel.admin.create' )"
+                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
+                  <PlusSmallIcon class="w-5 h-5 mx-1"/>
+                  {{ __('new') }}
+                </Link>
+              </li>
+
+            </ul>
+          </li>
+
+          <!-- accesses links -->
+          <li v-if="  hasAccess('role:create' ) || hasAccess( 'role:view')" class="relative ">
+            <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.access.*' )}"
+               class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+               data-te-sidenav-link-ref>
+              <LockClosedIcon class="w-5 h-5  "/>
+              <span class="mx-2 text-sm "> {{ __('roles') }} </span>
+              <span
+                  class="  right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
+                  data-te-sidenav-rotate-icon-ref>
+                <ChevronDownIcon class="h-5 w-5"/>
+              </span>
+            </a>
+            <ul
+                v-bind="{ 'data-te-collapse-show':menuIsActive ( 'admin.panel.access.*' )?true:null }"
+                class="  !visible relative m-0 hidden list-none    data-[te-collapse-show]:block "
+                data-te-collapse-item data-te-sidenav-collapse-ref>
+              <li class="relative ps-7">
+
+                <Link v-if="  hasAccess('role:view' )" :href="route('admin.panel.access.index')" role="menuitem"
+                      :class="subMenuIsActive( 'admin.panel.access.index' )"
+                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
+                  <Bars2Icon class="w-5 h-5 mx-1"/>
+                  {{ __('list') }}
+                </Link>
+                <Link v-if="  hasAccess('role:create' )" :href="route('admin.panel.access.create')" role="menuitem"
+                      :class="subMenuIsActive ( 'admin.panel.access.create' )"
+                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
+                  <PlusSmallIcon class="w-5 h-5 mx-1"/>
+                  {{ __('new') }}
+                </Link>
+              </li>
+
+            </ul>
+          </li>
+
           <!-- samples links -->
           <li v-if="  hasAccess('view_variation') " class="relative ">
             <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.sample.*' )}"
@@ -472,14 +583,13 @@
             </ul>
           </li>
 
-
-          <!-- Admins links -->
-          <li v-if="  hasAccess('view_admin')" class="relative ">
+          <!-- Users links -->
+          <li v-if="  hasAccess('user:view') || hasAccess('user:create')" class="relative ">
             <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.admin.*' )}"
                class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                data-te-sidenav-link-ref>
               <UserCircleIcon class="w-5 h-5  "/>
-              <span class="mx-2 text-sm "> {{ __('admins') }} </span>
+              <span class="mx-2 text-sm "> {{ __('users') }} </span>
               <span
                   class="  right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
                   data-te-sidenav-rotate-icon-ref>
@@ -487,19 +597,19 @@
                                              </span>
             </a>
             <ul
-                v-bind="{ 'data-te-collapse-show':menuIsActive ( 'admin.panel.admin.*' )?true:null }"
+                v-bind="{ 'data-te-collapse-show':menuIsActive ( 'admin.panel.user.*' )?true:null }"
                 class="  !visible relative m-0 hidden list-none    data-[te-collapse-show]:block "
                 data-te-collapse-item data-te-sidenav-collapse-ref>
               <li class="relative ps-7">
 
-                <Link :href="route('admin.panel.admin.index')" role="menuitem"
-                      :class="subMenuIsActive( 'admin.panel.admin.index' )"
+                <Link v-if="hasAccess('user:view')" :href="route('admin.panel.user.index')" role="menuitem"
+                      :class="subMenuIsActive( 'admin.panel.user.index' )"
                       class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
                   <Bars2Icon class="w-5 h-5 mx-1"/>
                   {{ __('list') }}
                 </Link>
-                <Link :href="route('admin.panel.admin.create')" role="menuitem"
-                      :class="subMenuIsActive ( 'admin.panel.admin.create' )"
+                <Link v-if="hasAccess('user:create')" :href="route('admin.panel.user.create')" role="menuitem"
+                      :class="subMenuIsActive ( 'admin.panel.user.create' )"
                       class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
                   <PlusSmallIcon class="w-5 h-5 mx-1"/>
                   {{ __('new') }}
@@ -576,41 +686,7 @@
 
           </li>
 
-          <!-- Category links -->
-          <li v-if="  hasAccess('view_category')" class="relative ">
-            <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.category.*' )}"
-               class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
-               data-te-sidenav-link-ref>
-              <FolderIcon class="w-5 h-5  "/>
-              <span class="mx-2 text-sm "> {{ __('categories') }} </span>
-              <span
-                  class="  right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
-                  data-te-sidenav-rotate-icon-ref>
-                <ChevronDownIcon class="h-5 w-5"/>
-              </span>
-            </a>
-            <ul
-                v-bind="{ 'data-te-collapse-show':menuIsActive ( 'admin.panel.category.*' )?true:null }"
-                class="  !visible relative m-0 hidden list-none    data-[te-collapse-show]:block "
-                data-te-collapse-item data-te-sidenav-collapse-ref>
-              <li class="relative ps-7">
 
-                <Link :href="route('admin.panel.category.index')" role="menuitem"
-                      :class="subMenuIsActive( 'admin.panel.category.index' )"
-                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
-                  <Bars2Icon class="w-5 h-5 mx-1"/>
-                  {{ __('list') }}
-                </Link>
-                <Link :href="route('admin.panel.category.create')" role="menuitem"
-                      :class="subMenuIsActive ( 'admin.panel.category.create' )"
-                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
-                  <PlusSmallIcon class="w-5 h-5 mx-1"/>
-                  {{ __('new') }}
-                </Link>
-              </li>
-
-            </ul>
-          </li>
           <!-- Brand links -->
           <li v-if="  hasAccess('view_brand')" class="relative ">
             <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.brand.*' )}"
@@ -720,7 +796,8 @@
           </li>
 
           <!-- Support links -->
-          <li class="relative  ">
+          <li v-if="hasAccess('notification:view') || hasAccess('ticket:view')|| hasAccess('ticket:create') "
+              class="relative  ">
             <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.ticket.*' )}"
                class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                data-te-sidenav-link-ref>
@@ -833,41 +910,7 @@
 
             </ul>
           </li>
-          <!-- accesses links -->
-          <li v-if="  hasAccess('view_access')" class="relative ">
-            <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.access.*' )}"
-               class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
-               data-te-sidenav-link-ref>
-              <LockClosedIcon class="w-5 h-5  "/>
-              <span class="mx-2 text-sm "> {{ __('accesses') }} </span>
-              <span
-                  class="  right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600"
-                  data-te-sidenav-rotate-icon-ref>
-                <ChevronDownIcon class="h-5 w-5"/>
-              </span>
-            </a>
-            <ul
-                v-bind="{ 'data-te-collapse-show':menuIsActive ( 'admin.panel.access.*' )?true:null }"
-                class="  !visible relative m-0 hidden list-none    data-[te-collapse-show]:block "
-                data-te-collapse-item data-te-sidenav-collapse-ref>
-              <li class="relative ps-7">
 
-                <Link :href="route('admin.panel.access.index')" role="menuitem"
-                      :class="subMenuIsActive( 'admin.panel.access.index' )"
-                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
-                  <Bars2Icon class="w-5 h-5 mx-1"/>
-                  {{ __('list') }}
-                </Link>
-                <Link :href="route('admin.panel.access.create')" role="menuitem"
-                      :class="subMenuIsActive ( 'admin.panel.access.create' )"
-                      class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
-                  <PlusSmallIcon class="w-5 h-5 mx-1"/>
-                  {{ __('new') }}
-                </Link>
-              </li>
-
-            </ul>
-          </li>
           <li>
             <div class="py-4">
 

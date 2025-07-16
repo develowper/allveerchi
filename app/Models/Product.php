@@ -13,6 +13,7 @@ class Product extends Model
 
     protected $fillable = [
         'name',
+        'name_en',
         'category_id',
         'tags',
         'sell_count',
@@ -29,7 +30,7 @@ class Product extends Model
         'weight',
         'PN',
         'categories',
-        'brand_id',
+
     ];
     protected $casts = [
         'categories' => 'array',

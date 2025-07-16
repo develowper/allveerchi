@@ -12,6 +12,7 @@ export default {
     data() {
         return {
             user: null,
+
         }
     },
 
@@ -170,8 +171,9 @@ export default {
                 return error.message;
             }
         },
-        hasAccess(role) {
-            return usePage().props.accesses == 'all' || usePage().props.accesses.indexOf(role) >= 0;
+        hasAccess(...args) {
+            const accesses = usePage().props.accesses;
+            return (args || []).every(i => accesses.indexOf(i) >= 0);
         },
         hasWallet() {
 

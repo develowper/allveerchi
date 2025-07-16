@@ -40,7 +40,7 @@
               <div class="my-2" v-if="hasAccess('edit_setting')">
                 <UserSelector :colsData="['name','phone','level']" :labelsData="['name','phone','type']"
                               :callback="{'level':getAgency}" :error="form.errors.shipping_agency_id"
-                              :link="route('admin.panel.agency.search')" :label="__('shipping_owner')"
+                              :link="route('admin.panel.agency.search')" :label="__('agency')"
                               :id="'shipping_agency_id'" v-model:selected="form.shipping_agency_id" :preload="null">
                   <template v-slot:selector="props">
                     <div :class="props.selectedText?'py-2':'py-2'"
@@ -207,7 +207,7 @@
                                  :error="form.errors.products"/>
               </div>
 
-<!--              <div class="my-2">-->
+              <!--              <div class="my-2">-->
               <!--                <Timestamp mode="create" :label="__('delivery_hours')"-->
               <!--                           :errors="form.errors || []" v-model="form.timestamps"/>-->
               <!--              </div>-->

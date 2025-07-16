@@ -40,7 +40,7 @@
               <div class="my-2" v-if="hasAccess('edit_setting')">
                 <UserSelector :colsData="['name','phone','level']" :labelsData="['name','phone','type']"
                               :callback="{'level':getAgency}" :error="form.errors.shipping_agency_id"
-                              :link="route('admin.panel.agency.search')" :label="__('shipping_owner')"
+                              :link="route('admin.panel.agency.search')" :label="__('agency')"
                               :id="'shipping_agency'" v-model:selected="form.shipping_agency_id"
                               :preload="$page.props.data.shipping_agency">
                   <template v-slot:selector="props">

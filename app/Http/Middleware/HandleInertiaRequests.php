@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\AdminFinancial;
 use App\Models\Agency;
 use App\Models\AgencyFinancial;
+use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\City;
 use App\Models\Pack;
@@ -51,6 +52,7 @@ class HandleInertiaRequests extends Middleware
         $user = auth('sanctum')->user();
         if ($user) {
             $user->setRelation('financial', $user instanceof Admin ? AdminFinancial::whereAdminId($user->id)->firstOrNew() : UserFinancial::whereUserId($user->id)->firstOrNew());
+            $user->setRelation('role', $user instanceof Admin ? Access::whereId($user->access_id)->where('agency_level', '>=', $user->agency_level)->firstOrNew() : new Access());
             if ($user instanceof Admin) {
                 $agency = Agency::with('financial')->findOrNew($user->agency_id);
                 if (!$agency->getRelation('financial'))
@@ -109,6 +111,7 @@ class HandleInertiaRequests extends Middleware
             'is_auction' => Setting::getValue('is_auction'),
             'units' => Variable::PRODUCT_UNITS,
             'packs' => Pack::get(),
+            'brands' => Brand::select('id', 'name')->get(),
             'grades' => Variable::GRADES,
             'products' => Product::select('id', 'name')->whereStatus('active')->orderBy('sell_count', 'DESC')->get(),
             'rubikFaces' => $this->getRubicFaces($domainCountry),

@@ -74,6 +74,23 @@
                   </template>
                 </TextInput>
               </div>
+              <div class="my-2">
+                <TextInput
+                    id="name_en"
+                    type="text"
+                    :placeholder="__('name_en')"
+                    classes="  "
+                    v-model="form.name_en"
+                    autocomplete="name_en"
+                    :error="form.errors.name_en"
+                >
+                  <template v-slot:prepend>
+                    <div class="p-3">
+                      <Bars2Icon class="h-5 w-5"/>
+                    </div>
+                  </template>
+                </TextInput>
+              </div>
               <div v-if="false" class="my-2">
                 <Selector ref="gradeSelector" v-model="form.grade"
                           :data="$page.props.grades.map(e=>{return{id:e,name:e}})"
@@ -81,6 +98,20 @@
                           :label="__('grade')" classes=""
                           :id="`grade`">
 
+                </Selector>
+              </div>
+              <div class="my-2">
+                <Selector ref="brandSelector" v-model="form.brand_id"
+                          :data="$page.props.brands "
+                          :error="form.errors.brand_id"
+                          :preload="$page.props.data.brand_id"
+                          :label="__('brand')"
+                          id="brand_id">
+                  <template v-slot:append>
+                    <div class="  p-3">
+                      <Squares2X2Icon class="h-5 w-5"/>
+                    </div>
+                  </template>
                 </Selector>
               </div>
               <div class="my-2">
@@ -229,11 +260,13 @@ export default {
       form: useForm({
         id: null,
         name: null,
+        name_en: null,
         uploading: false,
         cmnd: null,
         categories: null,
         pack_id: null,
         weight: null,
+        brand_id: null,
 
       }),
       img: null,
@@ -288,12 +321,13 @@ export default {
 
     this.form.id = this.data.id;
     this.form.name = this.data.name;
+    this.form.name_en = this.data.name_en;
     // this.form.categories = this.data.categories;
     this.form.pack_id = this.data.pack_id;
     this.$refs.packSelector.set(this.form.pack_id);
     this.form.weight = parseFloat(this.data.weight);
     this.form.cmnd = 'change-primary';
-
+    this.form.brand_id = this.data.brand_id;
   },
   methods: {
 

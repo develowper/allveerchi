@@ -89,7 +89,7 @@ class ProductController extends Controller
             'statuses' => Variable::STATUSES,
             'data' => $data,
             'categories' => Category::get(),
-            'brands' => Brand::select('id', 'name')->get(),
+
 
         ]);
     }
