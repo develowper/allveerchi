@@ -32,7 +32,7 @@ class ShippingController extends Controller
         $data = Shipping::whereIntegerInRaw('agency_id', $allowedAgencies)->find($id);
 
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {
@@ -162,7 +162,7 @@ class ShippingController extends Controller
     {
 
         $data = Shipping::find($id);
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
         $request->merge(['for_edit' => true, 'agency_id' => $data->agency_id, 'shipping_id' => $data->id]);
         $orders = (new OrderController())->searchMerged($request);
         $data->orders = $orders;

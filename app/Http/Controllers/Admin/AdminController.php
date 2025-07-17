@@ -9,7 +9,7 @@ use App\Http\Helpers\Util;
 use App\Http\Helpers\Variable;
 use App\Http\Requests\AdminRequest;
 use App\Http\Requests\UserRequest;
-use App\Models\Access;
+use App\Models\Role;
 use App\Models\Admin;
 use App\Models\AdminFinancial;
 use App\Models\Agency;
@@ -34,7 +34,7 @@ class AdminController extends Controller
         $roleId = $request->role_id;
         $admin = $request->user();
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {
@@ -127,7 +127,7 @@ class AdminController extends Controller
     public function edit(Request $request, $id): Response
     {
         $data = Admin::with('financial')->with('agency')->find($id);
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
 
         return Inertia::render('Panel/Admin/Admin/Edit', [
             'data' => $data,

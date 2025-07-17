@@ -259,7 +259,7 @@ export default {
       this.form.phone = this.f2e(this.form.phone);
       // this.isLoading(true, this.form.progress ? this.form.progress.percentage : null);
 
-      this.form.post(route('admin.panel.access.create'), {
+      this.form.post(route('admin.panel.role.create'), {
         preserveScroll: false,
 
         onSuccess: (data) => {

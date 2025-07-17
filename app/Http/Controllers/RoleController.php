@@ -4,22 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\Telegram;
 use App\Http\Helpers\Variable;
-use App\Http\Requests\AccessRequest;
+use App\Http\Requests\RoleRequest;
 use App\Models\Admin;
-use App\Models\Access;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class AccessController extends Controller
+class RoleController extends Controller
 {
     public function edit(Request $request, $id)
     {
 
-        $data = Access::find($id);
-        $this->authorize('edit', [Admin::class, $data]);
+        $data = Role::find($id);
+        $this->authorize('editAny', [Admin::class, $data]);
 
-        $data->accesses = Access::getTree($data->accesses);
-        return Inertia::render('Panel/Admin/Access/Edit', [
+        $data->accesses = Role::getTree($data->accesses);
+        return Inertia::render('Panel/Admin/Role/Edit', [
 
             'data' => $data,
 
@@ -37,7 +37,7 @@ class AccessController extends Controller
         $dir = $request->dir ?: 'DESC';
         $paginate = $request->paginate ?: 24;
         $status = $request->status;
-        $query = Access::query()->select('*');
+        $query = Role::query()->select('*');
         if ($search)
             $query->where('name', 'like', "%$search%");
 
@@ -78,33 +78,33 @@ class AccessController extends Controller
         return $res;
     }
 
-    public function create(AccessRequest $request)
+    public function create(RoleRequest $request)
     {
         $admin = $request->user();
         $accesses = $request->accesses;
         $res = $this->collectCheckedKeys($accesses);
 
-        $data = Access::create(['name' => $request->name, 'agency_level' => $request->agency_level, 'accesses' => $res]);
+        $data = Role::create(['name' => $request->name, 'agency_level' => $request->agency_level, 'accesses' => $res]);
 
         if ($data) {
 
             $res = ['flash_status' => 'success', 'flash_message' => __('created_successfully')];
             Telegram::log(null, 'access_created', $data);
         } else    $res = ['flash_status' => 'danger', 'flash_message' => __('response_error')];
-        return to_route('admin.panel.access.index')->with($res);
+        return to_route('admin.panel.role.index')->with($res);
 
     }
 
-    public function update(AccessRequest $request)
+    public function update(RoleRequest $request)
     {
         $response = ['message' => __('response_error')];
         $errorStatus = Variable::ERROR_STATUS;
         $successStatus = Variable::SUCCESS_STATUS;
         $id = $request->id;
         $cmnd = $request->cmnd;
-        $data = Access::find($id);
+        $data = Role::find($id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {
@@ -136,7 +136,7 @@ class AccessController extends Controller
 //        $id = $request->id;
 
         $cmnd = $request->cmnd;
-        $data = Access::find($id);
+        $data = Role::find($id);
         if (!starts_with($cmnd, 'bulk'))
             $this->authorize('delete', [Admin::class, $data]);
 

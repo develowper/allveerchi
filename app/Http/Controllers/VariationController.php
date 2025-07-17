@@ -196,7 +196,7 @@ class VariationController extends Controller
 
         $data = Variation::find($id);
 
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
         if ($data) {
             $all = Variation::getImages($data->id);
             $data->images = collect($all)->filter(fn($e) => !str_contains($e, 'thumb'))->all();
@@ -337,7 +337,7 @@ class VariationController extends Controller
         $cmnd = $request->cmnd;
         $data = Variation::find($id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
         $admin = $request->user();
         $request->merge(['agency_id' => $data->agency_id]);
         $request->validate(

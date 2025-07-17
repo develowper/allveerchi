@@ -24,7 +24,7 @@ class TicketController extends Controller
     {
         $user = $request->user();
         $data = Ticket::whereId($ticket)->with('chats.owner:id,fullname,role')->first();
-        $this->authorize('edit', [get_class($user), $data]);
+        $this->authorize('editAny', [get_class($user), $data]);
 
         if ($user instanceof Admin) {
             if ($data->from_id == $user->id && $data->from_type == 'admin')
@@ -60,7 +60,7 @@ class TicketController extends Controller
         $cmnd = $request->cmnd;
         $data = Ticket::find($id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [get_class($user), $data]);
+            $this->authorize('editAny', [get_class($user), $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

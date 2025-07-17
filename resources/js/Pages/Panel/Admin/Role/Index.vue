@@ -14,8 +14,8 @@
           <Bars2Icon class="h-7 w-7 mx-3"/>
           <h5 class="  font-semibold">{{ __('accesses') }}</h5>
         </div>
-        <div>
-          <Link :href="route('admin.panel.access.create')"
+        <div v-if="hasAccess('role:create')">
+          <Link :href="route('admin.panel.role.create')"
                 class="inline-flex items-center  justify-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold  transition-all duration-500 text-white     hover:bg-green-600 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
           >
             {{ __('new_access') }}
@@ -232,10 +232,11 @@
                          :src="`${route('storage.accesses')}/${d.id}.jpg`"
                          :data-lity="`${route('storage.accesses')}/${d.id}.jpg`"
                          :alt="cropText(d.name,30)"/>
-                  <Link class="flex  px-2 hover:text-gray-500"
-                        :href="route('admin.panel.access.edit',d.id)">
+                  <Link v-if="hasAccess('role:edit:*')" class="flex  px-2 hover:text-gray-500"
+                        :href="route('admin.panel.role.edit',d.id)">
                     <div class="text-xs font-semibold">{{ cropText(d.name, 50) }}</div>
                   </Link>
+                  <div v-else class="text-xs font-semibold">{{ cropText(d.name, 50) }}</div>
                 </td>
                 <td>
                   {{ __($page.props.agency_types.find(i => i.level == d.agency_level)?.name) }}
@@ -273,17 +274,18 @@
                   <div
                       class=" inline-flex rounded-md shadow-sm transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
                       role="group">
-                    <Link
-                        type="button" :href="route('admin.panel.access.edit',d.id)"
-                        class="inline-block rounded-s  bg-orange-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-orange-400   focus:outline-none focus:ring-0  "
-                        data-te-ripple-init
-                        data-te-ripple-color="light">
+                    <Link v-if="hasAccess('role:edit:*')"
+                          type="button" :href="route('admin.panel.role.edit',d.id)"
+                          class="inline-block rounded mx-1  bg-orange-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-orange-400   focus:outline-none focus:ring-0  "
+                          data-te-ripple-init
+                          data-te-ripple-color="light">
                       {{ __('edit') }}
                     </Link>
 
-                    <button @click=" showDialog('danger',__('remove_item?'), __('remove') , removeData,d.id )"
+                    <button v-if="hasAccess('role:delete')"
+                            @click=" showDialog('danger',__('remove_item?'), __('remove') , removeData,d.id )"
                             type="button"
-                            class="inline-block rounded-e  bg-red-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-red-400   focus:outline-none focus:ring-0  "
+                            class="inline-block rounded   bg-red-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-red-400   focus:outline-none focus:ring-0  "
                             data-te-ripple-init
                             data-te-ripple-color="light">
                       {{ __('remove') }}
@@ -364,7 +366,7 @@ export default {
   methods: {
     removeData(id) {
       this.loading = true;
-      window.axios.delete(route('admin.panel.access.delete', id), {},
+      window.axios.delete(route('admin.panel.role.delete', id), {},
           {})
           .then((response) => {
             if (response.data && response.data.message) {
@@ -392,7 +394,7 @@ export default {
 
       this.loading = true;
       this.data = [];
-      window.axios.get(route('admin.panel.access.search'), {
+      window.axios.get(route('admin.panel.role.search'), {
         params: this.params
       }, {})
           .then((response) => {
@@ -463,7 +465,7 @@ export default {
     },
     edit(params) {
       this.isLoading(true);
-      window.axios.patch(route('admin.panel.access.update'), params,
+      window.axios.patch(route('admin.panel.role.update'), params,
           {})
           .then((response) => {
             if (response.data && response.data.message) {

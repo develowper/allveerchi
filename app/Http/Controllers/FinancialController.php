@@ -112,7 +112,7 @@ class  FinancialController extends Controller
         $user = $request->user();
         $data = Variable::FINANCIALS [$type]::where("{$type}_id", $id)->first();
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
         if ($type) {
             $model = Variable::TRANSACTION_MODELS[$type]::find($id);
             $modelName = $model->name ?? $model->fullname;

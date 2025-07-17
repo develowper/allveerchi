@@ -173,7 +173,19 @@ export default {
         },
         hasAccess(...args) {
             const accesses = usePage().props.accesses;
-            return (args || []).every(i => accesses.indexOf(i) >= 0);
+
+
+            for (let j in (args || [])) {
+                let s = args[j]
+                if (s.indexOf(":*") !== -1) {
+                    s = s.replace(":*", "")
+                    if (!(accesses || []).some(access => access.includes(s))) return false;
+                } else {
+                    if (!(accesses || []).some(access => access.indexOf(s) !== -1)) return false;
+
+                }
+            }
+            return (args || []).length > 0
         },
         hasWallet() {
 

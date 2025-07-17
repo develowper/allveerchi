@@ -22,7 +22,7 @@ class RepositoryController extends Controller
     {
 
         $data = Repository::with('agency:id,name,level')->with('admin:id,fullname,phone')->find($id);
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
 
         return Inertia::render('Panel/Admin/Repository/Edit', [
             'statuses' => Variable::STATUSES,
@@ -40,7 +40,7 @@ class RepositoryController extends Controller
         $cmnd = $request->cmnd;
         $data = Repository::find($id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

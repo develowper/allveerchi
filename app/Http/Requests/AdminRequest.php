@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Access;
+use App\Models\Role;
 use App\Models\Admin;
 use App\Models\Agency;
 use App\Models\City;
@@ -60,7 +60,7 @@ class AdminRequest extends FormRequest
 //                return in_array($e, ['owner', 'admin', 'operator']);
 //            return in_array($e, ['admin', 'operator']);
 //        }));
-        $allowedRoles = Access::where('agency_level', '>=', $this->myAgency->id ?? '2')->pluck('id');
+        $allowedRoles = Role::where('agency_level', '>=', $this->myAgency->id ?? '2')->pluck('id');
         $allowedStatuses = collect(Variable::USER_STATUSES)->pluck('name');
         $user = $this->user();
         $availableAgencies = $user->allowedAgencies($this->myAgency)->get('id', 'name', 'level');

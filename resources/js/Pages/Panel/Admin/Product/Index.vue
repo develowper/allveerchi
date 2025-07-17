@@ -14,7 +14,7 @@
           <Bars2Icon class="h-7 w-7 mx-3"/>
           <h5 class="  font-semibold">{{ __('products_list') }}</h5>
         </div>
-        <div>
+        <div v-if="hasAccess('product:create')">
           <Link :href="route('admin.panel.product.create')"
                 class="inline-flex items-center  justify-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold  transition-all duration-500 text-white     hover:bg-green-600 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
           >
@@ -216,7 +216,8 @@
                        :src="`${route('storage.products')}/${d.id}.jpg`"
                        :data-lity="`${route('storage.products')}/${d.id}.jpg`"
                        :alt="cropText(d.title,5)"/>
-                <Link class="px-2 hover:text-gray-500" :href="route('admin.panel.product.edit',d.id)">
+                <Link class="px-2 hover:text-gray-500"
+                      :href=" hasAccess('product:edit:*')? route('admin.panel.product.edit',d.id):''">
                   <div class="text-sm font-semibold">{{ cropText(d.name, 30) }}</div>
                   <div class="font-normal text-gray-500">{{ }}</div>
                 </Link>
@@ -276,11 +277,11 @@
                 <div
                     class=" inline-flex rounded-md shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
                     role="group">
-                  <Link
-                      type="button" :href="route('admin.panel.product.edit',d.id)"
-                      class="inline-block rounded  bg-orange-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-orange-400   focus:outline-none focus:ring-0  "
-                      data-te-ripple-init
-                      data-te-ripple-color="light">
+                  <Link v-if="hasAccess('product:edit:*')"
+                        type="button" :href="route('admin.panel.product.edit',d.id)"
+                        class="inline-block rounded  bg-orange-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-orange-400   focus:outline-none focus:ring-0  "
+                        data-te-ripple-init
+                        data-te-ripple-color="light">
                     {{ __('edit') }}
                   </Link>
 

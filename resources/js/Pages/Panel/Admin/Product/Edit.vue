@@ -27,7 +27,7 @@
               class="flex flex-col mx-2   col-span-2 w-full     px-2"
           >
             <div class="flex-col   m-2 items-center rounded-lg max-w-xs  w-full mx-auto    ">
-              <div class="my-2">
+              <div class="my-2" v-if=" hasAccess('product:edit:image' )">
                 <ImageUploader :replace="true"
                                :preload="route('storage.products')+`/${$page.props.data.id}.jpg`"
                                mode="edit" :for-id="$page.props.data.id"
@@ -40,7 +40,7 @@
             </div>
             <form @submit.prevent="submit">
 
-              <div class="my-2">
+              <div v-if=" hasAccess('product:edit:name' )" class="my-2">
                 <TextInput
                     id="name"
                     type="text"
@@ -57,7 +57,7 @@
                   </template>
                 </TextInput>
               </div>
-              <div class="my-2">
+              <div class="my-2" v-if=" hasAccess('product:edit:name_en' )">
                 <TextInput
                     id="name_en"
                     type="text"
@@ -74,7 +74,7 @@
                   </template>
                 </TextInput>
               </div>
-              <div class="my-2">
+              <div class="my-2" v-if=" hasAccess('product:edit:PN' )">
                 <TextInput
                     id="PN"
                     type="text"
@@ -92,7 +92,7 @@
                 </TextInput>
               </div>
 
-              <div class="my-4">
+              <div class="my-4" v-if=" hasAccess('product:edit:categories' )">
                 <TreeSelector :multi="true" :label="__('categories')" v-model="form.categories"
                               :data=" $page.props.categories"
                               :preload="$page.props.data.categories"
@@ -115,7 +115,7 @@
                   </template>
                 </TextInput>
               </div>
-              <div class="my-4">
+              <div class="my-4" v-if=" hasAccess('product:edit:tags' )">
                 <TagInput ref="tags" :multi="true" :placeholder="__('tags')" v-model="form.tags"
                           :error="form.errors.tags"/>
               </div>

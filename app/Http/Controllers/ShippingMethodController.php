@@ -22,7 +22,7 @@ class ShippingMethodController extends Controller
 
         $data = ShippingMethod::with('repository:id,name')->with('shippingAgency:id,name')->find($id);
 
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
 
         $data->products = Variation::whereIntegerInRaw('id', $data->products ?? [])->select('id', 'name', 'pack_id', 'grade', 'weight')->get();
 
@@ -101,7 +101,7 @@ class ShippingMethodController extends Controller
         $data = $request->data;
         $admin = $request->user();
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

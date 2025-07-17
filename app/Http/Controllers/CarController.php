@@ -18,7 +18,7 @@ class CarController extends Controller
     {
 
         $data = Car::with('agency')->with('driver')->find($id);
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
         return Inertia::render('Panel/Admin/Shipping/Car/Edit', [
             'statuses' => Variable::STATUSES,
             'data' => $data,
@@ -98,7 +98,7 @@ class CarController extends Controller
         $cmnd = $request->cmnd;
         $data = Car::find($id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

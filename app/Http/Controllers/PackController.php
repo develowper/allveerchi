@@ -18,7 +18,7 @@ class PackController extends Controller
 
         $data = Pack:: find($id);
 
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
 
         return Inertia::render('Panel/Admin/Pack/Edit', [
             'statuses' => Variable::STATUSES,
@@ -36,7 +36,7 @@ class PackController extends Controller
         $cmnd = $request->cmnd;
         $data = Pack::find($request->id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

@@ -34,7 +34,7 @@ class RepositoryOrderController extends Controller
 
         $data = RepositoryOrder::with('items')->find($id);
 
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
 
         $agency = Agency::find($data->agency_id);
 
@@ -365,7 +365,7 @@ class RepositoryOrderController extends Controller
         $status = $request->status;
         $data = RepositoryOrder::find($id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

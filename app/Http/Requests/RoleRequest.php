@@ -15,7 +15,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use stdClass;
 
-class AccessRequest extends FormRequest
+class RoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -45,7 +45,7 @@ class AccessRequest extends FormRequest
         if (!$this->cmnd) {
 
             $tmp = array_merge($tmp, [
-                'name' => ['required', 'string', 'max:100', "unique:accesses,name,$this->id"],
+                'name' => ['required', 'string', 'max:100', "unique:roles,name,$this->id"],
                 'type_id' => ['required', Rule::in(array_column(Variable::AGENCY_TYPES, 'id'))],
                 'accesses' => ['required', 'array'],
 

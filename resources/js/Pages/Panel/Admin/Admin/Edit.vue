@@ -27,7 +27,8 @@
             <!--            <InputLabel class="m-2 w-full md:text-start lg:text-center"-->
             <!--                        :value="__('profile_images_max_%s_item').replace('%s',$page.props.max_images_limit)"/>-->
 
-            <div class="flex-col   m-2 items-center rounded-lg max-w-[8rem]  w-full mx-auto lg:mx-2   ">
+            <div v-show="hasAccess('admin:edit:image')"
+                 class="flex-col   m-2 items-center rounded-lg max-w-[8rem]  w-full mx-auto lg:mx-2   ">
               <div class="my-2">
                 <ImageUploader :replace="true"
                                :preload="route('storage.admins')+`/${$page.props.data.id}.jpg`"
@@ -46,19 +47,20 @@
           >
             <form @submit.prevent="submit">
 
-              <div class="flex flex-wrap items-center justify-center ">
+              <div v-show="hasAccess('admin:edit:status')" class="flex flex-wrap items-center justify-center ">
 
                 <RadioGroup ref="statusSelector" class=" grow mx-2" name="status" v-model="form.status"
                             :items="$page.props.statuses" :before-selected=" $page.props.data.status "/>
 
               </div>
-              <div class="flex flex-wrap items-center justify-center ">
+              <div v-show="hasAccess('admin:edit:role_id')" class="flex flex-wrap items-center justify-center ">
                 <RadioGroup ref="roleSelector" class=" grow mx-2" name="role"
                             @change="($e )=>form.access_id=$page.props.admin_roles.find((e)=>e.name==$e.target.value )?.id"
                             :before-selected=" getAdminRole($page.props.data.access_id) "
                             :items="$page.props.admin_roles?.map(i=>i.name)"/>
               </div>
-              <div class="my-2" v-if="$page.props.agency && $page.props.agency.level<3">
+              <div v-show="hasAccess('admin:edit:agency_id')" class="my-2"
+                   v-if="$page.props.agency && $page.props.agency.level<3">
                 <UserSelector :colsData="['name','phone','level']" :labelsData="['name','phone','type']"
                               :callback="{'level':getAgency}" :error="form.errors.agency_id"
                               :link="route('admin.panel.agency.search')" :label="__('agency')"
@@ -79,7 +81,7 @@
                 </UserSelector>
 
               </div>
-              <div class="my-4">
+              <div class="my-4" v-show="hasAccess('admin:edit:fullname')">
                 <TextInput
                     id="fullname"
                     type="text"
@@ -99,7 +101,7 @@
               </div>
 
 
-              <div class="my-4">
+              <div class="my-4" v-show="hasAccess('admin:edit:phone')">
                 <PhoneFields
                     v-model:phone="form.phone"
                     v-model:phone-verify="form.phone_verify"
@@ -113,7 +115,7 @@
                     :phone-verify-error="form.errors.phone_verify"
                 />
               </div>
-              <div class="my-4">
+              <div class="my-4" v-show="hasAccess('admin:edit:national_code')">
                 <TextInput
                     id="national_code"
                     type="text"
@@ -131,7 +133,7 @@
 
                 </TextInput>
               </div>
-              <div class="my-4">
+              <div class="my-4" v-show="hasAccess('admin:edit:card')">
                 <TextInput
                     id="card"
                     type="number"
@@ -149,7 +151,7 @@
 
                 </TextInput>
               </div>
-              <div class="my-4">
+              <div class="my-4" v-show="hasAccess('admin:edit:sheba')">
                 <TextInput
                     id="sheba"
                     type="number"
@@ -167,7 +169,7 @@
                   </template>
                 </TextInput>
               </div>
-              <div class="my-4">
+              <div class="my-4" v-show="hasAccess('admin:edit:wallet')">
                 <TextInput
                     id="wallet"
                     type="number"
@@ -185,7 +187,7 @@
 
                 </TextInput>
               </div>
-              <div class="my-2">
+              <div class="my-2" v-show="hasAccess('admin:edit:address')">
                 <AddressSelector ref="addressSelector" :editable="true" :clearable="true" class=" " type=""
                                  :label="__('address')"
                                  @change="updateAddress($event) "
@@ -193,7 +195,7 @@
 
 
               </div>
-              <div class="my-4">
+              <div class="my-4" v-show="hasAccess('admin:edit:password')">
                 <TextInput
                     id="password"
                     type="text"
@@ -212,7 +214,7 @@
                 </TextInput>
 
               </div>
-              <div class="my-4">
+              <div class="my-4" v-show="hasAccess('admin:edit:password')">
                 <TextInput
                     id="password_verify"
                     type="text"

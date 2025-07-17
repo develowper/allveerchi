@@ -204,8 +204,18 @@ class Variable
     ];
 
     const ACCESSES = [
+        'category' => ['view', 'create', 'delete', 'edit' => [
+            'image',
+            'name',
+            'level',
+            'status',
+            'parent_id',
+            'children',
+        ]
+        ],
         'product' => ['view', 'create', 'delete',
             'edit' => [
+                'image',
                 'name',
                 'name_en',
                 'PN',
@@ -228,11 +238,39 @@ class Variable
                 'weight',
                 'in_repo',
                 'in_shop',
-                'prices',
+                'in_auction',
+                'price',
                 'description',
             ]],
+        'admin' => ['view', 'create', 'delete', 'edit' => [
+            'image',
+            'agency_id',
+            'role_id',
+            'fullname',
+            'phone',
+            'status',
+            'national_code',
+            'card',
+            'sheba',
+            'wallet',
+//            'postal_code',
+//            'province_id',
+//            'county_id',
+//            'district_id',
+//            'location',
+            'address',
+            'password',
+        ]
+        ],
+        'role' => ['view', 'create', 'delete', 'edit' => [
+            'name',
+            'agency_level',
+            'accesses',
+        ]
+        ],
         'sample' => ['view', 'create', 'delete',
         ],
+
         'guarantee' => ['view', 'create', 'delete', 'edit' => []
         ],
         'order' => ['view', 'create', 'delete',
@@ -301,31 +339,8 @@ class Variable
             'status',
         ]
         ],
-        'admin' => ['view', 'create', 'delete', 'edit' => [
-            'agency_id',
-            'access_id',
-            'fullname',
-            'phone',
-            'password',
-            'status',
-            'national_code',
-//            'postal_code',
-//            'province_id',
-//            'county_id',
-//            'district_id',
-//            'location',
-            'address',
-        ]
-        ],
-        'category' => ['view', 'create', 'delete', 'edit' => [
-            'image',
-            'name',
-            'level',
-            'status',
-            'parent_id',
-            'children',
-        ]
-        ],
+
+
         'brand' => ['view', 'create', 'delete', 'edit' => [
             'image',
             'name',
@@ -350,12 +365,7 @@ class Variable
             'status',
         ]
         ],
-        'role' => ['view', 'create', 'delete', 'edit' => [
-            'name',
-            'agency_level',
-            'accesses',
-        ]
-        ],
+
         'ticket' => ['view', 'create', 'delete', 'edit' => [
 
         ]

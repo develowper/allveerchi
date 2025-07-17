@@ -59,7 +59,7 @@ class UserController extends Controller
     {
         $me = $request->user();
         $data = User::with('financial')->find($id);
-        $this->authorize('edit', [get_class($me), $data]);
+        $this->authorize('editAny', [get_class($me), $data]);
 
         return Inertia::render('Panel/Admin/User/Edit', [
             'data' => $data,
@@ -91,7 +91,7 @@ class UserController extends Controller
         $user = isset($id) ? User::find($id) : auth('sanctum')->user();
         $cmnd = $request->cmnd;
         if (isset($id))
-            $this->authorize('edit', [User::class, $user]);
+            $this->authorize('editAny', [User::class, $user]);
 
         switch ($cmnd) {
             case   'upload-img':

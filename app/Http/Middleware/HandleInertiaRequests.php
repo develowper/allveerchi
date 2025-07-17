@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Helpers\Variable;
-use App\Models\Access;
+use App\Models\Role;
 use App\Models\Admin;
 use App\Models\AdminFinancial;
 use App\Models\Agency;
@@ -52,7 +52,7 @@ class HandleInertiaRequests extends Middleware
         $user = auth('sanctum')->user();
         if ($user) {
             $user->setRelation('financial', $user instanceof Admin ? AdminFinancial::whereAdminId($user->id)->firstOrNew() : UserFinancial::whereUserId($user->id)->firstOrNew());
-            $user->setRelation('role', $user instanceof Admin ? Access::whereId($user->access_id)->where('agency_level', '>=', $user->agency_level)->firstOrNew() : new Access());
+            $user->setRelation('role', $user instanceof Admin ? Role::whereId($user->role_id)->where('agency_level', '>=', $user->agency_level)->firstOrNew() : new Access());
             if ($user instanceof Admin) {
                 $agency = Agency::with('financial')->findOrNew($user->agency_id);
                 if (!$agency->getRelation('financial'))
@@ -65,7 +65,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $user,
             ],
             'ip' => $request->ip(),
-            'admin_roles' => $user && $user instanceof Admin ? Access::select('id', 'name', 'agency_level', 'accesses')->where('agency_level', '>=', $user->agency_level ?? '2')->get() : [],
+            'admin_roles' => $user && $user instanceof Admin ? Role::select('id', 'name', 'agency_level', 'accesses')->where('agency_level', '>=', $user->agency_level ?? '2')->get() : [],
             'accesses' => $user && $user instanceof Admin ? $user->accesses() : [],
             'isAdmin' => $user && $user instanceof Admin,
             'agency' => $user && $user instanceof Admin ? Agency::with('financial')->find($user->agency_id) : (object)[],

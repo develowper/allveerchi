@@ -65,7 +65,7 @@ class SettingController extends Controller
         if ($id && !$data)
             return response()->json(['message' => sprintf(__('validator.invalid'), __('id')),], Variable::ERROR_STATUS);
         if ($data)
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if (!$id) {
             $data = Setting::create(['key' => $key, 'value' => $value]);
@@ -112,7 +112,7 @@ class SettingController extends Controller
         $data = Setting::find($id);
         if (!$data)
             return response()->json(['message' => sprintf(__('validator.invalid'), __('id')),], Variable::ERROR_STATUS);
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
 
         if ($data->delete()) {
             Telegram::log(null, 'setting_deleted', $data);

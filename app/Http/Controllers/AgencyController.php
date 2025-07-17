@@ -36,7 +36,7 @@ class AgencyController extends Controller
     {
 
         $data = Agency::with('owner:id,fullname,phone,agency_id')->with('financial')->find($id);
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
 
         $data->type_id = $data->level;
         $data->supported_provinces = $data->level == '1' ? $data->access : [];
@@ -59,7 +59,7 @@ class AgencyController extends Controller
         $admin = $request->user();
         $data = Agency::find($id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

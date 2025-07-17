@@ -328,16 +328,17 @@
                              :src="`${route('storage.variations')}/${d.id}/thumb.jpg`"
                              :fail-url="`${route('storage.products')}/${d.product_id}.jpg`"
                              :alt="cropText(d.title,5)"/>
-                      <Link class="px-1 whitespace-nowra hover:text-gray-500"
-                            :href="route('admin.panel.variation.edit',d.id)">
+                      <Link
+                          v-if="['image','name','name_en','brand_id','pack_id','weight'].some(i=>hasAccess(`variation:edit:${i}`))"
+                          class="px-1 whitespace-nowra hover:text-gray-500"
+                          :href="route('admin.panel.variation.edit',d.id)">
                         <div class=" font-semibold ">{{ cropText(d.name, 30) }}</div>
-                        <div class="font-normal text-gray-500">{{ }}</div>
                       </Link>
+                      <div v-else class=" font-semibold ">{{ cropText(d.name, 30) }}</div>
                     </td>
                     <td>
-
                       <button
-                          @click="d.idx=idx;d.cmnd='change-repo';selected=d; "
+                          @click="hasAccess('variation:edit:repo_id') ?(d.idx=idx,d.cmnd='change-repo',selected=d) :null "
                           id="RepoId"
                           aria-expanded="false"
                           data-te-ripple-init
@@ -454,7 +455,7 @@
                     </td>
                     <td class="px-2 py-4    ">
                       <button
-                          @click="d.idx=idx;d.cmnd='change-price';d.new_prices=d.prices ==null || d.prices.length ==0 ? [ ]:d.prices ;d.new_price=d.price;d.new_auction_price=d.auction_price; selected=d; "
+                          @click="hasAccess('variation:edit:price') ? (d.idx=idx,d.cmnd='change-price',d.new_prices=(d.prices ==null || d.prices.length ==0 ? [ ]:d.prices ),d.new_price=d.price,d.new_auction_price=d.auction_price, selected=d ):null "
                           id="PriceId"
                           aria-expanded="false"
                           data-te-ripple-init
@@ -483,7 +484,7 @@
                     </td>
                     <td class="px-2 py-4    ">
                       <button
-                          @click="d.idx=idx;d.cmnd='change-qty';d.new_in_shop=parseFloat(d.in_shop);d.new_in_repo=parseFloat(d.in_repo); selected=d; "
+                          @click="hasAccess('variation:edit:in_shop')? (d.idx=idx,d.cmnd='change-qty',d.new_in_shop=parseFloat(d.in_shop),d.new_in_repo=parseFloat(d.in_repo), selected=d ):null "
                           id="InShopId"
                           aria-expanded="false"
                           data-te-ripple-init
@@ -497,8 +498,8 @@
                     </td>
                     <td class="px-2 py-4    ">
                       <button
-                          @click="d.idx=idx;d.cmnd='change-qty';d.new_in_shop=parseFloat(d.in_shop);d.new_in_repo=parseFloat(d.in_repo); selected=d; "
-                          id="InShopId"
+                          @click="hasAccess('variation:edit:in_repo')? (d.idx=idx,d.cmnd='change-qty',d.new_in_shop=parseFloat(d.in_shop),d.new_in_repo=parseFloat(d.in_repo), selected=d ):null "
+                          id="InRepoId"
                           aria-expanded="false"
                           data-te-ripple-init
                           data-te-ripple-color="light"
@@ -511,7 +512,9 @@
                     <td v-if="false" class="px-2 py-4    ">
                       {{ d.is_private ? __('internal') : __('public') }}
                     </td>
+
                     <td class="px-2 py-4    " data-te-dropdown-ref>
+
                       <button
                           :id="`dropdownAuctionSetting${d.id}`"
                           data-te-dropdown-toggle-ref
@@ -522,7 +525,8 @@
                           :class="`bg-${ d.in_auction ? 'success' : 'danger' }-100 hover:bg-${d.in_auction ? 'success' : 'red'}-200 text-${d.in_auction ? 'success' : 'red'}-500`">
                         {{ getStatus('variation_statuses', d.in_auction ? 'active' : 'inactive').name }}
                       </button>
-                      <ul :ref="`variationMenu${d.id}`" data-te-dropdown-menu-ref
+                      <ul v-show="hasAccess('variation:edit:in_auction')" :ref="`variationMenu${d.id}`"
+                          data-te-dropdown-menu-ref
                           class="  absolute z-[1000]  m-0 hidden   list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-center text-base shadow-lg [&[data-te-dropdown-show]]:block"
                           tabindex="-1" role="menu" aria-orientation="vertical" aria-label="User menu"
                           :aria-labelledby="`dropdownVariationSetting${d.id}`">
@@ -550,7 +554,8 @@
                           :class="`bg-${getStatus('variation_statuses', d.status).color}-100 hover:bg-${getStatus('variation_statuses', d.status).color}-200 text-${getStatus('variation_statuses', d.status).color}-500`">
                         {{ getStatus('variation_statuses', d.status).name }}
                       </button>
-                      <ul :ref="`statusMenu${d.id}`" data-te-dropdown-menu-ref
+                      <ul v-show="hasAccess('variation:edit:status')" :ref="`statusMenu${d.id}`"
+                          data-te-dropdown-menu-ref
                           class="  absolute z-[1000]  m-0 hidden   list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-center text-base shadow-lg [&[data-te-dropdown-show]]:block"
                           tabindex="-1" role="menu" aria-orientation="vertical" aria-label="User menu"
                           :aria-labelledby="`dropdownStatusSetting${d.id}`">
@@ -575,6 +580,7 @@
                           role="group">
 
                         <Link
+                            v-if="['image','name','name_en','brand_id','pack_id','weight'].some(i=>hasAccess(`variation:edit:${i}`))"
                             type="button" :href="route('admin.panel.variation.edit',d.id)"
                             class="inline-block rounded  bg-orange-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-orange-400   focus:outline-none focus:ring-0  "
                             data-te-ripple-init
@@ -608,7 +614,7 @@
               <div @click.self="selected=null;errors={}"
                    class="flex min-h-full   justify-center p-4 text-center sm:items-center sm:p-0">
                 <div
-                    class="relative transform overflow-auto rounded-lg bg-white   shadow-xl transition-all sm:my-8  mx-auto   m-2 ">
+                    class="relative w-full  transform overflow-auto rounded-lg bg-white   shadow-xl transition-all sm:my-8    m-2 ">
                   <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div class=" flex flex-col items-stretch">
                       <div class="flex items-center  gap-2">
@@ -952,7 +958,7 @@
 
                               <div class="flex flex-col  ">
 
-                                <div class="my-2">
+                                <div class="my-2" v-show="hasAccess('variation:edit:in_shop')">
                                   <TextInput
                                       id="new_in_shop"
                                       type="number"
@@ -969,7 +975,7 @@
                                     </template>
                                   </TextInput>
                                 </div>
-                                <div class="my-2">
+                                <div class="my-2" v-show="hasAccess('variation:edit:in_repo')">
                                   <TextInput
                                       id="new_in_repo"
                                       type="number"

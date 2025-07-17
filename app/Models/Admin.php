@@ -60,7 +60,7 @@ class Admin extends Authenticatable
         'district_id',
         'address',
         'location',
-        'access_id',
+        'role_id',
     ];
 
     /**
@@ -171,9 +171,23 @@ class Admin extends Authenticatable
         return substr(str_shuffle($original), 0, $length);
     }
 
-    public function hasAccess($item)
+    public function hasAccess(...$args)
     {
-        if (in_array($this->role, ['god']))
+        $accesses = $this->getRelation('role')->accesses ?? [];
+        foreach ($args as $arg) {
+            $base = str_replace(':*', '', $arg);
+            $found = collect($accesses)->contains(function ($access) use ($arg, $base) {
+                return str_contains($arg, ':*')
+                    ? str_contains($access, $base)
+                    : $access == $arg;
+            });
+
+            if (!$found) return false;
+        }
+        return count($args) > 0;
+
+        $item = null;
+        if (in_array($item, $this->role, ['god']))
             return true;
 
         if (in_array($item, ['create_variation', 'create_pack', 'edit_pack', 'create_product', 'edit_product', 'edit_repository_order', 'edit_setting', 'edit_financial', 'view_user', 'create_category', 'edit_category', 'create_guarantee', 'edit_guarantee', 'create_catalog', 'edit_catalog', 'view_catalog', 'create_brand', 'edit_brand', 'view_brand', 'edit_access', 'view_access'])) {
@@ -251,6 +265,6 @@ class Admin extends Authenticatable
 
     public function access()
     {
-        return $this->belongsTo(Access::class, 'access_id');
+        return $this->belongsTo(Role::class, 'role_id');
     }
 }

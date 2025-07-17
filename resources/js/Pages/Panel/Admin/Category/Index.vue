@@ -14,7 +14,7 @@
           <Bars2Icon class="h-7 w-7 mx-3"/>
           <h5 class="  font-semibold">{{ __('categories') }}</h5>
         </div>
-        <div>
+        <div v-if="hasAccess('category:create')">
           <button @click="params.cmnd='add'; params.parent_id=null;params.name=null;modal.show()"
                   data-te-toggle="modal"
                   data-te-target="#createModal"
@@ -51,17 +51,18 @@
 
                     class="mtl-ml p-1 select-none ">{{ node.name }} {{ `(${node.id})` }}</span>
 
-                <WrenchIcon
-                    @click="params.cmnd='edit'; params.checked=node.checked;params.id=node.id;params.parent_id=node.parent_id;params.name=node.name;$refs.categorySelector.selecteds  = node.parent_id ; modal.show()"
-                    class="h-6   border rounded-full p-[2px] bg-blue-600 hover:bg-blue-500 cursor-pointer     text-white  hover:scale-[120%] duration-200"
-                    @click.native="stat.open = !stat.open"
+                <WrenchIcon v-if="hasAccess('category:edit:*')"
+                            @click="params.cmnd='edit'; params.checked=node.checked;params.id=node.id;params.parent_id=node.parent_id;params.name=node.name;$refs.categorySelector.selecteds  = node.parent_id ; modal.show()"
+                            class="h-6   border rounded-full p-[2px] bg-blue-600 hover:bg-blue-500 cursor-pointer     text-white  hover:scale-[120%] duration-200"
+                            @click.native="stat.open = !stat.open"
                 />
-                <MinusIcon v-if="!stat.children.length"
+                <MinusIcon v-if="!stat.children.length && hasAccess('category:delete')"
                            @click.prevent="showDialog('danger',__('remove_item?'),__('remove'),edit,{id:node.id,name:node.name,cmnd:'remove'})"
                            class="h-6 mx-1  border rounded-full  bg-danger-600 hover:bg-danger-500 cursor-pointer     text-white  hover:scale-[120%] duration-200"
                            @click.native="stat.open = !stat.open"
                 />
-                <PlusIcon @click="params.cmnd='add'; params.parent_id=node.id;params.name=null;modal.show()"
+                <PlusIcon v-if="hasAccess('category:create')"
+                          @click="params.cmnd='add'; params.parent_id=node.id;params.name=null;modal.show()"
                           class="h-6   border rounded-full   bg-success-600 hover:bg-success-500 cursor-pointer    text-white hover:scale-[120%] duration-200"
                           @click.native="stat.open = !stat.open"
                 />
@@ -155,7 +156,7 @@
               >
 
                 <form @submit.prevent="">
-                  <div class="my-2">
+                  <div class="my-2" v-show="hasAccess('category:edit:image')">
                     <ImageUploader :key="params.id" :replace="params.id" id="img"
                                    :preload="params.id?route('storage.categories')+`/${params.id}.jpg`:null"
                                    :mode="params.cmnd" :for-id="params.id" :cropRatio="1"
@@ -164,13 +165,13 @@
                                    height="10" class="grow w-48 mx-auto"/>
                     <InputError class="mt-1 " :message="params.errors.img"/>
                   </div>
-                  <TextInput
-                      id="checked"
-                      type="checkbox"
-                      :placeholder="__('active')"
-                      classes=" px-0 mx-0 "
-                      v-model="params.checked"
-                      :autocomplete="checked"
+                  <TextInput v-if="hasAccess('category:edit:status')"
+                             id="checked"
+                             type="checkbox"
+                             :placeholder="__('active')"
+                             classes=" px-0 mx-0 "
+                             v-model="params.checked"
+                             :autocomplete="checked"
 
                   >
                   </TextInput>
@@ -196,7 +197,7 @@
                     </div>
 
                   </div>
-                  <div class="my-2">
+                  <div class="my-2" v-show="hasAccess('category:edit:parent_id')">
                     <Selector ref="categorySelector" v-model="params.parent_id"
                               :data="$page.props.categories?.map( i =>({  ...i, name:`${i.name}(${i.id})` }))"
                               :error="params.errors.parent_id"
@@ -210,7 +211,7 @@
                       </template>
                     </Selector>
                   </div>
-                  <div class="my-2">
+                  <div v-show="hasAccess('category:edit:name')" class="my-2">
                     <TextInput
                         id="name"
                         type="text"

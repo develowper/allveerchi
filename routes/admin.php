@@ -12,7 +12,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\PreOrderController;
-use App\Http\Controllers\AccessController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SampleController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CategoryController;
@@ -44,7 +44,7 @@ use App\Models\Article;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Access;
+use App\Models\Role;
 use App\Models\Variation;
 use Illuminate\Support\Facades\Route;
 
@@ -81,55 +81,55 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('', [PanelController::class, 'index'])->name('admin.panel.index');
 
         PanelController::makeInertiaRoute('get', 'setting/index', 'admin.panel.setting.index', 'Panel/Admin/Setting/Index',
-            []);
+            [], "can:view,App\Models\Admin,App\Models\Setting,'1'");
         Route::get('setting/search', [SettingController::class, 'searchPanel'])->name('admin.panel.setting.search');
         Route::patch('setting/update', [SettingController::class, 'update'])->name('admin.panel.setting.update');
-        Route::post('setting/create', [SettingController::class, 'create'])->name('admin.panel.setting.create')->middleware("can:create,App\Models\Admin,App\Models\Ticket,'1'");
+        Route::post('setting/create', [SettingController::class, 'create'])->name('admin.panel.setting.create')->middleware("can:create,App\Models\Admin,App\Models\Setting,'1'");
         Route::get('setting/{setting}', [SettingController::class, 'edit'])->name('admin.panel.setting.edit');
 
-        Route::get('skin/index', [SettingController::class, 'skinIndex'])->name('admin.panel.skin.index');
+        Route::get('skin/index', [SettingController::class, 'skinIndex'])->name('admin.panel.skin.index')->middleware("can:view,App\Models\Admin,App\Models\Setting,'1'");
 
 
         PanelController::makeInertiaRoute('get', 'slider/index', 'admin.panel.slider.index', 'Panel/Admin/Slider/Index',
             [
 
-            ]);
+            ], "can:view,App\Models\Admin,App\Models\Slider,'1'");
         PanelController::makeInertiaRoute('get', 'slider/create', 'admin.panel.slider.create', 'Panel/Admin/Slider/Create',
             [
                 'sliderRatio' => Variable::RATIOS['slider'],
-            ]);
+            ], "can:create,App\Models\Admin,App\Models\Slider,'1'");
 
         PanelController::makeInertiaRoute('get', 'notification/index', 'admin.panel.notification.index', 'Panel/Admin/Notification/Index',
             [
 
-            ]);
+            ], "can:view,App\Models\Admin,App\Models\Notification,'1'");
         PanelController::makeInertiaRoute('get', 'notification/create', 'admin.panel.notification.create', 'Panel/Admin/Notification/Create',
             [
 
-            ]);
+            ], "can:create,App\Models\Admin,App\Models\Notification,'1'");
 
         PanelController::makeInertiaRoute('get', 'ticket/index', 'admin.panel.ticket.index', 'Panel/Ticket/Index',
             [
                 'statuses' => Variable::TICKET_STATUSES
 
-            ]);
+            ], "can:view,App\Models\Admin,App\Models\Ticket,'1'");
         PanelController::makeInertiaRoute('get', 'ticket/create', 'admin.panel.ticket.create', 'Panel/Ticket/Create',
             [
                 'attachment_allowed_mimes' => implode(',.', Variable::TICKET_ATTACHMENT_ALLOWED_MIMES),
-            ]);
+            ], "can:create,App\Models\Admin,App\Models\Ticket,'1'");
 
 
         Route::get('ticket/search', [TicketController::class, 'searchPanel'])->name('admin.panel.ticket.search');
         Route::patch('ticket/update', [TicketController::class, 'update'])->name('admin.panel.ticket.update');
         Route::post('ticket/create', [TicketController::class, 'create'])->name('admin.panel.ticket.create')->middleware("can:create,App\Models\Admin,App\Models\Ticket,'1'");
-        Route::get('ticket/{agency}', [TicketController::class, 'edit'])->name('admin.panel.ticket.edit');
+        Route::get('ticket/{ticket}', [TicketController::class, 'edit'])->name('admin.panel.ticket.edit');
 
         PanelController::makeInertiaRoute('get', 'user/index', 'admin.panel.user.index', 'Panel/Admin/User/Index',
             [
             ], "can:view,App\Models\Admin,App\Models\User,'1'");
         PanelController::makeInertiaRoute('get', 'user/create', 'admin.panel.user.create', 'Panel/Admin/User/Create',
             [
-            ]);
+            ], "can:create,App\Models\Admin,App\Models\User,'1'");
         Route::get('user/search', [UserController::class, 'searchPanel'])->name('admin.panel.user.search');
         Route::patch('user/update', [UserController::class, 'update'])->name('admin.panel.user.update');
         Route::post('user/create', [UserController::class, 'create'])->name('admin.panel.user.create')->middleware("can:create,App\Models\Admin,App\Models\User,'1'");
@@ -139,13 +139,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
             [
                 'user_statuses' => collect(Variable::USER_STATUSES)->filter(fn($e) => $e['name'] != 'block'),
 //                'admin_roles' => array_values(array_filter(Variable::ADMIN_ROLES, fn($e) => $e != 'god'))
-            ]);
+            ], "can:view,App\Models\Admin,App\Models\Admin,'1'");
         PanelController::makeInertiaRoute('get', 'admin/create', 'admin.panel.admin.create', 'Panel/Admin/Admin/Create',
             [
 //                'admin_roles' => array_values(array_filter(Variable::ADMIN_ROLES, fn($e) => $e != 'god')),
                 'user_statuses' => collect(Variable::USER_STATUSES)->filter(fn($e) => $e['name'] != 'block')->pluck('name'),
 
-            ]);
+            ], "can:create,App\Models\Admin,App\Models\Admin,'1'");
         Route::get('admin/search', [AdminController::class, 'searchPanel'])->name('admin.panel.admin.search');
         Route::patch('admin/update', [AdminController::class, 'update'])->name('admin.panel.admin.update');
         Route::post('admin/create', [AdminController::class, 'create'])->name('admin.panel.admin.create')->middleware("can:create,App\Models\Admin,App\Models\Admin,'1'");
@@ -159,16 +159,16 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
             ]);
         PanelController::makeInertiaRoute('get', 'message/create', 'admin.panel.message.create', 'Panel/Admin/Message/Create',
             [
-            ]);
+            ], "can:create,App\Models\Admin,App\Models\Message,'1'");
         PanelController::makeInertiaRoute('get', 'article/index', 'admin.panel.article.index', 'Panel/Admin/Article/Index',
             [
                 'statuses' => Variable::STATUSES
-            ]
+            ], "can:view,App\Models\Admin,App\Models\Article,'1'"
         );
         PanelController::makeInertiaRoute('get', 'article/create', 'admin.panel.article.create', 'Panel/Admin/Article/Create',
             [
                 'statuses' => Variable::STATUSES,
-            ]
+            ], "can:create,App\Models\Admin,App\Models\Article,'1'"
         );
 
         Route::post('/article/create', [ArticleController::class, 'create'])->name('admin.panel.article.create')->middleware('can:create,App\Models\Admin,App\Models\Article,""');
@@ -179,12 +179,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 
 
         PanelController::makeInertiaRoute('get', 'transaction/index', 'admin.panel.financial.transaction.index', 'Panel/Financial/Transaction/Index',
-            []
+            [], "can:view,App\Models\Admin,App\Models\Transaction,'1'"
         );
         Route::get('transaction/search', [TransactionController::class, 'searchPanel'])->name('admin.panel.financial.transaction.search');
 
         PanelController::makeInertiaRoute('get', 'financial/index', 'admin.panel.financial.index', 'Panel/Financial/Index',
-            ['wallet_types' => Variable::WALLET_TYPES]
+            ['wallet_types' => Variable::WALLET_TYPES], "can:view,App\Models\Admin,App\Models\Transaction,'1'"
         );
         Route::get('financial/search', [FinancialController::class, 'searchMerged'])->name('admin.panel.financial.search');
         Route::patch('financial/update', [FinancialController::class, 'update'])->name('admin.panel.financial.update');
@@ -192,12 +192,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 
         PanelController::makeInertiaRoute('get', 'agency/index', 'admin.panel.agency.index', 'Panel/Admin/Agency/Index',
             [
-            ]
+            ], "can:view,App\Models\Admin,App\Models\Agency,'1'"
         );
         PanelController::makeInertiaRoute('get', 'agency/create', 'admin.panel.agency.create', 'Panel/Admin/Agency/Create',
             [
                 'parent_agencies' => Agency::whereNot('level', Variable::AGENCY_TYPES[count(Variable::AGENCY_TYPES) - 1]['level'])->whereNotNull('level')->select('id', 'name', 'province_id', 'level', 'access')->get(),
-            ]
+            ], "can:create,App\Models\Admin,App\Models\Agency,'1'"
         );
 
         Route::get('agency/search', [AgencyController::class, 'searchPanel'])->name('admin.panel.agency.search');
@@ -207,28 +207,28 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 
         PanelController::makeInertiaRoute('get', 'guarantee/index', 'admin.panel.guarantee.index', 'Panel/Admin/Guarantee/Index',
             [
-            ]
+            ], "can:view,App\Models\Admin,App\Models\Guarantee,'1'"
         );
         PanelController::makeInertiaRoute('get', 'guarantee/create', 'admin.panel.guarantee.create', 'Panel/Admin/Guarantee/Create',
             [
-            ]
+            ], "can:create,App\Models\Admin,App\Models\Guarantee,'1'"
         );
 
         Route::get('guarantee/search', [GuaranteeController::class, 'searchPanel'])->name('admin.panel.guarantee.search');
         Route::patch('guarantee/update', [GuaranteeController::class, 'update'])->name('admin.panel.guarantee.update');
-        Route::post('guarantee/create', [GuaranteeController::class, 'create'])->name('admin.panel.guarantee.create');
+        Route::post('guarantee/create', [GuaranteeController::class, 'create'])->name('admin.panel.guarantee.create')->middleware("can:create,App\Models\Admin,App\Models\Guarantee,'1'");
         Route::get('guarantee/{guarantee}', [GuaranteeController::class, 'edit'])->name('admin.panel.guarantee.edit');
 
 
         PanelController::makeInertiaRoute('get', 'repository/index', 'admin.panel.repository.index', 'Panel/Admin/Repository/Index',
             [
 
-            ]
+            ], "can:view,App\Models\Admin,App\Models\Repository,'1'"
         );
 
         PanelController::makeInertiaRoute('get', 'repository/create', 'admin.panel.repository.create', 'Panel/Admin/Repository/Create',
             [
-            ]
+            ], "can:create,App\Models\Admin,App\Models\Repository,'1'"
         );
 
         Route::get('repository/search', [RepositoryController::class, 'searchPanel'])->name('admin.panel.repository.search');
@@ -262,7 +262,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 
 
         PanelController::makeInertiaRoute('get', 'order/user/index', 'admin.panel.order.user.index', 'Panel/Admin/Order/User/Index', ['order_statuses' => collect(Variable::ORDER_STATUSES)->filter(fn($e) => $e['name'] != 'request'),]);
-        PanelController::makeInertiaRoute('get', 'order/user/create', 'admin.panel.order.user.create', 'Panel/Admin/Order/User/Create', ['order_statuses' => collect(Variable::ORDER_STATUSES)->filter(fn($e) => $e['name'] != 'request'),]);
+        PanelController::makeInertiaRoute('get', 'order/user/create', 'admin.panel.order.user.create', 'Panel/Admin/Order/User/Create', ['order_statuses' => collect(Variable::ORDER_STATUSES)->filter(fn($e) => $e['name'] != 'request'),], "can:create,App\Models\Admin,App\Models\Order,'1'");
         Route::get('order/user/search', [OrderController::class, 'searchPanel'])->name('admin.panel.order.user.search');
         Route::patch('order/user/update', [OrderController::class, 'update'])->name('admin.panel.order.user.update');
         Route::get('order/user/{order}', [OrderController::class, 'edit'])->name('admin.panel.order.user.edit');
@@ -289,7 +289,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         PanelController::makeInertiaRoute('get', 'shipping/method/create', 'admin.panel.shipping-method.create', 'Panel/Admin/Shipping/Method/Create',
             [
                 'help' => __('help.shipping_method'),
-            ]
+            ], "can:create,App\Models\Admin,App\Models\ShippingMethod,'1'"
         );
         Route::get('shipping/method/search', [ShippingMethodController::class, 'searchPanel'])->name('admin.panel.shipping-method.search');
         Route::patch('shipping/method/update', [ShippingMethodController::class, 'update'])->name('admin.panel.shipping-method.update');
@@ -298,10 +298,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 
 
         PanelController::makeInertiaRoute('get', 'shipping/index', 'admin.panel.shipping.index', 'Panel/Admin/Shipping/Index',
-            ['shipping_statuses' => Variable::SHIPPING_STATUSES]
+            ['shipping_statuses' => Variable::SHIPPING_STATUSES], "can:view,App\Models\Admin,App\Models\Shipping,'1'"
         );
         PanelController::makeInertiaRoute('get', 'shipping/create', 'admin.panel.shipping.create', 'Panel/Admin/Shipping/Create',
-            ['order_statuses' => Variable::ORDER_STATUSES]
+            ['order_statuses' => Variable::ORDER_STATUSES], "can:create,App\Models\Admin,App\Models\Shipping,'1'"
         );
         Route::get('shipping/search', [ShippingController::class, 'searchPanel'])->name('admin.panel.shipping.search');
         Route::patch('shipping/update', [ShippingController::class, 'update'])->name('admin.panel.shipping.update');
@@ -324,7 +324,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 
 
         PanelController::makeInertiaRoute('get', 'category/index', 'admin.panel.category.index', 'Panel/Admin/Category/Index',
-            ['categories' => \App\Models\Category::select('id', 'name', 'parent_id')->get()]
+            ['categories' => \App\Models\Category::select('id', 'name', 'parent_id')->get()], "can:view,App\Models\Admin,App\Models\Category,'1'"
         );
 
         PanelController::makeInertiaRoute('get', 'category/create', 'admin.panel.category.create', 'Panel/Admin/Category/Create',
@@ -338,41 +338,41 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('category/{category}', [CategoryController::class, 'edit'])->name('admin.panel.category.edit');
 
         PanelController::makeInertiaRoute('get', 'brand/index', 'admin.panel.brand.index', 'Panel/Admin/Brand/Index',
-            ['statuses' => Variable::STATUSES]);
+            ['statuses' => Variable::STATUSES], "can:view,App\Models\Admin,App\Models\Brand,'1'");
         PanelController::makeInertiaRoute('get', 'brand/create', 'admin.panel.brand.create', 'Panel/Admin/Brand/Create', [
 
-        ]);
+        ], "can:create,App\Models\Admin,App\Models\Brand,'1'");
         Route::get('brand/search', [BrandController::class, 'searchPanel'])->name('admin.panel.brand.search');
         Route::patch('brand/update', [BrandController::class, 'update'])->name('admin.panel.brand.update');
         Route::post('brand/create', [BrandController::class, 'create'])->name('admin.panel.brand.create')->middleware("can:create,App\Models\Admin,App\Models\Brand,'1'");
         Route::get('brand/{brand}', [BrandController::class, 'edit'])->name('admin.panel.brand.edit');
 
 
-        PanelController::makeInertiaRoute('get', 'access/index', 'admin.panel.access.index', 'Panel/Admin/Access/Index',
-            []
+        PanelController::makeInertiaRoute('get', 'role/index', 'admin.panel.role.index', 'Panel/Admin/Role/Index',
+            [], "can:view,App\Models\Admin,App\Models\Role,'1'"
         );
 
-        PanelController::makeInertiaRoute('get', 'access/create', 'admin.panel.access.create', 'Panel/Admin/Access/Create',
+        PanelController::makeInertiaRoute('get', 'role/create', 'admin.panel.role.create', 'Panel/Admin/Role/Create',
             [
-                'access_data' => Access::getTree(),
-            ]
+                'access_data' => Role::getTree(),
+            ], "can:create,App\Models\Admin,App\Models\Role,'1'"
         );
-        Route::get('access/search', [AccessController::class, 'searchPanel'])->name('admin.panel.access.search');
-        Route::patch('access/update', [AccessController::class, 'update'])->name('admin.panel.access.update');
-        Route::post('access/create', [AccessController::class, 'create'])->name('admin.panel.access.create')->middleware("can:create,App\Models\Admin,App\Models\Access,'1'");
-        Route::delete('access/delete/{id}', [AccessController::class, 'delete'])->name('admin.panel.access.delete');
-        Route::get('access/{access}', [AccessController::class, 'edit'])->name('admin.panel.access.edit');
+        Route::get('role/search', [RoleController::class, 'searchPanel'])->name('admin.panel.role.search');
+        Route::patch('role/update', [RoleController::class, 'update'])->name('admin.panel.role.update');
+        Route::post('role/create', [RoleController::class, 'create'])->name('admin.panel.role.create')->middleware("can:create,App\Models\Admin,App\Models\Role,'1'");
+        Route::delete('role/delete/{id}', [RoleController::class, 'delete'])->name('admin.panel.role.delete');
+        Route::get('role/{role}', [RoleController::class, 'edit'])->name('admin.panel.role.edit');
 
 
         PanelController::makeInertiaRoute('get', 'product/index', 'admin.panel.product.index', 'Panel/Admin/Product/Index',
-            []
+            [], "can:view,App\Models\Admin,App\Models\Product,'1'"
         );
 
         PanelController::makeInertiaRoute('get', 'product/create', 'admin.panel.product.create', 'Panel/Admin/Product/Create',
             [
                 'categories' => Category::get(),
 
-            ]
+            ], "can:create,App\Models\Admin,App\Models\Product,'1'"
         );
         Route::get('product/tree', [ProductController::class, 'getTree'])->name('admin.panel.product.tree');
         Route::get('product/search', [ProductController::class, 'searchPanel'])->name('admin.panel.product.search')->middleware("can:view,App\Models\Admin,App\Models\Product,'1'");
@@ -381,13 +381,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('product/{product}', [ProductController::class, 'edit'])->name('admin.panel.product.edit');
 
         PanelController::makeInertiaRoute('get', 'repository/shop/cart', 'admin.panel.repository.shop.cart', 'Panel/Admin/Repository/Shop/Cart',
-            []
+            [],
         );
 
 
         PanelController::makeInertiaRoute('get', 'variation/create', 'admin.panel.variation.create', 'Panel/Admin/Variation/Create',
             [
                 'central_profit' => (\App\Models\Setting::getValue('tax_percent') ?? 0) + (\App\Models\Setting::getValue('order_percent_level_0') ?? 0)]
+            , "can:create,App\Models\Admin,App\Models\Variation,'1'"
         );
 
         Route::get('variation/index', [VariationController::class, 'index'])->name('admin.panel.variation.index')->middleware("can:view,App\Models\Admin,App\Models\Variation,'1'");
@@ -401,6 +402,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         PanelController::makeInertiaRoute('get', 'sample/create', 'admin.panel.sample.create', 'Panel/Admin/Sample/Create',
             [
                 'central_profit' => (\App\Models\Setting::getValue('tax_percent') ?? 0) + (\App\Models\Setting::getValue('order_percent_level_0') ?? 0)]
+            , "can:create,App\Models\Admin,App\Models\Sample,'1'"
         );
 
         Route::get('sample/index', [SampleController::class, 'index'])->name('admin.panel.sample.index')->middleware("can:view,App\Models\Admin,App\Models\Sample,'1'");
@@ -408,11 +410,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::patch('sample/update', [SampleController::class, 'update'])->name('admin.panel.sample.update');
         Route::post('sample/create', [SampleController::class, 'create'])->name('admin.panel.sample.create')->middleware("can:create,App\Models\Admin,App\Models\Sample,'1'");
         Route::post('sample/export', [SampleController::class, 'export'])->name('admin.panel.sample.export');
-        Route::delete('access/delete/{id}', [SampleController::class, 'delete'])->name('admin.panel.sample.delete');
+        Route::delete('sample/delete/{id}', [SampleController::class, 'delete'])->name('admin.panel.sample.delete');
         Route::get('sample/{sample}', [SampleController::class, 'edit'])->name('admin.panel.sample.edit');
 
 
-        PanelController::makeInertiaRoute('get', 'shipping/driver/index', 'admin.panel.shipping.driver.index', 'Panel/Admin/Shipping/Driver/Index', []);
+        PanelController::makeInertiaRoute('get', 'shipping/driver/index', 'admin.panel.shipping.driver.index', 'Panel/Admin/Shipping/Driver/Index', [], "can:view,App\Models\Admin,App\Models\Driver,'1'");
 
         PanelController::makeInertiaRoute('get', 'shipping/driver/create', 'admin.panel.shipping.driver.create', 'Panel/Admin/Shipping/Driver/Create', [], "can:create,App\Models\Admin,App\Models\Driver,'1'"
         );
@@ -422,7 +424,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::post('shipping/driver/create', [DriverController::class, 'create'])->name('admin.panel.shipping.driver.create')->middleware("can:create,App\Models\Admin,App\Models\Driver,'1'");
         Route::get('shipping/driver/{driver}', [DriverController::class, 'edit'])->name('admin.panel.shipping.driver.edit');
 
-        PanelController::makeInertiaRoute('get', 'shipping/car/index', 'admin.panel.shipping.car.index', 'Panel/Admin/Shipping/Car/Index', []);
+        PanelController::makeInertiaRoute('get', 'shipping/car/index', 'admin.panel.shipping.car.index', 'Panel/Admin/Shipping/Car/Index', [], "can:view,App\Models\Admin,App\Models\Car,'1'");
 
         PanelController::makeInertiaRoute('get', 'shipping/car/create', 'admin.panel.shipping.car.create', 'Panel/Admin/Shipping/Car/Create', [], "can:create,App\Models\Admin,App\Models\Car,'1'"
         );

@@ -35,7 +35,7 @@ class CatalogController extends Controller
 
         $data = Catalog:: find($id);
 
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
 
         return Inertia::render('Panel/Admin/Catalog/Edit', [
             'statuses' => Variable::STATUSES,
@@ -78,7 +78,7 @@ class CatalogController extends Controller
         $cmnd = $request->cmnd;
         $data = Catalog::find($id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

@@ -36,7 +36,7 @@
             </div>
             <form @submit.prevent="submit">
 
-              <div class="my-2">
+              <div class="my-2" v-show="hasAccess('role:edit:name')">
                 <TextInput
                     id="name"
                     type="text"
@@ -53,7 +53,7 @@
                   </template>
                 </TextInput>
               </div>
-              <div class="my-2">
+              <div class="my-2" v-show="hasAccess('role:edit:agency_level')">
                 <Selector
                     v-show="$page.props.agency_types.filter((e)=>$page.props.agency && e.level>=$page.props.agency.level).length>0"
                     ref="typeSelector"
@@ -68,7 +68,7 @@
                   </template>
                 </Selector>
               </div>
-              <div>
+              <div v-show="hasAccess('role:edit:accesses')">
 
                 <BaseTree treeLine dir="ltr" class="mtl-tree text-gray-600 text-sm p-1" v-model="form.accesses"
                           ref="tree"
@@ -272,7 +272,7 @@ export default {
       //   let tmp = this.$refs.imageCropper[i].getCroppedData();
       //   if (tmp) this.images.push(tmp);
       // }
-      this.form.patch(route('admin.panel.access.update'), {
+      this.form.patch(route('admin.panel.role.update'), {
         preserveScroll: false,
 
         onSuccess: (data) => {

@@ -220,7 +220,7 @@
 
           <!-- accesses links -->
           <li v-if="  hasAccess('role:create' ) || hasAccess( 'role:view')" class="relative ">
-            <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.access.*' )}"
+            <a :class="{'bg-primary-50 text-primary-500':menuIsActive ( 'admin.panel.role.*' )}"
                class="flex   cursor-pointer items-center truncate   px-3 py-4 text-[0.875rem] text-gray-600 outline-none transition duration-300 ease-linear hover:bg-primary-100 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                data-te-sidenav-link-ref>
               <LockClosedIcon class="w-5 h-5  "/>
@@ -232,19 +232,19 @@
               </span>
             </a>
             <ul
-                v-bind="{ 'data-te-collapse-show':menuIsActive ( 'admin.panel.access.*' )?true:null }"
+                v-bind="{ 'data-te-collapse-show':menuIsActive ( 'admin.panel.role.*' )?true:null }"
                 class="  !visible relative m-0 hidden list-none    data-[te-collapse-show]:block "
                 data-te-collapse-item data-te-sidenav-collapse-ref>
               <li class="relative ps-7">
 
-                <Link v-if="  hasAccess('role:view' )" :href="route('admin.panel.access.index')" role="menuitem"
-                      :class="subMenuIsActive( 'admin.panel.access.index' )"
+                <Link v-if="  hasAccess('role:view' )" :href="route('admin.panel.role.index')" role="menuitem"
+                      :class="subMenuIsActive( 'admin.panel.role.index' )"
                       class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
                   <Bars2Icon class="w-5 h-5 mx-1"/>
                   {{ __('list') }}
                 </Link>
-                <Link v-if="  hasAccess('role:create' )" :href="route('admin.panel.access.create')" role="menuitem"
-                      :class="subMenuIsActive ( 'admin.panel.access.create' )"
+                <Link v-if="  hasAccess('role:create' )" :href="route('admin.panel.role.create')" role="menuitem"
+                      :class="subMenuIsActive ( 'admin.panel.role.create' )"
                       class="flex   border-s-2 hover:border-primary-500  items-center p-2   text-sm  transition-all duration-200   hover:text-primary-700 hover:bg-primary-50">
                   <PlusSmallIcon class="w-5 h-5 mx-1"/>
                   {{ __('new') }}

@@ -79,7 +79,7 @@ class ProductController extends Controller
 
         $data = Product::find($id);
 
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
         if ($data) {
             $all = Product::getImages($data->id);
             $data->images = collect($all)->filter(fn($e) => !str_contains($e, 'thumb'))->all();
@@ -149,7 +149,7 @@ class ProductController extends Controller
         $cmnd = $request->cmnd;
         $data = Product::find($id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

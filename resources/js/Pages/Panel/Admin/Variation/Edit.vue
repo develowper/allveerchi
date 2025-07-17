@@ -26,7 +26,7 @@
           <div
               class="flex flex-col mx-2 text-gray-500   col-span-2 w-full     px-2"
           >
-            <div class="flex-col   m-2  rounded-lg    w-full mx-auto    ">
+            <div v-show="hasAccess('variation:edit:image')" class="flex-col   m-2  rounded-lg    w-full mx-auto    ">
               <div class="font-semibold">{{ __('main_product_image') }}</div>
               <div class="my-2 flex max-w-[150px]" v-if="$page.props.data">
                 <ImageUploader mode="edit"
@@ -57,7 +57,7 @@
             </div>
             <form @submit.prevent="submit">
 
-              <div class="my-2">
+              <div class="my-2" v-show="hasAccess('variation:edit:name')">
                 <TextInput
                     id="name"
                     type="text"
@@ -74,7 +74,7 @@
                   </template>
                 </TextInput>
               </div>
-              <div class="my-2">
+              <div class="my-2" v-show="hasAccess('variation:edit:name_en')">
                 <TextInput
                     id="name_en"
                     type="text"
@@ -100,7 +100,7 @@
 
                 </Selector>
               </div>
-              <div class="my-2">
+              <div class="my-2" v-show="hasAccess('variation:edit:brand_id')">
                 <Selector ref="brandSelector" v-model="form.brand_id"
                           :data="$page.props.brands "
                           :error="form.errors.brand_id"
@@ -114,7 +114,7 @@
                   </template>
                 </Selector>
               </div>
-              <div class="my-2">
+              <div class="my-2" v-show="hasAccess('variation:edit:pack_id')">
                 <Selector ref="packSelector" v-model="form.pack_id"
                           :preload="$page.props.data.pack_id"
                           :data="$page.props.packs"
@@ -125,7 +125,7 @@
 
                 </Selector>
               </div>
-              <div class="my-2">
+              <div class="my-2" v-show="hasAccess('variation:edit:weight')">
                 <TextInput
                     :id="`weight`"
                     type="number"

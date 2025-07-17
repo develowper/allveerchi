@@ -31,7 +31,7 @@ class PreOrderController extends Controller
 
         $data = PreOrder::find($id);
 
-        $this->authorize('edit', [get_class($user), $data]);
+        $this->authorize('editAny', [get_class($user), $data]);
         $data->items = json_decode($data->items);
         $data->products = $data->items ?? [];
 
@@ -137,7 +137,7 @@ class PreOrderController extends Controller
         $data = PreOrder::find($id);
 
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {
@@ -307,7 +307,7 @@ class PreOrderController extends Controller
 
         $data = PreOrder::find($id);
 
-        $this->authorize('edit', [get_class($user), $data]);
+        $this->authorize('editAny', [get_class($user), $data]);
 
         $agency = Agency::find($data->agency_id);
 

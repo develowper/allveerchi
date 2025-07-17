@@ -18,7 +18,7 @@ class BrandController extends Controller
     {
 
         $data = Brand::find($id);
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
         return Inertia::render('Panel/Admin/Brand/Edit', [
             'statuses' => Variable::STATUSES,
             'brands' => Brand::select('id', 'name')->get(),
@@ -78,7 +78,7 @@ class BrandController extends Controller
         $cmnd = $request->cmnd;
         $data = Brand::find($id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

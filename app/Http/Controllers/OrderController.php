@@ -41,7 +41,7 @@ class OrderController extends Controller
 
         $data = Order::with('items')->find($id);
 
-        $this->authorize('edit', [get_class($user), $data]);
+        $this->authorize('editAny', [get_class($user), $data]);
 
         $agency = Agency::find($data->agency_id);
 
@@ -82,7 +82,7 @@ class OrderController extends Controller
 
         $data = Order::with('items')->find($id);
 
-        $this->authorize('edit', [get_class($user), $data]);
+        $this->authorize('editAny', [get_class($user), $data]);
 
         $data->repository = Repository::with('shippingMethods')->find($data->repo_id);
         if ($data->repository && $data->repository->allow_visit) {
@@ -211,7 +211,7 @@ class OrderController extends Controller
         $data = $request->data ?? Order::find($id);
 
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

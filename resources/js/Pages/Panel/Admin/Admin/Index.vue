@@ -14,7 +14,7 @@
           <Bars2Icon class="h-7 w-7 mx-3"/>
           <h1 class="text-2xl font-semibold">{{ __('admins_list') }}</h1>
         </div>
-        <div>
+        <div v-if="hasAccess('admin:create')">
           <Link :href="route('admin.panel.admin.create')"
                 class="inline-flex items-center  justify-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold  transition-all duration-500 text-white     hover:bg-green-600 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
           >
@@ -255,9 +255,11 @@
                   class="flex  items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                 <Image class="w-10 h-10 rounded-full" :src="`${route('storage.admins')}/${d.id}.jpg`"
                        :alt="cropText(d.fullname,5)"/>
-                <Link class="px-3 text-xs hover:text-gray-500" :href="route('admin.panel.admin.edit',d.id)">
+                <Link v-if="hasAccess('admin:edit:*')" class="px-3 text-xs hover:text-gray-500"
+                      :href="route('admin.panel.admin.edit',d.id)">
                   <div class="  font-semibold">{{ cropText(d.fullname, 30) }}</div>
                 </Link>
+                <div v-else class="  font-semibold">{{ cropText(d.fullname, 30) }}</div>
               </td>
 
               <td class="px-2 py-4    ">
@@ -283,7 +285,7 @@
                     :class="`bg-${getStatus('user_statuses', d.status).color}-100 hover:bg-${getStatus('user_statuses', d.status).color}-200 text-${getStatus('user_statuses', d.status).color}-500`">
                   {{ getStatus('user_statuses', d.status).name }}
                 </button>
-                <ul :ref="`statusMenu${d.id}`" data-te-dropdown-menu-ref
+                <ul v-show="hasAccess('admin:edit:status')" :ref="`statusMenu${d.id}`" data-te-dropdown-menu-ref
                     class="  absolute z-[1000]   m-0 hidden   list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-center text-base shadow-lg [&[data-te-dropdown-show]]:block"
                     tabindex="-1" role="menu" aria-orientation="vertical" aria-label="User menu"
                     :aria-labelledby="`dropdownStatusSetting${d.id}`">
@@ -312,7 +314,7 @@
                     :class="`bg-gray-100 hover:bg-gray-200 text-gray-500`">
                   {{ getAdminRole(d.access_id) || '-' }}
                 </button>
-                <ul :ref="`roleMenu${d.id}`" data-te-dropdown-menu-ref
+                <ul v-show="hasAccess('admin:edit:role_id')" :ref="`roleMenu${d.id}`" data-te-dropdown-menu-ref
                     class="  absolute z-[1000]   m-0 hidden   list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-center text-base shadow-lg [&[data-te-dropdown-show]]:block"
                     tabindex="-1" role="menu" aria-orientation="vertical" aria-label="Role menu"
                     :aria-labelledby="`dropdownRole${d.id}`">
@@ -367,11 +369,11 @@
                 <div
                     class=" inline-flex rounded-md shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
                     role="group">
-                  <Link
-                      type="button" :href="route('admin.panel.admin.edit',d.id)"
-                      class="inline-block rounded  bg-orange-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-orange-400   focus:outline-none focus:ring-0  "
-                      data-te-ripple-init
-                      data-te-ripple-color="light">
+                  <Link v-if="hasAccess('admin:edit:*')"
+                        type="button" :href="route('admin.panel.admin.edit',d.id)"
+                        class="inline-block rounded  bg-orange-500 text-white px-6  py-2 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-orange-400   focus:outline-none focus:ring-0  "
+                        data-te-ripple-init
+                        data-te-ripple-color="light">
                     {{ __('edit') }}
                   </Link>
 

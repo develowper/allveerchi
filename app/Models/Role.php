@@ -6,10 +6,11 @@ use App\Http\Helpers\Variable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Access extends Model
+class Role extends Model
 {
     use HasFactory;
 
+    protected $table = 'roles';
     protected $fillable = [
         'agency_level',
         'name',

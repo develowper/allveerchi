@@ -13,7 +13,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('accesses', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->enum('agency_level', array_column(Variable::AGENCY_TYPES, 'level'))->nullable();
             $table->string('name', 100)->nullable();
@@ -29,6 +29,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('accesses');
+        Schema::dropIfExists('roles');
     }
 };

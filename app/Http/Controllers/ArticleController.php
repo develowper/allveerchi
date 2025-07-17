@@ -34,7 +34,7 @@ class ArticleController extends Controller
 
         $data = Article::with('category')->with('owner:id,fullname,phone')->find($id);
 
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
         if ($data->content)
             $data->content = json_decode($data->content);
 
@@ -59,7 +59,7 @@ class ArticleController extends Controller
         $data = Article::find($id);
 
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

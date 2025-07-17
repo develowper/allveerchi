@@ -19,7 +19,7 @@ class DriverController extends Controller
 
         $data = Driver::with('agency')->find($id);
 
-        $this->authorize('edit', [Admin::class, $data]);
+        $this->authorize('editAny', [Admin::class, $data]);
 
         return Inertia::render('Panel/Admin/Shipping/Driver/Edit', [
             'statuses' => Variable::STATUSES,
@@ -101,7 +101,7 @@ class DriverController extends Controller
         $cmnd = $request->cmnd;
         $data = Driver::find($id);
         if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('edit', [Admin::class, $data]);
+            $this->authorize('editAny', [Admin::class, $data]);
 
         if ($cmnd) {
             switch ($cmnd) {

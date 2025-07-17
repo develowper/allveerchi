@@ -44,7 +44,8 @@ class PanelController extends Controller
 
     public static function makeInertiaRoute(string $method, string $route, string $name, string $component, array $params = [], $middleware = [])
     {
-
+//if($middleware)
+//    dd($middleware);
         return Route::match([$method], $route, function () use ($component, $params) {
 
             return Inertia::render($component, $params);
