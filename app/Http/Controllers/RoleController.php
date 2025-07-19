@@ -119,7 +119,6 @@ class RoleController extends Controller
             $request->merge([
                 'accesses' => $res
             ]);
-
             foreach (['name', 'agency_level', 'accesses',] as $s) {
                 if ($data->$s != $request->$s)
                     $this->authorize('edit', [Admin::class, $data, true, $s]);
