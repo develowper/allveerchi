@@ -89,14 +89,13 @@ class CategoryController extends Controller
         $treeData = $request->tree_data;
         $cmnd = $request->cmnd;
         $data = Category::get();
-        if (!starts_with($cmnd, 'bulk'))
-            $this->authorize('create', [Admin::class, Category::class]);
 
         if ($cmnd) {
 
             switch ($cmnd) {
 
                 case 'add':
+                    $this->authorize('create', [Admin::class, $data, true]);
                     Category::create([
                         'parent_id' => $request->parent_id,
                         'name' => $request->name,
@@ -111,6 +110,15 @@ class CategoryController extends Controller
                     break;
                 case 'edit':
                     $data = Category::find($request->id);
+
+                    foreach (['parent_id', 'name', 'status',] as $s) {
+                        if ($s == 'status') {
+                            if ($data->$s != ($request->checked ? 'active' : 'inactive'))
+                                $this->authorize('edit', [Admin::class, $data, true, $s]);
+                        } else if ($data->$s != $request->$s) {
+                            $this->authorize('edit', [Admin::class, $data, true, $s]);
+                        }
+                    }
                     if ($data) {
                         if ($data->parent_id != $request->parent_id) {
                             $oldParent = Category::find($data->parent_id);
@@ -138,6 +146,9 @@ class CategoryController extends Controller
                     break;
                 case 'remove':
                     $data = Category::find($request->id);
+
+                    $this->authorize('delete', [Admin::class, $data, true]);
+
                     if ($data) {
 
                         $categoryProducts = Product::whereJsonContains('categories', $data->id)->get();

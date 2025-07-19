@@ -46,6 +46,7 @@ class VariationRequest extends FormRequest
         $grades = Variable::GRADES;
         $brands = Brand::pluck('id');
         $tmp = [];
+        $this->merge(['allowed_repositories' => $allowedRepositories]);
         if (!$this->cmnd) {
             $categories = Category::get()->pluck('id');
             $packs = Pack::pluck('id');

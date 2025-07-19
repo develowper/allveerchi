@@ -55,8 +55,8 @@
               </div>
               <div v-show="hasAccess('admin:edit:role_id')" class="flex flex-wrap items-center justify-center ">
                 <RadioGroup ref="roleSelector" class=" grow mx-2" name="role"
-                            @change="($e )=>form.access_id=$page.props.admin_roles.find((e)=>e.name==$e.target.value )?.id"
-                            :before-selected=" getAdminRole($page.props.data.access_id) "
+                            @change="($e )=>form.role_id=$page.props.admin_roles.find((e)=>e.name==$e.target.value )?.id"
+                            :before-selected=" getAdminRole($page.props.data.role_id) "
                             :items="$page.props.admin_roles?.map(i=>i.name)"/>
               </div>
               <div v-show="hasAccess('admin:edit:agency_id')" class="my-2"
@@ -341,7 +341,7 @@ export default {
         district_id: null,
         postal_code: null,
         preloadAddress: null,
-        access_id: null,
+        role_id: null,
       }),
       profile: null,
     }
@@ -399,7 +399,7 @@ export default {
     // console.log(this.data);
     this.form.id = this.data.id;
     this.form.status = this.data.status;
-    this.form.access_id = this.data.access_id;
+    this.form.role_id = this.data.role_id;
     this.form.fullname = this.data.fullname;
     this.form.phone = this.data.phone;
     this.form.national_code = this.data.national_code;

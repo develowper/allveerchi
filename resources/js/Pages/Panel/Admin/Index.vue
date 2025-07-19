@@ -54,7 +54,7 @@
           </section>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-1">
             <!-- setting card -->
-            <Link v-if="hasAccess('edit_settings')" :href="route('admin.panel.setting.index')"
+            <Link v-if="hasAccess('setting:edit:*')" :href="route('admin.panel.setting.index')"
                   :class="cardShadow"
                   class="flex   hover:scale-[101%] transition duration-300 cursor-pointer   items-center justify-between p-4 bg-white  rounded-lg ">
               <div>

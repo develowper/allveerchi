@@ -38,18 +38,27 @@ class AdminController extends Controller
 
         if ($cmnd) {
             switch ($cmnd) {
+
                 case 'status':
+                    $s = 'status';
+                    if ($data->$s != $request->$s)
+                        $this->authorize('edit', [Admin::class, $data, true, $s]);
                     $data->status = $status;
                     $data->save();
                     return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
 
                 case 'role':
-
-                    $data->access_id = $request->access_id;
+                    $s = 'role_id';
+                    if ($data->$s != $request->$s)
+                        $this->authorize('edit', [Admin::class, $data, true, $s]);
+                    $data->role_id = $request->role_id;
                     $data->save();
                     return response()->json(['message' => __('updated_successfully'), 'access_id' => $data->access_id,], $successStatus);
 
                 case  'upload-img' :
+                    $s = 'image';
+                    if ($data->$s != $request->$s)
+                        $this->authorize('edit', [Admin::class, $data, true, $s]);
 
                     if (!$request->img) //  add extra image
                         return response()->json(['errors' => [__('file_not_exists')], 422]);
@@ -59,13 +68,23 @@ class AdminController extends Controller
 
             }
         } elseif ($data) {
+            foreach (['status', 'role_id', 'agency_id', 'fullname', 'phone', 'national_code', 'card', 'sheba', 'wallet'] as $s) {
+                if ($data->$s != $request->$s)
+                    $this->authorize('edit', [Admin::class, $data, true, $s]);
+            }
+
+            foreach (['location', 'province_id', 'county_id', 'district_id', 'address', 'postal_code'] as $s) {
+                if ($data->$s != $request->$s)
+                    $this->authorize('edit', [Admin::class, $data, true, 'address']);
+            }
 
 
-            if ($request->password) {
+            if ($request->password && $this->authorize('edit', [Admin::class, $data, true, 'password'])) {
                 $request->merge([
                     'password' => Hash::make($request->password),
                 ]);
             }
+
             if ($data->update($request->except($request->password ? [] : ['password']))) {
 
                 AdminFinancial::updateOrCreate(['admin_id' => $data->id,],
@@ -87,6 +106,8 @@ class AdminController extends Controller
 
     public function create(AdminRequest $request)
     {
+
+        $this->authorize('create', [Admin::class, Admin::class, true]);
 
         $request->merge([
             'ref_id' => Admin::makeRefCode($request->phone),
@@ -120,6 +141,7 @@ class AdminController extends Controller
     public function new(Request $request)
     {
 
+        $this->authorize('create', [Admin::class, Admin::class, true]);
         return Inertia::render('Panel/Admin/Admin/Create', [
         ]);
     }

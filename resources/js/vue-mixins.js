@@ -181,7 +181,7 @@ export default {
                     s = s.replace(":*", "")
                     if (!(accesses || []).some(access => access.includes(s))) return false;
                 } else {
-                    if (!(accesses || []).some(access => access.indexOf(s) !== -1)) return false;
+                    if (!(accesses || []).some(access => access == s)) return false;
 
                 }
             }

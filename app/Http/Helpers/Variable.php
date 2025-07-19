@@ -374,6 +374,10 @@ class Variable
 
         ]
         ],
+        'setting' => ['view', 'create', 'delete', 'edit' => [
+            'value',
+        ]
+        ],
     ];
 
     const NOTIFICATION_LIMIT = 5;

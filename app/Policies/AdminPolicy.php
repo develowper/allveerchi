@@ -337,94 +337,97 @@ class AdminPolicy
         if (empty($message) && $item)
             switch ($item) {
                 case  $item instanceof Agency  :
-                    $res = $admin->hasAccess('agency:edit');
+                    $res = $admin->hasAccess("agency:edit:$option");
                     if ($res) {
                         $myAgency = Agency::find($admin->agency_id);
                         if (!$myAgency)
                             $res = false;
-                        elseif ($myAgency->level == '1')
+                        elseif ($myAgency->level == "1")
                             $res = $myAgency->id == $item->id || in_array($myAgency->province_id, $item->access ?? []);
-                        elseif ($myAgency->level == '2')
+                        elseif ($myAgency->level == "2")
                             $res = $myAgency->id == $item->id || in_array($myAgency->id, $item->access ?? []);
-                        elseif ($myAgency->level == '3')
+                        elseif ($myAgency->level == "3")
                             $res = $myAgency->id == $item->id;
 
                     }
 
                     break;
                 case  $item instanceof Repository  :
-                    $res = $admin->hasAccess('repository:edit');
+                    $res = $admin->hasAccess("repository:edit:$option");
 
                     break;
                 case  $item instanceof ShippingMethod  :
-                    $res = $admin->hasAccess('shipping-method:edit');
+                    $res = $admin->hasAccess("shipping-method:edit:$option");
                     break;
 
                 case  $item instanceof Pack  :
-                    $res = $admin->hasAccess('pack:edit');
+                    $res = $admin->hasAccess("pack:edit:$option");
                     break;
                 case   $item instanceof Product :
-                    $res = $admin->hasAccess('product:edit');
+                    $res = $admin->hasAccess("product:edit:$option");
+
                     break;
                 case   $item instanceof Variation :
-                    $res = $admin->hasAccess('variation:edit');
+                    $res = $admin->hasAccess("variation:edit:$option");
+
                     break;
                 case   $item instanceof Sample :
-                    $res = $admin->hasAccess('sample:edit');
+                    $res = $admin->hasAccess("sample:edit:$option");
                     break;
                 case   $item instanceof RepositoryOrder :
-                    $res = $admin->hasAccess('repository_order:edit');
+                    $res = $admin->hasAccess("repository_order:edit:$option");
                     if ($res)
                         break;
-                    $agencyIds = $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck('id');
+                    $agencyIds = $admin->allowedAgencies(Agency::find($admin->agency_id))->pluck("id");
                     $res = in_array($item->from_agency_id, $agencyIds->toArray());
                     break;
                 case   $item instanceof Driver :
-                    $res = $admin->hasAccess('driver:edit');
+                    $res = $admin->hasAccess("driver:edit:$option");
                     break;
                 case   $item instanceof Car :
-                    $res = $admin->hasAccess('car:edit');
+                    $res = $admin->hasAccess("car:edit:$option");
                     break;
                 case   $item instanceof Order :
-                    $res = $admin->hasAccess('order:edit');
+                    $res = $admin->hasAccess("order:edit:$option");
                     break;
                 case   $item instanceof PreOrder :
-                    $res = $admin->hasAccess('order:edit');
+                    $res = $admin->hasAccess("order:edit:$option");
                     break;
                 case   $item instanceof Shipping :
-                    $res = $admin->hasAccess('shipping:edit');
+                    $res = $admin->hasAccess("shipping:edit:$option");
                     break;
                 case   $item instanceof Ticket :
-                    $res = $admin->hasAccess('ticket:edit');
+                    $res = $admin->hasAccess("ticket:edit:$option");
                     break;
                 case   $item instanceof User :
-                    $res = $admin->hasAccess('user:edit');
+                    $res = $admin->hasAccess("user:edit:$option");
                     break;
                 case   $item instanceof Admin :
-                    $res = $admin->hasAccess('admin:edit');
+                    $res = $admin->hasAccess("admin:edit:$option");
                     break;
                 case   $item instanceof Setting :
-                    $res = $admin->hasAccess('setting:edit');
+                    $res = $admin->hasAccess("setting:edit:$option");
                     break;
                 case   $item instanceof UserFinancial :
                 case   $item instanceof AdminFinancial :
                 case   $item instanceof AgencyFinancial :
-                    $res = $admin->hasAccess('financial:edit');
+                    $res = $admin->hasAccess("financial:edit:$option");
                     break;
                 case   $item instanceof Catalog :
-                    $res = $admin->hasAccess('catalog:edit');
+                    $res = $admin->hasAccess("catalog:edit:$option");
                     break;
                 case   $item instanceof Article :
-                    $res = $admin->hasAccess('article:edit');
+                    $res = $admin->hasAccess("article:edit:$option");
                     break;
                 case   $item instanceof Category :
-                    $res = $admin->hasAccess('category:edit');
+                    $res = $admin->hasAccess("category:edit:$option");
+
                     break;
                 case   $item instanceof Brand :
-                    $res = $admin->hasAccess('brand:edit');
+                    $res = $admin->hasAccess("brand:edit:$option");
                     break;
                 case   $item instanceof Role :
-                    $res = $admin->hasAccess('role:edit');
+                    $res = $admin->hasAccess("role:edit:$option");
                     break;
             }
 

@@ -111,7 +111,7 @@ class AdminRequest extends FormRequest
             ]);
         if ($this->cmnd == 'role' || !$this->cmnd)
             $tmp = array_merge($tmp, [
-                'access_id' => ['required', Rule::in($allowedRoles)],
+                'role_id' => ['required', Rule::in($allowedRoles)],
                 'agency_id' => ['required', Rule::in($allowedAgencies)],
             ]);
         return $tmp;

@@ -445,7 +445,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 
 
         PanelController::makeInertiaRoute('get', 'catalog/index', 'admin.panel.catalog.index', 'Panel/Admin/Catalog/Index',
-            []
+            [], "can:create,App\Models\Admin,App\Models\Catalog,'1'"
         );
         PanelController::makeInertiaRoute('get', 'catalog/create', 'admin.panel.catalog.create', 'Panel/Admin/Catalog/Create',
             [], "can:create,App\Models\Admin,App\Models\Catalog,'1'"

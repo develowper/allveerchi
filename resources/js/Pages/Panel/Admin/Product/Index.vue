@@ -238,12 +238,12 @@
                     :class="`bg-${getStatus('product', d.status).color}-100 hover:bg-${getStatus('product', d.status).color}-200 text-${getStatus('product', d.status).color}-500`">
                   {{ getStatus('product', d.status).name }}
                 </button>
-                <ul :ref="`statusMenu${d.id}`" data-te-dropdown-menu-ref
+                <ul v-show="hasAccess('product:edit:status')" :ref="`statusMenu${d.id}`" data-te-dropdown-menu-ref
                     class="  absolute z-[1000]   m-0 hidden   list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-center text-base shadow-lg [&[data-te-dropdown-show]]:block"
                     tabindex="-1" role="menu" aria-orientation="vertical" aria-label="User menu"
                     :aria-labelledby="`dropdownStatusSetting${d.id}`">
 
-                  <li v-if="d.status=='active'  " role="menuitem"
+                  <li role="menuitem"
                       @click="edit({'idx':idx,'id':d.id,'cmnd':'inactive'})"
                       class="   cursor-pointer   text-sm   transition-colors hover:bg-gray-100">
                     <div class="flex items-center text-danger  px-6 py-2 justify-between ">

@@ -19,6 +19,7 @@ use Faker\Extension\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -196,7 +197,16 @@ class VariationController extends Controller
 
         $data = Variation::find($id);
 
-        $this->authorize('editAny', [Admin::class, $data]);
+        $hasAccessSome = false;
+        foreach (['image', 'name', 'name_en', 'pack_id', 'brand_id', 'weight', 'status'] as $s) {
+            if (Gate::allows('edit', [Admin::class, $data, false, $s])) {
+                $hasAccessSome = true;
+                break;
+            }
+        }
+        if (!$hasAccessSome) {
+            $this->authorize('edit', [Admin::class, $data, true, '']);
+        }
         if ($data) {
             $all = Variation::getImages($data->id);
             $data->images = collect($all)->filter(fn($e) => !str_contains($e, 'thumb'))->all();
@@ -362,6 +372,11 @@ class VariationController extends Controller
             switch ($cmnd) {
                 case 'change-primary'   :
 
+                    foreach (['name', 'name_en', 'pack_id', 'brand_id', 'weight'] as $s) {
+                        if ($data->$s != $request->$s)
+                            $this->authorize('edit', [Admin::class, $data, true, $s]);
+                    }
+
                     $packs = Pack::pluck('id');
                     $categories = Category::get()->pluck('id');
                     $brands = Brand::pluck('id');
@@ -410,6 +425,8 @@ class VariationController extends Controller
                     return back()->with(['flash_status' => 'success', 'flash_message' => __('updated_successfully')]);
                     break;
                 case 'delete-img'   :
+                    $this->authorize('edit', [Admin::class, $data, true, 'image']);
+
                     $type = Variable::IMAGE_FOLDERS[Variation::class];
                     $path = Storage::path("public/$type/$id/" . basename($request->path));
 //                    $allFiles = Storage::allFiles("public/$type/$id");
@@ -421,6 +438,8 @@ class VariationController extends Controller
                     return response()->json(['message' => __('updated_successfully')], $successStatus);
 
                 case  'upload-img' :
+                    $this->authorize('edit', [Admin::class, $data, true, 'image']);
+
                     $limit = Variable::VARIATION_IMAGE_LIMIT;
                     $type = Variable::IMAGE_FOLDERS[Variation::class];
                     $allFiles = Storage::allFiles("public/$type/$id");
@@ -443,10 +462,13 @@ class VariationController extends Controller
 
                 case 'change-repo'  :
 
-
+                    foreach (['repo_id',] as $s) {
+                        if ($data->$s != $request->$s)
+                            $this->authorize('edit', [Admin::class, $data, true, $s]);
+                    }
                     $request->validate(
                         [
-                            'new_repo_id' => ['required', 'numeric', "not_in:$data->repo_id", $admin->hasAccess('edit_product') ? null : Rule::in(Repository::where('agency_id', $data->agency_id)->pluck('id'))],
+                            'new_repo_id' => ['required', 'numeric', "not_in:$data->repo_id", Rule::in($request->allowed_repositories)],
                         ],
                         [
                             'new_repo_id.required' => sprintf(__('validator.required'), __('repository')),
@@ -632,8 +654,13 @@ class VariationController extends Controller
 
                     break;
                 case 'change-price':
+
+                    $priceChanged = $request->new_prices != $data->prices || $request->new_price != $data->price || $request->new_auction_price != $data->auction_price;
+                    if ($priceChanged)
+                        $this->authorize('edit', [Admin::class, $data, true, 'price']);
+
                     $request->merge([
-                        'changed' => $request->new_prices != $data->prices || $request->new_price != $data->price || $request->new_auction_price != $data->auction_price],
+                        'changed' => $priceChanged],
                     );
                     $request->validate(
                         [
@@ -719,9 +746,15 @@ class VariationController extends Controller
 
                     break;
                 case 'change-qty':
+                    if ($data->in_repo != $request->new_in_repo)
+                        $this->authorize('edit', [Admin::class, $data, true, 'in_repo']);
+                    if ($data->in_shop != $request->new_in_shop)
+                        $this->authorize('edit', [Admin::class, $data, true, 'in_shop']);
+
+
                     $request->merge([
                         'changed' => $request->new_in_repo != $data->in_repo || $request->new_in_shop != $data->in_shop,
-                        'sum_equal' => $request->new_in_repo + $request->new_in_shop,
+//                        'sum_equal' => $request->new_in_repo + $request->new_in_shop,
                     ]);
                     $request->validate(
                         [
@@ -753,6 +786,10 @@ class VariationController extends Controller
 
                     break;
                 case 'status':
+
+                    if ($data->status != $request->status)
+                        $this->authorize('edit', [Admin::class, $data, true, 'status']);
+
                     $request->validate(
                         [
                             'status' => ['required', Rule::in(array_column(Variable::VARIATION_STATUSES, 'name'))],
@@ -768,6 +805,11 @@ class VariationController extends Controller
                     Telegram::log(null, 'variation_status_edited', (object)['id' => $data->id, 'name' => $data->name, 'status' => __($data->status)]);
                     return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
                 case 'auction':
+
+                    if ($data->in_auction != ($request->status == 'active'))
+                        $this->authorize('edit', [Admin::class, $data, true, 'in_auction']);
+
+
                     $request->validate(
                         [
                             'status' => ['required', Rule::in(array_column(Variable::VARIATION_STATUSES, 'name'))],

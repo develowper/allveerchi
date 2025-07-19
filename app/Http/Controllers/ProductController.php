@@ -154,16 +154,19 @@ class ProductController extends Controller
         if ($cmnd) {
             switch ($cmnd) {
                 case 'inactive':
+                    $this->authorize('edit', [Admin::class, $data, true, 'status']);
                     $data->status = 'inactive';
                     $data->save();
                     return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
 
                 case 'activate':
+                    $this->authorize('edit', [Admin::class, $data, true, 'status']);
                     $data->status = 'active';
                     $data->save();
                     return response()->json(['message' => __('updated_successfully'), 'status' => $data->status,], $successStatus);
 
                 case 'delete-img'   :
+                    $this->authorize('edit', [Admin::class, $data, true, 'image']);
                     $type = Variable::IMAGE_FOLDERS[Product::class];
                     $path = Storage::path("public/$type/$id/" . basename($request->path));
 //                    $allFiles = Storage::allFiles("public/$type/$id");
@@ -175,7 +178,7 @@ class ProductController extends Controller
                     return response()->json(['message' => __('updated_successfully')], $successStatus);
 
                 case  'upload-img' :
-
+                    $this->authorize('edit', [Admin::class, $data, true, 'image']);
                     if (!$request->img) //  add extra image
                         return response()->json(['errors' => [__('file_not_exists')], 422]);
 
@@ -221,6 +224,11 @@ class ProductController extends Controller
                 'tags' => $request->tags,
 
             ]);
+
+            foreach (['name', 'name_en', 'PN', 'categories', 'tags'] as $s) {
+                if ($data->$s != $request->$s)
+                    $this->authorize('edit', [Admin::class, $data, true, $s]);
+            }
 
             if ($data->update($request->all())) {
 

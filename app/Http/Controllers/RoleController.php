@@ -80,6 +80,7 @@ class RoleController extends Controller
 
     public function create(RoleRequest $request)
     {
+        $this->authorize('create', [Admin::class, Role::class, true]);
         $admin = $request->user();
         $accesses = $request->accesses;
         $res = $this->collectCheckedKeys($accesses);
@@ -118,6 +119,11 @@ class RoleController extends Controller
             $request->merge([
                 'accesses' => $res
             ]);
+
+            foreach (['name', 'agency_level', 'accesses',] as $s) {
+                if ($data->$s != $request->$s)
+                    $this->authorize('edit', [Admin::class, $data, true, $s]);
+            }
 
             if ($data->update($request->all())) {
 
