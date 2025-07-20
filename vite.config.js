@@ -10,7 +10,10 @@ import {createRequire} from 'node:module';
 const require = createRequire(import.meta.url);
 
 export default defineConfig({
-
+    build: {
+        outDir: 'public/build',
+        emptyOutDir: true,
+    },
     // base: '/build/',
     optimizeDeps: {
         exclude: ['leaflet-bing-layer']
