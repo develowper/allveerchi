@@ -10,12 +10,12 @@ import {createRequire} from 'node:module';
 const require = createRequire(import.meta.url);
 
 export default defineConfig({
-    build: {
-        outDir: 'public/build',
-        emptyOutDir: true,
-        manifest: true,
-        manifestFileName: 'manifest.json',
-    },
+    // build: {
+    //     outDir: 'public/build',
+    //     emptyOutDir: true,
+    //     manifest: true,
+    //     manifestFileName: 'manifest.json',
+    // },
     // base: '/build/',
     optimizeDeps: {
         exclude: ['leaflet-bing-layer']
