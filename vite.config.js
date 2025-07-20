@@ -14,6 +14,7 @@ export default defineConfig({
         outDir: 'public/build',
         emptyOutDir: true,
         manifest: true,
+        manifestFileName: 'manifest.json',
     },
     // base: '/build/',
     optimizeDeps: {
