@@ -33,5 +33,6 @@ jobs:
             database/**
             lang/**
             config/**
+            public/**
             vite.config.js
            
