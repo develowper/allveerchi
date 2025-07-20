@@ -66,7 +66,6 @@ Route::get('/cache', function () {
 });
 Route::get('test', function () {
     return;
-    return;
     foreach (Catalog::get() as $catalog) {
 
 
