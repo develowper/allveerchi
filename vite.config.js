@@ -11,7 +11,7 @@ const require = createRequire(import.meta.url);
 
 export default defineConfig({
 
-    base: '/build/',
+    // base: '/build/',
     optimizeDeps: {
         exclude: ['leaflet-bing-layer']
     },
