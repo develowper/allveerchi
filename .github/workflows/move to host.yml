@@ -28,7 +28,7 @@ jobs:
             server.php
             composer.lock
             package-lock.json
-            app/*
+            app/**
             resources/**
             database/**
             vite.config.js
