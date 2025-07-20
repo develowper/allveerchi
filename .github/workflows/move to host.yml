@@ -31,4 +31,5 @@ jobs:
             app/*
             resources/**
             database/**
+            vite.config.js
            
