@@ -1,31 +1,31 @@
-#on: push
-#name: 🚀 allveerchi app changes
-#jobs:
-#  web-deploy:
-#    name: Deploy
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: 🚚 Get latest code
-#        uses: actions/checkout@v4
-#
-#      - name: 📂 Sync files
-#        uses: SamKirkland/FTP-Deploy-Action@4.3.3
-#        with:
-#          server: ailverchi.ir
-#          protocol: ftp
-#          port: 21
-#          username: allveerchi
-#          password: ${{ secrets.FTP_PASSWORD }}
-#          server-dir: /allveerchi/
-#          dangerous-clean-slate: false
-#          timeout: 120000
-#          ##        dry-run: true
-#          exclude: |
-#            **/.git*
-#            **/.git*/**
-#            **/node_modules/**
-#            vendor/**
-#            server.php
-#            composer.lock
-#            package-lock.json
-#
+on: push
+name: 🚀 allveerchi app changes
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ailverchi.ir
+          protocol: ftp
+          port: 21
+          username: allveerchi
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /allveerchi/
+          dangerous-clean-slate: false
+          timeout: 120000
+          ##        dry-run: true
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            vendor/**
+            server.php
+            composer.lock
+            package-lock.json
+           
