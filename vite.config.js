@@ -18,12 +18,12 @@ export default defineConfig({
     plugins: [
 
         // manifestSRI(),
-        VitePWA({
-            registerType: 'autoUpdate',
-            devOptions: {
-                enabled: true
-            }
-        }),
+        // VitePWA({
+        //     registerType: 'autoUpdate',
+        //     devOptions: {
+        //         enabled: true
+        //     }
+        // }),
         laravel({
             input: 'resources/js/app.js',
             ssr: 'resources/js/ssr.js',
