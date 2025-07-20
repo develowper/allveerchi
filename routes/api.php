@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::post('/bot/drzantia/getupdates', [BotDrZantiaController::class, 'getupdates']);
 Route::post('/bot/drzantia/sendmessage', [BotDrZantiaController::class, 'sendmessage']);
 
