@@ -28,5 +28,3 @@ jobs:
             server.php
             composer.lock
             package-lock.json
-
-
