@@ -28,5 +28,7 @@ jobs:
             server.php
             composer.lock
             package-lock.json
-            
+            app/*
+            resources/**
+            database/**
            
