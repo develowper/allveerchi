@@ -52,7 +52,7 @@ class HandleInertiaRequests extends Middleware
         $user = auth('sanctum')->user();
         if ($user) {
             $user->setRelation('financial', $user instanceof Admin ? AdminFinancial::whereAdminId($user->id)->firstOrNew() : UserFinancial::whereUserId($user->id)->firstOrNew());
-            $user->setRelation('role', $user instanceof Admin ? Role::whereId($user->role_id)->where('agency_level', '>=', $user->agency_level)->firstOrNew() : new Access());
+            $user->setRelation('role', $user instanceof Admin ? Role::whereId($user->role_id)->where('agency_level', '>=', $user->agency_level)->firstOrNew() : new Role());
             if ($user instanceof Admin) {
                 $agency = Agency::with('financial')->findOrNew($user->agency_id);
                 if (!$agency->getRelation('financial'))
